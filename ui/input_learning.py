@@ -19,10 +19,10 @@ VIRTUAL_REPORTS = {
             ["정중신경 (Median CMAP)", "근위부 자극 (팔꿈치)", "정상 범위", "정상 범위", "정상 (정상범위: 잠복기 < 4.2ms, 진폭 > 4.0mV)"]
         ],
         "emg": [
-            ["위팔두갈래근 (Biceps brachii)", "근육피부신경(C5-C6) [C5 우세]", "Fibrillation potentials 및<br/>Positive sharp waves 출현", "Reduced MU recruitment", "비정상 (활동성 탈신경 상태)"],
-            ["노쪽손목폄근 (ECRL)", "노신경(C6-C7) [C6 우세]", "Fibrillation potentials 및<br/>Positive sharp waves 출현", "Giant MUAPs 출현 및<br/>Reduced MU recruitment", "비정상 (만성 재신경지배 상태)"],
+            ["위팔두갈래근 (Biceps brachii)", "근육피부신경(C5-C6)", "Fibrillation potentials 및<br/>Positive sharp waves 출현", "Reduced MU recruitment", "비정상 (활동성 탈신경 상태)"],
+            ["노쪽손목폄근 (ECRL)", "노신경(C6-C7)", "Fibrillation potentials 및<br/>Positive sharp waves 출현", "Giant MUAPs 출현 및<br/>Reduced MU recruitment", "비정상 (만성 재신경지배 상태)"],
             ["짧은엄지벌림근 (Abductor Pollicis APB)", "정중신경(C8-T1) [T1 우세]", "Silent at rest (전기적 침묵)", "Normal MU recruitment", "정상"],
-            ["목 척추주위근 (Cervical Paraspinal)", "척수신경후지 (C6 Root)", "Fibrillation potentials 및<br/>Positive sharp waves 출현", "통증으로 인해 동원 제한", "비정상 (활동성 탈신경 상태)"]
+            ["목 척추주위근 (Cervical Paraspinal)", "척수신경 뒤가지 (C6 Root)", "Fibrillation potentials 및<br/>Positive sharp waves 출현", "통증으로 인해 동원 제한", "비정상 (활동성 탈신경 상태)"]
         ],
         "interpretation": [
             "감각신경전도검사(SNAP)가 모두 정상입니다. 이는 병변이 뒤뿌리신경절(DRG)보다 몸쪽(근위부)인 신경뿌리(Root)에 있음을 의미합니다.",
@@ -30,11 +30,11 @@ VIRTUAL_REPORTS = {
             "이 근육들은 서로 다른 말초신경의 지배를 받지만, 공통적으로 C6 신경뿌리의 지배를 받으므로 C6 신경뿌리병증으로 확진합니다."
         ],
         "emg_meaning": [
-            "Fibrillation / Positive sharp wave: 축삭 사멸로 인해 지배력을 잃은 근섬유가 자발적으로 미세 유발하는 급성 활동성 전위입니다.",
-            "Silent at rest: 휴식 시 어떠한 비정상 전기 활동도 관찰되지 않는 완벽한 전기적 침묵 상태입니다.",
+            "Fibrillation / Positive sharp wave: 축삭 손상으로 인해 지배력을 잃은 근섬유가 자발적으로 미세 유발하는 급성 활동성 전위입니다.",
+            "Silent at rest: 휴식 시 어떠한 비정상 전기 활동도 관찰되지 않는 완벽한 전기적 침묵 상태(정상)입니다.",
             "Normal MU recruitment: 근수축 요구도에 따라 정량적인 운동단위(Motor Unit) 결합 동원이 원활한 정상 상태입니다."
         ],
-        "ddx": "디스크 탈출증이나 척추관 협착증 확인을 위해 경추 MRI 검사 시행이 권장됩니다."
+        "ddx": "디스크 탈출증 (HNP)이나 척추관 협착증 (stenosis) 확인을 위해 목 부위 MRI 검사 시행이 권장됩니다."
     },
 
     "2. 우측 1~3번째 손가락 저림 및 야간통 (손목굴증후군 의심)": {
@@ -57,7 +57,7 @@ VIRTUAL_REPORTS = {
             "목 척추주위근이 완전히 정상이므로 C8-T1 신경뿌리병증을 원천 배제할 수 있으며, 손목 부위에 한정된 국소 포착성 단일신경병증입니다."
         ],
         "emg_meaning": [
-            "진폭 감소 및 Giant MUAPs: 단순 수초 손상 단계를 지나 신경 내부 축삭(axon) 사멸과 그에 따른 우회로 만성 측부 재지배가 일어났음을 나타냅니다."
+            "진폭 감소 및 거대운동단위전위(Giant MUAPs): 단순 수초 손상 단계를 지나 신경 내부 축삭(axon) 손상과 그에 따른 우회로 만성 축삭 측부 재지배가 일어났음을 나타냅니다."
         ],
         "ddx": "동일 수근관 부위 포착을 악화시키는 당뇨 및 갑상선 질환 등 전신 대사질환 배제가 병행되어야 합니다."
     },
@@ -77,7 +77,7 @@ VIRTUAL_REPORTS = {
             ["앞정강근 (Tibialis Anterior)", "깊은종아리신경(L4-L5) [L4-L5 우세]", "Fibrillation potentials 및<br/>Positive sharp waves 출현", "Reduced MU recruitment", "비정상 (활동성 탈신경 상태)"],
             ["긴종아리근 (Peroneus Longus)", "얕은종아리신경(L5-S1) [L5 우세]", "Positive sharp waves 출현", "Giant MUAPs 출현 및<br/>Reduced MU recruitment", "비정상 (만성 재신경지배 상태)"],
             ["가자미근 (Soleus)", "정강신경(S1-S2) [S1 우세]", "Silent at rest (전기적 침묵)", "Normal MU recruitment", "정상"],
-            ["허리 척추주위근 (Lumbar Paraspinal)", "척수신경후지 (L5 Root)", "Fibrillation potentials 출현", "평가불가", "비정상 (활동성 탈신경 상태)"]
+            ["허리 척추주위근 (Lumbar Paraspinal)", "척수신경 뒤가지 (L5 Root)", "Fibrillation potentials 출현", "평가불가", "비정상 (활동성 탈신경 상태)"]
         ],
         "interpretation": [
             "다리의 감각신경전도검사(SNAP)가 완전히 정상입니다. 이는 병변이 말초신경이 아닌 요추 신경뿌리(Root)에 있음을 확인해 줍니다.",
@@ -86,7 +86,7 @@ VIRTUAL_REPORTS = {
         "emg_meaning": [
             "감각신경 보존의 원리: 신경뿌리병증은 대개 뒤뿌리신경절(DRG)보다 근위부(척수 쪽)에서 발생하므로, 말초 쪽으로 뻗어나온 감각신경은 온전하게 유지됩니다."
         ],
-        "ddx": "L4-L5 추간판 탈출증 또는 요추관 협착증 확인을 위해 요추 MRI 검사가 필요합니다."
+        "ddx": "L4-L5 추간판 탈출증 또는 허러 협착증 확인을 위해 허리 MRI 검사가 필요합니다."
     },
 
     "4. 우측 발처짐 및 종아리 가쪽 감각 저하 (종아리신경 마비 의심)": {
@@ -104,7 +104,7 @@ VIRTUAL_REPORTS = {
             ["앞정강근 (Tibialis Anterior)", "깊은종아리신경(L4-L5) [L4-L5 우세]", "Silent at rest (전기적 침묵)", "No MUAPs on volition", "비정상 (완전 동원 소실 상태)"],
             ["긴종아리근 (Peroneus Longus)", "얕은종아리신경(L5-S1) [L5 우세]", "Silent at rest (전기적 침묵)", "Severely reduced MU recruitment", "비정상 (불완전 동원 감소 상태)"],
             ["가자미근 (Soleus)", "정강신경(S1-S2) [S1 우세]", "Silent at rest", "Normal MU recruitment", "정상"],
-            ["허리 척추주위근 (Lumbar Paraspinal)", "척수신경후지 (L5 Root)", "Silent at rest", "평가불가", "정상"]
+            ["허리 척추주위근 (Lumbar Paraspinal)", "척수신경 뒤가지 (L5 Root)", "Silent at rest", "평가불가", "정상"]
         ],
         "interpretation": [
             "종아리뼈머리(Fibular head) 부위를 가로질러 근위부 자극 시 운동신경 진폭이 급격히 떨어지는 '전도차단(Conduction block)'이 관찰됩니다.",
@@ -134,20 +134,20 @@ VIRTUAL_REPORTS = {
         ],
         "interpretation": [
             "가장 긴 신경인 하지 감각신경에서 반응 소실(No response)이 먼저 나타나며, 상지 신경은 비교적 보존되는 전형적인 '길이 의존성(Length-dependent)' 패턴입니다.",
-            "진폭 감소가 두드러지는 축삭 손상(Axonal loss) 우세형 다발신경병증입니다."
+            "진폭 감소가 두드러지는 축삭 손상(Axonal loss) 우세형 다발신경병증(Polyneuopathy)입니다."
         ],
         "emg_meaning": [
-            "길이의존성 병태생리: 대사성/독성 원인에 의해 세포체에서 가장 멀리 떨어져 영양공급이 취약한 긴 신경의 끝부분부터 서서히 손상(Dying back)되는 양상입니다."
+            "길이의존성 병태생리: 당뇨병, 대사성/독성 등의 원인에 의해 세포체에서 가장 멀리 떨어져 영양공급이 취약한 긴 말초 신경의 끝부분부터 서서히 손상(Dying back)되는 양상입니다."
         ],
         "ddx": "비타민 B12 결핍, 알코올성 신경병증 감별 및 발 상처(당뇨발) 주의 교육 필수."
     },
 
-    "6. 상하지 대칭성 근력 저하 (급성 길랭-바레 증후군 의심)": {
+    "6. 팔다리 대칭성 근력 저하 (급성 기얭-바레 증후군 의심)": {
         "info": {"age": 41, "sex": "여성", "symptom": "2주 전 장염, 다리에서 시작되어 팔로 올라오는 대칭성 근력 약화", "side": "양측"},
-        "diagnosis": "급성 염증성 말이집탈락성 다발신경병증 (GBS)",
+        "diagnosis": "급성 염증성 말이집탈락성 다발신경병증 (Guillain-Barré Syndrome, GBS)",
         "ncs_sensory": [
             ["정중신경 (Median SNAP)", "정상 범위", "잠복기 지연", "비정상 (정상범위: 잠복기 < 3.5ms)"],
-            ["장딴지신경 (Sural SNAP)", "정상 범위", "정상 범위", "정상 (Sural sparing pattern)"]
+            ["장딴지신경 (Sural SNAP)", "정상 범위", "정상 범위", "정상 (장딴지 신경 보존 패턴, Sural sparing pattern)"]
         ],
         "ncs_motor": [
             ["종아리신경 (Peroneal CMAP)", "원위부 자극 (발목)", "정상 범위", "잠복기 지연", "비정상 (정상범위: 잠복기 < 6.0ms)"],
@@ -155,15 +155,15 @@ VIRTUAL_REPORTS = {
         ],
         "emg": [
             ["앞정강근 (Tibialis Anterior)", "깊은종아리신경(L4-L5)", "Silent at rest (전기적 침묵)", "Severely reduced MU recruitment", "비정상 (운동단위 동원 감소 상태)"],
-            ["허리 척추주위근 (Lumbar Paraspinal)", "척수신경후지 (L5 Root)", "Silent at rest", "평가불가", "정상"]
+            ["허리 척추주위근 (Lumbar Paraspinal)", "척수신경 뒤가지 (L5 Root)", "Silent at rest", "평가불가", "정상"]
         ],
         "interpretation": [
             "여러 운동신경에서 심한 잠복기 지연과 전도속도 저하가 나타나는 명확한 '말이집탈락성(Demyelinating)' 소견입니다.",
-            "상지 감각신경은 이상이 있으나, 하지 감각은 정상으로 보존되는 GBS의 특징적인 'Sural sparing pattern'이 관찰됩니다."
+            "상지 감각신경은 이상이 있으나, 하지 감각은 정상으로 보존되는 기얭-바레 증후군 (Guillain-Barré Syndrome, GBS)의 특징적인 '장딴지 신경 보존 패턴 (Sural sparing pattern)'이 관찰됩니다."
         ],
         "emg_meaning": [
             "시간분산(Temporal dispersion): 근위부 자극 시 말이집이 불규칙하게 벗겨져 전도 속도가 제각각이 되면서, 파형이 넓게 퍼지고 진폭이 흩어지는 현상입니다.",
-            "초기 Silent at rest: 발병 초기(2~3주 이내)에는 축삭 자체가 끊어지지 않아 탈신경 전위가 나타나지 않습니다."
+            "초기 Silent at rest: 발병 초기(2~3주 이내)에는 축삭 자체가 끊어지지 않아 탈신경 전위(fibrillation, positive sharp wave)가 나타나지 않습니다."
         ],
         "ddx": "뇌척수액 검사(단백세포 해리 확인) 및 호흡근 마비 모니터링 필수."
     }
@@ -251,11 +251,11 @@ def render_input_learning():
         <div class="info-legend-box" style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:10px; margin-top:15px; font-size:0.83rem; line-height:1.45;">
             ℹ️ <b>결과표 약어 해설 사전:</b><br/>
             • <b>Silent at rest:</b> 휴식 시 생리적 무반응(정상 상태)<br/>
-            • <b>Fibrillation potential:</b> 섬유자발전위 (축삭 사멸 시 개별 근섬유의 단독 미세 수축)<br/>
+            • <b>Fibrillation potential:</b> 섬유자발전위 (축삭 손상 시 개별 근섬유의 단독 미세 수축)<br/>
             • <b>Positive sharp wave:</b> 양성예파 (탈신경된 근섬유 침 자극 시 유발되는 비정상 자발활동)<br/>
             • <b>MU recruitment:</b> 운동단위 동원패턴 (근수축 강도에 비례한 운동단위 참여도)<br/>
             • <b>MUAPs:</b> 운동단위활동전위 (Motor Unit Action Potentials)<br/>
-            • <b>Giant MUAP:</b> 거대 운동단위전위 (탈신경 후 인접 생존 신경가지의 Sprouting 재지배로 형성된 거대 파형)<br/>
+            • <b>Giant MUAP:</b> 거대 운동단위전위 (탈신경 후 인접 생존 신경가지의 축삭 발아(Sprouting) 재지배로 형성된 거대 파형)<br/>
             • <b>No MUAPs on volition:</b> 의지적인 근수축(Volition) 시도에도 불구하고 운동단위 전위가 전혀 동원되지 않는 완전 마비 상태
         </div>
         """, unsafe_allow_html=True)
