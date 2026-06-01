@@ -10,10 +10,10 @@ RESULT_OPTION_NONE = "미선택"
 RESULT_NORMAL = "정상 범위(within normal limits)"
 
 # NCS
-RESULT_DELAYED = "잠복기 지연(delayed latency) - 말이집탈락성/포착 시사"
-RESULT_REDUCED = "진폭 감소(reduced amplitude) - 축삭 손상 시사"
-RESULT_CONDUCTION_BLOCK = "근위부 자극 시 진폭 감소(conduction block) - 전도차단 시사"
-RESULT_ABSENT = "반응 소실(absent response)"
+RESULT_DELAYED = "잠복기 지연 (Delayed latency) - 정상 대비 130% 이상 초과"
+RESULT_REDUCED = "진폭 감소 (Reduced amplitude) - 정상 대비 50% 이하 감소"
+RESULT_CONDUCTION_BLOCK = "전도차단 (Conduction block) - 근위부/원위부 진폭 50% 이상 감소"
+RESULT_ABSENT = "반응 소실 (Absent response) - 전기 자극에 무반응"
 RESULT_DELAYED_OR_ABSENT = "잠복기 지연 또는 반응 소실(delayed or absent response)"
 
 # F-wave / Blink / H-reflex
@@ -22,10 +22,11 @@ RESULT_H_REFLEX_HYPER = "H-반사 항진 또는 문턱값 감소(hyperactive H-r
 RESULT_HM_RATIO_INC = "H/M 비율 증가 가능(increased H/M ratio possible)"
 
 # EMG
-RESULT_EMG_NORMAL = "휴식 시 전기적 침묵(electrical silence), 수의수축 시 정상 운동단위 동원패턴"
-RESULT_EMG_ACTIVE_DENERVATION = "휴식 시 섬유자발전위(Fibrillation) 및 양성예파(PSW) 관찰"
-RESULT_EMG_ACTIVE_DENERVATION_WITH_REDUCED_RECRUITMENT = "휴식 시 섬유자발전위 및 양성예파 관찰, 수의수축 시 운동단위 동원 감소"
-RESULT_EMG_FASCICULATION = "휴식 시 근육다발수축전위(fasciculation potentials) 관찰 가능"
+RESULT_EMG_NORMAL = "휴식 시 Silent at rest (전기적 침묵) / 근수축 시 Normal MU recruitment"
+RESULT_EMG_ACTIVE_DENERVATION = "휴식 시 Fibrillation 및 Positive sharp wave 출현 / 근수축 시 Reduced MU recruitment"
+RESULT_EMG_CHRONIC_REINNERVATION = "휴식 시 Silent at rest / 근수축 시 Giant MUAPs 출현 및 Reduced MU recruitment"
+RESULT_EMG_FASCICULATION = "휴식 시 Fasciculation potentials 출현 / 근수축 시 Reduced MU recruitment"
+RESULT_EMG_NO_RESPONSE = "휴식 시 Silent at rest / 근수축 시 No MUAP on volition (운동단위 동원 불가)"
 
 # 기존 호환용 옵션
 RESULT_OPTIONS = [
