@@ -8,7 +8,7 @@ from ui.navigation import render_bottom_navigation
 # 수치 데이터 입력 완료 및 침근전도 약어 정리 완료
 # =====================================================================
 VIRTUAL_REPORTS = {
-    "1. 좌측 목/어깨 통증 및 팔 저림 (C6 신경뿌리병증 의심)": {
+    "좌측 목/어깨 통증 및 팔 저림 (C6 신경뿌리병증 의심)": {
         "info": {"age": 45, "sex": "남성", "symptom": "좌측 목 통증, 엄지/검지 저림, 위팔두갈래근 근력 약화", "side": "좌측"},
         "diagnosis": "좌측 C6 신경뿌리병증 (C6 Radiculopathy)",
         "ncs_sensory": [
@@ -35,10 +35,10 @@ VIRTUAL_REPORTS = {
             "Silent at rest: 휴식 시 어떠한 비정상 전기 활동도 관찰되지 않는 완벽한 전기적 침묵 상태입니다.",
             "Normal MU recruitment: 근수축 요구도에 따라 정량적인 운동단위(Motor Unit) 결합 동원이 원활한 정상 상태입니다."
         ],
-        "ddx": "디스크 탈출증이나 척추관 협착증 확인을 위해 경추 MRI 검사 시행이 권장됩니다."
+        "ddx": "디스크 탈출증이나 척추관 협착증 확인을 위해 목 부위 MRI 검사 시행이 권장됩니다."
     },
 
-    "2. 우측 1~3번째 손가락 저림 및 야간통 (손목굴증후군 의심)": {
+    "우측 1~3번째 손가락 저림 및 야간통 (손목굴증후군 의심)": {
         "info": {"age": 52, "sex": "여성", "symptom": "우측 1,2,3번째 손가락 저림, 밤에 통증 심해짐, 쥐기 약화", "side": "우측"},
         "diagnosis": "우측 중증 손목굴증후군 (Severe Carpal Tunnel Syndrome)",
         "ncs_sensory": [
@@ -63,7 +63,7 @@ VIRTUAL_REPORTS = {
         "ddx": "동일 수근관 부위 포착을 악화시키는 당뇨 및 갑상선 질환 등 전신 대사질환 배제가 병행되어야 합니다."
     },
 
-    "3. 좌측 허리 통증 및 엄지발가락 올림 약화 (L5 신경뿌리병증 의심)": {
+    "좌측 허리 통증 및 엄지발가락 올림 약화 (L5 신경뿌리병증 의심)": {
         "info": {"age": 58, "sex": "여성", "symptom": "좌측 엉덩이부터 종아리 가쪽으로 방사통, 발처짐 증상", "side": "좌측"},
         "diagnosis": "좌측 L5 신경뿌리병증 (L5 Radiculopathy)",
         "ncs_sensory": [
@@ -87,10 +87,10 @@ VIRTUAL_REPORTS = {
         "emg_meaning": [
             "감각신경 보존의 원리: 신경뿌리병증은 대개 뒤뿌리신경절(DRG)보다 근위부(척수 쪽)에서 발생하므로, 말초 쪽으로 뻗어나온 감각신경은 온전하게 유지됩니다."
         ],
-        "ddx": "L4-L5 추간판 탈출증 또는 요추관 협착증 확인을 위해 요추 MRI 검사가 필요합니다."
+        "ddx": "L4-L5 추간판 탈출증 또는 허리 협착증 확인을 위해 요추 MRI 검사가 필요합니다."
     },
 
-    "4. 우측 발처짐 및 종아리 가쪽 감각 저하 (종아리신경 마비 의심)": {
+    "우측 발처짐 및 종아리 가쪽 감각 저하 (종아리신경 마비 의심)": {
         "info": {"age": 32, "sex": "남성", "symptom": "다리를 꼬고 잔 후 발생한 우측 발처짐, 허리 통증 없음", "side": "우측"},
         "diagnosis": "우측 온종아리신경 마비 (Common Peroneal Neuropathy)",
         "ncs_sensory": [
@@ -118,7 +118,7 @@ VIRTUAL_REPORTS = {
         "ddx": "급성 압박성 신경병증. 다리 꼬는 습관 교정 및 발목 보조기(AFO) 착용 여부 평가가 필요합니다."
     },
 
-    "5. 양측 발끝 저림 및 감각 저하 (당뇨병성 다발신경병증 의심)": {
+    "양측 발끝 저림 및 감각 저하 (당뇨병성 다발신경병증 의심)": {
         "info": {"age": 68, "sex": "남성", "symptom": "양쪽 발바닥이 화끈거리고 감각 둔화 (장갑-양말 분포), 당뇨", "side": "양측"},
         "diagnosis": "길이의존성 감각운동 다발신경병증 (Polyneuropathy)",
         "ncs_sensory": [
@@ -143,7 +143,7 @@ VIRTUAL_REPORTS = {
         "ddx": "비타민 B12 결핍, 알코올성 신경병증 감별 및 발 상처(당뇨발) 주의 교육 필수."
     },
 
-    "6. 상하지 대칭성 근력 저하 (급성 길랭-바레 증후군 의심)": {
+    "팔다리 대칭성 근력 저하 (급성 기얭-바레 증후군 의심)": {
         "info": {"age": 41, "sex": "여성", "symptom": "2주 전 장염, 다리에서 시작되어 팔로 올라오는 대칭성 근력 약화", "side": "양측"},
         "diagnosis": "급성 염증성 말이집탈락성 다발신경병증 (GBS)",
         "ncs_sensory": [
@@ -160,7 +160,7 @@ VIRTUAL_REPORTS = {
         ],
         "interpretation": [
             "여러 운동신경에서 심한 잠복기 지연과 전도속도 저하가 나타나는 명확한 '말이집탈락성(Demyelinating)' 소견입니다.",
-            "상지 감각신경은 이상이 있으나, 하지 감각은 정상으로 보존되는 GBS의 특징적인 'Sural sparing pattern'이 관찰됩니다."
+            "상지 감각신경은 이상이 있으나, 하지 감각은 정상으로 보존되는 기얭-바레 증후군(Guillain-Barré Syndrome, GBS)의 특징적인 '장딴지 보존 패턴(Sural sparing pattern)'이 관찰됩니다."
         ],
         "emg_meaning": [
             "시간분산(Temporal dispersion): 근위부 시 말이집이 불규칙하게 벗겨져 전도 속도가 제각각이 되면서, 파형이 넓게 퍼지고 진폭이 흩어지는 현상입니다.",
@@ -256,7 +256,7 @@ def render_input_learning():
             • <b>Positive sharp wave:</b> 양성예파 (탈신경된 근섬유 침 자극 시 유발되는 비정상 자발활동)<br/>
             • <b>MU recruitment:</b> 운동단위 동원패턴 (근수축 강도에 비례한 운동단위 참여도)<br/>
             • <b>MUAPs:</b> 운동단위활동전위 (Motor Unit Action Potentials)<br/>
-            • <b>Giant MUAP:</b> 거대 운동단위전위 (탈신경 후 인접 생존 신경가지의 Sprouting 재지배로 형성된 거대 파형)<br/>
+            • <b>Giant MUAP:</b> 거대 운동단위전위 [탈신경 후 인접 생존 신경가지의 축삭발아(Sprouting) 재지배로 형성된 거대 파형]<br/>
             • <b>No MUAPs on volition:</b> 의지적인 근수축(Volition) 시도에도 불구하고 운동단위 전위가 전혀 동원되지 않는 완전 마비 상태
         </div>
         """, unsafe_allow_html=True)
