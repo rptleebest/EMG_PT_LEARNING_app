@@ -240,7 +240,7 @@ def render_input_learning():
         st.markdown(f'<div class="case-section-label">📋 근전도 결과표 (NCS & Needle EMG): 병변측 ({data["info"]["side"]})</div>', unsafe_allow_html=True)
 
         st.markdown('<div class="finding-highlight">⚡ 감각신경전도검사 (Sensory NCS)</div>', unsafe_allow_html=True)
-        st.markdown(create_responsive_table(["검사 신경", "진폭 수치", "잠복기 수치", "해석 및 정상 기준"], data["ncs_sensory"], "sensory_tbl"), unsafe_allow_html=True)
+        st.markdown(create_responsive_table(["검사 신경", "진폭 수치", "잠복기 수치", "해석"], data["ncs_sensory"], "sensory_tbl"), unsafe_allow_html=True)
 
         st.markdown('<div class="finding-highlight">⚡ 운동신경전도검사 (Motor NCS)</div>', unsafe_allow_html=True)
         st.markdown(create_responsive_table(["검사 신경", "자극 위치", "진폭 수치", "잠복기 수치", "해석"], data["ncs_motor"], "motor_tbl"), unsafe_allow_html=True)
