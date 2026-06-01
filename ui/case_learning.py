@@ -215,7 +215,7 @@ def render_case_detail():
         st.markdown('<div class="result-label">침근전도 해석 포인트</div>', unsafe_allow_html=True)
         for x in teaching["emg_reason"]:
             x_strip = x.strip()
-            # 1), 2), 3) 번호 리스트 가시성 제어 (불릿 • 제거하고 정형화된 정렬 적용)
+            # 1), 2), 3) 번호 리스트 가시성 제어 (불릿 • 제거하고 깔끔한 정렬 부여)
             if x_strip.startswith(("1)", "2)", "3)", "4)", "5)")):
                 st.markdown(f'<div class="result-text" style="padding-left: 14px; margin-bottom: 5px; line-height:1.6;">{x_strip}</div>', unsafe_allow_html=True)
             # 타이틀 강조 제어 (마크다운 ** 및 [] 제거 후 파란색 강조 폰트 바인딩)
