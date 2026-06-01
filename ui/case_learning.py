@@ -13,7 +13,7 @@ def render_case_list():
     st.markdown('<div class="section-card">', unsafe_allow_html=True)
     st.markdown('<div class="case-section-label">📋 학습할 가상 사례 선택</div>', unsafe_allow_html=True)
 
-    # 1. 필터 및 기본 첫 항목 자동 체크 방지를 위한 '선택 안 함' 도입
+    # 기본 첫 항목 자동 체크 방지를 위한 '선택 안 함' 도입
     case_names = ["선택 안 함"] + list(CASE_LIBRARY.keys())
     selected = st.radio("학습할 임상 증상 선택", case_names, label_visibility="collapsed")
 
@@ -44,8 +44,8 @@ def _render_finding_block(title, findings, side):
     if not findings:
         return
 
-    # 5. 표제어 수정 적용: 근전도 결과표 (NCS & Needle EMG): 병변측
-    st.markdown(f'<div class="case-section-label">{title} (병변측: {side})</div>', unsafe_allow_html=True)
+    # 1) 표제어 전면 수정 적용
+    st.markdown(f'<div class="case-section-label">{title}</div>', unsafe_allow_html=True)
     block_parts = []
 
     items = list(findings.items())
@@ -53,7 +53,7 @@ def _render_finding_block(title, findings, side):
         left = values[0] if len(values) > 0 else ""
         right = values[1] if len(values) > 1 else ""
 
-        # 정상측 정보는 완전히 노출하지 않고 병변측 정보만 렌더링
+        # 정상측 정보는 배제하고 오직 병변측 정보만 렌더링
         lines = [f'<div class="finding-highlight">{item}</div>']
 
         if side == "양쪽" or side == "양측":
@@ -63,22 +63,64 @@ def _render_finding_block(title, findings, side):
             pathological_val = right if (side == "오른쪽" or side == "우") else left
             norm_val = normalize_result_text(pathological_val)
 
-            # 진폭과 잠복기를 분리하여 판독 결과 매핑 및 가이드라인 제시 (Request 3 반영)
-            if "SNAP" in item or "CMAP" in item:
+            # 감각/운동 신경전도 검사 출력 제어
+            if "감각" in title:
                 if "지연" in norm_val or "delayed" in norm_val.lower():
-                    lines.append(f'<div class="finding-subtext">1) 진폭: <span class="text-blue">정상 범위</span></div>')
-                    lines.append(f'<div class="finding-subtext">2) 잠복기: <span class="text-red">비정상 (정상범위: 잠복기 정상 대비 130% 미만)</span></div>')
+                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-blue">정상 범위</span></div>')
+                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-red">비정상 (정상범위: 잠복기 정상 대비 130% 미만)</span></div>')
                 elif "감소" in norm_val or "reduced" in norm_val.lower():
-                    lines.append(f'<div class="finding-subtext">1) 진폭: <span class="text-red">비정상 (정상범위: 진폭 정상 대비 50% 초과)</span></div>')
-                    lines.append(f'<div class="finding-subtext">2) 잠복기: <span class="text-blue">정상 범위</span></div>')
+                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-red">비정상 (정상범위: 진폭 정상 대비 50% 초과)</span></div>')
+                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-blue">정상 범위</span></div>')
                 elif "소실" in norm_val or "absent" in norm_val.lower():
-                    lines.append(f'<div class="finding-subtext">1) 진폭: <span class="text-red">반응 소실 (전기 자극에 무반응)</span></div>')
-                    lines.append(f'<div class="finding-subtext">2) 잠복기: <span class="text-red">반응 소실 (전기 자극에 무반응)</span></div>')
+                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-red">반응 소실 (전기 자극에 무반응)</span></div>')
+                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-red">반응 소실 (전기 자극에 무반응)</span></div>')
                 else:
-                    lines.append(f'<div class="finding-subtext">1) 진폭: <span class="text-blue">정상 범위</span></div>')
-                    lines.append(f'<div class="finding-subtext">2) 잠복기: <span class="text-blue">정상 범위</span></div>')
+                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-blue">정상 범위</span></div>')
+                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-blue">정상 범위</span></div>')
+                    
+            elif "운동" in title:
+                if "지연" in norm_val or "delayed" in norm_val.lower():
+                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-blue">정상 범위</span></div>')
+                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-red">비정상 (정상범위: 잠복기 정상 대비 130% 미만)</span></div>')
+                elif "감소" in norm_val or "reduced" in norm_val.lower():
+                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-red">비정상 (정상범위: 진폭 정상 대비 50% 초과)</span></div>')
+                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-blue">정상 범위</span></div>')
+                elif "차단" in norm_val or "block" in norm_val.lower():
+                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-red">비정상 (전도차단: 근위부/원위부 진폭 50% 이상 감소)</span></div>')
+                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-blue">정상 범위</span></div>')
+                elif "소실" in norm_val or "absent" in norm_val.lower():
+                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-red">반응 소실 (전기 자극에 무반응)</span></div>')
+                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-red">반응 소실 (전기 자극에 무반응)</span></div>')
+                else:
+                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-blue">정상 범위</span></div>')
+                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-blue">정상 범위</span></div>')
+                    
+            # 2) 침근전도 검사결과 소견 포맷 고도화 반영
+            elif "침근전도" in title:
+                rest_val = "Silent at rest"
+                vol_val = "Normal MU recruitment"
+                
+                # 질환에 내재된 생리학적 상태 디코딩
+                if "Fibrillation" in norm_val or "자발전위" in norm_val or "PSW" in norm_val or "양성예파" in norm_val:
+                    rest_val = "fibrillation potential, positive sharp wave"
+                    vol_val = "Reduced MU recruitment"
+                elif "Giant" in norm_val or "거대" in norm_val or "재신경지배" in norm_val:
+                    rest_val = "Silent at rest"
+                    vol_val = "Giant MUAPs 출현 및 Reduced MU recruitment"
+                elif "Fasciculation" in norm_val or "다발수축" in norm_val:
+                    rest_val = "fasciculation potential"
+                    vol_val = "Reduced MU recruitment"
+                elif "No MUAPs" in norm_val or "무반응" in norm_val or "동원 불가" in norm_val:
+                    rest_val = "Silent at rest"
+                    vol_val = "No MUAPs on volition (운동단위 동원 불가)"
+                
+                rest_color = "text-red" if rest_val != "Silent at rest" else "text-blue"
+                vol_color = "text-red" if "Reduced" in vol_val or "Giant" in vol_val or "No MUAPs" in vol_val else "text-blue"
+
+                lines.append(f'<div class="finding-subtext">- 휴식 시: <span class="{rest_color}">{rest_val}</span></div>')
+                lines.append(f'<div class="finding-subtext">- 근수축 시: <span class="{vol_color}">{vol_val}</span></div>')
             else:
-                # EMG 또는 반사계
+                # 반사 및 후기 반응 소견
                 lines.append(f'<div class="finding-subtext">판독 결과: <span class="text-red">{norm_val}</span></div>')
 
         block_parts.append(f'<div class="compact-item">{"".join(lines)}</div>')
@@ -113,7 +155,6 @@ def render_case_detail():
     elif side == "좌": side = "왼쪽"
     elif side == "양측": side = "양쪽"
 
-    # 5. 학생용 사고 프레임 기준 추가
     st.markdown("""
     <div class="warn-card">
         <div class="finding-highlight" style="color: #b45309; border-bottom-color: #fde68a;">🎓 학생용 사고 프레임 (판독 기준)</div>
@@ -141,18 +182,18 @@ def render_case_detail():
 
     grouped = split_findings_by_domain(findings, ANATOMY)
 
-    # 5. 표제어 수정 적용: 근전도 결과표 (NCS & Needle EMG): 병변측
+    # 1) 표제어 수정 및 함수 호출 분기 처리
     if grouped["sensory"]:
-        _render_finding_block("근전도 결과표 (NCS & Needle EMG): 병변측 감각신경전도 소견", grouped["sensory"], side)
+        _render_finding_block("감각신경전도검사: 병변측", grouped["sensory"], side)
     if grouped["motor"]:
-        _render_finding_block("근전도 결과표 (NCS & Needle EMG): 병변측 운동신경전도 소견", grouped["motor"], side)
+        _render_finding_block("운동신경전도검사: 병변측", grouped["motor"], side)
     if grouped["muscle"]:
-        _render_finding_block("근전도 결과표 (NCS & Needle EMG): 병변측 침근전도 소견", grouped["muscle"], side)
+        _render_finding_block("침근전도검사 소견: 병변측", grouped["muscle"], side)
     if grouped["reflex"] or grouped["other"]:
         merged = {}
         merged.update(grouped["reflex"])
         merged.update(grouped["other"])
-        _render_finding_block("근전도 결과표 (NCS & Needle EMG): 병변측 반사 및 후기반응 소견", merged, side)
+        _render_finding_block("반사 및 후기반응 소견: 병변측", merged, side)
 
     st.markdown('<div class="result-card">', unsafe_allow_html=True)
     st.markdown('<div class="result-title">✅ 교육용 진단 요약</div>', unsafe_allow_html=True)
@@ -187,7 +228,6 @@ def render_case_detail():
                 st.markdown('<hr class="item-divider">', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # 4 & 6. 다른 케이스 선택 버튼 배치 (뒤로가기가 홈으로 가지 않고 초기화 회귀)
     st.markdown('<div style="text-align: center; margin-top: 20px; margin-bottom: 20px;">', unsafe_allow_html=True)
     if st.button("🔄 다른 임상 케이스 분석하기", key="back_to_case_list_btn"):
         st.session_state["screen"] = "case_list"
