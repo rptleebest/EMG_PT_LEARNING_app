@@ -1,7 +1,6 @@
 # app.py
 
 import streamlit as st
-
 from utils.state import init_app_state
 from ui.navigation import render_top_navigation
 from ui.router import render_router
@@ -44,23 +43,7 @@ def apply_mobile_first_style():
         background: var(--bg) !important;
     }
 
-    [data-testid="stToolbar"] {
-        background: transparent !important;
-    }
-
     [data-testid="stMain"] {
-        background: var(--bg) !important;
-    }
-
-    [data-testid="stMainBlockContainer"] {
-        background: var(--bg) !important;
-    }
-
-    section.main {
-        background: var(--bg) !important;
-    }
-
-    .main {
         background: var(--bg) !important;
     }
 
@@ -306,48 +289,54 @@ def apply_mobile_first_style():
         line-height: 1.42 !important;
     }
 
-    /* ★ 버튼 흰색 글씨 강제화 로직 */
-    div[data-testid="stButton"] > button {
+    /* --------------------------------------------------
+       ★ 자동 반응형 버튼 너비 제어 스타일링 (핵심 개선)
+       -------------------------------------------------- */
+    /* [기본 PC 스타일]: 컨텐츠 길이에 맞추되 최소 200px 보장, 정중앙 정렬 */
+    div[data-testid="stButton"] > button,
+    div[data-testid="stDownloadButton"] > button {
+        width: auto !important;
+        min-width: 200px !important;
+        max-width: 100% !important;
+        padding-left: 24px !important;
+        padding-right: 24px !important;
+        margin: 0 auto !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
         font-weight: 800 !important;
         border-radius: 12px !important;
-        min-height: 46px !important;
+        min-height: 44px !important;
         font-size: 0.92rem !important;
+        transition: all 0.2s ease-in-out !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
     }
 
+    /* Primary 버튼 (학습 시작 등 주요 액션) 글씨색 강제 */
     div[data-testid="stButton"] > button[kind="primary"],
     div[data-testid="stButton"] > button[data-testid="baseButton-primary"] {
         color: #ffffff !important;
-        -webkit-text-fill-color: #ffffff !important;
-        font-weight: 800 !important;
+        background-color: var(--blue) !important;
+        border: none !important;
     }
 
     div[data-testid="stButton"] > button[kind="primary"] *,
     div[data-testid="stButton"] > button[data-testid="baseButton-primary"] * {
         color: #ffffff !important;
-        -webkit-text-fill-color: #ffffff !important;
     }
 
-    div[data-testid="stButton"] > button[kind="primary"]:hover,
-    div[data-testid="stButton"] > button[data-testid="baseButton-primary"]:hover {
-        color: #ffffff !important;
-        -webkit-text-fill-color: #ffffff !important;
-    }
-
-    div[data-testid="stButton"] > button[kind="primary"]:hover *,
-    div[data-testid="stButton"] > button[data-testid="baseButton-primary"]:hover * {
-        color: #ffffff !important;
-        -webkit-text-fill-color: #ffffff !important;
-    }
-
-    div[data-testid="stDownloadButton"] > button {
-        font-weight: 800 !important;
-        border-radius: 12px !important;
-        min-height: 46px !important;
-        font-size: 0.92rem !important;
-    }
-
-    /* 모바일 반응형 사이즈 조정 */
+    /* [모바일 스타일 오버라이드]: 768px 이하 환경에서는 100% 꽉 차도록 확장 */
     @media (max-width: 768px) {
+        div[data-testid="stButton"] > button,
+        div[data-testid="stDownloadButton"] > button {
+            width: 100% !important;
+            max-width: 100% !important;
+            min-width: 100% !important;
+            display: block !important;
+            padding-left: 12px !important;
+            padding-right: 12px !important;
+        }
+
         .main .block-container {
             padding-top: 0.9rem;
             padding-bottom: 3rem;
