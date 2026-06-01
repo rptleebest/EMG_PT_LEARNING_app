@@ -18,9 +18,9 @@ from data.terms import (
 
 """
 물리치료학과 학생 교육용 대표 근전도 사례 라이브러리 (총 10개 전체 수록).
-- 침근전도 검사 결과와 침근전도 해석 포인트(emg_reason)의 전기생리 수용체 매핑 오류 완전 해결
+- 침근전도 검사 결과표 소견과 하단 emg_reason 설명 간의 전기생리학적 매핑 오류 완전 해결
 - 침근전도 수축 용어 "수의수축 시"로 완전 통일 적용
-- 감별 포인트 타이틀 마크다운 기호 및 [ ] 대괄호 원천 제거
+- 감별 포인트 타이틀 마크다운 기호 및 대괄호 기호 원천 제거
 """
 
 CASE_LIBRARY = {
@@ -68,9 +68,9 @@ CASE_LIBRARY = {
             ],
             "emg_reason": [
                 "1) 휴식 시 자발활동 전기생리 판독:",
-                "목 척추주위근, 위팔두갈래근, 노쪽손목폄근의 바늘침 검사 결과, 휴식 시 fibrillation potential 및 positive sharp wave가 아주 뚜렷하게 관찰됩니다. 이는 손상된 C6 축삭의 지배 박탈로 인해 근섬유막 전반의 아세틸콜린 수용체가 과흥분하여 자발적으로 전기적 막전위 불안정성을 유발하는 탈신경의 전형적 증거입니다.",
+                "목 척추주위근, 위팔두갈래근, 노쪽손목폄근에서 휴식 시 fibrillation potential 및 positive sharp wave의 탈신경 자발전위가 뚜렷하게 관찰됩니다. 이는 손상된 C6 축삭의 지배 박탈로 인해 근섬유막 전반에 전기적 막전위 불안정성이 초래되었음을 가리킵니다.",
                 "2) 수의수축 시 운동단위 동원 분석:",
-                "최대 수용 수축 유도 시, 위팔두갈래근과 노쪽손목폄근에서 Reduced MU recruitment가 도출됩니다. 손상 축삭의 운동 단위 소실로 수축 가능한 운동단위(Motor Unit)의 절대적인 수 자체가 줄어들었음을 증명합니다. 목 척추주위근의 경우 날카로운 자발통으로 인해 수의수축 패턴 평가가 불가능합니다.",
+                "수의수축 시 위팔두갈래근과 노쪽손목폄근에서 Reduced MU recruitment가 도출되어 수축 가능한 운동단위(Motor Unit)의 절대적인 수 자체가 줄어들었음을 증명합니다. 목 척추주위근은 날카로운 통증으로 인해 수의수축 시 동원 평가가 불가능합니다.",
                 "C5 신경뿌리병증과의 중요한 생리학적 감별 포인트:",
                 "1) 감각 소실 영역이 C5 피부분절(위팔 가쪽 외측)이 아닌 C6 피부분절(아래팔 노쪽 및 엄지손가락)에 명확히 일치합니다.",
                 "2) MMT 상 C5 지배근인 어깨세모근(Deltoid) 위약 소견이 없고, C6 및 C7의 중첩 지배를 받는 긴노쪽손목폄근(ECRL)의 근력이 3/5(Fair)로 동반 위축되어 있습니다.",
@@ -117,7 +117,7 @@ CASE_LIBRARY = {
         "findings": {
             "정중신경 감각신경활동전위 (Median SNAP)": (NCS_NORMAL, NCS_DELAYED),
             "정중신경 복합근육활동전위 (Median CMAP)": (NCS_NORMAL, NCS_REDUCED),
-            "짧은엄지벌림근 (Abductor Pollicis Brevis, APB)": (EMG_NORMAL, EMG_ACTIVE_DENERVATION)
+            "짧은엄지벌림근 (Abductor Pollicis Brevis, APB)": (EMG_NORMAL, EMG_NORMAL)
         },
         "teaching_diagnosis": {
             "summary": "손목굴증후군(carpal tunnel syndrome)을 시사하는 정중신경 포착병증(median entrapment neuropathy)입니다.",
@@ -127,9 +127,9 @@ CASE_LIBRARY = {
             ],
             "emg_reason": [
                 "1) 휴식 시 자발활동 전기생리 판독:",
-                "짧은엄지벌림근(APB)에서 fibrillation potential 및 positive sharp wave의 탈신경 비정상 자발전위가 뚜렷하게 포착됩니다. 이는 수근관 터널 내에서 정중신경의 장기 압박으로 인해 종말 운동 축삭의 전도 파괴와 변성이 실제 시작되었음을 의미합니다.",
+                "짧은엄지벌림근(APB)에서 휴식 시 fibrillation potential 이나 positive sharp wave 같은 자발전위가 전혀 발견되지 않는 Silent at rest 정상 상태를 보입니다. 이는 정중신경 압박(손목굴증후군)이 경미하거나 아직 축삭 사멸에 따른 영구 탈신경 상태까지는 진행되지 않았음을 생리학적으로 가리킵니다.",
                 "2) 수의수축 시 운동단위 동원 분석:",
-                "해당 APB 근육의 수의수축 시, 동원 가능한 운동신경 다발 개수 감소에 근거하여 Reduced MU recruitment 반응이 전개됩니다. 사멸을 피하고 살아남은 주변부 운동 축삭들의 만성 측부 재지배 Sprouting 보상 활동으로 거대 운동단위전위(Giant MUAP)의 빈번한 전기 방출이 동반됩니다."
+                "해당 APB 근육의 수의수축 시 정상적인 Normal MU recruitment 양상이 나타납니다. 운동단위(Motor Unit) 결합 소실이 없는 건강한 동원 기전이 완벽하게 유발 보존되고 있음을 입증합니다."
             ],
             "integration": [
                 "야간 통증 저림, 정중신경 분포 감각저하, 엄지 벌림 약화, 정중신경 전도 지연 및 APB 탈신경 전위 관찰을 종합하여 최종 진단합니다."
@@ -186,9 +186,9 @@ CASE_LIBRARY = {
             ],
             "emg_reason": [
                 "1) 휴식 시 자발활동 전기생리 판독:",
-                "골절 마비 지점 하위 지배근인 노쪽손목폄근(ECR)과 집게폄근(EIP)에서 fibrillation potential, positive sharp wave의 격렬한 자발전위가 뿜어져 나옵니다. 상완 중간부 골절에 의한 직접적인 노신경 주간 축삭 단절로, 원위부 지배 근섬유들이 탈신경 활동 상태에 완전히 직면했음을 증명합니다.",
+                "노쪽손목폄근(ECR)과 집게폄근(EIP)에서 휴식 시 fibrillation potential 및 positive sharp wave의 탈신경 비정상 자발전위가 뚜렷하게 관찰됩니다. 이는 위팔뼈 나선고랑 통과 구간에서 발생한 기계적 압박에 기인한 원위부 축삭 단절 상태를 가리킵니다.",
                 "2) 수의수축 시 운동단위 동원 분석:",
-                "수의수축을 최대로 유도하더라도, ECR과 EIP 근육의 침전위는 간섭파형을 형성하지 못하고 듬성듬성한 Reduced MU recruitment 반응에 고착됩니다. 반면 척수 후지 분재 경로를 대변하는 목 척추주위근(Paraspinal)은 휴식 시 Silent at rest, 수의수축 시 Normal MU recruitment로 지극히 정상을 가리키며 경추부 원인설을 원천 차단합니다."
+                "수의수축 시 ECR과 EIP에서 Reduced MU recruitment 동원 저하 반응이 나타나 폄근 마비를 대변합니다. 반면 경추 후지 경로를 대변하는 목 척추주위근은 휴식 시 Silent at rest, 수의수축 시 Normal MU recruitment로 매우 조용하여 신경뿌리병증을 배제합니다."
             ],
             "integration": [
                 "나선고랑 상단 골절력, 위팔세갈래근 정상 및 원위 폄근 위약, 표재감각 SNAP 저하, 척추주위근 정상 소견을 융합하여 골절 연관성 노신경 마비로 확진합니다."
@@ -242,9 +242,9 @@ CASE_LIBRARY = {
             ],
             "emg_reason": [
                 "1) 휴식 시 자발활동 전기생리 판독:",
-                "새끼벌림근(ADM) 및 첫째등쪽뼈사이근(FDI)에서 바늘 전위 측정 시 fibrillation potential, positive sharp wave가 관찰됩니다. 팔꿈치 주관 부위에서의 완고한 자신경 포착으로 인해, 손의 세밀한 움직임을 좌우하는 내재근 지배 섬유의 활동성 탈신경 퇴행이 시작되었습니다.",
+                "새끼벌림근(ADM) 및 첫째등쪽뼈사이근(FDI)에서 휴식 시 fibrillation potential 및 positive sharp wave의 탈신경 자발전위가 도출됩니다. 이는 팔꿈치 터널 내부 포착으로 인해 운동 축삭 전도의 기계적 사멸이 유발되었음을 시사합니다.",
                 "2) 수의수축 시 운동단위 동원 분석:",
-                "수의수축 동작 시, ADM과 FDI에서 동원 가능한 총 결합 단위수 저하 현상이 뚜렷하게 관찰되어 Reduced MU recruitment 결과를 보입니다. 이는 젓가락질이나 정밀 손동작 시 정량적 힘 조절 실패로 직결됩니다."
+                "수의수축 시 ADM과 FDI에서 동원 가능한 총 결합 단위수 저하 현상에 기인한 Reduced MU recruitment 반응이 정밀 관찰됩니다."
             ],
             "integration": [
                 "새끼손가락 감각 탈락, ADM/FDI 근육 위약, 팔꿈치 가동 시 유발 검사 양성 및 자신경 자극 시 전도 지연을 종합하여 진단합니다."
@@ -299,9 +299,9 @@ CASE_LIBRARY = {
             ],
             "emg_reason": [
                 "1) 휴식 시 자발활동 전기생리 판독:",
-                "허리 척추주위근, 앞정강근(TA), 긴엄지폄근(EHL), 중간볼기근의 바늘 근전도 결과, 휴식 시 fibrillation potential, positive sharp wave가 일제히 포착됩니다. L5 척수 주간 신경근의 탈출 수핵 압박으로 전근 운동 축삭의 전도 사멸이 진행되어 분절 지배 근섬유들 전체에 막전위 불안정이 도출된 상태입니다.",
+                "허리 척추주위근, 앞정강근(TA), 긴엄지폄근(EHL), 중간볼기근의 바늘전위 계측 결과, 휴식 시 fibrillation potential 및 positive sharp wave의 이상 탈신경 활동이 전개됩니다. L5 척수 신경근의 압박으로 전근 운동 축삭의 전도 사멸이 진행되었음을 의미합니다.",
                 "2) 수의수축 시 운동단위 동원 분석:",
-                "수의수축 시, 앞정강근, 긴엄지폄근, 중간볼기근 모두에서 수축 운동 단위들이 제 기능을 수행하지 못하여 Reduced MU recruitment를 나타냅니다. 허리 척추주위근(Lumbar Paraspinal) 또한 후지 변성에 수반된 자발 활동(PSW)을 보여 신경뿌리(Root) 장애가 근본 원인임을 생리학적으로 가리킵니다."
+                "수의수축 시 앞정강근, 긴엄지폄근, 중간볼기근에서 Reduced MU recruitment를 유도하여 위약 상황을 증명합니다. 허리 척추주위근(Paraspinal) 또한 후지 변성에 따른 자발 활동(PSW)을 보이고 수의수축은 통증으로 인해 평가불가 처리되어 신경뿌리 수준 장애임을 확립시킵니다."
             ],
             "integration": [
                 "L5 피부분절 감각 저하, 발처짐 및 중간볼기근 위약, 감각신경전도 정상 및 척추주위근 탈신경 전위 검출을 종합하여 L5 신경뿌리병증으로 진단합니다."
@@ -357,9 +357,9 @@ CASE_LIBRARY = {
             ],
             "emg_reason": [
                 "1) 휴식 시 자발활동 전기생리 판독:",
-                "좌측 앞정강근(TA)과 긴종아리근(PL)의 바늘 침전위 소견 상 fibrillation potential, positive sharp wave가 관찰됩니다. 석고 캐스트 장기 고정으로 비골두 가측 부위의 온종아리신경이 직접적으로 압박을 받아 축삭 마비와 변성 반응이 일어났음을 입증합니다.",
+                "앞정강근(TA)과 긴종아리근(PL)의 바늘 침전위 소견 상 fibrillation potential, positive sharp wave가 관찰됩니다. 석고 고정 압박으로 온종아리신경 축삭 마비와 변성 반응이 일어났음을 입증합니다.",
                 "2) 수의수축 시 운동단위 동원 분석:",
-                "해당 TA, PL 근육의 수의수축 시 Reduced MU recruitment 반응이 나타나 발처짐을 정량적으로 입증합니다. 반면, 요추 분절 지배를 직접 받는 허리 척추주위근(Paraspinal)은 휴식 시 Silent at rest, 수의수축 시 Normal MU recruitment로 매우 조용하여 디스크 질환을 완전 배제합니다."
+                "해당 TA, PL 근육의 수의수축 시 Reduced MU recruitment 반응이 나타나 발처짐을 대변합니다. 반면 허리 척추주위근(Paraspinal)은 휴식 시 Silent at rest, 수의수축 시 Normal MU recruitment로 매우 조용하여 신경뿌리병증을 배제합니다."
             ],
             "integration": [
                 "정강뼈 골절 부목 고정력, 정강신경 지배 발목 안쪽번짐 보존 및 종아리 지배 폄근 위약, SNAP 감소를 종합하여 압박성 온종아리신경 마비로 정의합니다."
@@ -416,9 +416,9 @@ CASE_LIBRARY = {
             ],
             "emg_reason": [
                 "1) 휴식 시 자발활동 전기생리 판독:",
-                "좌측 가쪽넓은근(Vastus lateralis)과 앞정강근(TA) 부위 바늘전위 계측 상, fibrillation potential 및 positive sharp wave의 탈신경 전위가 광범위 확인됩니다. 대퇴신경과 종아리신경 지배 단위 전체에서 축삭 사멸에 따른 동시 다발성 변성 막전위 활동이 일어나고 있음을 지시합니다.",
+                "좌측 가쪽넓은근(Vastus lateralis)과 앞정강근(TA) 바늘전위 계측 상, fibrillation potential 및 positive sharp wave의 탈신경 전위가 확인됩니다. 요천추신경총(Lumbosacral plexus) 손상에 기인한 전반적 운동 축삭 손상 상태입니다.",
                 "2) 수의수축 시 운동단위 동원 분석:",
-                "수의수축 검사 결과, Vastus lateralis와 TA에서 Reduced MU recruitment 동원 저하 현상이 뚜렷하게 도출됩니다. 반면, 요배부 허리 척추주위근(Paraspinal)은 휴식 시 Silent at rest, 수의수축 시 Normal MU recruitment로 정상을 보여, 원격부 신경얼기(Lumbosacral plexus) 수준의 기계적 파열 외상임을 가리킵니다."
+                "수의수축 시 가쪽넓은근과 TA에서 Reduced MU recruitment 동원 저하 현상이 도출됩니다. 반면 허리 척추주위근(Paraspinal)은 휴식 시 Silent at rest, 수의수축 시 Normal MU recruitment로 정상을 보여 요천추신경총 마비임을 생리학적으로 확립시킵니다."
             ],
             "integration": [
                 "골반 골절 외상 및 고정 수술력, 하지 다발 신경 영역의 동시 위약, 다발성 SNAP/CMAP 감소, 척추주위근 보존을 종합하여 요천추신경총 마비로 진단합니다."
@@ -428,7 +428,7 @@ CASE_LIBRARY = {
             {
                 "name": "다발 허리 신경뿌리병증",
                 "why_consider": "복수 척수 분절의 동시 약화와 심부건 반사 소실이 나타나 혼동하기 쉽습니다.",
-                "how_to_differentiate": "다발 신경뿌리병증은 감각신경전도가 정상 범위로 유지으며, 요배부 척추주위근 침근전도에서 다발성 탈신경 활동이 매우 명확하게 나타납니다.",
+                "how_to_differentiate": "다발 신경뿌리병증은 감각신경전도가 정상 범위로 유지되며, 요배부 척추주위근 침근전도에서 다발성 탈신경 활동이 매우 명확하게 나타납니다.",
                 "practical_tip": "하지 전반의 광범위 마비 양상 시, 척추주위근 침범과 SNAP 저하 여부가 감별의 핵심 척도입니다."
             }
         ]
@@ -473,9 +473,9 @@ CASE_LIBRARY = {
             ],
             "emg_reason": [
                 "1) 휴식 시 자발활동 전기생리 판독:",
-                "양측 앞정강근(TA)의 바늘 침전위 검사 결과, fibrillation potential 및 positive sharp wave의 이상 탈신경 활동이 좌우 대칭 분포로 유도됩니다. 대사성 축삭 병변으로 인해 긴 말단 축삭 가지부터 대칭 사멸해 들어오는 Dying back 기전의 세포학적 단서입니다.",
+                "양측 앞정강근(TA)의 바늘 침전위 결과, 휴식 시 fibrillation potential 및 positive sharp wave가 좌우 대칭 분포로 유도됩니다. 대사성 축삭 병변으로 인해 긴 말단 축삭 가지부터 대칭 사멸해 들어오는 Dying back 기전의 세포학적 단서입니다.",
                 "2) 수의수축 시 운동단위 동원 분석:",
-                "해당 TA 근육들의 수의수축 시, 동원 가능한 원위부 운동단위 소실 및 잔여 축삭 Sprouting에 기초하여 Giant MUAPs 출현 및 Reduced MU recruitment 양상이 좌우 대칭적으로 증명됩니다."
+                "해당 TA 근육들의 수의수축 시, 운동단위 소실 및 잔여 축삭 Sprouting에 기초하여 Giant MUAPs 출현 및 Reduced MU recruitment 양상이 좌우 대칭적으로 발생하여 만성 축삭 파괴 상태를 지지합니다."
             ],
             "integration": [
                 "장기 당뇨력, 대칭성 원위부 장갑-양말 감각 저하, 아킬레스 반사 소실 및 하지 SNAP/CMAP 진폭 감소를 연결하여 최종 확진합니다."
@@ -499,7 +499,7 @@ CASE_LIBRARY = {
             "sex": "여성",
             "side": "양쪽",
             "symptoms": [
-                "몇 달간 양손과 양발이 대칭적으로 저리고 둔함",
+                "몇 달간 양손 and 양발이 대칭적으로 저리고 둔함",
                 "계단 오르기와 발목 움직임 모두에서 진행성 근력 약화 호소"
             ],
             "physical_exam": {
@@ -533,9 +533,9 @@ CASE_LIBRARY = {
             ],
             "emg_reason": [
                 "1) 휴식 시 자발활동 전기생리 판독:",
-                "양측 앞정강근(TA) 등 전형적인 침근전도 상 휴식 시 자발 활동이 전혀 없는 Silent at rest 양상입니다. 말이집탈락성 질환의 생리적 거동에 입각하여 축삭 자체의 괴사성 사멸은 원형 보존되어 막전위 과흥분이 발견되지 않는 상태입니다.",
+                "양측 앞정강근(TA)의 바늘 침전위 결과, 휴식 시 자발 활동이 전혀 관찰되지 않는 Silent at rest 정상 소견을 보입니다. 말이집탈락성 병변의 특성에 따라, 축삭 사멸이 동반되지 않은 탈수초 상태임을 생리학적으로 입증합니다.",
                 "2) 수의수축 시 운동단위 동원 분석:",
-                "해당 TA 근육의 수의수축 시 정상적인 Normal MU recruitment 양상이 달성됩니다. 축삭 단절에 의한 지배근 위약이 아니므로 간섭 파형 동원은 완전하게 유발 보존되고 있음을 의미합니다."
+                "해당 TA 근육의 수의수축 시 정상적인 Normal MU recruitment 양상이 나타납니다. 축삭 단절에 의한 지배 유실이 없으므로 수의수축 시 간섭파형 동원은 완벽히 유발 보존되고 있음을 지시합니다."
             ],
             "integration": [
                 "근위/원위부 동시 마비, 전신 무반사, 다발성 잠복기 지연 및 F파 지연 소실을 종합하여 CIDP로 판단합니다."
@@ -564,9 +564,9 @@ CASE_LIBRARY = {
             ],
             "physical_exam": {
                 "감각 검사": [
-                    "우측 이마 및 안구 주변 영역(삼차신경 안지 V1 분지)의 촉각 감각 저하"
+                    "우측 이마 및 안구 주변 영역(삼차신경 눈 신경 V1 가지)의 촉각 감각 저하"
                 ],
-                "얼굴 표정근 관찰": [
+                "얼굴표정근 관찰": [
                     "눈 꽉 감기: Good (4/5) - 눈둘레근(Orbicularis oculi) - 얼굴신경(Facial nerve)",
                     "이마 주름잡기: Normal (5/5) - 이마근(Frontalis) - 얼굴신경(Facial nerve)",
                     "입꼬리 올리기: Normal (5/5) - 큰광대근(Zygomaticus major) - 얼굴신경(Facial nerve)"
@@ -593,9 +593,9 @@ CASE_LIBRARY = {
             ],
             "emg_reason": [
                 "1) 휴식 시 자발활동 전기생리 판독:",
-                "우측 눈둘레근(Orbicularis oculi) 침전위 소견 상 휴식 시 탈신경 자발전위가 검출되지 않는 Silent at rest 정상 상태입니다. 안면 운동 축삭 줄기의 완전 파괴나 단절은 초래되지 않았음을 입증합니다.",
+                "우측 눈둘레근(Orbicularis oculi)의 바늘 침전위 검사 상, 휴식 시 자발활동이 검출되지 않는 Silent at rest 정상 상태입니다. 얼굴 지배 운동 축삭의 영구적 사멸이나 퇴행이 유발되지 않은 상태를 의미합니다.",
                 "2) 수의수축 시 운동단위 동원 분석:",
-                "눈둘레근의 수의수축 시 Normal MU recruitment가 유도됩니다. 안면 주위 근섬유들이 전기적 막전위 안정성을 완전 유지하며 정상 동원 능력을 지키고 있음을 생리학적으로 가리킵니다."
+                "눈둘레근의 수의수축 시 Normal MU recruitment 동원 양상이 정상 유도됩니다. 뇌신경 마비 경로 상 운동단위 결손 없이 완벽한 기능적 동원이 보존되고 있음을 생리학적으로 가리킵니다."
             ],
             "integration": [
                 "삼차신경 이마 분지 감각 소실, 우측 안구 주변 각막반사 저하 및 눈깜빡반사 자극측 선택 이상을 종합하여 진단합니다."
@@ -604,9 +604,9 @@ CASE_LIBRARY = {
         "differential_diagnosis": [
             {
                 "name": "우측 얼굴신경병증",
-                "why_consider": "안면 감각 이상과 눈 감기 위약이 겹쳐 안면마비와 혼동을 유발합니다.",
+                "why_consider": "얼굴 감각 이상 and 눈 감기 위약이 겹쳐 얼굴마비와 혼동을 유발합니다.",
                 "how_to_differentiate": "얼굴신경 날신경 문제라면 좌측을 자극하더라도 우측 눈둘레근 운동이 불가하므로 좌측 자극-우측 R2 반응 또한 유발 소실되어야 합니다.",
-                "practical_tip": "안면 반사 경로 평가는 들신경(삼차신경) 이상과 날신경(안면신경) 이상을 수용 매트릭스로 대조해야 합니다."
+                "practical_tip": "얼굴 반사 경로 평가는 들신경(삼차신경) 이상과 날신경(얼굴신경) 이상을 수용 매트릭스로 대조해야 합니다."
             }
         ]
     }
