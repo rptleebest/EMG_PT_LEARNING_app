@@ -298,7 +298,7 @@ CASE_LIBRARY = {
             {
                 "name": "온종아리신경병증(Common peroneal neuropathy)",
                 "why_consider": "발목관절 등굽힘 약화로 보행 시 발처짐 양상이 완전 일치합니다.",
-                "how_to_differentiate": "온종아리신경병증은 외측 무릎 부위 포착으로 얕은종아리신경 SNAP 및 Peroneal CMAP가 대폭 감소하며, 위볼기신경 지배인 중간볼기근 및 척추주위근은 완벽히 정상입니다.",
+                "how_to_differentiate": "온종아리신경병증은 외측 무릎 부위 포착으로 얕은종아리신경 SNAP 및 Peroneal CMAP가 대폭 감소하며, 위볼기신경지배인 중간볼기근 및 척추주위근은 완벽히 정상입니다.",
                 "practical_tip": "발처짐 감별 시 엉덩관절 벌림(Hip abduction) 및 발목 안쪽번짐(Inversion) 근력의 보존 여부를 반드시 연계 확인하십시오."
             }
         ]
@@ -353,7 +353,7 @@ CASE_LIBRARY = {
             {
                 "name": "L5 허리 신경뿌리병증",
                 "why_consider": "발처짐 및 발등 감각 이상 양상이 매우 비슷합니다.",
-                "how_to_differentiate": "L5 신경뿌리병증은 감각신경전도(SNAP)가 대칭적 정상으로 보존되며, 척추주위근 침범 자발전위가 뚜렷하게 도출됩니다.",
+                "how_to_differentiate": "L5 신경뿌리병증은 감각신경전도(SNAP)가 대칭 정상 보존되며, 척추주위근 침범 자발전위가 뚜렷하게 도출됩니다.",
                 "practical_tip": "뒤정강근(Tibialis posterior)이 분담하는 안쪽번짐(Inversion) 기능 보존 여부가 L5 뿌리 마비와 말초 온종아리신경 마비를 가르는 임상적 열쇠입니다."
             }
         ]
@@ -396,7 +396,7 @@ CASE_LIBRARY = {
         "teaching_diagnosis": {
             "summary": "외상과 관련된 허리엉치신경얼기병증(lumbosacral plexopathy) 패턴입니다.",
             "ncs_reason": [
-                "장딴지신경 SNAP, 넓적다리신경 및 종아리신경 CMAP 등 복수의 주요 말초 전도에서 진폭 감소가 확인됩니다. 이는 병변이 척수후근신경절 원위부의 신경얼기 단위 손상임을 시사합니다."
+                "장딴지신경 SNAP, 넓적다리신경 및 종아리신경 CMAP 등 복수의 주요 말초 전도에서 진폭 감소가 확인됩니다. 이는 병변이 척수후근신경절 원위부에 형성된 말초 신경총 줄기 장애임을 시사합니다."
             ],
             "emg_reason": [
                 "넓적다리신경 지배근(가쪽넓은근)과 깊은종아리신경 지배근(앞정강근)에서 광범위 탈신경 자발전위가 확인되나, 척추주위근은 정상입니다."
