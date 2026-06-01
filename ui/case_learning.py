@@ -52,23 +52,23 @@ def _render_finding_block(title, findings, side):
         left = values[0] if len(values) > 0 else ""
         right = values[1] if len(values) > 1 else ""
 
-        # 정상측 정보는 배제하고 오직 병변측 정보만 렌더링
+        # 정상측 정보는 배제하고 병변측 정보만 렌더링
         lines = [f'<div class="finding-highlight">{item}</div>']
 
         if side == "양쪽" or side == "양측":
-            lines.append(f'<div class="finding-subtext">1) 좌측: <span class="text-red">{normalize_result_text(left)}</span></div>')
-            lines.append(f'<div class="finding-subtext">2) 우측: <span class="text-red">{normalize_result_text(right)}</span></div>')
+            lines.append(f'<div class="finding-subtext">좌측: <span class="text-red">{normalize_result_text(left)}</span></div>')
+            lines.append(f'<div class="finding-subtext">우측: <span class="text-red">{normalize_result_text(right)}</span></div>')
         else:
             pathological_val = right if (side == "오른쪽" or side == "우") else left
             norm_val = normalize_result_text(pathological_val)
 
-            # 감각 신경전도 검사 출력 제어
+            # 감각/운동 신경전도검사 수치 판독 가이드 (Request 1 정량화 반영)
             if "감각" in title:
                 if "지연" in norm_val or "delayed" in norm_val.lower():
                     lines.append(f'<div class="finding-subtext">진폭: <span class="text-blue">정상 범위</span></div>')
-                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-red">비정상 (정상범위: 잠복기 정상 대비 130% 미만)</span></div>')
+                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-red">비정상 (잠복기: 지연 / 정상측 대비 130% 이상)</span></div>')
                 elif "감소" in norm_val or "reduced" in norm_val.lower():
-                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-red">비정상 (정상범위: 진폭 정상 대비 50% 초과)</span></div>')
+                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-red">비정상 (진폭: 감소 / 정상측 대비 30% 미만)</span></div>')
                     lines.append(f'<div class="finding-subtext">잠복기: <span class="text-blue">정상 범위</span></div>')
                 elif "소실" in norm_val or "absent" in norm_val.lower():
                     lines.append(f'<div class="finding-subtext">진폭: <span class="text-red">반응 소실 (전기 자극에 무반응)</span></div>')
@@ -80,9 +80,9 @@ def _render_finding_block(title, findings, side):
             elif "운동" in title:
                 if "지연" in norm_val or "delayed" in norm_val.lower():
                     lines.append(f'<div class="finding-subtext">진폭: <span class="text-blue">정상 범위</span></div>')
-                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-red">비정상 (정상범위: 잠복기 정상 대비 130% 미만)</span></div>')
+                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-red">비정상 (잠복기: 지연 / 정상측 대비 130% 이상)</span></div>')
                 elif "감소" in norm_val or "reduced" in norm_val.lower():
-                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-red">비정상 (정상범위: 진폭 정상 대비 50% 초과)</span></div>')
+                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-red">비정상 (진폭: 감소 / 정상측 대비 30% 미만)</span></div>')
                     lines.append(f'<div class="finding-subtext">잠복기: <span class="text-blue">정상 범위</span></div>')
                 elif "차단" in norm_val or "block" in norm_val.lower():
                     lines.append(f'<div class="finding-subtext">진폭: <span class="text-red">비정상 (전도차단: 근위부/원위부 진폭 50% 이상 감소)</span></div>')
@@ -94,26 +94,20 @@ def _render_finding_block(title, findings, side):
                     lines.append(f'<div class="finding-subtext">진폭: <span class="text-blue">정상 범위</span></div>')
                     lines.append(f'<div class="finding-subtext">잠복기: <span class="text-blue">정상 범위</span></div>')
                     
-            # 침근전도 소견 포맷 고도화 및 "수의수축 시" 용어 통일 적용
             elif "침근전도" in title:
                 rest_val = "Silent at rest"
                 vol_val = "Normal MU recruitment"
-                
                 norm_val_lower = norm_val.lower()
                 
-                # 자발전위(Active Denervation)
                 if any(k in norm_val_lower for k in ["fibrillation", "섬유자발전위", "psw", "양성예파", "positive sharp wave"]):
                     rest_val = "fibrillation potential, positive sharp wave"
                     vol_val = "Reduced MU recruitment"
-                # 만성 재신경지배(Chronic Reinnervation)
                 elif any(k in norm_val_lower for k in ["giant", "거대", "reinnervation", "재신경지배", "만성"]):
                     rest_val = "Silent at rest"
                     vol_val = "Giant MUAPs 출현 및 Reduced MU recruitment"
-                # 근육다발수축(Fasciculation)
                 elif any(k in norm_val_lower for k in ["fasciculation", "근육다발수축", "다발수축"]):
                     rest_val = "fasciculation potential"
                     vol_val = "Reduced MU recruitment"
-                # 완전 운동마비(No MUAPs)
                 elif any(k in norm_val_lower for k in ["no muap", "무반응", "동원 불가", "동원 소실"]):
                     rest_val = "Silent at rest"
                     vol_val = "No MUAPs on volition (운동단위 동원 불가)"
@@ -127,7 +121,10 @@ def _render_finding_block(title, findings, side):
                 lines.append(f'<div class="finding-subtext">- 휴식 시: <span class="{rest_color}">{rest_val}</span></div>')
                 lines.append(f'<div class="finding-subtext">- 수의수축 시: <span class="{vol_color}">{vol_val}</span></div>')
             else:
-                lines.append(f'<div class="finding-subtext">판독 결과: <span class="text-red">{norm_val}</span></div>')
+                # Blink Reflex, H-Reflex 등 후기반응 정량값 표현용 렌더링 바인딩
+                lines.append(f'<div class="finding-subtext">검출치 및 임상소견: <span class="text-red">{norm_val}</span></div>')
+                if right:
+                    lines.append(f'<div class="finding-subtext">측정 데이터: <span class="text-blue">{right}</span></div>')
 
         block_parts.append(f'<div class="compact-item">{"".join(lines)}</div>')
         if idx < len(items) - 1:
@@ -141,10 +138,6 @@ def render_case_detail():
     case = CASE_LIBRARY.get(case_name)
 
     st.markdown('<div class="main-title">사례 상세 학습</div>', unsafe_allow_html=True)
-    st.markdown(
-        '<div class="subtle">증상 분포, 근력/반사, 신경전도검사/침근전도검사 패턴을 연결해 해석하는 단계입니다.</div>',
-        unsafe_allow_html=True
-    )
 
     if not case:
         st.warning("사례를 찾을 수 없습니다.")
@@ -161,19 +154,19 @@ def render_case_detail():
     elif side == "좌": side = "왼쪽"
     elif side == "양측": side = "양쪽"
 
-    st.markdown("""
-    <div class="warn-card">
-        <div class="finding-highlight" style="color: #b45309; border-bottom-color: #fde68a;">🎓 학생용 사고 프레임 (판독 기준)</div>
-        <div class="case-bullet-strong">1. 진폭(Amplitude) 감소: 정상 범위 대비 <b>50% 이하</b>로 감소 시 운동/감각 축삭 손상(Axonal loss)을 의미합니다.</div>
-        <div class="case-bullet-strong">2. 잠복기(Latency) 지연: 정상 범위 대비 <b>130% 이상</b> 연장 시 말이집탈락성(Demyelinating) 변화 혹은 국소 포착성 압박을 의미합니다.</div>
-        <div class="case-bullet-strong">3. 감각신경전도 보존: 신경근병증(Radiculopathy)은 병변이 뒤뿌리신경절(DRG)보다 근위부에 있으므로 말초 감각신경활동전위(SNAP)가 정상 범위로 보존됩니다.</div>
-    </div>
-    """, unsafe_allow_html=True)
+    # 1. 환자 정보 요약 카드 (질환명 및 기본 정보) 상단 우선 배치 (Request 2 반영)
+    st.markdown(f'<div class="info-card">', unsafe_allow_html=True)
+    st.markdown(f'<div class="case-title-mobile">👤 환자 사례: {case_name}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="case-subtitle-mobile"><span class="label-strong text-blue">연령/성별:</span> <span class="result-value">{patient["age"]}세 / {patient["sex"]}</span> | <span class="label-strong text-blue">병변측:</span> <span class="result-value">{side}</span></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="case-subtitle-mobile"><span class="label-strong text-red">최종 교육용 진단:</span> <span class="result-value">{teaching.get("summary","")}</span></div>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
+    # 2. 주요 증상(Chief Complaints) 즉각 순차 배치 (Request 2 반영)
     st.markdown('<div class="case-section-label">🗣️ 주요 증상</div>', unsafe_allow_html=True)
     symptoms_html = "".join([f'<div class="case-bullet">• {s}</div>' for s in patient.get("symptoms", [])])
     st.markdown(f'<div class="case-text-block">{symptoms_html}</div>', unsafe_allow_html=True)
 
+    # 3. 이학적 검사 결과 (얼굴 표정근 관찰 / 강직 MAS 및 반사 등 세분화 렌더링)
     st.markdown('<div class="case-section-label">🧪 이학적 검사결과</div>', unsafe_allow_html=True)
     exam_html = []
     for sec_name, items in patient.get("physical_exam", {}).items():
@@ -186,43 +179,65 @@ def render_case_detail():
                 exam_html.append(f'<div class="case-bullet">• {i}</div>')
     st.markdown(f'<div class="case-text-block">{"".join(exam_html)}</div>', unsafe_allow_html=True)
 
+    # 4. 사고 프레임 가이드 배치
+    st.markdown("""
+    <div class="warn-card">
+        <div class="finding-highlight" style="color: #b45309; border-bottom-color: #fde68a;">🎓 학생용 사고 프레임 (판독 기준)</div>
+        <div class="case-bullet-strong">1. 진폭(Amplitude) 감소: 정상 범위 대비 <b>50% 이하 (정상측 대비 30% 미만)</b>로 감소 시 운동/감각 축삭 손상(Axonal loss)을 의미합니다.</div>
+        <div class="case-bullet-strong">2. 잠복기(Latency) 지연: 정상 범위 대비 <b>130% 이상</b> 연장 시 말이집탈락성(Demyelinating) 변화 혹은 국소 포착성 압박을 의미합니다.</div>
+        <div class="case-bullet-strong">3. 감각신경전도 보존: 신경근병증(Radiculopathy)은 병변이 뒤뿌리신경절(DRG)보다 근위부에 있으므로 말초 감각신경활동전위(SNAP)가 정상 범위로 보존됩니다.</div>
+    </div>
+    """, unsafe_allow_html=True)
+
     grouped = split_findings_by_domain(findings, ANATOMY)
 
-    # 표제어 수정 적용
+    # 5. 전기진단 소견 분류 렌더링 (병변측 표제어 일괄 매핑)
     if grouped["sensory"]:
         _render_finding_block("감각신경전도검사: 병변측", grouped["sensory"], side)
     if grouped["motor"]:
         _render_finding_block("운동신경전도검사: 병변측", grouped["motor"], side)
     if grouped["muscle"]:
         _render_finding_block("침근전도검사 소견: 병변측", grouped["muscle"], side)
+        
+    # Blink Reflex / H-Reflex 등 후기반응 소견 렌더링
     if grouped["reflex"] or grouped["other"]:
         merged = {}
         merged.update(grouped["reflex"])
         merged.update(grouped["other"])
-        _render_finding_block("반사 및 후기반응 소견: 병변측", merged, side)
+        
+        # 사례명에 따라 후기반응 표제어 세분화
+        if "뇌졸중" in case_name:
+            _render_finding_block("H-반사 유발 및 경직 정량검사: 병변측", merged, side)
+        elif "눈꺼풀" in case_name:
+            _render_finding_block("눈깜빡반사 (Blink Reflex Test) 회로 분석: 병변측", merged, side)
+        else:
+            _render_finding_block("반사 및 후기반응 소견: 병변측", merged, side)
 
+    # 6. 추론 해석 포인트 렌더링
     st.markdown('<div class="result-card">', unsafe_allow_html=True)
     st.markdown('<div class="result-title">✅ 교육용 진단 요약</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="result-text"><span class="label-strong text-blue">요약:</span> <span class="result-value">{teaching.get("summary","")}</span></div>', unsafe_allow_html=True)
 
     if teaching.get("ncs_reason"):
-        st.markdown('<div class="result-label">신경전도 해석 포인트</div>', unsafe_allow_html=True)
+        st.markdown('<div class="result-label">신경전도 및 후기반응 해석 포인트</div>', unsafe_allow_html=True)
         for x in teaching["ncs_reason"]:
             st.markdown(f'<div class="result-text">• {x}</div>', unsafe_allow_html=True)
 
-    # 침근전도 감별 포인트 가독성 및 "수의수축 시" 용어 완벽 정렬 패치 적용
-    if teaching.get("emg_reason"):
-        st.markdown('<div class="result-label">침근전도 해석 포인트</div>', unsafe_allow_html=True)
-        for x in teaching["emg_reason"]:
-            x_strip = x.strip()
-            # 1), 2), 3) 번호 리스트 가시성 제어 (불릿 • 제거하고 깔끔한 정렬 부여)
-            if x_strip.startswith(("1)", "2)", "3)", "4)", "5)")):
-                st.markdown(f'<div class="result-text" style="padding-left: 14px; margin-bottom: 5px; line-height:1.6;">{x_strip}</div>', unsafe_allow_html=True)
-            # 타이틀 강조 제어 (마크다운 ** 및 [] 제거 후 파란색 강조 폰트 바인딩)
-            elif x_strip.endswith(":"):
-                st.markdown(f'<div class="result-text" style="font-weight: 800; color: #1e40af; margin-top: 12px; margin-bottom: 6px; font-size:0.92rem;">{x_strip}</div>', unsafe_allow_html=True)
-            else:
-                st.markdown(f'<div class="result-text" style="line-height:1.6; margin-bottom:5px;">• {x_strip}</div>', unsafe_allow_html=True)
+    # 침근전도가 불필요한 뇌신경 및 H-반사 단독 사례의 경우 하단 침근전도 해석 포인트 렌더링 예외 처리
+    if teaching.get("emg_reason") and "Blink reflex" not in str(teaching.get("emg_reason")) and "H-반사" not in str(teaching.get("emg_reason")):
+        # 침근전도가 생략된 특수 사례(눈꺼풀 떨림, 뇌졸중 H-반사)는 침근전도 해석 헤더를 출력하지 않음
+        is_emg_skipped = "Blink Reflex" in str(teaching["emg_reason"][0]) or "H-reflex" in str(teaching["emg_reason"][0])
+        
+        if not is_emg_skipped:
+            st.markdown('<div class="result-label">침근전도 해석 포인트</div>', unsafe_allow_html=True)
+            for x in teaching["emg_reason"]:
+                x_strip = x.strip()
+                if x_strip.startswith(("1)", "2)", "3)", "4)", "5)")):
+                    st.markdown(f'<div class="result-text" style="padding-left: 14px; margin-bottom: 5px; line-height:1.6;">{x_strip}</div>', unsafe_allow_html=True)
+                elif x_strip.endswith(":"):
+                    st.markdown(f'<div class="result-text" style="font-weight: 800; color: #1e40af; margin-top: 12px; margin-bottom: 6px; font-size:0.92rem;">{x_strip}</div>', unsafe_allow_html=True)
+                else:
+                    st.markdown(f'<div class="result-text" style="line-height:1.6; margin-bottom:5px;">• {x_strip}</div>', unsafe_allow_html=True)
 
     if teaching.get("integration"):
         st.markdown('<div class="result-label">통합 해석</div>', unsafe_allow_html=True)
