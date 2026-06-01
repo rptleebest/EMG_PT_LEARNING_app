@@ -44,7 +44,7 @@ def _render_finding_block(title, findings, side):
     if not findings:
         return
 
-    # 1) 표제어 전면 수정 적용
+    # 표제어 전면 수정 적용
     st.markdown(f'<div class="case-section-label">{title}</div>', unsafe_allow_html=True)
     block_parts = []
 
@@ -63,7 +63,7 @@ def _render_finding_block(title, findings, side):
             pathological_val = right if (side == "오른쪽" or side == "우") else left
             norm_val = normalize_result_text(pathological_val)
 
-            # 감각/운동 신경전도 검사 출력 제어
+            # 감각 신경전도 검사 출력 제어
             if "감각" in title:
                 if "지연" in norm_val or "delayed" in norm_val.lower():
                     lines.append(f'<div class="finding-subtext">진폭: <span class="text-blue">정상 범위</span></div>')
@@ -95,32 +95,41 @@ def _render_finding_block(title, findings, side):
                     lines.append(f'<div class="finding-subtext">진폭: <span class="text-blue">정상 범위</span></div>')
                     lines.append(f'<div class="finding-subtext">잠복기: <span class="text-blue">정상 범위</span></div>')
                     
-            # 2) 침근전도 검사결과 소견 포맷 고도화 반영
+            # 침근전도 소견 포맷 및 영문 상태값 보정
             elif "침근전도" in title:
                 rest_val = "Silent at rest"
                 vol_val = "Normal MU recruitment"
                 
-                # 질환에 내재된 생리학적 상태 디코딩
-                if "Fibrillation" in norm_val or "자발전위" in norm_val or "PSW" in norm_val or "양성예파" in norm_val:
+                norm_val_lower = norm_val.lower()
+                
+                # 자발전위(Active Denervation)
+                if any(k in norm_val_lower for k in ["fibrillation", "섬유자발전위", "psw", "양성예파", "positive sharp wave"]):
                     rest_val = "fibrillation potential, positive sharp wave"
                     vol_val = "Reduced MU recruitment"
-                elif "Giant" in norm_val or "거대" in norm_val or "재신경지배" in norm_val:
+                # 만성 재신경지배(Chronic Reinnervation)
+                elif any(k in norm_val_lower for k in ["giant", "거대", "reinnervation", "재신경지배", "만성"]):
                     rest_val = "Silent at rest"
                     vol_val = "Giant MUAPs 출현 및 Reduced MU recruitment"
-                elif "Fasciculation" in norm_val or "다발수축" in norm_val:
+                # 근육다발수축(Fasciculation)
+                elif any(k in norm_val_lower for k in ["fasciculation", "근육다발수축", "다발수축"]):
                     rest_val = "fasciculation potential"
                     vol_val = "Reduced MU recruitment"
-                elif "No MUAPs" in norm_val or "무반응" in norm_val or "동원 불가" in norm_val:
+                # 완전 운동마비(No MUAPs)
+                elif any(k in norm_val_lower for k in ["no muap", "무반응", "동원 불가", "동원 소실"]):
                     rest_val = "Silent at rest"
                     vol_val = "No MUAPs on volition (운동단위 동원 불가)"
                 
+                # 수축 시 평가제한 사유 반영 (Pain, Pain limitation 등)
+                if any(k in norm_val_lower for k in ["평가불가", "제한", "통증"]):
+                    vol_val = "통증으로 인해 평가불가"
+
                 rest_color = "text-red" if rest_val != "Silent at rest" else "text-blue"
-                vol_color = "text-red" if "Reduced" in vol_val or "Giant" in vol_val or "No MUAPs" in vol_val else "text-blue"
+                vol_color = "text-red" if any(k in vol_val for k in ["Reduced", "Giant", "No MUAPs", "평가불가"]) else "text-blue"
 
                 lines.append(f'<div class="finding-subtext">- 휴식 시: <span class="{rest_color}">{rest_val}</span></div>')
                 lines.append(f'<div class="finding-subtext">- 근수축 시: <span class="{vol_color}">{vol_val}</span></div>')
             else:
-                # 반사 및 후기 반응 소견
+                # 반사 및 후기반응
                 lines.append(f'<div class="finding-subtext">판독 결과: <span class="text-red">{norm_val}</span></div>')
 
         block_parts.append(f'<div class="compact-item">{"".join(lines)}</div>')
@@ -182,7 +191,7 @@ def render_case_detail():
 
     grouped = split_findings_by_domain(findings, ANATOMY)
 
-    # 1) 표제어 수정 및 함수 호출 분기 처리
+    # 표제어 수정 적용
     if grouped["sensory"]:
         _render_finding_block("감각신경전도검사: 병변측", grouped["sensory"], side)
     if grouped["motor"]:
@@ -204,10 +213,19 @@ def render_case_detail():
         for x in teaching["ncs_reason"]:
             st.markdown(f'<div class="result-text">• {x}</div>', unsafe_allow_html=True)
 
+    # 이학적/생리학적 감별 포인트 UI 최적화 적용 (중복 불릿 제거 및 타이틀 텍스트 보정)
     if teaching.get("emg_reason"):
         st.markdown('<div class="result-label">침근전도 해석 포인트</div>', unsafe_allow_html=True)
         for x in teaching["emg_reason"]:
-            st.markdown(f'<div class="result-text">• {x}</div>', unsafe_allow_html=True)
+            x_strip = x.strip()
+            # 1), 2), 3) 번호 리스트 가시성 제어 (불릿 • 제거하고 단독 패딩 처리)
+            if x_strip.startswith(("1)", "2)", "3)", "4)", "5)")):
+                st.markdown(f'<div class="result-text" style="padding-left: 18px; margin-bottom: 4px;">{x_strip}</div>', unsafe_allow_html=True)
+            # 타이틀 강조 제어 (마크다운 ** 및 [] 제거 후 파란색 강조 폰트 바인딩)
+            elif x_strip.endswith(":"):
+                st.markdown(f'<div class="result-text" style="font-weight: 800; color: #1e3a8a; margin-top: 10px; margin-bottom: 6px;">{x_strip}</div>', unsafe_allow_html=True)
+            else:
+                st.markdown(f'<div class="result-text">• {x_strip}</div>', unsafe_allow_html=True)
 
     if teaching.get("integration"):
         st.markdown('<div class="result-label">통합 해석</div>', unsafe_allow_html=True)
