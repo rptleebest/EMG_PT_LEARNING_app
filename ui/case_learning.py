@@ -44,7 +44,6 @@ def _render_finding_block(title, findings, side):
     if not findings:
         return
 
-    # 표제어 전면 수정 적용
     st.markdown(f'<div class="case-section-label">{title}</div>', unsafe_allow_html=True)
     block_parts = []
 
@@ -95,7 +94,7 @@ def _render_finding_block(title, findings, side):
                     lines.append(f'<div class="finding-subtext">진폭: <span class="text-blue">정상 범위</span></div>')
                     lines.append(f'<div class="finding-subtext">잠복기: <span class="text-blue">정상 범위</span></div>')
                     
-            # 침근전도 소견 포맷 및 영문 상태값 보정
+            # 침근전도 소견 포맷 고도화 및 "수의수축 시" 용어 통일 적용
             elif "침근전도" in title:
                 rest_val = "Silent at rest"
                 vol_val = "Normal MU recruitment"
@@ -119,7 +118,6 @@ def _render_finding_block(title, findings, side):
                     rest_val = "Silent at rest"
                     vol_val = "No MUAPs on volition (운동단위 동원 불가)"
                 
-                # 수축 시 평가제한 사유 반영 (Pain, Pain limitation 등)
                 if any(k in norm_val_lower for k in ["평가불가", "제한", "통증"]):
                     vol_val = "통증으로 인해 평가불가"
 
@@ -127,9 +125,8 @@ def _render_finding_block(title, findings, side):
                 vol_color = "text-red" if any(k in vol_val for k in ["Reduced", "Giant", "No MUAPs", "평가불가"]) else "text-blue"
 
                 lines.append(f'<div class="finding-subtext">- 휴식 시: <span class="{rest_color}">{rest_val}</span></div>')
-                lines.append(f'<div class="finding-subtext">- 근수축 시: <span class="{vol_color}">{vol_val}</span></div>')
+                lines.append(f'<div class="finding-subtext">- 수의수축 시: <span class="{vol_color}">{vol_val}</span></div>')
             else:
-                # 반사 및 후기반응
                 lines.append(f'<div class="finding-subtext">판독 결과: <span class="text-red">{norm_val}</span></div>')
 
         block_parts.append(f'<div class="compact-item">{"".join(lines)}</div>')
@@ -213,19 +210,19 @@ def render_case_detail():
         for x in teaching["ncs_reason"]:
             st.markdown(f'<div class="result-text">• {x}</div>', unsafe_allow_html=True)
 
-    # 이학적/생리학적 감별 포인트 UI 최적화 적용 (중복 불릿 제거 및 타이틀 텍스트 보정)
+    # 침근전도 감별 포인트 가독성 및 "수의수축 시" 용어 완벽 정렬 패치 적용
     if teaching.get("emg_reason"):
         st.markdown('<div class="result-label">침근전도 해석 포인트</div>', unsafe_allow_html=True)
         for x in teaching["emg_reason"]:
             x_strip = x.strip()
-            # 1), 2), 3) 번호 리스트 가시성 제어 (불릿 • 제거하고 단독 패딩 처리)
+            # 1), 2), 3) 번호 리스트 가시성 제어 (불릿 • 제거하고 정형화된 정렬 적용)
             if x_strip.startswith(("1)", "2)", "3)", "4)", "5)")):
-                st.markdown(f'<div class="result-text" style="padding-left: 18px; margin-bottom: 4px;">{x_strip}</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="result-text" style="padding-left: 14px; margin-bottom: 5px; line-height:1.6;">{x_strip}</div>', unsafe_allow_html=True)
             # 타이틀 강조 제어 (마크다운 ** 및 [] 제거 후 파란색 강조 폰트 바인딩)
             elif x_strip.endswith(":"):
-                st.markdown(f'<div class="result-text" style="font-weight: 800; color: #1e3a8a; margin-top: 10px; margin-bottom: 6px;">{x_strip}</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="result-text" style="font-weight: 800; color: #1e40af; margin-top: 12px; margin-bottom: 6px; font-size:0.92rem;">{x_strip}</div>', unsafe_allow_html=True)
             else:
-                st.markdown(f'<div class="result-text">• {x_strip}</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="result-text" style="line-height:1.6; margin-bottom:5px;">• {x_strip}</div>', unsafe_allow_html=True)
 
     if teaching.get("integration"):
         st.markdown('<div class="result-label">통합 해석</div>', unsafe_allow_html=True)
