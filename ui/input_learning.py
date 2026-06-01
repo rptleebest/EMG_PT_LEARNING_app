@@ -246,7 +246,7 @@ def render_input_learning():
         st.markdown(create_responsive_table(["검사 신경", "자극 위치", "진폭 수치", "잠복기 수치", "최종 판정"], data["ncs_motor"], "motor_tbl"), unsafe_allow_html=True)
 
         st.markdown('<div class="finding-highlight">🪡 침근전도검사 (Needle EMG)</div>', unsafe_allow_html=True)
-        st.markdown(create_responsive_table(["검사 근육", "해당 분절 (Root)", "휴식 시 반응 (Rest)", "근수축 시 반응 (Volitiont)", "근생리 상태 진단"], data["emg"], "emg_tbl"), unsafe_allow_html=True)
+        st.markdown(create_responsive_table(["검사 근육", "해당 분절 (Root)", "휴식 시 반응 (Rest)", "근수축 시 반응 (Volition)", "근생리 상태 진단"], data["emg"], "emg_tbl"), unsafe_allow_html=True)
 
         st.markdown("""
         <div class="info-legend-box" style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:10px; margin-top:15px; font-size:0.83rem; line-height:1.45;">
