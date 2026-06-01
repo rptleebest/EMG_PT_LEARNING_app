@@ -35,12 +35,12 @@ CASE_LIBRARY = {
             ],
             "physical_exam": {
                 "감각 검사": [
-                    "아래팔 노쪽 및 엄지/검지 쪽 감각 저하. C6 피부분절(dermatome) 분포와 잘 맞음"
+                    "아래팔 노쪽 및 엄지/검지 쪽 감각 저하. C6 피부분절(dermatome) 분포와 일치함"
                 ],
                 "맨손 근력검사(MMT)": [
-                    "팔꿉관절 굽힘: Fair (3/5) - 위팔두갈래근(Biceps brachii) - 근육피부신경(Musculocutaneous nerve, C5-6) [C5 우세]",
-                    "손목관절 폄: Fair (3/5) - 긴노쪽손목폄근(Extensor carpi radialis longus) - 노신경(Radial nerve, C6-7) [C6 우세]",
-                    "팔꿉관절 폄: Normal (5/5) - 위팔세갈래근(Triceps brachii) - 노신경(Radial nerve) [C7 우세 보존]"
+                    "팔꿉관절 굽힘: Fair (3/5) - 위팔두갈래근(Biceps brachii) - 근육피부신경(Musculocutaneous nerve, C5-C6) [C5 우세]",
+                    "손목관절 폄: Fair (3/5) - 긴노쪽손목폄근(Extensor carpi radialis longus) - 노신경(Radial nerve, C6-C7) [C6 우세]",
+                    "팔꿉관절 폄: Normal (5/5) - 위팔세갈래근(Triceps brachii) - 노신경(Radial nerve, C7-C8) [C7 우세 보존]"
                 ],
                 "반사 검사": [
                     "위팔노근 반사(Brachioradialis reflex, C6): 감소(DRT 1+)",
@@ -61,28 +61,30 @@ CASE_LIBRARY = {
         "teaching_diagnosis": {
             "summary": "C6 중심의 목 신경뿌리병증(cervical radiculopathy) 패턴입니다.",
             "ncs_reason": [
-                "감각신경활동전위(SNAP)가 정상 범위로 보존됩니다. 신경뿌리병증은 병변이 뒤뿌리신경절(dorsal root ganglion, DRG)보다 몸쪽에 있어 말초 감각신경전도가 정상 범위일 수 있습니다.",
-                "노신경(radial nerve)과 근육피부신경(musculocutaneous nerve)의 말단 운동신경전도(CMAP)가 정상 범위이므로 말초 단일신경병증(mononeuropathy) 가능성은 낮습니다."
+                "감각신경활동전위(SNAP)가 정상 범위로 완전히 보존됩니다. 신경뿌리병증은 뒤뿌리신경절(DRG)보다 몸쪽(proximal)에 병변이 위치하므로, 축삭 사멸이 원위부 감각신경체까지 진행되지 않아 말초 감각신경전도는 정상 범위로 나타나는 해부학적 특성을 지닙니다.",
+                "근육피부신경과 노신경의 말단 운동신경전도(CMAP)가 정상 범위이므로 말초 신경총 혹은 단일 신경병증 가능성은 희박합니다."
             ],
             "emg_reason": [
-                "목 척추주위근(cervical paraspinal muscle)에서 섬유자발전위(fibrillation potential)와 양성예파(positive sharp wave)가 관찰되면 신경뿌리 수준 병변을 강하게 시사합니다.",
-                "서로 다른 말초신경 지배를 받지만 C6 분절을 공유하는 근육에서 탈신경근 소견이 함께 나타납니다.",
-                "섬유자발전위와 양성예파는 비정상 자발전위(abnormal spontaneous activity)로, 축삭 손상(axonal injury) 또는 진행된 신경뿌리 손상을 시사합니다."
+                "목 척추주위근(Cervical paraspinal muscle)에서 섬유자발전위와 양성예파가 관찰되어 척수 분절 수준의 명확한 전근(anterior root) 손상을 확진합니다.",
+                "**[C5 신경뿌리병증과의 중요한 감별 포인트]**:",
+                "1) 감각 소실 영역이 C5 피부분절(위팔 가쪽 외측)이 아닌 C6 피부분절(아래팔 노쪽 및 엄지손가락)에 명확히 일치합니다.",
+                "2) MMT 상 C5 지배근인 어깨세모근(Deltoid) 위약 소견이 없고, C6 및 C7의 중첩 지배를 받는 긴노쪽손목폄근(ECRL)의 근력이 3/5(Fair)로 동반 위축되어 있습니다.",
+                "3) 반사 검사 상 C5 위주의 위팔두갈래근 반사는 정상 보존되었으나, C6 전형인 위팔노근 반사(Brachioradialis reflex)는 유의미하게 저하되어 최종적으로 C6 신경뿌리병증으로 해석하는 것이 의학적으로 타당합니다."
             ],
             "integration": [
-                "C6 피부분절 증상, C6 우세 근력 약화, 위팔노근 반사 저하, 척추주위근 침범을 종합하면 C6 목 신경뿌리병증으로 해석하는 것이 적절합니다."
+                "C6 피부분절의 저림, 위팔노근 반사 감소, 손목관절 폄 근력의 저하, 그리고 목 척추주위근 및 원위부 중첩 지배근의 동시 탈신경 자발활동 출현을 종합할 때 C6 목 신경뿌리병증으로 정의합니다."
             ]
         },
         "differential_diagnosis": [
             {
                 "name": "노신경병증(Radial neuropathy)",
                 "why_consider": "손목관절 폄 약화와 노쪽 감각 이상이 동반되어 혼동될 수 있습니다.",
-                "how_to_differentiate": "말초 노신경병증이라면 표재노신경 감각신경활동전위(SNAP) 진폭 감소가 나타날 수 있고 척추주위근은 정상이어야 합니다. 본 사례는 감각신경전도(SNAP)의 보존과 척추주위근 탈신경 소견이 있어 신경뿌리병증에 가깝습니다.",
-                "practical_tip": "손목관절 폄 약화가 있더라도 감각신경전도(SNAP)의 보존 여부와 척추주위근 침범 여부를 함께 확인하세요."
+                "how_to_differentiate": "말초 노신경병증이라면 표재노신경 감각신경활동전위(SNAP) 진폭 감소가 나타나며 척추주위근은 완벽히 정상이어야 합니다. 본 사례는 감각신경전도의 보존과 척추주위근 탈신경 소견이 함께 있어 신경뿌리병증으로 귀결됩니다.",
+                "practical_tip": "손목관절 폄 위약 환자 평가 시, 표재노신경 감각신경전도의 보존 여부와 요배부 척추주위근 침범을 감별 축으로 삼으십시오."
             }
         ]
     },
-
+   
     "야간 손저림과 엄지 근력 약화": {
         "category": "말초 포착신경병증",
         "difficulty": "초중급",
@@ -96,14 +98,14 @@ CASE_LIBRARY = {
             ],
             "physical_exam": {
                 "감각 검사": [
-                    "엄지, 검지, 중지 및 반지손가락 노쪽 절반의 손바닥쪽 감각 둔화. 정중신경(median nerve) 분포와 일치"
+                    "엄지, 검지, 중지 및 반지손가락 노쪽 절반의 손바닥쪽 감각 둔화. 정중신경(median nerve) 피부분절 분포와 일치"
                 ],
                 "맨손 근력검사(MMT)": [
-                    "엄지손가락 벌림: Good (4/5) - 짧은엄지벌림근(Abductor pollicis brevis) - 정중신경(Median nerve) [T1 우세]"
+                    "엄지손가락 벌림: Good (4/5) - 짧은엄지벌림근(Abductor pollicis brevis) - 정중신경(Median nerve, C8-T1) [T1 우세]"
                 ],
                 "반사 검사": [
-                    "위팔두갈래근반사(Biceps reflex, C5), 위팔노근반사(Brachioradialis reflex, C6), 위팔세갈래근반사(Triceps reflex, C7): 모두 대칭적 정상(DRT 2+)",
-                    "특수 검사: 팔렌 검사(Phalen test) 양성, 손목 티넬징후(Tinel sign) 양성"
+                    "위팔두갈래근 반사(Biceps reflex, C5-C6), 위팔노근 반사(Brachioradialis reflex, C5-C6), 위팔세갈래근 반사(Triceps reflex, C7-C8): 모두 대칭적 정상(DRT 2+)",
+                    "특수 검사: 팔렌 검사(Phalen test) 양성, 손목 정중신경 주행 부위 티넬 징후(Tinel's sign) 양성"
                 ]
             }
         },
@@ -115,23 +117,23 @@ CASE_LIBRARY = {
         "teaching_diagnosis": {
             "summary": "손목굴증후군(carpal tunnel syndrome)을 시사하는 정중신경 포착병증(median entrapment neuropathy)입니다.",
             "ncs_reason": [
-                "정중신경 감각신경활동전위(SNAP)에서 잠복기 지연이 관찰되어 손목굴 부위의 국소 전도 지연을 시사합니다.",
-                "정중신경 복합근육활동전위(CMAP)에서는 진폭 감소가 동반되어 운동축삭 손상이 함께 있을 가능성을 시사합니다."
+                "정중신경 감각신경활동전위(SNAP)에서 잠복기 지연이 나타나 손목굴 부위의 국소 전도 지연을 지시합니다.",
+                "정중신경 복합근육활동전위(CMAP)에서 진폭 감소가 수반되는 것은 포착이 심해져 운동축삭 손상이 진행 중임을 의미합니다."
             ],
             "emg_reason": [
-                "짧은엄지벌림근(APB)에서 섬유자발전위와 양성예파가 관찰되면 단순 전도 지연을 넘어 운동축삭 손상이 동반되었을 가능성을 시사합니다.",
-                "침근전도에서 휴식 시 비정상 자발전위(fibrillation potential, positive sharp wave, fasciculation potential 등)가 보이면 탈신경근 소견으로 해석합니다."
+                "정중신경의 최원위부 지배근이자 T1 우세 절을 공유하는 짧은엄지벌림근(APB)에서 섬유자발전위 및 양성예파가 검출됩니다.",
+                "이는 손목굴에서의 정중신경 압박이 운동 축삭 변성 단계에 들어섰음을 시사하는 객관적 침근전도 징후입니다."
             ],
             "integration": [
-                "야간 손저림, 정중신경 분포 감각저하, 엄지손가락 벌림 약화, 정중신경 감각신경활동전위 지연과 복합근육활동전위 진폭 감소를 종합하면 손목굴증후군으로 판단할 수 있습니다."
+                "야간 통증 저림, 정중신경 감각 영역 둔화, 엄지 벌림 약화, 정중신경 전도 지연 및 APB 탈신경 전위 관찰을 종합하여 최종 진단합니다."
             ]
         },
         "differential_diagnosis": [
             {
                 "name": "근위부 정중신경병증(Proximal median neuropathy)",
-                "why_consider": "정중신경 지배 영역의 감각 이상과 엄지 근력 약화가 비슷하게 나타날 수 있습니다.",
-                "how_to_differentiate": "원엎침근(pronator teres) 등 손목보다 몸쪽의 정중신경 지배근이 보존되면 손목굴 수준 병변 가능성이 높습니다.",
-                "practical_tip": "정중신경병증에서는 어느 지점보다 먼쪽 근육부터 침범되는지 확인해 포착 위치를 추정하세요."
+                "why_consider": "정중신경 지배 영역의 위약 및 감각 이상 양상이 매우 유사합니다.",
+                "how_to_differentiate": "원엎침근(pronator teres) 등 손목보다 근위부 정중신경 지배근들의 근력과 침근전도가 정상이므로 손목 수준의 포착으로 확진할 수 있습니다.",
+                "practical_tip": "포착 신경병증 진단 시, 의심 부위보다 근위부 기시 근육들의 보존 여부를 반드시 정밀 타진하십시오."
             }
         ]
     },
@@ -149,16 +151,16 @@ CASE_LIBRARY = {
             ],
             "physical_exam": {
                 "감각 검사": [
-                    "손등 노쪽 부위 감각 소실. 표재노신경(superficial radial nerve) 분포"
+                    "손등 노쪽 부위 감각 소실. 표재노신경(superficial radial nerve) 분포 영역과 일치"
                 ],
                 "맨손 근력검사(MMT)": [
-                    "손목관절 폄: Poor (2/5) - 노쪽손목폄근(Extensor carpi radialis) - 노신경(Radial nerve) [C6 우세]",
-                    "손가락 폄: Poor (2/5) - 손가락폄근(Extensor digitorum) - 노신경(Radial nerve) [C7 우세]",
-                    "팔꿉관절 폄: Normal (5/5) - 위팔세갈래근(Triceps brachii) - 노신경(Radial nerve) [C7 우세 보존]"
+                    "손목관절 폄: Poor (2/5) - 긴노쪽손목폄근(Extensor carpi radialis longus) - 노신경(Radial nerve, C6-C7) [C6 우세]",
+                    "손가락 폄: Poor (2/5) - 손가락폄근(Extensor digitorum) - 뒤뼈사이신경(Posterior interosseous nerve, C7-C8) [C7 우세]",
+                    "팔꿉관절 폄: Normal (5/5) - 위팔세갈래근(Triceps brachii) - 노신경(Radial nerve, C7-C8) [C7 우세 보존]"
                 ],
                 "반사 검사": [
-                    "위팔세갈래근 반사(Triceps reflex, C7): 정상(DRT 2+)",
-                    "위팔노근 반사(Brachioradialis reflex, C6): 감소(DRT 1+)"
+                    "위팔세갈래근 반사(Triceps reflex, C7-C8): 정상(DRT 2+ - 골절 부위 상단 기시 분지로 보존됨)",
+                    "위팔노근 반사(Brachioradialis reflex, C5-C6): 감소(DRT 1+)"
                 ]
             }
         },
@@ -172,23 +174,23 @@ CASE_LIBRARY = {
         "teaching_diagnosis": {
             "summary": "위팔뼈 나선고랑(spiral groove) 부위 노신경병증(radial neuropathy) 패턴입니다.",
             "ncs_reason": [
-                "표재노신경 감각신경활동전위(SNAP) 진폭 감소는 말초 감각신경이 병변에 포함되었음을 의미합니다.",
-                "노신경 복합근육활동전위(CMAP) 진폭 감소는 운동축삭 손상 또는 심한 전도차단 가능성을 시사합니다."
+                "표재노신경 감각신경활동전위(SNAP) 진폭 감소는 병변이 뒤뿌리신경절 원위부의 말초 혼합신경 줄기 손상임을 의미합니다.",
+                "노신경 복합근육활동전위(CMAP)의 진폭 감소 및 전도 지연은 압박 부위 이하 축삭의 기능적/구조적 탈락을 시사합니다."
             ],
             "emg_reason": [
-                "노신경 지배 원위부 근육에서 섬유자발전위와 양성예파가 관찰되므로 탈신경근 소견이 있습니다.",
-                "목 척추주위근이 정상 범위이므로 C7 신경뿌리병증보다는 말초 노신경병증에 가깝습니다."
+                "노신경 지배 원위근(노쪽손목폄근, 집게폄근)에서 자발전위가 뚜렷이 관찰되나, 경추부 신경뿌리 수준의 척추주위근 침근전도는 완전한 무반응(Silent)으로 정상 상태입니다.",
+                "이는 경추부 병변이 아닌 위팔뼈 외상에 수반된 원위 말초신경 줄기 폐색성 마비임을 지지합니다."
             ],
             "integration": [
-                "위팔뼈 골절 병력, 위팔세갈래근 보존, 손목/손가락 폄 약화, 표재노신경 감각신경활동전위 감소를 종합하면 나선고랑 부위 노신경병증이 적절합니다."
+                "나선고랑 상단 골절력, 위팔세갈래근 정상 및 원위 폄근 위약, 표재감각 SNAP 저하, 척추주위근 정상 소견을 융합하여 골절 연관성 노신경 마비로 확진합니다."
             ]
         },
         "differential_diagnosis": [
             {
                 "name": "뒤뼈사이신경병증(Posterior interosseous neuropathy, PIN)",
-                "why_consider": "손목과 손가락 폄 약화가 비슷하게 보일 수 있습니다.",
-                "how_to_differentiate": "뒤뼈사이신경은 주로 운동가지이므로 감각 소실과 표재노신경 감각신경활동전위(SNAP) 감소가 없어야 합니다. 본 사례는 감각 이상과 감각신경활동전위(SNAP) 감소가 있어 노신경 본줄기 손상입니다.",
-                "practical_tip": "손목처짐 환자에서 감각 이상이 있으면 운동가지 단독 손상보다 혼합신경 손상을 먼저 고려하세요."
+                "why_consider": "손가락 및 손목관절 폄 약화 기전이 매우 흡사합니다.",
+                "how_to_differentiate": "뒤뼈사이신경은 노신경의 순수 운동분지이므로 감각 소실 영역이 없어야 하며, 표재노신경 감각신경활동전위(SNAP)가 완전한 정상이어야 합니다.",
+                "practical_tip": "표재노신경 감각전도의 유의미한 탈락 유무가 노신경 주지 마비와 심부 분지 마비를 가르는 가장 결정적인 기준선입니다."
             }
         ]
     },
