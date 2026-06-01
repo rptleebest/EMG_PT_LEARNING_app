@@ -11,7 +11,7 @@ def render_case_list():
     st.markdown('<div class="section-card">', unsafe_allow_html=True)
     st.markdown('<div class="case-section-label">📚 가상 사례 선택</div>', unsafe_allow_html=True)
 
-    # 1. 필터 삭제 및 라디오 버튼 즉시 노출
+    # 필터 삭제 및 라디오 버튼 즉시 노출
     case_names = list(CASE_LIBRARY.keys())
     selected = st.radio("학습할 임상 증상 선택", case_names, label_visibility="collapsed")
 
@@ -42,13 +42,13 @@ def render_case_detail():
 
     st.markdown(f'<div class="main-title">📘 {case_name}</div>', unsafe_allow_html=True)
     
-    # 5. 학생용 사고 프레임에 % 수치 기준 명확화
+    # 학생용 사고 프레임에 % 수치 기준 명확화
     st.markdown("""
     <div class="warn-card">
         <div class="finding-highlight" style="color: #b45309; border-bottom-color: #fde68a;">🎓 학생용 사고 프레임 (판독 기준)</div>
-        <div class="case-bullet-strong">1. 진폭(Amplitude) 감소: 정상치 대비 <b>50% 이하</b>로 급감 시 '축삭 손상(Axonal loss)'을 의미합니다.</div>
-        <div class="case-bullet-strong">2. 잠복기(Latency) 지연: 정상치 대비 <b>130% 이상</b> 길어질 때 국소 포착 또는 '말이집탈락성(Demyelinating)' 병변을 시사합니다.</div>
-        <div class="case-bullet-strong">3. 감각신경 보존: 통증/저림이 심한데 감각신경이 정상이라면 병변은 '신경뿌리(Root)' 위치입니다.</div>
+        <div class="case-bullet-strong">1. 진폭(Amplitude) 감소: 정상치 대비 <b>50% 이하</b>로 감소할 경우 '축삭 손상(Axonal loss)'을 의미합니다.</div>
+        <div class="case-bullet-strong">2. 잠복기(Latency) 지연: 정상치 대비 <b>130% 이상</b> 길어질 경우 '말이집탈락성(Demyelinating)' 병변을 의미합니다.</div>
+        <div class="case-bullet-strong">3. 감각신경 보존 여부: 통증과 약화가 뚜렷함에도 감각신경전도(SNAP)가 정상이면 병변은 뒤뿌리신경절보다 몸쪽인 '신경뿌리(Root)' 위치입니다.</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -60,7 +60,7 @@ def render_case_detail():
         for item in v: exam_html += f'<div class="case-bullet">• {item}</div>'
     st.markdown(f'<div class="case-text-block">{exam_html}</div>', unsafe_allow_html=True)
 
-    # 2 & 3. 병변측 전용 블록 렌더링 함수
+    # 감각신경전도검사 렌더링 (병변측만 노출)
     def render_ncs_sensory(data, title):
         if not data: return
         st.markdown(f'<div class="case-section-label">{title} (병변측: {side})</div>', unsafe_allow_html=True)
@@ -72,21 +72,23 @@ def render_case_detail():
             st.markdown(f'<div class="finding-subtext">2) 잠복기: <span class="{lat_color}">{result["잠복기"]}</span></div>', unsafe_allow_html=True)
             st.markdown('<hr class="item-divider">', unsafe_allow_html=True)
 
+    # 운동신경전도검사 렌더링 (원위부/근위부 분리)
     def render_ncs_motor(data, title):
         if not data: return
         st.markdown(f'<div class="case-section-label">{title} (병변측: {side})</div>', unsafe_allow_html=True)
         for nerve, result in data.items():
             st.markdown(f'<div class="finding-highlight" style="font-size:1rem;">⚡ {nerve}</div>', unsafe_allow_html=True)
             
-            d_amp_col = "text-red" if "감소" in result["원위부 진폭"] or "침묵" in result["원위부 진폭"] else "text-blue"
+            d_amp_col = "text-red" if "감소" in result["원위부 진폭"] or "무반응" in result["원위부 진폭"] else "text-blue"
             d_lat_col = "text-red" if "지연" in result["원위부 잠복기"] or "무반응" in result["원위부 잠복기"] else "text-blue"
-            p_amp_col = "text-red" if "감소" in result["근위부 진폭"] or "침묵" in result["근위부 진폭"] else "text-blue"
+            p_amp_col = "text-red" if "감소" in result["근위부 진폭"] or "무반응" in result["근위부 진폭"] else "text-blue"
             p_lat_col = "text-red" if "지연" in result["근위부 잠복기"] or "무반응" in result["근위부 잠복기"] else "text-blue"
             
             st.markdown(f'<div class="finding-subtext"><b>[원위부 자극]</b> 진폭: <span class="{d_amp_col}">{result["원위부 진폭"]}</span> | 잠복기: <span class="{d_lat_col}">{result["원위부 잠복기"]}</span></div>', unsafe_allow_html=True)
             st.markdown(f'<div class="finding-subtext"><b>[근위부 자극]</b> 진폭: <span class="{p_amp_col}">{result["근위부 진폭"]}</span> | 잠복기: <span class="{p_lat_col}">{result["근위부 잠복기"]}</span></div>', unsafe_allow_html=True)
             st.markdown('<hr class="item-divider">', unsafe_allow_html=True)
 
+    # 침근전도검사 렌더링 (휴식 시 / 수축 시 분리)
     def render_emg(data, title):
         if not data: return
         st.markdown(f'<div class="case-section-label">{title} (병변측: {side})</div>', unsafe_allow_html=True)
@@ -102,10 +104,10 @@ def render_case_detail():
     render_ncs_motor(case.get("ncs_motor"), "운동신경전도검사 소견")
     render_emg(case.get("emg"), "침근전도검사 소견")
 
-    # 결과 및 해석 렌더링
+    # 결과 및 해석 렌더링 (해석 포인트로 해석 내용 이동)
     td = case["teaching_diagnosis"]
     st.markdown('<div class="result-card">', unsafe_allow_html=True)
-    st.markdown('<div class="result-title">✅ 근전도 결과 세부 해석</div>', unsafe_allow_html=True)
+    st.markdown('<div class="result-title">✅ 교육용 진단 요약</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="result-text"><span class="label-strong text-red">최종 요약:</span> <b>{td["summary"]}</b></div>', unsafe_allow_html=True)
     
     st.markdown('<div class="result-label">신경전도 해석 포인트</div>', unsafe_allow_html=True)
