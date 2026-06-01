@@ -5,45 +5,46 @@ from typing import Dict, Tuple, Any, List
 
 # 기존 사례들의 텍스트를 학생용/신용어 표준 텍스트로 정규화
 TEXT_NORMALIZATION_MAP = {
-    "정상 범위(within normal limits)": "정상 범위(within normal limits)",
-    "정상 (Normal)": "정상 범위(within normal limits)",
-    "normal": "정상 범위(within normal limits)",
-    "Normal": "정상 범위(within normal limits)",
-    "정상": "정상 범위(within normal limits)",
+    "정상 범위(within normal limits)": "정상 범위 (within normal limits)",
+    "정상 (Normal)": "정상 범위 (within normal limits)",
+    "normal": "정상 범위 (within normal limits)",
+    "Normal": "정상 범위 (within normal limits)",
+    "정상": "정상 범위 (within normal limits)",
+    "정상 범위": "정상 범위 (within normal limits)",
 
-    "잠복기 지연(delayed latency)": "잠복기 지연(delayed latency) - 말이집탈락성/포착 시사",
-    "잠복기 지연 (Delayed latency)": "잠복기 지연(delayed latency) - 말이집탈락성/포착 시사",
-    "delayed": "잠복기 지연(delayed latency) - 말이집탈락성/포착 시사",
-    "지연 (Delayed)": "잠복기 지연(delayed latency) - 말이집탈락성/포착 시사",
-    "잠복기 지연": "잠복기 지연(delayed latency) - 말이집탈락성/포착 시사",
+    "잠복기 지연(delayed latency)": "잠복기 지연 (Delayed latency) - 정상 대비 130% 이상 초과",
+    "잠복기 지연 (Delayed latency)": "잠복기 지연 (Delayed latency) - 정상 대비 130% 이상 초과",
+    "delayed": "잠복기 지연 (Delayed latency) - 정상 대비 130% 이상 초과",
+    "지연 (Delayed)": "잠복기 지연 (Delayed latency) - 정상 대비 130% 이상 초과",
+    "잠복기 지연": "잠복기 지연 (Delayed latency) - 정상 대비 130% 이상 초과",
 
-    "진폭 감소(reduced amplitude)": "진폭 감소(reduced amplitude) - 축삭 손상 시사",
-    "감소 (Reduced)": "진폭 감소(reduced amplitude) - 축삭 손상 시사",
-    "reduced": "진폭 감소(reduced amplitude) - 축삭 손상 시사",
-    "진폭 감소": "진폭 감소(reduced amplitude) - 축삭 손상 시사",
+    "진폭 감소(reduced amplitude)": "진폭 감소 (Reduced amplitude) - 정상 대비 50% 이하 감소",
+    "감소 (Reduced)": "진폭 감소 (Reduced amplitude) - 정상 대비 50% 이하 감소",
+    "reduced": "진폭 감소 (Reduced amplitude) - 정상 대비 50% 이하 감소",
+    "진폭 감소": "진폭 감소 (Reduced amplitude) - 정상 대비 50% 이하 감소",
 
-    "반응 소실(absent response)": "반응 소실(absent response)",
-    "무반응 (No response)": "반응 소실(absent response)",
-    "absent": "반응 소실(absent response)",
-    "소실 (Absent)": "반응 소실(absent response)",
-    "반응 소실": "반응 소실(absent response)",
+    "반응 소실(absent response)": "반응 소실 (Absent response) - 전기 자극에 무반응",
+    "무반응 (No response)": "반응 소실 (Absent response) - 전기 자극에 무반응",
+    "absent": "반응 소실 (Absent response) - 전기 자극에 무반응",
+    "소실 (Absent)": "반응 소실 (Absent response) - 전기 자극에 무반응",
+    "반응 소실": "반응 소실 (Absent response) - 전기 자극에 무반응",
 
-    "잠복기 지연 또는 반응 소실(delayed or absent response)": "잠복기 지연 또는 반응 소실(delayed or absent response)",
-    "지연 또는 소실 (Delayed/Absent)": "잠복기 지연 또는 반응 소실(delayed or absent response)",
+    "잠복기 지연 또는 반응 소실(delayed or absent response)": "잠복기 지연 또는 반응 소실 (delayed or absent response)",
+    "지연 또는 소실 (Delayed/Absent)": "잠복기 지연 또는 반응 소실 (delayed or absent response)",
 
-    "F파 최소잠복기 지연 또는 소실(delayed or absent F-wave)": "F파 최소잠복기 지연 또는 소실(delayed or absent F-wave)",
-    "H-반사 항진 또는 문턱값 감소(hyperactive H-reflex / lower threshold)": "H-반사 항진 또는 문턱값 감소(hyperactive H-reflex) - 위운동신경세포 병변 시사",
-    "H/M 비율 증가 가능(increased H/M ratio possible)": "H/M 비율 증가 가능(increased H/M ratio possible)",
-    "증가 가능 (May be increased)": "H/M 비율 증가 가능(increased H/M ratio possible)",
-    "항진 또는 문턱값 감소 (Hyperactive / lower threshold)": "H-반사 항진 또는 문턱값 감소(hyperactive H-reflex) - 위운동신경세포 병변 시사",
+    "F파 최소잠복기 지연 또는 소실(delayed or absent F-wave)": "F파 최소잠복기 지연 또는 소실 (delayed or absent F-wave)",
+    "H-반사 항진 또는 문턱값 감소(hyperactive H-reflex / lower threshold)": "H-반사 항진 또는 문턱값 감소 (hyperactive H-reflex) - 위운동신경세포 병변 시사",
+    "H/M 비율 증가 가능(increased H/M ratio possible)": "H/M 비율 증가 가능 (increased H/M ratio possible)",
+    "증가 가능 (May be increased)": "H/M 비율 증가 가능 (increased H/M ratio possible)",
+    "항진 또는 문턱값 감소 (Hyperactive / lower threshold)": "H-반사 항진 또는 문턱값 감소 (hyperactive H-reflex) - 위운동신경세포 병변 시사",
 
-    "휴식 시 전기적 침묵(no motor unit action potential, MUAP), 수의수축 시 정상 운동단위전위(motor unit action potential, MUAP) 동원": "휴식 시 전기적 침묵(electrical silence), 수의수축 시 정상 운동단위 동원패턴",
-    "비정상 자발전위 출현 (Fibrillation Potential, Positive Sharp Wave 등)": "휴식 시 섬유자발전위(Fibrillation) 및 양성예파(PSW) 관찰",
-    "비정상 자발전위 (Fibrillation, Positive sharp wave 등) 출현": "휴식 시 섬유자발전위(Fibrillation) 및 양성예파(PSW) 관찰",
-    "휴식 시 섬유자발전위(fibrillation potential) 및 양성예파(positive sharp wave) 관찰": "휴식 시 섬유자발전위(Fibrillation) 및 양성예파(PSW) 관찰",
-    "휴식 시 섬유자발전위(fibrillation potential) 및 양성예파(positive sharp wave) 관찰, 수의수축 시 운동단위전위(motor unit action potential, MUAP) 동원 감소 가능": "휴식 시 섬유자발전위 및 양성예파 관찰, 수의수축 시 운동단위 동원 감소",
-    "휴식 시 근육다발수축전위(fasciculation potential) 관찰 가능": "휴식 시 근육다발수축전위(fasciculation potentials) 관찰 가능",
-    "무반응 / 전기적 침묵 (Electrical silence)": "휴식 시 전기적 침묵(electrical silence), 수의수축 시 정상 운동단위 동원패턴",
+    "휴식 시 전기적 침묵(no motor unit action potential, MUAP), 수의수축 시 정상 운동단위전위(motor unit action potential, MUAP) 동원": "휴식 시 Silent at rest (전기적 침묵) / 근수축 시 Normal MU recruitment",
+    "비정상 자발전위 출현 (Fibrillation Potential, Positive Sharp Wave 등)": "휴식 시 Fibrillation 및 Positive sharp wave 출현 / 근수축 시 Reduced MU recruitment",
+    "비정상 자발전위 (Fibrillation, Positive sharp wave 등) 출현": "휴식 시 Fibrillation 및 Positive sharp wave 출현 / 근수축 시 Reduced MU recruitment",
+    "휴식 시 섬유자발전위(fibrillation potential) 및 양성예파(positive sharp wave) 관찰": "휴식 시 Fibrillation 및 Positive sharp wave 출현 / 근수축 시 Reduced MU recruitment",
+    "휴식 시 섬유자발전위(fibrillation potential) 및 양성예파(positive sharp wave) 관찰, 수의수축 시 운동단위전위(motor unit action potential, MUAP) 동원 감소 가능": "휴식 시 Fibrillation 및 Positive sharp wave 출현 / 근수축 시 Reduced MU recruitment",
+    "휴식 시 근육다발수축전위(fasciculation potential) 관찰 가능": "휴식 시 Fasciculation potentials 출현 / 근수축 시 Reduced MU recruitment",
+    "무반응 / 전기적 침묵 (Electrical silence)": "휴식 시 Silent at rest (전기적 침묵) / 근수축 시 Normal MU recruitment",
 }
 
 
@@ -56,7 +57,7 @@ def normalize_result_text(value: Any) -> str:
 
 def is_abnormal(value: Any) -> bool:
     text = normalize_result_text(value)
-    return bool(text) and "정상 범위" not in text and "전기적 침묵" not in text
+    return bool(text) and "정상 범위" not in text and "Silent at rest" not in text
 
 
 def split_findings_by_domain(
@@ -105,6 +106,7 @@ def build_case_report_text(case_name: str, case: Dict[str, Any]) -> str:
     patient = case.get("patient", {})
     teaching = case.get("teaching_diagnosis", {})
     diff_dx = case.get("differential_diagnosis", [])
+    findings = case.get("findings", {})
 
     lines = [
         f"사례명: {case_name}",
@@ -125,24 +127,15 @@ def build_case_report_text(case_name: str, case: Dict[str, Any]) -> str:
             lines.append(f"  - {i}")
 
     lines.extend(["", "[전기진단 소견 (병변측)]"])
-    
-    ncs_s = case.get("ncs_sensory", {})
-    if ncs_s:
-        lines.append("- 감각신경전도검사")
-        for k, v in ncs_s.items():
-            lines.append(f"  {k}: 진폭({v.get('진폭','')}), 잠복기({v.get('잠복기','')})")
-            
-    ncs_m = case.get("ncs_motor", {})
-    if ncs_m:
-        lines.append("- 운동신경전도검사")
-        for k, v in ncs_m.items():
-            lines.append(f"  {k}: [원위부] 진폭({v.get('원위부 진폭','')})/잠복기({v.get('원위부 잠복기','')}), [근위부] 진폭({v.get('근위부 진폭','')})/잠복기({v.get('근위부 잠복기','')})")
-
-    emg = case.get("emg", {})
-    if emg:
-        lines.append("- 침근전도검사")
-        for k, v in emg.items():
-            lines.append(f"  {k}: 휴식 시({v.get('휴식 시','')}), 근수축 시({v.get('근수축 시','')})")
+    for item, values in findings.items():
+        left = values[0] if len(values) > 0 else ""
+        right = values[1] if len(values) > 1 else ""
+        if str(right).strip():
+            lines.append(f"- {item}")
+            lines.append(f"  좌측: {normalize_result_text(left)}")
+            lines.append(f"  우측: {normalize_result_text(right)}")
+        else:
+            lines.append(f"- {item}: {normalize_result_text(left)}")
 
     lines.extend(["", "[교육용 진단 요약]", teaching.get("summary", ""), "", "[NCS 해석 포인트]"])
     for x in teaching.get("ncs_reason", []):
@@ -388,7 +381,7 @@ def analyze_manual_input(
         level = meta.get("level", "")
 
         # 엄격한 정상 필터링
-        if "정상 범위" in normalized or "전기적 침묵" in normalized:
+        if "정상 범위" in normalized or "Silent at rest" in normalized:
             continue
 
         abnormalities.append({
