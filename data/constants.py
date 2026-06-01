@@ -21,12 +21,12 @@ RESULT_F_WAVE_ABN = "F파 최소잠복기 지연 또는 소실(delayed or absent
 RESULT_H_REFLEX_HYPER = "H-반사 항진 또는 문턱값 감소(hyperactive H-reflex) - 위운동신경세포 병변 시사"
 RESULT_HM_RATIO_INC = "H/M 비율 증가 가능(increased H/M ratio possible)"
 
-# EMG (실제 판독 및 생리학적 상태 가이드)
+# EMG
 RESULT_EMG_NORMAL = "휴식 시 Silent at rest (전기적 침묵) / 근수축 시 Normal MU recruitment"
 RESULT_EMG_ACTIVE_DENERVATION = "휴식 시 Fibrillation 및 Positive sharp wave 출현 / 근수축 시 Reduced MU recruitment"
 RESULT_EMG_CHRONIC_REINNERVATION = "휴식 시 Silent at rest / 근수축 시 Giant MUAPs 출현 및 Reduced MU recruitment"
 RESULT_EMG_FASCICULATION = "휴식 시 Fasciculation potentials 출현 / 근수축 시 Reduced MU recruitment"
-RESULT_EMG_NO_RESPONSE = "휴식 시 Silent at rest / 근수축 시 No MUAPs on volition"
+RESULT_EMG_NO_RESPONSE = "휴식 시 Silent at rest / 근수축 시 No MUAPs on volition (운동단위 동원 불가)"
 
 # 기존 호환용 옵션
 RESULT_OPTIONS = [
