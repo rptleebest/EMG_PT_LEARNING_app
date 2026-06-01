@@ -105,7 +105,6 @@ def build_case_report_text(case_name: str, case: Dict[str, Any]) -> str:
     patient = case.get("patient", {})
     teaching = case.get("teaching_diagnosis", {})
     diff_dx = case.get("differential_diagnosis", [])
-    findings = case.get("findings", {})
 
     lines = [
         f"사례명: {case_name}",
@@ -125,16 +124,25 @@ def build_case_report_text(case_name: str, case: Dict[str, Any]) -> str:
         for i in items:
             lines.append(f"  - {i}")
 
-    lines.extend(["", "[전기진단 소견]"])
-    for item, values in findings.items():
-        left = values[0] if len(values) > 0 else ""
-        right = values[1] if len(values) > 1 else ""
-        if str(right).strip():
-            lines.append(f"- {item}")
-            lines.append(f"  좌측: {normalize_result_text(left)}")
-            lines.append(f"  우측: {normalize_result_text(right)}")
-        else:
-            lines.append(f"- {item}: {normalize_result_text(left)}")
+    lines.extend(["", "[전기진단 소견 (병변측)]"])
+    
+    ncs_s = case.get("ncs_sensory", {})
+    if ncs_s:
+        lines.append("- 감각신경전도검사")
+        for k, v in ncs_s.items():
+            lines.append(f"  {k}: 진폭({v.get('진폭','')}), 잠복기({v.get('잠복기','')})")
+            
+    ncs_m = case.get("ncs_motor", {})
+    if ncs_m:
+        lines.append("- 운동신경전도검사")
+        for k, v in ncs_m.items():
+            lines.append(f"  {k}: [원위부] 진폭({v.get('원위부 진폭','')})/잠복기({v.get('원위부 잠복기','')}), [근위부] 진폭({v.get('근위부 진폭','')})/잠복기({v.get('근위부 잠복기','')})")
+
+    emg = case.get("emg", {})
+    if emg:
+        lines.append("- 침근전도검사")
+        for k, v in emg.items():
+            lines.append(f"  {k}: 휴식 시({v.get('휴식 시','')}), 근수축 시({v.get('근수축 시','')})")
 
     lines.extend(["", "[교육용 진단 요약]", teaching.get("summary", ""), "", "[NCS 해석 포인트]"])
     for x in teaching.get("ncs_reason", []):
