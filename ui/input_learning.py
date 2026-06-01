@@ -16,8 +16,8 @@ VIRTUAL_REPORTS = {
             ["자신경 (Ulnar SNAP)", "22 μV", "2.5 ms", "정상 (정상범위: 잠복기 < 3.1ms, 진폭 > 15μV)"]
         ],
         "ncs_motor": [
-            ["정중신경 (Median CMAP)", "원위부 자극 (손목)", "8.5 mV", "3.5 ms", "정상 (정상범위: 잠복기 < 4.2ms, 진폭 > 4.0mV)"],
-            ["정중신경 (Median CMAP)", "근위부 자극 (팔꿈치)", "8.1 mV", "7.8 ms", "정상 (정상범위: 잠복기 < 4.2ms, 진폭 > 4.0mV)"]
+            ["정중신경 (Median CMAP)", "원위부 (손목)", "8.5 mV", "3.5 ms", "정상 (정상범위: 잠복기 < 4.2ms, 진폭 > 4.0mV)"],
+            ["정중신경 (Median CMAP)", "근위부 (팔꿈치)", "8.1 mV", "7.8 ms", "정상 (정상범위: 잠복기 < 4.2ms, 진폭 > 4.0mV)"]
         ],
         "emg": [
             ["위팔두갈래근 (Biceps brachii)", "C5-C6", "Fibrillation potential, positive sharp wave", "Reduced MU recruitment", "비정상 (활동성 탈신경 상태)"],
@@ -46,8 +46,8 @@ VIRTUAL_REPORTS = {
             ["자신경 (Ulnar SNAP)", "25 μV", "2.6 ms", "정상 (정상범위: 잠복기 < 3.1ms, 진폭 > 15μV)"]
         ],
         "ncs_motor": [
-            ["정중신경 (Median CMAP)", "원위부 자극 (손목)", "3.1 mV", "5.5 ms", "비정상 (정상범위: 잠복기 < 4.2ms, 진폭 > 4.0mV)"],
-            ["정중신경 (Median CMAP)", "근위부 자극 (팔꿈치)", "2.9 mV", "9.8 ms", "비정상"]
+            ["정중신경 (Median CMAP)", "원위부 (손목)", "3.1 mV", "5.5 ms", "비정상 (정상범위: 잠복기 < 4.2ms, 진폭 > 4.0mV)"],
+            ["정중신경 (Median CMAP)", "근위부 (팔꿈치)", "2.9 mV", "9.8 ms", "비정상"]
         ],
         "emg": [
             ["짧은엄지벌림근 (Abductor Pollicis APB)", "C8-T1", "Positive sharp waves 출현", "Giant MUAPs 출현 및 Reduced MU recruitment", "비정상 (만성 재신경지배 상태)"],
@@ -58,7 +58,7 @@ VIRTUAL_REPORTS = {
             "목 척추주위근이 완전히 정상이므로 C8-T1 신경뿌리병증을 원천 배제할 수 있으며, 손목 부위에 한정된 국소 포착성 단일신경병증입니다."
         ],
         "emg_meaning": [
-            "진폭 감소 및 Giant MUAPs: 단순 수초 손상 단계를 지나 신경 내부 축삭(axon) 사멸과 그에 따른 우회로 만성 측부 재지배가 일어났음을 나타냅니다."
+            "진폭 감소 및 Giant MUAPs: 단순 말이집 손상 단계를 지나 신경 내부 축삭(axon) 사멸과 그에 따른 우회로 만성 측부 재지배가 일어났음을 나타냅니다."
         ],
         "ddx": "동일 수근관 부위 포착을 악화시키는 당뇨 및 갑상선 질환 등 전신 대사질환 배제가 병행되어야 합니다."
     },
@@ -71,8 +71,8 @@ VIRTUAL_REPORTS = {
             ["장딴지신경 (Sural SNAP)", "15 μV", "3.1 ms", "정상 (정상범위: 잠복기 < 3.6ms, 진폭 > 10μV)"]
         ],
         "ncs_motor": [
-            ["종아리신경 (Peroneal CMAP)", "원위부 자극 (발목)", "3.5 mV", "4.5 ms", "정상 (정상범위: 잠복기 < 6.0ms, 진폭 > 2.0mV)"],
-            ["종아리신경 (Peroneal CMAP)", "근위부 자극 (오금)", "3.3 mV", "11.2 ms", "정상"]
+            ["종아리신경 (Peroneal CMAP)", "원위부 (발목)", "3.5 mV", "4.5 ms", "정상 (정상범위: 잠복기 < 6.0ms, 진폭 > 2.0mV)"],
+            ["종아리신경 (Peroneal CMAP)", "근위부 (오금)", "3.3 mV", "11.2 ms", "정상"]
         ],
         "emg": [
             ["앞정강근 (Tibialis Anterior)", "L4-L5", "Fibrillation potentials 및 Positive sharp waves 출현", "Reduced MU recruitment", "비정상 (활동성 탈신경 상태)"],
@@ -98,8 +98,8 @@ VIRTUAL_REPORTS = {
             ["장딴지신경 (Sural SNAP)", "16 μV", "3.0 ms", "정상 (정상범위: 잠복기 < 3.6ms, 진폭 > 10μV)"]
         ],
         "ncs_motor": [
-            ["종아리신경 (Peroneal CMAP)", "원위부 자극 (발목)", "4.5 mV", "4.8 ms", "정상 (원위부 보존)"],
-            ["종아리신경 (Peroneal CMAP)", "근위부 자극 (비골두 위)", "1.1 mV", "무반응", "비정상 (전도차단 부위)"]
+            ["종아리신경 (Peroneal CMAP)", "원위부 (발목)", "4.5 mV", "4.8 ms", "정상 (원위부 보존)"],
+            ["종아리신경 (Peroneal CMAP)", "근위부 (종아리뼈머리 위)", "1.1 mV", "무반응", "비정상 (전도차단 부위)"]
         ],
         "emg": [
             ["앞정강근 (Tibialis Anterior)", "L4-L5", "Silent at rest", "No MUAPs on volition", "비정상 (완전 동원 소실 상태)"],
@@ -108,7 +108,7 @@ VIRTUAL_REPORTS = {
             ["허리 척추주위근 (Lumbar Paraspinal)", "L5", "Silent at rest", "평가불가", "정상"]
         ],
         "interpretation": [
-            "종아리뼈머리(Fibular head) 부위를 가로질러 근위부 자극 시 운동신경 진폭이 급격히 떨어지는 '전도차단(Conduction block)'이 관찰됩니다.",
+            "종아리뼈머리(Fibular head) 부위를 가로질러 근위부 시 운동신경 진폭이 급격히 떨어지는 '전도차단(Conduction block)'이 관찰됩니다.",
             "얕은종아리신경(감각)의 진폭이 감소하였고, 척추주위근은 정상이므로 요추 신경뿌리병증(L5)을 명확히 배제할 수 있습니다."
         ],
         "emg_meaning": [
@@ -126,8 +126,8 @@ VIRTUAL_REPORTS = {
             ["정중신경 (Median SNAP) 우측", "18 μV", "3.4 ms", "정상 범위 (경미한 감소)"]
         ],
         "ncs_motor": [
-            ["정강신경 (Tibial CMAP) 우측", "원위부 자극 (발목)", "1.5 mV", "6.2 ms", "비정상 (정상범위: 잠복기 < 6.0ms, 진폭 > 4.0mV)"],
-            ["정강신경 (Tibial CMAP) 우측", "근위부 자극 (오금)", "1.2 mV", "15.2 ms", "비정상 (정상범위: 잠복기 < 6.0ms, 진폭 > 4.0mV)"]
+            ["정강신경 (Tibial CMAP) 우측", "원위부 (발목)", "1.5 mV", "6.2 ms", "비정상 (정상범위: 잠복기 < 6.0ms, 진폭 > 4.0mV)"],
+            ["정강신경 (Tibial CMAP) 우측", "근위부 (오금)", "1.2 mV", "15.2 ms", "비정상 (정상범위: 잠복기 < 6.0ms, 진폭 > 4.0mV)"]
         ],
         "emg": [
             ["앞정강근 (Tibialis Anterior)", "L4-L5", "Positive sharp waves 출현", "Reduced MU recruitment", "비정상 (활동성 탈신경 상태)"],
@@ -151,8 +151,8 @@ VIRTUAL_REPORTS = {
             ["장딴지신경 (Sural SNAP)", "12 μV", "3.4 ms", "정상 (Sural sparing pattern)"]
         ],
         "ncs_motor": [
-            ["종아리신경 (Peroneal CMAP)", "원위부 자극 (발목)", "3.0 mV", "8.5 ms", "비정상 (정상범위: 잠복기 < 6.0ms)"],
-            ["종아리신경 (Peroneal CMAP)", "근위부 자극 (비골두)", "1.2 mV", "20.1 ms", "비정상 (시간분산 출현)"]
+            ["종아리신경 (Peroneal CMAP)", "원위부 (발목)", "3.0 mV", "8.5 ms", "비정상 (정상범위: 잠복기 < 6.0ms)"],
+            ["종아리신경 (Peroneal CMAP)", "근위부 (종아리뼈머리)", "1.2 mV", "20.1 ms", "비정상 (시간분산 출현)"]
         ],
         "emg": [
             ["앞정강근 (Tibialis Anterior)", "L4-L5", "Silent at rest", "Severely reduced MU recruitment", "비정상 (운동단위 동원 감소 상태)"],
@@ -163,7 +163,7 @@ VIRTUAL_REPORTS = {
             "상지 감각신경은 이상이 있으나, 하지 감각은 정상으로 보존되는 GBS의 특징적인 'Sural sparing pattern'이 관찰됩니다."
         ],
         "emg_meaning": [
-            "시간분산(Temporal dispersion): 근위부 자극 시 말이집이 불규칙하게 벗겨져 전도 속도가 제각각이 되면서, 파형이 넓게 퍼지고 진폭이 흩어지는 현상입니다.",
+            "시간분산(Temporal dispersion): 근위부 시 말이집이 불규칙하게 벗겨져 전도 속도가 제각각이 되면서, 파형이 넓게 퍼지고 진폭이 흩어지는 현상입니다.",
             "초기 Silent at rest: 발병 초기(2~3주 이내)에는 축삭 자체가 끊어지지 않아 탈신경 전위가 나타나지 않습니다."
         ],
         "ddx": "뇌척수액 검사(단백세포 해리 확인) 및 호흡근 마비 모니터링 필수."
