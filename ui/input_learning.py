@@ -8,7 +8,7 @@ from ui.navigation import render_bottom_navigation
 # =====================================================================
 VIRTUAL_REPORTS = {
     "1. 좌측 목/어깨 통증 및 팔 저림 (C6 신경뿌리병증 의심)": {
-        "info": {"age": 45, "sex": "남성", "symptom": "좌측 목 통증, 엄지/검지 저림, 위팔두갈래근(Biceps brachii) 근력 약화", "side": "좌측"},
+        "info": {"age": 45, "sex": "남성", "symptom": "좌측 목 통증, 엄지/검지 저림, 위팔두갈래근 근력 약화", "side": "좌측"},
         "diagnosis": "좌측 C6 신경뿌리병증 (C6 Radiculopathy)",
         "ncs_sensory": [
             ["정중신경 (Median SNAP)", "정상 범위", "정상 범위", "정상 (정상범위: 잠복기 < 3.5ms, 진폭 > 20μV)"],
@@ -22,7 +22,7 @@ VIRTUAL_REPORTS = {
             ["위팔두갈래근 (Biceps brachii)", "근육피부신경(C5-C6) [C5 우세]", "Fibrillation potentials 및<br/>Positive sharp waves 출현", "Reduced MU recruitment", "비정상 (활동성 탈신경 상태)"],
             ["노쪽손목폄근 (ECRL)", "노신경(C6-C7) [C6 우세]", "Fibrillation potentials 및<br/>Positive sharp waves 출현", "Giant MUAPs 출현 및<br/>Reduced MU recruitment", "비정상 (만성 재신경지배 상태)"],
             ["짧은엄지벌림근 (Abductor Pollicis APB)", "정중신경(C8-T1) [T1 우세]", "Silent at rest (전기적 침묵)", "Normal MU recruitment", "정상"],
-            ["목 척추주위근 (Cervical Paraspinal)", "척수신경후지 (C6 Root)", "Fibrillation potentials 및<br/>Positive sharp waves 출현", "통증으로 인해 동원 제한", "비정상 (활동성 탈신경 상태)")
+            ["목 척추주위근 (Cervical Paraspinal)", "척수신경후지 (C6 Root)", "Fibrillation potentials 및<br/>Positive sharp waves 출현", "통증으로 인해 동원 제한", "비정상 (활동성 탈신경 상태)"]
         ],
         "interpretation": [
             "감각신경전도검사(SNAP)가 모두 정상입니다. 이는 병변이 뒤뿌리신경절(DRG)보다 몸쪽(근위부)인 신경뿌리(Root)에 있음을 의미합니다.",
@@ -171,8 +171,6 @@ VIRTUAL_REPORTS = {
 
 
 def render_input_learning():
-    # 1. 탭/시뮬레이터를 완전히 삭제하고 가상 결과표 학습 모드 단일 화면으로 최적화 구성
-    # 1. 자동 첫 선택 방지를 위해 "선택 안 함" 기본값 추가
     if "selected_report_case" not in st.session_state:
         st.session_state["selected_report_case"] = None
 
@@ -180,7 +178,6 @@ def render_input_learning():
         st.markdown('<div class="section-card">', unsafe_allow_html=True)
         st.markdown('<div class="case-section-label">📋 학습할 환자 사례 선택 (6가지 전형적 케이스)</div>', unsafe_allow_html=True)
         
-        # 1 & 2. 체크박스/라디오 버튼 제어
         chosen = st.radio(
             "의심 질환 가이드 리스트",
             ["선택 안 함"] + list(VIRTUAL_REPORTS.keys()),
@@ -203,7 +200,6 @@ def render_input_learning():
         st.markdown(f'<div class="mobile-note">주요 임상 증상: {data["info"]["symptom"]}</div>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-        # 모바일 최적화 반응형 렌더링 헬퍼
         def create_responsive_table(headers, rows, table_id):
             css = f"""
             <style>
@@ -239,7 +235,6 @@ def render_input_learning():
                 tr_html += f"<tr>{td_html}</tr>"
             return f'{css}<table id="{table_id}"><thead><tr>{"".join([f"<th>{h}</th>" for h in headers])}</tr></thead><tbody>{tr_html}</tbody></table>'
 
-        # 5. 표제어 수정 적용: 근전도 결과표 (NCS & Needle EMG): 병변측
         st.markdown('<div class="section-card">', unsafe_allow_html=True)
         st.markdown(f'<div class="case-section-label">📋 근전도 결과표 (NCS & Needle EMG): 병변측 ({data["info"]["side"]})</div>', unsafe_allow_html=True)
 
@@ -252,7 +247,6 @@ def render_input_learning():
         st.markdown('<div class="finding-highlight">🪡 침근전도검사 (Needle EMG)</div>', unsafe_allow_html=True)
         st.markdown(create_responsive_table(["검사 근육", "해당 분절 (Root)", "휴식 시 반응 (Rest)", "근수축 시 반응 (Volition - MU recruitment)", "근생리 상태 진단"], data["emg"], "emg_tbl"), unsafe_allow_html=True)
 
-        # 7. 약어 해설 사전 보강
         st.markdown("""
         <div class="info-legend-box" style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:10px; margin-top:15px; font-size:0.83rem; line-height:1.45;">
             ℹ️ <b>결과표 약어 해설 사전:</b><br/>
@@ -261,7 +255,7 @@ def render_input_learning():
             • <b>Positive sharp wave:</b> 양성예파 (탈신경된 근섬유 침 자극 시 유발되는 비정상 자발활동)<br/>
             • <b>MU recruitment:</b> 운동단위 동원패턴 (근수축 강도에 비례한 운동단위 참여도)<br/>
             • <b>MUAPs:</b> 운동단위활동전위 (Motor Unit Action Potentials)<br/>
-            • <b>Giant MUAP:</b> 거대 운동단위전위 (만성 변성 후 인접 신경의 Sprouting을 통한 가지치기 재신경화 파형)<br/>
+            • <b>Giant MUAP:</b> 거대 운동단위전위 (탈신경 후 인접 생존 신경가지의 Sprouting 재지배로 형성된 거대 파형)<br/>
             • <b>No MUAPs on volition:</b> 의지적인 근수축(Volition) 시도에도 불구하고 운동단위 전위가 전혀 동원되지 않는 완전 마비 상태
         </div>
         """, unsafe_allow_html=True)
