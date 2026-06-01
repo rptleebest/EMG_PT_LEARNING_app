@@ -306,34 +306,52 @@ def apply_mobile_first_style():
         line-height: 1.42 !important;
     }
 
-    /* ★ 버튼 최적 길이 및 중앙 정렬 (Request 1 반영) */
-    div[data-testid="stButton"] > button {
+    /* ★ [수정 핵심] 모든 버튼 텍스트의 흰색 두꺼운 글씨 강제화 로직 */
+    div[data-testid="stButton"] > button,
+    div[data-testid="stDownloadButton"] > button {
         font-weight: 800 !important;
+        font-weight: calc(800) !important; /* 일부 모바일 강제 굵기 상속 */
         border-radius: 12px !important;
         min-height: 44px !important;
-        font-size: 0.92rem !important;
+        font-size: 0.94rem !important;
         max-width: 320px !important;
         width: 100% !important;
         margin: 0 auto !important;
         display: block !important;
+        
+        /* 텍스트 렌더링 엔진 우회 설정 */
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+        text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2) !important;
     }
 
+    /* 기본 테마 엔진의 글자 색상 상속 오버라이드 및 호버 반응성 보강 */
     div[data-testid="stButton"] > button[kind="primary"],
-    div[data-testid="stButton"] > button[data-testid="baseButton-primary"] {
+    div[data-testid="stButton"] > button[data-testid="baseButton-primary"],
+    div[data-testid="stButton"] > button[kind="secondary"],
+    div[data-testid="stButton"] > button[data-testid="baseButton-secondary"] {
         color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
         background-color: var(--blue) !important;
+        border: none !important;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15) !important;
+    }
+
+    /* 버튼 호버 및 활성 상태 시 글자색 흰색 완전 사수 */
+    div[data-testid="stButton"] > button:hover,
+    div[data-testid="stButton"] > button:active,
+    div[data-testid="stButton"] > button:focus {
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+        background-color: #1d4ed8 !important; /* 조금 더 짙은 파란색으로 반응 */
         border: none !important;
     }
 
-    div[data-testid="stDownloadButton"] > button {
-        font-weight: 800 !important;
-        border-radius: 12px !important;
-        min-height: 44px !important;
-        font-size: 0.92rem !important;
-        max-width: 320px !important;
-        width: 100% !important;
-        margin: 0 auto !important;
-        display: block !important;
+    div[data-testid="stDownloadButton"] > button:hover,
+    div[data-testid="stDownloadButton"] > button:active,
+    div[data-testid="stDownloadButton"] > button:focus {
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
     }
 
     /* 모바일 반응형 사이즈 조정 */
