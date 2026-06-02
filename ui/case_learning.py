@@ -8,13 +8,13 @@ from ui.navigation import render_bottom_navigation
 
 def _get_ncs_line_text(raw_val):
     if raw_val == "ncs_delayed":
-        return "진폭: 정상 범위 / <span class='text-red' style='font-weight:700;'>잠복기: 지연</span>"
+        return "진폭: 정상 범위 / <span class='text-red' style='font-weight:700;'>잠복기: 지연 (정상측 대비 130% 이상)</span>"
     elif raw_val == "ncs_reduced":
-        return "<span class='text-red' style='font-weight:700;'>진폭: 감소</span> / 잠복기: 정상 범위"
+        return "<span class='text-red' style='font-weight:700;'>진폭: 감소 (정상측 대비 50% 이하)</span> / 잠복기: 정상 범위"
     elif raw_val == "ncs_absent":
-        return "<span class='text-red' style='font-weight:700;'>반응 소실</span>"
+        return "<span class='text-red' style='font-weight:700;'>반응 소실 (전기 자극에 무반응)</span>"
     else:
-        return "정상 범위 (normal limits)"
+        return "정상 범위 (within normal limits)"
 
 def _get_emg_line_text(raw_val):
     if raw_val in ["emg_active_denervation", "emg_paraspinal_denervation"]:
@@ -70,13 +70,12 @@ def _render_finding_block(title, findings, side):
             """, unsafe_allow_html=True)
             continue
         else:
-            # 학생용 사고 프레임과 직관적으로 1대1 일치하는 극단적 미니멀 표기 (모바일 뷰 최적화)
             if "감각" in title or "운동" in title:
                 if raw_val == "ncs_delayed":
                     lines.append(f'<div class="finding-subtext" style="font-size:0.82rem; margin-bottom:2px;">진폭: <span class="text-blue">정상 범위</span></div>')
-                    lines.append(f'<div class="finding-subtext" style="font-size:0.82rem; margin-bottom:2px;">잠복기: <span class="text-red" style="font-weight:800;">지연</span></div>')
+                    lines.append(f'<div class="finding-subtext" style="font-size:0.82rem; margin-bottom:2px;">잠복기: <span class="text-red" style="font-weight:800;">지연 (정상측 대비 130% 이상)</span></div>')
                 elif raw_val == "ncs_reduced":
-                    lines.append(f'<div class="finding-subtext" style="font-size:0.82rem; margin-bottom:2px;">진폭: <span class="text-red" style="font-weight:800;">감소</span></div>')
+                    lines.append(f'<div class="finding-subtext" style="font-size:0.82rem; margin-bottom:2px;">진폭: <span class="text-red" style="font-weight:800;">감소 (정상측 대비 50% 이하)</span></div>')
                     lines.append(f'<div class="finding-subtext" style="font-size:0.82rem; margin-bottom:2px;">잠복기: <span class="text-blue">정상 범위</span></div>')
                 elif raw_val == "ncs_absent":
                     lines.append(f'<div class="finding-subtext" style="font-size:0.82rem; margin-bottom:2px;">진폭: <span class="text-red" style="font-weight:800;">반응 소실</span></div>')
@@ -207,7 +206,7 @@ def render_case_list():
             <div class="finding-highlight" style="color: #b45309; border-bottom-color: #fde68a; font-size:0.85rem; padding-bottom:2px; margin-top:2px;">🎓 학생용 사고 프레임 (판독 기준)</div>
             <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:3px;">1. 진폭(Amplitude) 감소: 정상측 대비 <b>50% 이하</b> 시 축삭 손상(Axonal loss) 지시</div>
             <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:3px;">2. 잠복기(Latency) 지연: 정상측 대비 <b>130% 이상</b> 시 탈수초 변화(Demyelinating) 지시</div>
-            <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:2px;">3. 감각 전도 보존: 신경근병증(Radiculopathy)은 DRG 근위부 병변이므로 감각 SNAP이 정상 범위로 온전하게 보존됨</div>
+            <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:2px;">3. 감각 전도 보존: 신경근병증(Radiculopathy)은 뒤뿌리신경절(DRG) 몸쪽 병변이므로 감각 SNAP이 정상 범위로 온전하게 보존됨</div>
         </div>
         """, unsafe_allow_html=True)
 
