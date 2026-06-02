@@ -20,7 +20,7 @@ def render_home():
     
     st.markdown('<div class="case-bullet" style="font-size:0.82rem; margin-bottom:4px;">• <b>사례 학습 모드</b>: 임상 증상, 이학적 검사, 전기진단 소견을 통합하여 병변 위치를 입체적으로 추론합니다.</div>', unsafe_allow_html=True)
     st.markdown('<div class="case-bullet" style="font-size:0.82rem; margin-bottom:4px;">• <b>가상 결과표 판독학습</b>: 정교하게 구축된 수치 데이터를 기반으로 결과표 해석 논리를 다각도로 훈련합니다.</div>', unsafe_allow_html=True)
-    st.markdown('<div class="case-bullet" style="font-size:0.82rem; margin-bottom:4px;">• <b>고급 교육 포인트</b>: 신경뿌리(Nerve root), 신경얼기(Plexus), 말초신경(Peripheral nerve), 다발신경병증(Polyneuropathy), 반사경로(Reflex pathway)를 완벽하게 비교 학습합니다.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="case-bullet" style="font-size:0.82rem; margin-bottom:4px;">• <b>고급 교육 포인트</b>: 신경뿌리(Nerve root), 신경얼기(Plexus), 말초신경(Peripheral nerve), 다발신경병증(Polyneuropathy), 반사경로(Reflex pathway)에서의 병변 위치를 학습합니다.</div>', unsafe_allow_html=True)
     st.markdown('<div class="case-bullet" style="font-size:0.82rem; color: #dc2626; font-weight:700;">• 본 앱은 교육용 시뮬레이터이며 실제 의학적 임상 진단을 대체할 수 없습니다.</div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
