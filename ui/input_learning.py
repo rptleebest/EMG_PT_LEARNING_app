@@ -191,7 +191,7 @@ VIRTUAL_REPORTS = {
         "ddx": "위팔세갈래근 반사(Triceps reflex) 감퇴 여부를 검증하고 목 MRI를 통한 제6-7번 목 척추 추간판 유착 확인을 연계합니다."
     },
 
-    "8. 왼쪽 엉덩이 통증 및 발바닥 저림 (S1 신경뿌리병증 의심)": {
+    "8. S1 신경뿌리병증 의심 사례": {
         "info": {"age": 53, "sex": "남성", "symptom": "왼쪽 요통(Lumbago), 왼쪽 볼기에서 허벅지 뒤편을 관통하여 발등 가쪽 및 새끼발가락으로 흐르는 칼로 찌르는 듯한 통증", "side": "왼쪽"},
         "diagnosis": "왼쪽 S1 허리 신경뿌리병증(Lumbar radiculopathy)",
         "ncs_sensory": [
@@ -233,7 +233,7 @@ VIRTUAL_REPORTS = {
             ["짧은엄지벌림근 (APB)", "C8-T1", "Silent at rest", "Giant MUAPs 출현 및 Reduced MU recruitment", "비정상 (만성 축삭 손상에 따른 Gilliatt-Sumner 손 양상)"],
             ["첫째등쪽뼈사이근 (FDI)", "C8-T1", "Silent at rest", "Giant MUAPs 출현 및 Reduced MU recruitment", "비정상 (만성 축삭 손상에 따른 손 내재근 위축)"],
             ["위팔두갈래근 (Biceps brachii)", "C5-C6", "Silent at rest", "Normal MU recruitment", "정상 범위"],
-            ["목 척추주위근 (Cervical Paraspinal)", "C8-T1", "Silent at rest", "Normal MU recruitment", "정상 범위"]
+            ["목 척추주위근 (C8-T1)", "C8-T1", "Silent at rest", "Normal MU recruitment", "정상 범위"]
         ],
         "interpretation": [
             "위팔신경얼기(Brachial plexus) 하부 신경줄기(Lower trunk)가 빗장뼈(clavicle) 아래 통로에서 물리 압박을 받는 가슴문증후군(Thoracic outlet syndrome, TOS) 기전입니다. 안쪽아래팔피부신경(MAC) SNAP의 진폭이 극적으로 감소(50% 이하)하여 신경얼기(Plexus) 수준의 먼쪽(Distal) 변성을 가리칩니다.",
@@ -259,28 +259,16 @@ VIRTUAL_REPORTS = {
         "emg": [
             ["눈둘레근 (Orbicularis Oculi)", "얼굴신경 지배", "Silent at rest", "Normal MU recruitment", "정상 범위"]
         ],
-        "teaching_diagnosis": {
-            "summary": "왼쪽 얼굴신경(뇌신경 VII)의 급성 축삭 손상을 동반한 특발성 얼굴신경마비(Bell's palsy) 상태입니다.",
-            "ncs_reason": [
-                "왼쪽 얼굴 자극 시 운동 복합근육활동전위(CMAP) 최대 진폭이 정상측 대비 50% 이하인 34% 수준(1.1 mV)으로 폭락해 있어, 심각한 원위부 축삭 사멸 변성이 급격히 진행되고 있음을 정량 계측해 냅니다.",
-                "눈깜빡반사(Blink Reflex) 검사 상 왼쪽 각막 자극 시 신호 지연이 심해, 뇌간 반사 회로가 기능 마비에 처했음을 보여줍니다."
-            ],
-            "emg_reason": [
-                "1) 검사 선택의 전기생리학적 근거:",
-                "본 사례는 얼굴 근육의 원위 운동축삭 변성을 평가하기 위한 얼굴 복합근육활동전위(CMAP) 정량 분석과 뇌줄기 삼차-얼굴신경 반사궁 회로(Blink reflex)를 추적했습니다. 침근전도는 발병 초기(2~3주 미만)에는 검사 프로토콜 상 완전 제외됩니다."
-            ],
-            "integration": [
-                "왼쪽 이마 주름 소실, 눈 감기 불능, 얼굴신경 자극 시 좌/우 진폭 비대칭성 격차 및 눈깜박반사 R1/R2 전도 이상을 종합하여 얼굴신경마비(Bell's palsy)로 진단합니다."
-            ]
-        },
-        "differential_diagnosis": [
-            {
-                "name": "중추성 얼굴마비 (뇌졸중 등)",
-                "why_consider": "급격한 한쪽 얼굴 편마비 양상이 뇌줄기나 피질 병변과 매우 혼동하기 쉽습니다.",
-                "how_to_differentiate": "중추성 얼굴마비는 전두엽의 이중 지배 덕분에 이마 주름 잡기(이마근 수축)가 정상 보존되지만, 말초성 벨마비는 이마 주름을 잡는 것조차 불가능합니다.",
-                "practical_tip": "환자가 내원 시 이마 주름을 잡을 수 있는지를 우선 감별하여 위운동신경세포와 아래운동신경세포 마비를 선별하십시오."
-            }
-        ]
+        # [수정 핵심] 가상 결과지 판독 스키마에 맞춰 interpretation, emg_meaning, ddx 구조로 전면 재정렬 (KeyError 완전 제거)
+        "interpretation": [
+            "왼쪽 얼굴 자극 시 운동 복합근육활동전위(Facial CMAP) 최대 진폭이 정상측 대비 50% 이하인 34% 수준(1.1 mV)으로 폭락해 있어, 심각한 원위부 축삭 사멸 변성이 급격히 진행되고 있음을 정량 계측해 냅니다.",
+            "눈깜빡반사(Blink Reflex) 검사 상 왼쪽 각막 자극 시 신호 지연이 심해, 뇌간 반사 회로가 기능 마비에 처했음을 보여줍니다.",
+            "왼쪽 이마 주름 소실, 눈 감기 불능, 얼굴신경 자극 시 좌/우 진폭 비대칭성 격차 및 눈깜박반사 R1/R2 전도 이상을 종합하여 얼굴신경마비(Bell's palsy)로 최종 진단합니다."
+        ],
+        "emg_meaning": [
+            "얼굴 근육의 원위 운동축삭 변성을 평가하기 위한 얼굴 복합근육활동전위(CMAP) 정량 분석과 뇌줄기 삼차-얼굴신경 반사궁 회로(Blink reflex)를 추적했습니다. 침근전도는 발병 초기(2~3주 미만)에는 검사 프로토콜 상 완전 제외됩니다."
+        ],
+        "ddx": "중추성 얼굴마비(뇌졸중 등)는 이마 주름 잡기가 정상 보존되나 말초성 벨마비는 불가능하므로, 내원 시 이마 주름 형성 여부를 관찰하여 위운동신경세포(UMN)와 아래운동신경세포(LMN) 장애를 명확히 선별하십시오."
     }
 }
 
@@ -368,7 +356,7 @@ def render_input_learning():
 
         st.markdown('</div>', unsafe_allow_html=True)
 
-        # [수정 핵심] "최종 교육용 진단" 타이틀 통일 및 엠퍼시스 강조 적용
+        # "최종 교육용 진단" 타이틀 통일 및 엠퍼시스 강조 적용
         st.markdown('<div class="result-card" style="padding: 10px 8px;">', unsafe_allow_html=True)
         st.markdown('<div class="result-title" style="font-size:0.92rem;">✅ 임상 추론 및 생리학적 해석 결과</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="result-text" style="font-size:0.84rem; background: #fff1f2; border: 1px solid #fecdd3; padding: 8px; border-radius:6px;"><span class="label-strong text-red" style="font-size:0.85rem; font-weight:800;">최종 교육용 진단:</span> <span style="font-weight:800; color:#9f1239; font-size:0.88rem; margin-left:4px;">{data["diagnosis"]}</span></div>', unsafe_allow_html=True)
