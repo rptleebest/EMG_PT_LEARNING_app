@@ -272,18 +272,18 @@ def apply_mobile_first_style():
         font-size: 0.92rem !important;
     }   
     
-    /* 🚨 텍스트 색상 및 굵기 수정 부분 (가독성 최적화) */
+    /* 🚨 텍스트 색상 및 굵기 수정 부분 (학술/교육용 차분한 톤) */
     .text-blue { 
-        color: #1d4ed8 !important; /* 차분한 파란색 */
-        font-weight: 600 !important; /* 800->600 하향 */
+        color: #1e40af !important; /* 딥 로얄 블루 (안정감 있는 파랑) */
+        font-weight: 600 !important; 
     }
     .text-green { 
         color: #15803d !important; 
         font-weight: 600 !important; 
     }
     .text-red { 
-        color: #be123c !important; /* 쨍한 빨강(#dc2626) -> 눈이 편안한 로즈레드 */
-        font-weight: 600 !important; /* 과도한 굵기 억제 */
+        color: #991b1b !important; /* 딥 브릭 레드 (벽돌색, 피로도 최소화) */
+        font-weight: 600 !important; 
     }
     
     .result-value { 
@@ -294,7 +294,7 @@ def apply_mobile_first_style():
     
     .case-bullet-strong { 
         font-size: 0.88rem; 
-        font-weight: 600 !important; /* 가독성을 위해 굵기 통일 */
+        font-weight: 600 !important; 
         margin-bottom: 5px; 
         line-height: 1.6; 
         color: #0f172a;
