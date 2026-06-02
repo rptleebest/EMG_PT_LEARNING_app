@@ -148,15 +148,16 @@ def render_case_list():
 
     case_names = ["선택 안 함"] + list(CASE_LIBRARY.keys())
     
-    if "case_radio_idx" not in st.session_state:
-        st.session_state["case_radio_idx"] = 0
+    # 1. 세션 상태의 무결성을 담보하는 안전 위젯 상태값 선언
+    if "case_radio_selector" not in st.session_state:
+        st.session_state["case_radio_selector"] = "선택 안 함"
 
+    # st.radio에 key를 적용하면 session_state["case_radio_selector"]와 직접 동기화되어 desync(디싱크)가 해결됩니다.
     selected = st.radio(
         "학습할 임상 증상 선택", 
         case_names, 
-        index=st.session_state["case_radio_idx"],
-        label_visibility="collapsed",
-        key="case_radio_selector"
+        key="case_radio_selector",
+        label_visibility="collapsed"
     )
 
     st.markdown('</div>', unsafe_allow_html=True)
@@ -285,10 +286,11 @@ def render_case_list():
                     st.markdown('<hr class="item-divider">', unsafe_allow_html=True)
             st.markdown('</div>', unsafe_allow_html=True)
 
-        # 동적 라디오 인덱스 초기화 제어
+        # 2. 다른 임상케이스 분석하기 버튼 동적 바인딩 버그 완전 제어
         st.markdown('<div style="text-align: center; margin-top: 20px; margin-bottom: 20px;">', unsafe_allow_html=True)
         if st.button("🔄 다른 임상 케이스 분석하기", key="reset_case_radio_btn"):
-            st.session_state["case_radio_idx"] = 0
+            # 위젯 키 세션을 직접 초기화하여 버퍼 락을 무결하게 파쇄합니다.
+            st.session_state["case_radio_selector"] = "선택 안 함"
             st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
 
