@@ -30,6 +30,22 @@ def _get_emg_line_text(raw_val):
     else: 
         return "휴식 시: <span class='text-blue' style='font-weight:700;'>Silent at rest</span> / 수의수축 시: <span class='text-blue' style='font-weight:700;'>Normal MU recruitment</span>"
 
+# F파 및 반사 검사 결과를 한글 표준 용어로 번역하는 공용 헬퍼 함수
+def _get_reflex_line_text(raw_val):
+    if raw_val == "fwave_delayed_absent":
+        return "F파: 지연/부재"
+    elif raw_val == "blink_delayed":
+        return "비정상 (눈깜빡반사 R1/R2 지연)"
+    elif raw_val == "blink_delayed_absent":
+        return "비정상 (눈깜빡반사 R2 유발 소실)"
+    elif raw_val == "h_reflex_hyperactive":
+        return "비정상 (H-반사 최대 진폭 항진)"
+    elif raw_val == "h_m_ratio_increased":
+        return "비정상 (H/M ratio 증가)"
+    elif raw_val in ["ncs_normal", "정상 범위"]:
+        return "정상 범위"
+    return raw_val
+
 def _render_finding_block(title, findings, side):
     if not findings:
         return
@@ -58,8 +74,9 @@ def _render_finding_block(title, findings, side):
                 left_text = _get_emg_line_text(raw_left)
                 right_text = _get_emg_line_text(raw_right)
             else:
-                left_text = raw_left
-                right_text = raw_right
+                # [버그 수정] 양측 F파 및 반사 검사의 원시 코드를 한글 맵핑 텍스트로 치환 적용
+                left_text = _get_reflex_line_text(raw_left)
+                right_text = _get_reflex_line_text(raw_right)
 
             st.markdown(f"""
             <div style="padding-left: 6px; margin-bottom: 6px; border-bottom: 1px solid #f1f5f9; padding-bottom: 6px;">
@@ -113,19 +130,7 @@ def _render_finding_block(title, findings, side):
                 """, unsafe_allow_html=True)
                 continue
             else:
-                norm_val = raw_val
-                if raw_val == "fwave_delayed_absent":
-                    norm_val = "F파: 지연/부재"
-                elif raw_val == "blink_delayed":
-                    norm_val = "비정상 (눈깜빡반사 R1/R2 지연)"
-                elif raw_val == "blink_delayed_absent":
-                    norm_val = "비정상 (눈깜빡반사 R2 유발 소실)"
-                elif raw_val == "h_reflex_hyperactive":
-                    norm_val = "비정상 (H-반사 최대 진폭 항진)"
-                elif raw_val == "h_m_ratio_increased":
-                    norm_val = "비정상 (H/M ratio 증가)"
-                elif raw_val == "ncs_normal":
-                    norm_val = "정상 범위"
+                norm_val = _get_reflex_line_text(raw_val)
                 
                 lines.append(f'<div class="finding-subtext" style="font-size:0.82rem;">판독 결과: <span class="text-red" style="font-weight:700;">{norm_val}</span></div>')
                 if right and right not in ["ncs_normal", "NCS_NORMAL"]:
@@ -174,7 +179,7 @@ def render_case_list():
         elif side == "좌": side = "왼쪽"
         elif side == "양측": side = "양쪽"
 
-        # [수정 핵심] 상단 카드에서 정답 스포일러 방지를 위해 "최종 교육용 진단" 행을 완전히 영구 삭제
+        # 상단 카드에서 정답 스포일러 방지를 위해 "최종 교육용 진단" 행을 완전히 영구 삭제
         st.markdown(f'<div class="info-card" style="padding: 10px 8px;">', unsafe_allow_html=True)
         st.markdown(f'<div class="case-title-mobile" style="font-size:0.94rem;">👤 환자 사례: {selected}</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="case-subtitle-mobile" style="font-size:0.82rem; margin-top:2px;"><span class="label-strong text-blue">연령/성별:</span> <span class="result-value">{patient["age"]}세 / {patient["sex"]}</span> | <span class="label-strong text-blue">병변측:</span> <span class="result-value">{side}</span></div>', unsafe_allow_html=True)
@@ -223,7 +228,7 @@ def render_case_list():
                 <div class="finding-highlight" style="color: #b45309; border-bottom-color: #fde68a; font-size:0.85rem; padding-bottom:2px; margin-top:2px;">🎓 학생용 사고 프레임 (NCS / EMG 판독 기준)</div>
                 <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:3px;">1. 진폭(Amplitude) 감소: 정상측 대비 <b>50% 이하</b> 시 축삭 손상(Axonal loss) 지시</div>
                 <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:3px;">2. 잠복기(Latency) 지연: 정상측 대비 <b>130% 이상</b> 시 말이집털락 변화(Demyelinating) 또는 포착 지시</div>
-                <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:2px;">3. 감각 전도 보존: 신경뿌리병증(Radiculopathy)은 뒤뿌리신경절(DRG) 몸쪽 병변이므로 감각신경활동전위(SNAP)가 정상 범위로 온전하게 보존됨</div>
+                <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:2px;">3. 감각 전도 보존: 신경근병증(Radiculopathy)은 뒤뿌리신경절(DRG) 몸쪽 병변이므로 감각신경활동전위(SNAP)가 정상 범위로 온전하게 보존됨</div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -250,7 +255,7 @@ def render_case_list():
             else:
                 _render_finding_block("반사 및 후기반응 소견: 병변측", merged, side)
 
-        # [수정 핵심] 중복을 철저히 배제하고 정합성을 극대화하기 위해, 최하단 리포트 요약 헤더를 "최종 교육용 진단"으로 고착화하여 렌더링
+        # 최하단 리포트 요약 헤더를 "최종 교육용 진단"으로 고착화하여 렌더링
         st.markdown('<div class="result-card" style="padding: 10px 8px;">', unsafe_allow_html=True)
         st.markdown('<div class="result-title" style="font-size:0.92rem;">✅ 임상 추론 및 해석 결과</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="result-text" style="font-size:0.84rem; background: #fff1f2; border: 1px solid #fecdd3; padding: 8px; border-radius:6px;"><span class="label-strong text-red" style="font-size:0.85rem; font-weight:800;">최종 교육용 진단:</span> <span class="result-value" style="font-weight: 800; font-size:0.88rem; color: #9f1239; margin-left: 4px;">{teaching.get("summary","")}</span></div>', unsafe_allow_html=True)
