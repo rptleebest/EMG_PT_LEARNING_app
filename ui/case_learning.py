@@ -8,13 +8,13 @@ from ui.navigation import render_bottom_navigation
 
 def _get_ncs_line_text(raw_val):
     if raw_val == "ncs_delayed":
-        return "진폭 정상 / <span class='text-red' style='font-weight:700;'>잠복기 지연 (정상측 대비 130% 이상)</span>"
+        return "진폭: 정상 범위 / <span class='text-red' style='font-weight:700;'>잠복기: 지연</span>"
     elif raw_val == "ncs_reduced":
-        return "<span class='text-red' style='font-weight:700;'>진폭 감소 (정상측 대비 50% 이하)</span> / 잠복기 정상"
+        return "<span class='text-red' style='font-weight:700;'>진폭: 감소</span> / 잠복기: 정상 범위"
     elif raw_val == "ncs_absent":
-        return "<span class='text-red' style='font-weight:700;'>반응 소실 (전기 자극에 무반응)</span>"
+        return "<span class='text-red' style='font-weight:700;'>반응 소실</span>"
     else:
-        return "정상 범위 (within normal limits)"
+        return "정상 범위 (normal limits)"
 
 def _get_emg_line_text(raw_val):
     if raw_val in ["emg_active_denervation", "emg_paraspinal_denervation"]:
@@ -34,7 +34,7 @@ def _render_finding_block(title, findings, side):
     if not findings:
         return
 
-    st.markdown(f'<div class="case-section-label">{title}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="case-section-label" style="font-size:0.92rem; padding: 6px 8px;">{title}</div>', unsafe_allow_html=True)
     block_parts = []
 
     items = list(findings.items())
@@ -42,7 +42,7 @@ def _render_finding_block(title, findings, side):
         left = values[0] if len(values) > 0 else ""
         right = values[1] if len(values) > 1 else ""
 
-        lines = [f'<div class="finding-highlight">{item}</div>']
+        lines = [f'<div class="finding-highlight" style="font-size:0.88rem; margin-top:4px; padding-bottom:2px;">{item}</div>']
         
         pathological_val = right if (side == "오른쪽" or side == "우") else left
         raw_val = str(pathological_val).strip()
@@ -62,27 +62,28 @@ def _render_finding_block(title, findings, side):
                 right_text = raw_right
 
             st.markdown(f"""
-            <div style="padding-left: 10px; margin-bottom: 8px;">
-                <div class="finding-highlight" style="font-size:1.0rem; border-bottom:none; margin-top:5px;">{item}</div>
-                <div class="finding-subtext" style="margin-bottom: 2px;">• 좌측: {left_text}</div>
-                <div class="finding-subtext">• 우측: {right_text}</div>
+            <div style="padding-left: 6px; margin-bottom: 6px; border-bottom: 1px solid #f1f5f9; padding-bottom: 6px;">
+                <div class="finding-highlight" style="font-size:0.88rem; border-bottom:none; margin-top:2px;">{item}</div>
+                <div class="finding-subtext" style="margin-bottom: 1px; font-size:0.8rem; line-height:1.4;">• 좌측: {left_text}</div>
+                <div class="finding-subtext" style="margin-bottom: 1px; font-size:0.8rem; line-height:1.4;">• 우측: {right_text}</div>
             </div>
             """, unsafe_allow_html=True)
             continue
         else:
+            # 학생용 사고 프레임과 직관적으로 1대1 일치하는 극단적 미니멀 표기 (모바일 뷰 최적화)
             if "감각" in title or "운동" in title:
                 if raw_val == "ncs_delayed":
-                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-blue">정상 범위</span></div>')
-                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-red" style="font-weight:700;">비정상 [잠복기: 지연 (정상측 대비 130% 이상)]</span></div>')
+                    lines.append(f'<div class="finding-subtext" style="font-size:0.82rem; margin-bottom:2px;">진폭: <span class="text-blue">정상 범위</span></div>')
+                    lines.append(f'<div class="finding-subtext" style="font-size:0.82rem; margin-bottom:2px;">잠복기: <span class="text-red" style="font-weight:800;">지연</span></div>')
                 elif raw_val == "ncs_reduced":
-                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-red" style="font-weight:700;">비정상 [진폭: 감소 (정상측 대비 50% 이하)]</span></div>')
-                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-blue">정상 범위</span></div>')
+                    lines.append(f'<div class="finding-subtext" style="font-size:0.82rem; margin-bottom:2px;">진폭: <span class="text-red" style="font-weight:800;">감소</span></div>')
+                    lines.append(f'<div class="finding-subtext" style="font-size:0.82rem; margin-bottom:2px;">잠복기: <span class="text-blue">정상 범위</span></div>')
                 elif raw_val == "ncs_absent":
-                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-red" style="font-weight:700;">반응 소실 (전기 자극에 무반응)</span></div>')
-                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-red" style="font-weight:700;">반응 소실 (전기 자극에 무반응)</span></div>')
+                    lines.append(f'<div class="finding-subtext" style="font-size:0.82rem; margin-bottom:2px;">진폭: <span class="text-red" style="font-weight:800;">반응 소실</span></div>')
+                    lines.append(f'<div class="finding-subtext" style="font-size:0.82rem; margin-bottom:2px;">잠복기: <span class="text-red" style="font-weight:800;">반응 소실</span></div>')
                 else: # ncs_normal
-                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-blue">정상 범위</span></div>')
-                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-blue">정상 범위</span></div>')
+                    lines.append(f'<div class="finding-subtext" style="font-size:0.82rem; margin-bottom:2px;">진폭: <span class="text-blue">정상 범위</span></div>')
+                    lines.append(f'<div class="finding-subtext" style="font-size:0.82rem; margin-bottom:2px;">잠복기: <span class="text-blue">정상 범위</span></div>')
                     
             elif "침근전도" in title:
                 rest_val = "Silent at rest"
@@ -105,10 +106,10 @@ def _render_finding_block(title, findings, side):
                 vol_color = "text-red" if any(k in vol_val for k in ["Reduced", "Giant", "No MUAPs", "평가불가"]) else "text-blue"
 
                 st.markdown(f"""
-                <div style="padding-left: 10px; margin-bottom: 8px;">
-                    <div class="finding-highlight" style="font-size:1.0rem; border-bottom:none; margin-top:5px;">{item}</div>
-                    <div class="finding-subtext" style="margin-bottom: 2px;">• 휴식 시: <span class="{rest_color}" style="font-weight: 700;">{rest_val}</span></div>
-                    <div class="finding-subtext">• 수의수축 시: <span class="{vol_color}" style="font-weight: 700;">{vol_val}</span></div>
+                <div style="padding-left: 6px; margin-bottom: 6px; border-bottom: 1px solid #f1f5f9; padding-bottom: 6px;">
+                    <div class="finding-highlight" style="font-size:0.88rem; border-bottom:none; margin-top:2px;">{item}</div>
+                    <div class="finding-subtext" style="margin-bottom: 1px; font-size:0.82rem;">• 휴식 시: <span class="{rest_color}" style="font-weight: 700;">{rest_val}</span></div>
+                    <div class="finding-subtext" style="margin-bottom: 1px; font-size:0.82rem;">• 수의수축 시: <span class="{vol_color}" style="font-weight: 700;">{vol_val}</span></div>
                 </div>
                 """, unsafe_allow_html=True)
                 continue
@@ -127,36 +128,36 @@ def _render_finding_block(title, findings, side):
                 elif raw_val == "ncs_normal":
                     norm_val = "정상 범위 (within normal limits)"
                 
-                lines.append(f'<div class="finding-subtext">판독 결과: <span class="text-red" style="font-weight:700;">{norm_val}</span></div>')
+                lines.append(f'<div class="finding-subtext" style="font-size:0.82rem;">판독 결과: <span class="text-red" style="font-weight:700;">{norm_val}</span></div>')
                 if right and right not in ["ncs_normal", "NCS_NORMAL"]:
-                    lines.append(f'<div class="finding-subtext">측정 데이터: <span class="text-blue">{right}</span></div>')
+                    lines.append(f'<div class="finding-subtext" style="font-size:0.82rem;">측정 데이터: <span class="text-blue">{right}</span></div>')
 
-        block_parts.append(f'<div class="compact-item">{"".join(lines)}</div>')
+        block_parts.append(f'<div class="compact-item" style="padding: 2px 0;">{"".join(lines)}</div>')
         if idx < len(items) - 1:
-            block_parts.append('<hr class="item-divider">')
+            block_parts.append('<hr class="item-divider" style="margin: 4px 0;">')
 
     if block_parts:
-        st.markdown(f'<div class="case-text-block">{"".join(block_parts)}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="case-text-block" style="padding: 6px 8px;">{"".join(block_parts)}</div>', unsafe_allow_html=True)
 
 
 def render_case_list():
     st.markdown('<div class="main-title">사례 학습 모드</div>', unsafe_allow_html=True)
-    st.markdown('<div class="subtle">환자의 임상 증상과 근전도 소견을 실시간 비교 분석하여 임상적 판단력을 기릅니다.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="subtle" style="font-size:0.84rem; line-height:1.45; word-break:keep-all;">환자의 임상 증상과 근전도 소견을 실시간 비교 분석하여 임상적 판단력을 기릅니다.</div>', unsafe_allow_html=True)
 
-    st.markdown('<div class="section-card">', unsafe_allow_html=True)
-    st.markdown('<div class="case-section-label">📋 학습할 가상 사례 선택 (비교 분석형)</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-card" style="padding: 10px 8px;">', unsafe_allow_html=True)
+    st.markdown('<div class="case-section-label" style="font-size:0.92rem;">📋 학습할 가상 사례 선택 (비교 분석형)</div>', unsafe_allow_html=True)
 
     case_names = ["선택 안 함"] + list(CASE_LIBRARY.keys())
     
-    # 1. 세션 상태의 무결성을 담보하는 안전 위젯 상태값 선언
-    if "case_radio_selector" not in st.session_state:
-        st.session_state["case_radio_selector"] = "선택 안 함"
+    if "case_reset_counter" not in st.session_state:
+        st.session_state["case_reset_counter"] = 0
 
-    # st.radio에 key를 적용하면 session_state["case_radio_selector"]와 직접 동기화되어 desync(디싱크)가 해결됩니다.
+    dynamic_radio_key = f"case_radio_selector_{st.session_state['case_reset_counter']}"
+
     selected = st.radio(
         "학습할 임상 증상 선택", 
         case_names, 
-        key="case_radio_selector",
+        key=dynamic_radio_key,
         label_visibility="collapsed"
     )
 
@@ -176,37 +177,37 @@ def render_case_list():
         elif side == "양측": side = "양쪽"
 
         # 환자 기본 정보 카드
-        st.markdown(f'<div class="info-card">', unsafe_allow_html=True)
-        st.markdown(f'<div class="case-title-mobile">👤 환자 사례: {selected}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="case-subtitle-mobile"><span class="label-strong text-blue">연령/성별:</span> <span class="result-value">{patient["age"]}세 / {patient["sex"]}</span> | <span class="label-strong text-blue">병변측:</span> <span class="result-value">{side}</span></div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="case-subtitle-mobile"><span class="label-strong text-red">최종 교육용 진단:</span> <span class="result-value">{teaching.get("summary","")}</span></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="info-card" style="padding: 10px 8px;">', unsafe_allow_html=True)
+        st.markdown(f'<div class="case-title-mobile" style="font-size:0.94rem;">👤 환자 사례: {selected}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="case-subtitle-mobile" style="font-size:0.82rem; margin-top:2px;"><span class="label-strong text-blue">연령/성별:</span> <span class="result-value">{patient["age"]}세 / {patient["sex"]}</span> | <span class="label-strong text-blue">병변측:</span> <span class="result-value">{side}</span></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="case-subtitle-mobile" style="font-size:0.82rem; margin-top:1px; line-height:1.4;"><span class="label-strong text-red">최종 교육용 진단:</span> <span class="result-value">{teaching.get("summary","")}</span></div>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
         # 주요 증상(Chief Complaints)
-        st.markdown('<div class="case-section-label">🗣️ 주요 증상</div>', unsafe_allow_html=True)
-        symptoms_html = "".join([f'<div class="case-bullet">• {s}</div>' for s in patient.get("symptoms", [])])
-        st.markdown(f'<div class="case-text-block">{symptoms_html}</div>', unsafe_allow_html=True)
+        st.markdown('<div class="case-section-label" style="font-size:0.92rem;">🗣️ 주요 증상</div>', unsafe_allow_html=True)
+        symptoms_html = "".join([f'<div class="case-bullet" style="font-size:0.82rem; margin-bottom:4px;">• {s}</div>' for s in patient.get("symptoms", [])])
+        st.markdown(f'<div class="case-text-block" style="padding: 8px 10px;">{symptoms_html}</div>', unsafe_allow_html=True)
 
         # 이학적 검사 결과
-        st.markdown('<div class="case-section-label">🧪 이학적 검사결과</div>', unsafe_allow_html=True)
+        st.markdown('<div class="case-section-label" style="font-size:0.92rem;">🧪 이학적 검사결과</div>', unsafe_allow_html=True)
         exam_html = []
         for sec_name, items in patient.get("physical_exam", {}).items():
-            exam_html.append(f'<div class="finding-highlight" style="font-size:1.0rem;">{sec_name}</div>')
+            exam_html.append(f'<div class="finding-highlight" style="font-size:0.86rem; margin-top:4px; padding-bottom:1px; border-bottom:none; color:#475569;">[{sec_name}]</div>')
             for i in items:
                 parts = i.split(":", 1)
                 if len(parts) == 2:
-                    exam_html.append(f'<div class="case-bullet"><span class="label-strong">{parts[0]}:</span> <span class="result-value">{parts[1]}</span></div>')
+                    exam_html.append(f'<div class="case-bullet" style="font-size:0.82rem; margin-bottom:3px;"><span class="label-strong" style="font-size:0.82rem;">{parts[0]}:</span> <span class="result-value" style="font-size:0.82rem;">{parts[1]}</span></div>')
                 else:
-                    exam_html.append(f'<div class="case-bullet">• {i}</div>')
-        st.markdown(f'<div class="case-text-block">{"".join(exam_html)}</div>', unsafe_allow_html=True)
+                    exam_html.append(f'<div class="case-bullet" style="font-size:0.82rem; margin-bottom:3px;">• {i}</div>')
+        st.markdown(f'<div class="case-text-block" style="padding: 8px 10px;">{"".join(exam_html)}</div>', unsafe_allow_html=True)
 
-        # 학생용 사고 프레임 가이드 (정량 기준 정렬)
+        # 학생용 사고 프레임 가이드 (모바일 적응형 압축 레이아웃)
         st.markdown("""
-        <div class="warn-card">
-            <div class="finding-highlight" style="color: #b45309; border-bottom-color: #fde68a;">🎓 학생용 사고 프레임 (판독 기준)</div>
-            <div class="case-bullet-strong">1. 진폭(Amplitude) 감소: 정상 범위 대비 <b>50% 이하 (정상측 대비 50% 이하)</b>로 감소 시 운동/감각 축삭 손상(Axonal loss)을 의미합니다.</div>
-            <div class="case-bullet-strong">2. 잠복기(Latency) 지연: 정상 범위 대비 <b>130% 이상 (정상측 대비 130% 이상)</b> 연장 시 말이집탈락성(Demyelinating) 변화 혹은 국소 포착성 압박을 의미합니다.</div>
-            <div class="case-bullet-strong">3. 감각신경전도 보존: 신경근병증(Radiculopathy)은 병변이 뒤뿌리신경절(DRG)보다 근위부에 있으므로 말초 감각신경활동전위(SNAP)가 정상 범위로 보존됩니다.</div>
+        <div class="warn-card" style="padding: 8px 8px; margin-bottom:10px;">
+            <div class="finding-highlight" style="color: #b45309; border-bottom-color: #fde68a; font-size:0.85rem; padding-bottom:2px; margin-top:2px;">🎓 학생용 사고 프레임 (판독 기준)</div>
+            <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:3px;">1. 진폭(Amplitude) 감소: 정상측 대비 <b>50% 이하</b> 시 축삭 손상(Axonal loss) 지시</div>
+            <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:3px;">2. 잠복기(Latency) 지연: 정상측 대비 <b>130% 이상</b> 시 탈수초 변화(Demyelinating) 지시</div>
+            <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:2px;">3. 감각 전도 보존: 신경근병증(Radiculopathy)은 DRG 근위부 병변이므로 감각 SNAP이 정상 범위로 온전하게 보존됨</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -218,7 +219,6 @@ def render_case_list():
         if grouped["motor"]:
             _render_finding_block("운동신경전도검사: 병변측", grouped["motor"], side)
             
-        # 침근전도가 생략된 특수 사례(눈꺼풀 떨림, 뇌졸중 H-반사)는 침근전도 결과표를 완전 숨김 처리
         is_emg_needed = "눈꺼풀" not in selected and "뇌졸중" not in selected
         if grouped["muscle"] and is_emg_needed:
             _render_finding_block("침근전도검사 소견: 병변측", grouped["muscle"], side)
@@ -230,67 +230,66 @@ def render_case_list():
             if "뇌졸중" in selected:
                 _render_finding_block("H-반사 유발 및 경직 정량검사: 병변측", merged, side)
             elif "눈꺼풀" in selected:
-                _render_finding_block("눈깜빡반사 (Blink Reflex Test) 회로 분석: 병변측", merged, side)
+                _render_finding_block("눈깜빡반사 회로 분석: 병변측", merged, side)
             else:
                 _render_finding_block("반사 및 후기반응 소견: 병변측", merged, side)
 
-        # 추론 분석 보고서 영역
-        st.markdown('<div class="result-card">', unsafe_allow_html=True)
-        st.markdown('<div class="result-title">✅ 교육용 진단 요약</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="result-text"><span class="label-strong text-blue">요약:</span> <span class="result-value">{teaching.get("summary","")}</span></div>', unsafe_allow_html=True)
+        # 추론 분석 보고서 영역 (수의수축 시 용어 단일화 준수)
+        st.markdown('<div class="result-card" style="padding: 10px 8px;">', unsafe_allow_html=True)
+        st.markdown('<div class="result-title" style="font-size:0.92rem;">✅ 임상 추론 및 해석 결과</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="result-text" style="font-size:0.82rem;"><span class="label-strong text-blue" style="font-size:0.82rem;">요약:</span> <span class="result-value" style="font-size:0.82rem;">{teaching.get("summary","")}</span></div>', unsafe_allow_html=True)
 
         if teaching.get("ncs_reason"):
-            st.markdown('<div class="result-label">신경전도 및 후기반응 해석 포인트</div>', unsafe_allow_html=True)
+            st.markdown('<div class="result-label" style="font-size:0.85rem; padding: 4px 6px;">신경전도 및 후기반응 해석 포인트</div>', unsafe_allow_html=True)
             for x in teaching["ncs_reason"]:
-                st.markdown(f'<div class="result-text">• {x}</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="result-text" style="font-size:0.8rem; line-height:1.45;">• {x}</div>', unsafe_allow_html=True)
 
         if teaching.get("emg_reason"):
             is_emg_skipped = "Blink Reflex" in str(teaching["emg_reason"][0]) or "H-reflex" in str(teaching["emg_reason"][0]) or "H-반사" in str(teaching["emg_reason"][0]) or "눈꺼풀" in selected or "뇌졸중" in selected
             
             if not is_emg_skipped:
-                st.markdown('<div class="result-label">침근전도 해석 포인트</div>', unsafe_allow_html=True)
+                st.markdown('<div class="result-label" style="font-size:0.85rem; padding: 4px 6px;">침근전도 해석 포인트</div>', unsafe_allow_html=True)
                 for x in teaching["emg_reason"]:
                     x_strip = x.strip()
                     if x_strip.startswith(("1)", "2)", "3)", "4)", "5)")):
                         st.markdown(
-                            f'<div class="result-text" style="padding-left: 14px; margin-top: 10px; margin-bottom: 5px; line-height:1.6; font-weight: 800; color: #1e3a8a; font-size: 0.94rem;">{x_strip}</div>', 
+                            f'<div class="result-text" style="padding-left: 8px; margin-top: 8px; margin-bottom: 4px; line-height:1.4; font-weight: 800; color: #1e3a8a; font-size: 0.84rem;">{x_strip}</div>', 
                             unsafe_allow_html=True
                         )
                     elif x_strip.endswith(":"):
                         st.markdown(
-                            f'<div class="result-text" style="font-weight: 800; color: #b45309; margin-top: 14px; margin-bottom: 6px; font-size:0.92rem;">{x_strip}</div>', 
+                            f'<div class="result-text" style="font-weight: 800; color: #b45309; margin-top: 10px; margin-bottom: 4px; font-size:0.82rem;">{x_strip}</div>', 
                             unsafe_allow_html=True
                         )
                     else:
                         st.markdown(
-                            f'<div class="result-text" style="line-height:1.6; margin-bottom:5px; padding-left: 10px; color: #334155;">• {x_strip}</div>', 
+                            f'<div class="result-text" style="line-height:1.45; margin-bottom:3px; padding-left: 6px; color: #334155; font-size:0.8rem;">• {x_strip}</div>', 
                             unsafe_allow_html=True
                         )
 
         if teaching.get("integration"):
-            st.markdown('<div class="result-label">통합 해석</div>', unsafe_allow_html=True)
+            st.markdown('<div class="result-label" style="font-size:0.85rem; padding: 4px 6px;">통합 해석</div>', unsafe_allow_html=True)
             for x in teaching["integration"]:
-                st.markdown(f'<div class="result-text">• {x}</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="result-text" style="font-size:0.8rem; line-height:1.45;">• {x}</div>', unsafe_allow_html=True)
 
         st.markdown('</div>', unsafe_allow_html=True)
 
         if diff_dx:
-            st.markdown('<div class="section-card">', unsafe_allow_html=True)
-            st.markdown('<div class="case-section-label">🧭 감별진단 포인트</div>', unsafe_allow_html=True)
+            st.markdown('<div class="section-card" style="padding: 10px 8px;">', unsafe_allow_html=True)
+            st.markdown('<div class="case-section-label" style="font-size:0.92rem;">🧭 감별진단 포인트</div>', unsafe_allow_html=True)
             for idx, d in enumerate(diff_dx):
-                st.markdown(f'<div class="finding-highlight">{d.get("name","")}</div>', unsafe_allow_html=True)
-                st.markdown(f'<div class="case-bullet"><span class="label-strong text-blue">왜 고려하나:</span> <span class="result-value">{d.get("why_consider","")}</span></div>', unsafe_allow_html=True)
-                st.markdown(f'<div class="case-bullet"><span class="label-strong text-blue">어떻게 구분하나:</span> <span class="result-value">{d.get("how_to_differentiate","")}</span></div>', unsafe_allow_html=True)
-                st.markdown(f'<div class="case-bullet"><span class="label-strong text-green">실전 팁:</span> <span class="result-value">{d.get("practical_tip","")}</span></div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="finding-highlight" style="font-size:0.86rem; margin-top:2px;">{d.get("name","")}</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="case-bullet" style="font-size:0.8rem; margin-bottom:3px;"><span class="label-strong text-blue" style="font-size:0.8rem;">왜 고려하나:</span> <span class="result-value" style="font-size:0.8rem;">{d.get("why_consider","")}</span></div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="case-bullet" style="font-size:0.8rem; margin-bottom:3px;"><span class="label-strong text-blue" style="font-size:0.8rem;">어떻게 구분하나:</span> <span class="result-value" style="font-size:0.8rem;">{d.get("how_to_differentiate","")}</span></div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="case-bullet" style="font-size:0.8rem; margin-bottom:3px;"><span class="label-strong text-green" style="font-size:0.8rem;">실전 팁:</span> <span class="result-value" style="font-size:0.8rem;">{d.get("practical_tip","")}</span></div>', unsafe_allow_html=True)
                 if idx < len(diff_dx) - 1:
-                    st.markdown('<hr class="item-divider">', unsafe_allow_html=True)
+                    st.markdown('<hr class="item-divider" style="margin: 6px 0;">')
             st.markdown('</div>', unsafe_allow_html=True)
 
-        # 2. 다른 임상케이스 분석하기 버튼 동적 바인딩 버그 완전 제어
-        st.markdown('<div style="text-align: center; margin-top: 20px; margin-bottom: 20px;">', unsafe_allow_html=True)
+        # 다른 임상케이스 분석하기 버튼 동적 키 로테이션 리셋 바인딩 (에러 완벽 차단)
+        st.markdown('<div style="text-align: center; margin-top: 15px; margin-bottom: 15px;">', unsafe_allow_html=True)
         if st.button("🔄 다른 임상 케이스 분석하기", key="reset_case_radio_btn"):
-            # 위젯 키 세션을 직접 초기화하여 버퍼 락을 무결하게 파쇄합니다.
-            st.session_state["case_radio_selector"] = "선택 안 함"
+            st.session_state["case_reset_counter"] += 1
             st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
 
