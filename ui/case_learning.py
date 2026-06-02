@@ -131,7 +131,7 @@ def render_case_list():
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # 1. 사례가 선택되었을 경우 아래쪽에 페이지 전환 없이 동시 즉시 출력 (선생님 제안 사항 핵심 반영)
+    # 사례 선택 즉시 실시간 통합 동시 렌더링
     if selected != "선택 안 함":
         case = CASE_LIBRARY[selected]
         patient = case["patient"]
@@ -144,19 +144,19 @@ def render_case_list():
         elif side == "좌": side = "왼쪽"
         elif side == "양측": side = "양쪽"
 
-        # 1-1. 환자 기본 정보 카드
+        # 환자 기본 정보 카드
         st.markdown(f'<div class="info-card">', unsafe_allow_html=True)
         st.markdown(f'<div class="case-title-mobile">👤 환자 사례: {selected}</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="case-subtitle-mobile"><span class="label-strong text-blue">연령/성별:</span> <span class="result-value">{patient["age"]}세 / {patient["sex"]}</span> | <span class="label-strong text-blue">병변측:</span> <span class="result-value">{side}</span></div>', unsafe_allow_html=True)
         st.markdown(f'<div class="case-subtitle-mobile"><span class="label-strong text-red">최종 교육용 진단:</span> <span class="result-value">{teaching.get("summary","")}</span></div>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-        # 1-2. 주요 증상 (Chief Complaints)
+        # 주요 증상(Chief Complaints)
         st.markdown('<div class="case-section-label">🗣️ 주요 증상</div>', unsafe_allow_html=True)
         symptoms_html = "".join([f'<div class="case-bullet">• {s}</div>' for s in patient.get("symptoms", [])])
         st.markdown(f'<div class="case-text-block">{symptoms_html}</div>', unsafe_allow_html=True)
 
-        # 1-3. 이학적 검사 결과
+        # 이학적 검사 결과
         st.markdown('<div class="case-section-label">🧪 이학적 검사결과</div>', unsafe_allow_html=True)
         exam_html = []
         for sec_name, items in patient.get("physical_exam", {}).items():
@@ -169,7 +169,7 @@ def render_case_list():
                     exam_html.append(f'<div class="case-bullet">• {i}</div>')
         st.markdown(f'<div class="case-text-block">{"".join(exam_html)}</div>', unsafe_allow_html=True)
 
-        # 1-4. 학생 사고 프레임 가이드
+        # 학생용 사고 프레임 가이드
         st.markdown("""
         <div class="warn-card">
             <div class="finding-highlight" style="color: #b45309; border-bottom-color: #fde68a;">🎓 학생용 사고 프레임 (판독 기준)</div>
@@ -181,7 +181,7 @@ def render_case_list():
 
         grouped = split_findings_by_domain(findings, ANATOMY)
 
-        # 1-5. 신경전도/침근전도 결과표 순차 렌더링
+        # 전기진단 소견 분류 렌더링
         if grouped["sensory"]:
             _render_finding_block("감각신경전도검사: 병변측", grouped["sensory"], side)
         if grouped["motor"]:
@@ -200,7 +200,7 @@ def render_case_list():
             else:
                 _render_finding_block("반사 및 후기반응 소견: 병변측", merged, side)
 
-        # 1-6. 추론 분석 보고서 영역
+        # 추론 분석 보고서 영역
         st.markdown('<div class="result-card">', unsafe_allow_html=True)
         st.markdown('<div class="result-title">✅ 교육용 진단 요약</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="result-text"><span class="label-strong text-blue">요약:</span> <span class="result-value">{teaching.get("summary","")}</span></div>', unsafe_allow_html=True)
@@ -252,7 +252,7 @@ def render_case_list():
                     st.markdown('<hr class="item-divider">', unsafe_allow_html=True)
             st.markdown('</div>', unsafe_allow_html=True)
 
-        # 1-7. 하단 케이스 선택 초기화 버저닝
+        # 동적 라디오 인덱스 초기화 제어
         st.markdown('<div style="text-align: center; margin-top: 20px; margin-bottom: 20px;">', unsafe_allow_html=True)
         if st.button("🔄 다른 임상 케이스 분석하기", key="reset_case_radio_btn"):
             st.session_state["case_radio_idx"] = 0
@@ -260,3 +260,9 @@ def render_case_list():
         st.markdown('</div>', unsafe_allow_html=True)
 
     render_bottom_navigation()
+
+# 2. 라우터 파일과의 호환성 및 오버헤드 방지를 위한 안전 폴백 처리 함수 추가 (가장 중요)
+def render_case_detail():
+    # 단일 페이지 인터페이스 통합에 따라 불필요해진 세부 화면 진입 시, 즉각 리스트 화면으로 안전 리다이렉트
+    st.session_state["screen"] = "case_list"
+    st.rerun()
