@@ -208,8 +208,8 @@ def render_case_list():
             <div class="warn-card" style="padding: 8px 8px; margin-bottom:10px; border-left-color: #9333ea; background: #faf5ff;">
                 <div class="finding-highlight" style="color: #7c3aed; border-bottom-color: #f3e8ff; font-size:0.85rem; padding-bottom:2px; margin-top:2px;">🎓 학생용 사고 프레임 (UMN H-reflex 판독 기준)</div>
                 <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:3px; color:#5b21b6;">1. H-반사(H-reflex) 특성: 일반 신경전도(NCS)나 침근전도(Needle EMG)를 적용하지 않으며, 감각 섬유(Ia)와 운동 섬유를 경유하는 단일시냅스 척수 반사(Spinal reflex)를 직접 평가합니다.</div>
-                <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:3px; color:#5b21b6;">2. 중추성 위운동신경세포(UMN) 병변: 대뇌 피질의 하행성 억제 소실로 인해 자극 한계치 하강 및 알파운동신경세포의 비정상 과흥분성으로 <b>H-반사 최대 진폭 항진</b> 및 <b>H/M ratio 비율 대폭 폭증(> 40%)</b>이 유발됩니다.</div>
-                <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:2px; color:#5b21b6;">3. 치료 완화 정량화: 스트레칭 및 전기자극 물리치료 중재 적용 후 H/M ratio 수치의 유의미한 감소 여부로 경직(Spasticity) 완화도를 객관적 수치 추적합니다.</div>
+                <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:3px; color:#5b21b6;">2. 중추성 위운동신경세포(UMN) 병변: 대뇌 피질의 하행성 억제 소실로 인해 자극 한계치 하강 및 알파운동신경세포의 비정상 과흥분성으로 <b>H-반사 최대 진폭 항진</b> 및 <b>H/M ratio 비율이 대폭 증가(> 40%)</b> 됩니다.</div>
+                <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:2px; color:#5b21b6;">3. 치료 완화 정량화: 스트레칭 및 전기자극 물리치료 중재 적용 후 H/M ratio 수치의 유의미한 감소 여부로 경직(Spasticity) 완화도를 객관적 수치로 평가합니다.</div>
             </div>
             """, unsafe_allow_html=True)
         elif "눈꺼풀" in selected:
