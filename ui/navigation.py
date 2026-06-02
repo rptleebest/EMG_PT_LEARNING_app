@@ -26,43 +26,33 @@ def _go_back():
     st.rerun()
 
 
-def render_navigation(position: str = "bottom"):
-    """
-    위치(top/bottom)에 따라 최적화된 여백과 버튼을 렌더링합니다.
-    """
+def render_bottom_navigation():
+    """하단 내비게이션 렌더링 (모바일 최적화 여백 포함)"""
     # 홈 화면에서는 내비게이션을 숨김
     if st.session_state.get("screen", "home") == "home":
         return
 
-    # 위치별 상단 여백 (하단 내비게이션일 경우 모바일 스크롤 여유 공간 확보)
-    if position == "top":
-        st.markdown('<div style="height: 4px;"></div>', unsafe_allow_html=True)
-    else:
-        st.markdown('<div style="height: 24px;"></div>', unsafe_allow_html=True)
+    # 하단 내비게이션 상단 여백
+    st.markdown('<div style="height: 24px;"></div>', unsafe_allow_html=True)
 
     col1, col2 = st.columns(2)
 
     with col1:
-        if st.button("🏠 처음으로", use_container_width=True, key=f"nav_home_{position}"):
+        if st.button("🏠 처음으로", use_container_width=True, key="nav_home_bottom"):
             _go_home()
 
     with col2:
-        if st.button("⬅️ 이전으로", use_container_width=True, key=f"nav_back_{position}"):
+        if st.button("⬅️ 이전으로", use_container_width=True, key="nav_back_bottom"):
             _go_back()
 
-    # 상단 내비게이션일 경우에만 콘텐츠와의 분리를 위해 구분선(hr) 렌더링
-    if position == "top":
-        st.markdown("<hr style='margin-top: 12px; margin-bottom: 20px;'/>", unsafe_allow_html=True)
-    else:
-        # 하단 내비게이션일 경우 기기 하단 베젤 겹침 방지용 여백 추가
-        st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
+    # 하단 기기 베젤 겹침 방지용 안전 여백
+    st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
 
 
 def render_top_navigation():
-    """짧은 안내 화면 등에서 호출할 상단 내비게이션"""
-    render_navigation("top")
-
-
-def render_bottom_navigation():
-    """길이가 긴 학습/판독 화면 등에서 호출할 하단 내비게이션"""
-    render_navigation("bottom")
+    """
+    [상단 버튼 완전 차단(Kill-Switch)]
+    main.py 등 다른 파일에서 이 함수를 호출하더라도 
+    화면에 아무것도 그리지 않고 무시하도록 처리합니다.
+    """
+    pass
