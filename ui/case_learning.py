@@ -68,7 +68,7 @@ def _render_finding_block(title, findings, side):
                     lines.append(f'<div class="finding-subtext">진폭: <span class="text-blue">정상 범위</span></div>')
                     lines.append(f'<div class="finding-subtext">잠복기: <span class="text-red">비정상 (잠복기: 지연 / 정상측 대비 130% 이상)</span></div>')
                 elif "감소" in norm_val or "reduced" in norm_val.lower():
-                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-red">비정상 (진폭: 감소 / 정상측 대비 30% 미만)</span></div>')
+                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-red">비정상 (진폭: 감소 / 정상측 대비 50% 미만)</span></div>')
                     lines.append(f'<div class="finding-subtext">잠복기: <span class="text-blue">정상 범위</span></div>')
                 elif "소실" in norm_val or "absent" in norm_val.lower():
                     lines.append(f'<div class="finding-subtext">진폭: <span class="text-red">반응 소실 (전기 자극에 무반응)</span></div>')
@@ -82,7 +82,7 @@ def _render_finding_block(title, findings, side):
                     lines.append(f'<div class="finding-subtext">진폭: <span class="text-blue">정상 범위</span></div>')
                     lines.append(f'<div class="finding-subtext">잠복기: <span class="text-red">비정상 (잠복기: 지연 / 정상측 대비 130% 이상)</span></div>')
                 elif "감소" in norm_val or "reduced" in norm_val.lower():
-                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-red">비정상 (진폭: 감소 / 정상측 대비 30% 미만)</span></div>')
+                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-red">비정상 (진폭: 감소 / 정상측 대비 50% 미만)</span></div>')
                     lines.append(f'<div class="finding-subtext">잠복기: <span class="text-blue">정상 범위</span></div>')
                 elif "차단" in norm_val or "block" in norm_val.lower():
                     lines.append(f'<div class="finding-subtext">진폭: <span class="text-red">비정상 (전도차단: 근위부/원위부 진폭 50% 이상 감소)</span></div>')
@@ -192,8 +192,8 @@ def render_case_detail():
     # 4. 사고 프레임 가이드 배치
     st.markdown("""
     <div class="warn-card">
-        <div class="finding-highlight" style="color: #b45309; border-bottom-color: #fde68a;">🎓 학생용 사고 프레임 (판독 기준)</div>
-        <div class="case-bullet-strong">1. 진폭(Amplitude) 감소: 정상 범위 대비 <b>50% 이하 (정상측 대비 30% 미만)</b>로 감소 시 운동/감각 축삭 손상(Axonal loss)을 의미합니다.</div>
+        <div class="finding-highlight" style="color: #b45509; border-bottom-color: #fde68a;">🎓 학생용 사고 프레임 (판독 기준)</div>
+        <div class="case-bullet-strong">1. 진폭(Amplitude) 감소: 정상 범위 대비 <b>50% 이하 (정상측 대비 50% 미만)</b>로 감소 시 운동/감각 축삭 손상(Axonal loss)을 의미합니다.</div>
         <div class="case-bullet-strong">2. 잠복기(Latency) 지연: 정상 범위 대비 <b>130% 이상</b> 연장 시 말이집탈락성(Demyelinating) 변화 혹은 국소 포착성 압박을 의미합니다.</div>
         <div class="case-bullet-strong">3. 감각신경전도 보존: 신경근병증(Radiculopathy)은 병변이 뒤뿌리신경절(DRG)보다 근위부에 있으므로 말초 감각신경활동전위(SNAP)가 정상 범위로 보존됩니다.</div>
     </div>
@@ -250,7 +250,7 @@ def render_case_detail():
                 # 타이틀 강조 제어 (마크다운 ** 및 [] 제거 후 파란색 강조 폰트 바인딩)
                 elif x_strip.endswith(":"):
                     st.markdown(
-                        f'<div class="result-text" style="font-weight: 800; color: #b45309; margin-top: 14px; margin-bottom: 6px; font-size:0.92rem;">{x_strip}</div>', 
+                        f'<div class="result-text" style="font-weight: 800; color: #b45509; margin-top: 14px; margin-bottom: 6px; font-size:0.92rem;">{x_strip}</div>', 
                         unsafe_allow_html=True
                     )
                 else:
