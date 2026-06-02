@@ -265,22 +265,36 @@ def apply_mobile_first_style():
         border-bottom: 2px solid #e2e8f0;
         padding-bottom: 4px;
     }
+    
     .label-strong {
         font-weight: 800 !important;
         color: #0f172a !important;
         font-size: 0.92rem !important;
     }   
-    .text-blue { color: #2563eb !important; }
-    .text-green { color: #16a34a !important; }
-    .text-red { color: #dc2626 !important; }
+    
+    /* 🚨 텍스트 색상 및 굵기 수정 부분 (가독성 최적화) */
+    .text-blue { 
+        color: #1d4ed8 !important; /* 차분한 파란색 */
+        font-weight: 600 !important; /* 800->600 하향 */
+    }
+    .text-green { 
+        color: #15803d !important; 
+        font-weight: 600 !important; 
+    }
+    .text-red { 
+        color: #be123c !important; /* 쨍한 빨강(#dc2626) -> 눈이 편안한 로즈레드 */
+        font-weight: 600 !important; /* 과도한 굵기 억제 */
+    }
+    
     .result-value { 
-        font-weight: 500 !important; 
+        font-weight: 600 !important; 
         color: #334155 !important; 
         margin-left: 4px; 
     }
+    
     .case-bullet-strong { 
         font-size: 0.88rem; 
-        font-weight: 700; 
+        font-weight: 600 !important; /* 가독성을 위해 굵기 통일 */
         margin-bottom: 5px; 
         line-height: 1.6; 
         color: #0f172a;
@@ -306,11 +320,10 @@ def apply_mobile_first_style():
         line-height: 1.42 !important;
     }
 
-    /* ★ [수정 핵심] 모든 버튼 텍스트의 흰색 두꺼운 글씨 강제화 로직 */
     div[data-testid="stButton"] > button,
     div[data-testid="stDownloadButton"] > button {
         font-weight: 800 !important;
-        font-weight: calc(800) !important; /* 일부 모바일 강제 굵기 상속 */
+        font-weight: calc(800) !important;
         border-radius: 12px !important;
         min-height: 44px !important;
         font-size: 0.94rem !important;
@@ -318,14 +331,11 @@ def apply_mobile_first_style():
         width: 100% !important;
         margin: 0 auto !important;
         display: block !important;
-        
-        /* 텍스트 렌더링 엔진 우회 설정 */
         color: #ffffff !important;
         -webkit-text-fill-color: #ffffff !important;
         text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2) !important;
     }
 
-    /* 기본 테마 엔진의 글자 색상 상속 오버라이드 및 호버 반응성 보강 */
     div[data-testid="stButton"] > button[kind="primary"],
     div[data-testid="stButton"] > button[data-testid="baseButton-primary"],
     div[data-testid="stButton"] > button[kind="secondary"],
@@ -337,13 +347,12 @@ def apply_mobile_first_style():
         box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15) !important;
     }
 
-    /* 버튼 호버 및 활성 상태 시 글자색 흰색 완전 사수 */
     div[data-testid="stButton"] > button:hover,
     div[data-testid="stButton"] > button:active,
     div[data-testid="stButton"] > button:focus {
         color: #ffffff !important;
         -webkit-text-fill-color: #ffffff !important;
-        background-color: #1d4ed8 !important; /* 조금 더 짙은 파란색으로 반응 */
+        background-color: #1d4ed8 !important;
         border: none !important;
     }
 
