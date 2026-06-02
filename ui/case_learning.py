@@ -6,6 +6,30 @@ from data.constants import ANATOMY
 from engine.inference import normalize_result_text, split_findings_by_domain
 from ui.navigation import render_bottom_navigation
 
+def _get_ncs_line_text(raw_val):
+    if raw_val == "ncs_delayed":
+        return "진폭 정상 / <span class='text-red' style='font-weight:700;'>잠복기 지연 (정상측 대비 130% 이상)</span>"
+    elif raw_val == "ncs_reduced":
+        return "<span class='text-red' style='font-weight:700;'>진폭 감소 (정상측 대비 50% 이하)</span> / 잠복기 정상"
+    elif raw_val == "ncs_absent":
+        return "<span class='text-red' style='font-weight:700;'>반응 소실 (전기 자극에 무반응)</span>"
+    else:
+        return "정상 범위 (within normal limits)"
+
+def _get_emg_line_text(raw_val):
+    if raw_val in ["emg_active_denervation", "emg_paraspinal_denervation"]:
+        rest = "fibrillation potential, positive sharp wave"
+        vol = "Reduced MU recruitment" if raw_val == "emg_active_denervation" else "통증으로 인해 평가불가"
+        return f"휴식 시: <span class='text-red' style='font-weight:700;'>{rest}</span> / 수의수축 시: <span class='text-red' style='font-weight:700;'>{vol}</span>"
+    elif raw_val == "emg_chronic_reinnervation":
+        return "휴식 시: <span class='text-blue' style='font-weight:700;'>Silent at rest</span> / 수의수축 시: <span class='text-red' style='font-weight:700;'>Giant MUAPs 출현 및 Reduced MU recruitment</span>"
+    elif raw_val == "emg_active_chronic":
+        return "휴식 시: <span class='text-red' style='font-weight:700;'>fibrillation potential, positive sharp wave</span> / 수의수축 시: <span class='text-red' style='font-weight:700;'>Giant MUAPs 출현 및 Reduced MU recruitment</span>"
+    elif raw_val == "emg_fasciculation":
+        return "휴식 시: <span class='text-red' style='font-weight:700;'>fasciculation potential</span> / 수의수축 시: <span class='text-red' style='font-weight:700;'>Reduced MU recruitment</span>"
+    else: # emg_normal
+        return "휴식 시: <span class='text-blue' style='font-weight:700;'>Silent at rest</span> / 수의수축 시: <span class='text-blue' style='font-weight:700;'>Normal MU recruitment</span>"
+
 def _render_finding_block(title, findings, side):
     if not findings:
         return
@@ -18,99 +42,101 @@ def _render_finding_block(title, findings, side):
         left = values[0] if len(values) > 0 else ""
         right = values[1] if len(values) > 1 else ""
 
-        # 정상측 정보는 배제하고 오직 병변측 정보만 렌더링
         lines = [f'<div class="finding-highlight">{item}</div>']
+        
+        pathological_val = right if (side == "오른쪽" or side == "우") else left
+        raw_val = str(pathological_val).strip()
 
         if side == "양쪽" or side == "양측":
-            lines.append(f'<div class="finding-subtext">좌측: <span class="text-red">{normalize_result_text(left)}</span></div>')
-            lines.append(f'<div class="finding-subtext">우측: <span class="text-red">{normalize_result_text(right)}</span></div>')
-        else:
-            pathological_val = right if (side == "오른쪽" or side == "우") else left
-            norm_val = normalize_result_text(pathological_val)
+            raw_left = str(left).strip()
+            raw_right = str(right).strip()
+            
+            if "감각" in title or "운동" in title:
+                left_text = _get_ncs_line_text(raw_left)
+                right_text = _get_ncs_line_text(raw_right)
+            elif "침근전도" in title:
+                left_text = _get_emg_line_text(raw_left)
+                right_text = _get_emg_line_text(raw_right)
+            else:
+                left_text = raw_left
+                right_text = raw_right
 
-            # 감각/운동 신경전도검사 수치 판독 가이드 (정상측 대비 50%이하 / 130%이상 규칙 완벽 반영)
-            if "감각" in title:
-                if "지연" in norm_val or "delayed" in norm_val.lower():
+            st.markdown(f"""
+            <div style="padding-left: 10px; margin-bottom: 8px;">
+                <div class="finding-highlight" style="font-size:1.0rem; border-bottom:none; margin-top:5px;">{item}</div>
+                <div class="finding-subtext" style="margin-bottom: 2px;">• 좌측: {left_text}</div>
+                <div class="finding-subtext">• 우측: {right_text}</div>
+            </div>
+            """, unsafe_allow_html=True)
+            continue
+        else:
+            if "감각" in title or "운동" in title:
+                if raw_val == "ncs_delayed":
                     lines.append(f'<div class="finding-subtext">진폭: <span class="text-blue">정상 범위</span></div>')
-                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-red">비정상 [잠복기: 지연 (정상측 대비 130% 이상)]</span></div>')
-                elif "감소" in norm_val or "reduced" in norm_val.lower():
-                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-red">비정상 [진폭: 감소 (정상측 대비 50% 이하)]</span></div>')
+                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-red" style="font-weight:700;">비정상 [잠복기: 지연 (정상측 대비 130% 이상)]</span></div>')
+                elif raw_val == "ncs_reduced":
+                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-red" style="font-weight:700;">비정상 [진폭: 감소 (정상측 대비 50% 이하)]</span></div>')
                     lines.append(f'<div class="finding-subtext">잠복기: <span class="text-blue">정상 범위</span></div>')
-                elif "소실" in norm_val or "absent" in norm_val.lower():
-                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-red">반응 소실 (전기 자극에 무반응)</span></div>')
-                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-red">반응 소실 (전기 자극에 무반응)</span></div>')
-                else:
-                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-blue">정상 범위</span></div>')
-                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-blue">정상 범위</span></div>')
-                    
-            elif "운동" in title:
-                if "지연" in norm_val or "delayed" in norm_val.lower():
-                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-blue">정상 범위</span></div>')
-                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-red">비정상 [잠복기: 지연 (정상측 대비 130% 이상)]</span></div>')
-                elif "감소" in norm_val or "reduced" in norm_val.lower():
-                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-red">비정상 [진폭: 감소 (정상측 대비 50% 이하)]</span></div>')
-                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-blue">정상 범위</span></div>')
-                elif "차단" in norm_val or "block" in norm_val.lower():
-                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-red">비정상 (전도차단: 근위부/원위부 진폭 50% 이상 감소)</span></div>')
-                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-blue">정상 범위</span></div>')
-                elif "소실" in norm_val or "absent" in norm_val.lower():
-                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-red">반응 소실 (전기 자극에 무반응)</span></div>')
-                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-red">반응 소실 (전기 자극에 무반응)</span></div>')
-                else:
+                elif raw_val == "ncs_absent":
+                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-red" style="font-weight:700;">반응 소실 (전기 자극에 무반응)</span></div>')
+                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-red" style="font-weight:700;">반응 소실 (전기 자극에 무반응)</span></div>')
+                else: # ncs_normal
                     lines.append(f'<div class="finding-subtext">진폭: <span class="text-blue">정상 범위</span></div>')
                     lines.append(f'<div class="finding-subtext">잠복기: <span class="text-blue">정상 범위</span></div>')
                     
-            # 침근전도 소견 포맷 및 한글 괄호 완전 배제
             elif "침근전도" in title:
                 rest_val = "Silent at rest"
                 vol_val = "Normal MU recruitment"
-                norm_val_lower = norm_val.lower()
                 
-                # 자발전위(Active Denervation)
-                if any(k in norm_val_lower for k in ["fibrillation", "섬유자발전위", "psw", "양성예파", "positive sharp wave", "active_denervation", "paraspinal_denervation"]):
+                if raw_val in ["emg_active_denervation", "emg_paraspinal_denervation"]:
                     rest_val = "fibrillation potential, positive sharp wave"
-                    vol_val = "Reduced MU recruitment"
-                # 만성 재신경지배(Chronic Reinnervation)
-                elif any(k in norm_val_lower for k in ["giant", "거대", "reinnervation", "재신경지배", "만성", "chronic_reinnervation"]):
+                    vol_val = "Reduced MU recruitment" if raw_val == "emg_active_denervation" else "통증으로 인해 평가불가"
+                elif raw_val == "emg_chronic_reinnervation":
                     rest_val = "Silent at rest"
                     vol_val = "Giant MUAPs 출현 및 Reduced MU recruitment"
-                # 급성/만성 혼합상태 (Active + Chronic Reinnervation)
-                elif any(k in norm_val_lower for k in ["active_chronic", "mixed"]):
+                elif raw_val == "emg_active_chronic":
                     rest_val = "fibrillation potential, positive sharp wave"
                     vol_val = "Giant MUAPs 출현 및 Reduced MU recruitment"
-                # 근육다발수축(Fasciculation)
-                elif any(k in norm_val_lower for k in ["fasciculation", "근육다발수축", "다발수축"]):
+                elif raw_val == "emg_fasciculation":
                     rest_val = "fasciculation potential"
                     vol_val = "Reduced MU recruitment"
-                # 완전 운동마비(No MUAPs)
-                elif any(k in norm_val_lower for k in ["no muap", "무반응", "동원 불가", "동원 소실"]):
-                    rest_val = "Silent at rest"
-                    vol_val = "No MUAPs on volition (운동단위 동원 불가)"
-                
-                if any(k in norm_val_lower for k in ["평가불가", "제한", "통증"]):
-                    vol_val = "통증으로 인해 평가불가"
 
                 rest_color = "text-red" if rest_val != "Silent at rest" else "text-blue"
                 vol_color = "text-red" if any(k in vol_val for k in ["Reduced", "Giant", "No MUAPs", "평가불가"]) else "text-blue"
 
                 st.markdown(f"""
                 <div style="padding-left: 10px; margin-bottom: 8px;">
+                    <div class="finding-highlight" style="font-size:1.0rem; border-bottom:none; margin-top:5px;">{item}</div>
                     <div class="finding-subtext" style="margin-bottom: 2px;">• 휴식 시: <span class="{rest_color}" style="font-weight: 700;">{rest_val}</span></div>
                     <div class="finding-subtext">• 수의수축 시: <span class="{vol_color}" style="font-weight: 700;">{vol_val}</span></div>
                 </div>
                 """, unsafe_allow_html=True)
                 continue
             else:
-                # Blink Reflex, H-Reflex 등 후기반응 정량값 표현용 렌더링
-                lines.append(f'<div class="finding-subtext">검출치 및 임상소견: <span class="text-red">{norm_val}</span></div>')
-                if right:
+                norm_val = raw_val
+                if raw_val == "blink_delayed":
+                    norm_val = "비정상 (눈깜빡반사 R1/R2 지연)"
+                elif raw_val == "blink_delayed_absent":
+                    norm_val = "비정상 (눈깜빡반사 R2 유발 소실)"
+                elif raw_val == "h_reflex_hyperactive":
+                    norm_val = "비정상 [H-반사 최대 진폭 항진 (S1 위운동신경세포 병변)]"
+                elif raw_val == "h_m_ratio_increased":
+                    norm_val = "비정상 [H/M ratio 증가 (중추성 가자미근 강직)]"
+                elif raw_val == "fwave_delayed_absent":
+                    norm_val = "비정상 (F파 최소잠복기 지연 및 유발 소실)"
+                elif raw_val == "ncs_normal":
+                    norm_val = "정상 범위 (within normal limits)"
+                
+                lines.append(f'<div class="finding-subtext">판독 결과: <span class="text-red" style="font-weight:700;">{norm_val}</span></div>')
+                if right and right not in ["ncs_normal", "NCS_NORMAL"]:
                     lines.append(f'<div class="finding-subtext">측정 데이터: <span class="text-blue">{right}</span></div>')
 
         block_parts.append(f'<div class="compact-item">{"".join(lines)}</div>')
         if idx < len(items) - 1:
             block_parts.append('<hr class="item-divider">')
 
-    st.markdown(f'<div class="case-text-block">{"".join(block_parts)}</div>', unsafe_allow_html=True)
+    if block_parts:
+        st.markdown(f'<div class="case-text-block">{"".join(block_parts)}</div>', unsafe_allow_html=True)
 
 
 def render_case_list():
@@ -122,7 +148,6 @@ def render_case_list():
 
     case_names = ["선택 안 함"] + list(CASE_LIBRARY.keys())
     
-    # 세션 상태 기반 인덱스 바인딩 (동적 초기화를 위함)
     if "case_radio_idx" not in st.session_state:
         st.session_state["case_radio_idx"] = 0
 
@@ -191,7 +216,10 @@ def render_case_list():
             _render_finding_block("감각신경전도검사: 병변측", grouped["sensory"], side)
         if grouped["motor"]:
             _render_finding_block("운동신경전도검사: 병변측", grouped["motor"], side)
-        if grouped["muscle"]:
+            
+        # 침근전도가 생략된 특수 사례(눈꺼풀 떨림, 뇌졸중 H-반사)는 침근전도 결과표를 완전 숨김 처리
+        is_emg_needed = "눈꺼풀" not in selected and "뇌졸중" not in selected
+        if grouped["muscle"] and is_emg_needed:
             _render_finding_block("침근전도검사 소견: 병변측", grouped["muscle"], side)
             
         if grouped["reflex"] or grouped["other"]:
@@ -216,7 +244,7 @@ def render_case_list():
                 st.markdown(f'<div class="result-text">• {x}</div>', unsafe_allow_html=True)
 
         if teaching.get("emg_reason"):
-            is_emg_skipped = "Blink Reflex" in str(teaching["emg_reason"][0]) or "H-reflex" in str(teaching["emg_reason"][0]) or "H 반사" in str(teaching["emg_reason"][0])
+            is_emg_skipped = "Blink Reflex" in str(teaching["emg_reason"][0]) or "H-reflex" in str(teaching["emg_reason"][0]) or "H-반사" in str(teaching["emg_reason"][0]) or "눈꺼풀" in selected or "뇌졸중" in selected
             
             if not is_emg_skipped:
                 st.markdown('<div class="result-label">침근전도 해석 포인트</div>', unsafe_allow_html=True)
@@ -268,6 +296,5 @@ def render_case_list():
 
 
 def render_case_detail():
-    # 단일 페이지 실시간 학습 아키텍처 연동용 안전 상방 백패스 폴백
     st.session_state["screen"] = "case_list"
     st.rerun()
