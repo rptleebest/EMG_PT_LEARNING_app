@@ -7,7 +7,7 @@ from ui.navigation import render_bottom_navigation
 # 실제 임상 계측 수치 기반 10대 핵심 물리치료 연계 증례 데이터셋
 # =====================================================================
 VIRTUAL_REPORTS = {
-    "1. 왼쪽 목/어깨 통증 및 팔 저림 (C6 신경뿌리병증 의심)": {
+    "왼쪽 목/어깨 통증 및 팔 저림 (C6 신경뿌리병증 의심)": {
         "info": {"age": 45, "sex": "남성", "symptom": "왼쪽 목(Cervical) 통증 및 무감각, 엄지/검지 손가락 끝 저림, 팔꿉관절 굽힘(Flexion)력 감소", "side": "왼쪽"},
         "diagnosis": "왼쪽 C6 목 신경뿌리병증(Cervical radiculopathy)",
         "ncs_sensory": [
@@ -35,7 +35,7 @@ VIRTUAL_REPORTS = {
         "ddx": "목(Cervical) 디스크 협착 병변을 감별하기 위해 목 MRI 정밀 영상 검사와의 대조 분석이 요구됩니다."
     },
 
-    "2. 오른쪽 1~3번째 손가락 저림 및 야간통 (손목굴증후군 의심)": {
+    "오른쪽 1~3번째 손가락 저림 및 야간통 (손목굴증후군 의심)": {
         "info": {"age": 52, "sex": "여성", "symptom": "오른쪽 1, 2, 3번째 손가락 노쪽(Radial) 분포 영역 저림, 야간 통증 및 손목관절 굽힘(Flexion) 시 통증 악화", "side": "오른쪽"},
         "diagnosis": "오른쪽 손목굴증후군(Carpal tunnel syndrome)",
         "ncs_sensory": [
@@ -61,7 +61,7 @@ VIRTUAL_REPORTS = {
         "ddx": "목(Cervical) 신경뿌리 장애와의 감별을 위해 이학적 반사 검사 및 손목 정중신경 주행 부위 티넬 징후(Tinel's sign) 확인이 동반되어야 합니다."
     },
 
-    "3. 왼쪽 허리 통증 및 엄지발가락 올림 약화 (L5 신경뿌리병증 의심)": {
+    "왼쪽 허리 통증 및 엄지발가락 올림 약화 (L5 신경뿌리병증 의심)": {
         "info": {"age": 58, "sex": "여성", "symptom": "왼쪽 허리통증(Lumbago)-종아리 가쪽 및 발등 통증, 보행 시 발목관절 등굽힘(Dorsiflexion) 약화로 발끝 끌림", "side": "왼쪽"},
         "diagnosis": "왼쪽 L5 허리 신경뿌리병증(Lumbar radiculopathy)",
         "ncs_sensory": [
@@ -88,7 +88,7 @@ VIRTUAL_REPORTS = {
         "ddx": "L4-L5 척수 신경뿌리의 디스크 압박 수준을 진단하기 위해 허리엉치 MRI 검사 의뢰가 추천됩니다."
     },
 
-    "4. 오른쪽 발처짐 및 종아리 가쪽 감각 저하 (온종아리신경 마비 의심)": {
+    "오른쪽 발처짐 및 종아리 가쪽 감각 저하 (온종아리신경 마비 의심)": {
         "info": {"age": 32, "sex": "남성", "symptom": "오랫동안 다리를 꼬고 앉은 오른쪽 발목관절 등굽힘(Dorsiflexion) 불능 및 보행 시 발처짐(Foot drop)", "side": "오른쪽"},
         "diagnosis": "오른쪽 온종아리신경 마비(Common peroneal neuropathy)",
         "ncs_sensory": [
@@ -114,7 +114,7 @@ VIRTUAL_REPORTS = {
         "ddx": "물리치료적으로 보행 보조기(AFO) 처방 검토와 종아리뼈머리 부위의 외부 가해 압박 해소가 중요합니다."
     },
 
-    "5. 양측 발끝 저림 및 감각 저하 (당뇨병성 다발신경병증 의심)": {
+    "양측 발끝 저림 및 감각 저하 (당뇨병성 다발신경병증 의심)": {
         "info": {"age": 68, "sex": "남성", "symptom": "양 발바닥이 대칭적으로 저리고 화끈거리며 무감각한 대칭성 장갑-양말형(Glove-stocking) 감각 마비", "side": "양측"},
         "diagnosis": "길이의존성 축삭성 다발신경병증(Length-dependent axonal polyneuropathy)",
         "ncs_sensory": [
@@ -139,7 +139,7 @@ VIRTUAL_REPORTS = {
         "ddx": "혈중 당화혈색소 수치 추적과 당뇨발 방지를 위한 압박 예방 보행 물리치료 중재가 추천됩니다."
     },
 
-    "6. 상하지 대칭성 근력 저하 (급성 길랭-바레 증후군 의심)": {
+    "상하지 대칭성 근력 저하 (급성 길랭-바레 증후군 의심)": {
         "info": {"age": 41, "sex": "여성", "symptom": "가벼운 장염을 앓고 난 뒤 2주 후부터 대칭적으로 무릎 이하 다리 근력이 빠지고 위쪽으로 상행하는 양상", "side": "양측"},
         "diagnosis": "급성 염증성 탈말이집성 다발신경뿌리병증(Guillain-Barre Syndrome, GBS)",
         "ncs_sensory": [
@@ -164,7 +164,7 @@ VIRTUAL_REPORTS = {
         "ddx": "급성 상행성 호흡 마비 유무 모니터링을 위해 호흡기 치료 연계 관리가 필수적입니다."
     },
 
-    "7. 오른쪽 팔꿈치 통증 및 손가락 힘 빠짐 (C7 신경뿌리병증 의심)": {
+    "오른쪽 팔꿈치 통증 및 손가락 힘 빠짐 (C7 신경뿌리병증 의심)": {
         "info": {"age": 49, "sex": "여성", "symptom": "오른쪽 어깨 뒤부터 삼두근 부위를 지나 가운데 손가락으로 전개되는 통증 및 팔꿉관절 폄(Extension) 근력저하", "side": "오른쪽"},
         "diagnosis": "오른쪽 C7 목 신경뿌리병증(Cervical radiculopathy)",
         "ncs_sensory": [
@@ -191,7 +191,7 @@ VIRTUAL_REPORTS = {
         "ddx": "위팔세갈래근 반사(Triceps reflex) 감퇴 여부를 검증하고 목 MRI를 통한 제6-7번 목 척추 추간판 유착 확인을 연계합니다."
     },
 
-    "8. S1 신경뿌리병증 의심 사례": {
+    "S1 신경뿌리병증 의심 사례": {
         "info": {"age": 53, "sex": "남성", "symptom": "왼쪽 요통(Lumbago), 왼쪽 볼기에서 허벅지 뒤편을 관통하여 발등 가쪽 및 새끼발가락으로 흐르는 칼로 찌르는 듯한 통증", "side": "왼쪽"},
         "diagnosis": "왼쪽 S1 허리 신경뿌리병증(Lumbar radiculopathy)",
         "ncs_sensory": [
@@ -218,7 +218,7 @@ VIRTUAL_REPORTS = {
         "ddx": "좌골신경통(Sciatica)과의 구분을 위해 바로누운자세 편다리올림검사(straight leg raising test, SLR test) 물리치료 평가 검사와 허리엉치 MRI 정밀 확인을 권장합니다."
     },
 
-    "9. 오른쪽 어깨 통증 및 손 내재근 위축 (가슴문증후군 의심)": {
+    "오른쪽 어깨 통증 및 손 내재근 위축 (가슴문증후군 의심)": {
         "info": {"age": 38, "sex": "여성", "symptom": "오른쪽 어깨 및 빗장뼈(Clavicle) 하부 통증, 새끼손가락 쪽 감각 이상, 짧은엄지벌림근(APB)의 심한 위축으로 인한 Gilliatt-Sumner 손(Gilliatt-Sumner hand) 양상 동반", "side": "오른쪽"},
         "diagnosis": "오른쪽 가슴문증후군(Thoracic outlet syndrome, TOS)",
         "ncs_sensory": [
@@ -245,7 +245,7 @@ VIRTUAL_REPORTS = {
         "ddx": "목갈비근(Scalene muscle) 단축 긴장을 감별하기 위한 Adson 검사 연계 및 이학적 가슴문 압박 가동 검사가 추천됩니다."
     },
 
-    "10. 왼쪽 갑작스러운 한쪽 얼굴 마비 (얼굴신경마비 의심)": {
+    "왼쪽 갑작스러운 한쪽 얼굴 마비 (얼굴신경마비 의심)": {
         "info": {"age": 29, "sex": "남성", "symptom": "급격히 발현된 왼쪽 얼굴 전반 이마 주름 소실, 왼쪽 안구 완전 감김(Closure) 불능, 입꼬리 대칭 이탈", "side": "왼쪽"},
         "diagnosis": "왼쪽 특발성 얼굴신경마비(Bell's palsy)",
         "ncs_sensory": [
