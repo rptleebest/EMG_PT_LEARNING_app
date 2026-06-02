@@ -125,16 +125,16 @@ VIRTUAL_REPORTS = {
             ["위팔두갈래근 (Biceps brachii)", "C5-C6", "Silent at rest", "Normal MU recruitment", "정상 범위"]
         ],
         "interpretation": [
-            "다리의 먼쪽(Distal) 말단 감각전도인 장딴지신경(Sural nerve) SNAP가 대칭 반응 소실을 보여 축삭 손상(Axonal loss)을 고지합니다.",
+            "다리의 먼쪽(distal)(Distal) 말단 감각전도인 장딴지신경(Sural nerve) SNAP가 대칭 반응 소실을 보여 축삭 손상(Axonal loss)을 고지합니다.",
             "가장 길고 에너지 대사가 취약한 축삭 원단부부터 대칭 시들어 들어가는 당뇨성 길이의존성(Length-dependent, dying-back) 다발신경병증(Polyneuropathy) 기전과 일치합니다."
         ],
         "emg_meaning": [
-            "Dying-back pattern: 대사 이상으로 인해 신경 가지 세포체에서 가장 거리가 먼 먼쪽(Distal) 신경망부터 퇴행성 사멸이 역행하여 진입하는 현상입니다."
+            "Dying-back pattern: 대사 이상으로 인해 신경 가지 세포체에서 가장 거리가 먼 먼쪽(distal)(Distal) 신경망부터 퇴행성 사멸이 역행하여 진입하는 현상입니다."
         ],
         "ddx": "혈중 당화혈색소 수치 추적과 당뇨발 방지를 위한 압박 예방 보행 물리치료 중재가 추천됩니다."
     },
 
-    "상하지 대칭성 근력 저하 (급성 길랭-바레 증후군 의심)": {
+    "팔다리 대칭성 근력 저하 (급성 기얭-바레 증후군 의심)": {
         "info": {"age": 41, "sex": "여성", "symptom": "가벼운 장염을 앓고 난 뒤 2주 후부터 대칭적으로 무릎 이하 다리 근력이 빠지고 위쪽으로 상행하는 양상", "side": "양측"},
         "diagnosis": "급성 염증성 탈말이집성 다발신경뿌리병증(Guillain-Barre Syndrome, GBS)",
         "ncs_sensory": [
@@ -151,16 +151,16 @@ VIRTUAL_REPORTS = {
         ],
         "interpretation": [
             "다수의 다리 전도 속도가 폭락하고 전달 잠복기가 130% 이상 대폭 늘어난 대칭 말이집탈락(Demyelination)성 이상 전도를 나타냅니다.",
-            "감각 SNAP은 정상 범위로 생존하면서 오직 운동 신경 복합근육활동전위(CMAP)만 극도로 붕괴되는 길랭-바레 증후군의 전형적인 장단지 스페어링(Sural sparing) 양상을 만족합니다."
+            "감각 감각신경활동전위(SNAP)는 정상 범위로 생존하면서 오직 운동 신경 복합근육활동전위(CMAP)만 극도로 붕괴되는 기얭-바레 증후군의 전형적인 장딴지 보존(Sural sparing) 양상을 만족합니다."
         ],
         "emg_meaning": [
-            "Sural sparing effect: 자가면역 말이집 손상 시 하지 말단 감각인 장딴지 감각신경활동전위(Sural SNAP) 반응이 홀로 정상 유지되는 전형적 기얭-바레 증후군(GBS) 판독 감별점입니다."
+            "Sural sparing effect: 자가면역 말이집 손상 시 다리 말단 감각인 장딴지 감각신경활동전위(Sural SNAP) 반응이 홀로 정상 유지되는 전형적 기얭-바레 증후군(GBS) 판독 감별점입니다."
         ],
         "ddx": "급성 상행성 호흡 마비 유무 모니터링을 위해 호흡기 치료 연계 관리가 필수적입니다."
     },
 
     "오른쪽 팔꿈치 통증 및 손가락 힘 빠짐 (C7 신경뿌리병증 의심)": {
-        "info": {"age": 49, "sex": "여성", "symptom": "오른쪽 어깨 뒤부터 삼두근 부위를 지나 가운데 손가락으로 전개되는 통증 및 팔꿉관절 폄(Extension) 근력저하", "side": "오른쪽"},
+        "info": {"age": 49, "sex": "여성", "symptom": "오른쪽 어깨 뒤부터 위팔세갈래근(Triceps) 부위를 지나 가운데 손가락으로 전개되는 통증 및 팔꿉관절 폄(Extension) 근력저하", "side": "오른쪽"},
         "diagnosis": "오른쪽 C7 목 신경뿌리병증(Cervical radiculopathy)",
         "ncs_sensory": [
             ["정중신경 (Median SNAP)", "28 μV", "2.9 ms", "정상 범위"],
@@ -204,7 +204,7 @@ VIRTUAL_REPORTS = {
             ["허리 척추주위근 (Lumbar Paraspinal)", "S1", "fibrillation potential, positive sharp wave", "통증으로 인해 평가불가", "비정상 (활동성 탈신경)"]
         ],
         "interpretation": [
-            "새끼발가락 외측(S1 피부분절) 저림에도 불구하고 장딴지신경(Sural nerve) SNAP가 정상 범위로 완전히 보존되어 병변이 뒤뿌리신경절(DRG) 몸쪽(Proximal)의 척수 신경뿌리 병변임을 의미합니다.",
+            "새끼발가락 외측(S1 피부분절) 저림에도 불구하고 장딴지신경(Sural nerve) 감각신경활동전위(SNAP)가 정상 범위로 완전히 보존되어 병변이 뒤뿌리신경절(DRG) 몸쪽(Proximal)의 척수 신경뿌리 병변임을 의미합니다.",
             "정강신경(Tibial nerve) 지배 하에 있으면서 S1 지배 하에 있는 가자미근(Soleus) 및 장딴지근(Gastrocnemius)에서 탈신경 비정상적인 자발전위가 출현하며, S1 허리 척추주위근육(Lumbar paraspinal muscle)에서 동반 출현하여 S1 허리 신경뿌리병증(Lumbar radiculopathy)으로 판독합니다."
         ],
         "emg_meaning": [
@@ -213,7 +213,7 @@ VIRTUAL_REPORTS = {
         "ddx": "좌골신경통(Sciatica)과의 구분을 위해 바로누운자세 편다리올림검사(straight leg raising test, SLR test) 물리치료 평가 검사와 허리엉치 MRI 정밀 확인을 권장합니다."
     },
 
-    "오른쪽 어깨 통증 및 손 내재근 위축 (가슴문증후군 의심)": {
+    "오른쪽 어깨 통증 및 손 자체기원근육 위축 (가슴문증후군 의심)": {
         "info": {"age": 38, "sex": "여성", "symptom": "오른쪽 어깨 및 빗장뼈(Clavicle) 하부 통증, 새끼손가락 쪽 감각 이상, 짧은엄지벌림근(APB)의 심한 위축으로 인한 Gilliatt-Sumner 손(Gilliatt-Sumner hand) 양상 동반", "side": "오른쪽"},
         "diagnosis": "오른쪽 가슴문증후군(Thoracic outlet syndrome, TOS)",
         "ncs_sensory": [
@@ -226,12 +226,12 @@ VIRTUAL_REPORTS = {
         ],
         "emg": [
             ["짧은엄지벌림근 (APB)", "C8-T1", "Silent at rest", "Giant MUAPs 출현 및 Reduced MU recruitment", "비정상 (만성 축삭 손상에 따른 Gilliatt-Sumner 손 양상)"],
-            ["첫째등쪽뼈사이근 (FDI)", "C8-T1", "Silent at rest", "Giant MUAPs 출현 및 Reduced MU recruitment", "비정상 (만성 축삭 손상에 따른 손 내재근 위축)"],
+            ["첫째등쪽뼈사이근 (FDI)", "C8-T1", "Silent at rest", "Giant MUAPs 출현 및 Reduced MU recruitment", "비정상 (만성 축삭 손상에 따른 손 자체기원근육 위축)"],
             ["위팔두갈래근 (Biceps brachii)", "C5-C6", "Silent at rest", "Normal MU recruitment", "정상 범위"],
             ["목 척추주위근 (C8-T1)", "C8-T1", "Silent at rest", "Normal MU recruitment", "정상 범위"]
         ],
         "interpretation": [
-            "위팔신경얼기(Brachial plexus) 하부 신경줄기(Lower trunk)가 빗장뼈(clavicle) 아래 통로에서 물리 압박을 받는 가슴문증후군(Thoracic outlet syndrome, TOS) 기전입니다. 안쪽아래팔피부신경(MAC) SNAP의 진폭이 극적으로 감소(50% 이하)하여 신경얼기(Plexus) 수준의 먼쪽(Distal) 변성을 가리칩니다.",
+            "위팔신경얼기(Brachial plexus) 아래 신경줄기(Lower trunk)가 빗장뼈(clavicle) 아래 통로에서 물리 압박을 받는 가슴문증후군(Thoracic outlet syndrome, TOS) 기전입니다. 안쪽아래팔피부신경(MAC) SNAP의 진폭이 극적으로 감소(50% 이하)하여 신경얼기(Plexus) 수준의 먼쪽(distal)(Distal) 변성을 가리칩니다.",
             "T1 우세 지배인 짧은엄지벌림근 (APB)과 첫째등쪽뼈사이근 (FDI)에서 만성적인 축삭발아(Sprouting) 결과물인 거대운동단위활동전위(Giant MUAP)들이 드문드문 동원되는 반면, 목 척추주위근육(Cervical paraspinal muscle)은 완전 정상이므로 척수 신경뿌리을 배제하고 가슴문(Thoracic outlet) 영역의 압박성 마비(TOS)로 확진합니다."
         ],
         "emg_meaning": [
@@ -255,14 +255,14 @@ VIRTUAL_REPORTS = {
             ["눈둘레근 (Orbicularis Oculi)", "얼굴신경 지배", "Silent at rest", "Normal MU recruitment", "정상 범위"]
         ],
         "interpretation": [
-            "왼쪽 얼굴 자극 시 운동 복합근육활동전위(Facial CMAP) 최대 진폭이 정상측 대비 50% 이하인 34% 수준(1.1 mV)으로 폭락해 있어, 심각한 원위부 축삭 사멸 변성이 급격히 진행되고 있음을 정량 계측해 냅니다.",
+            "왼쪽 얼굴 자극 시 운동 복합근육활동전위(Facial CMAP) 최대 진폭이 정상측 대비 50% 이하인 34% 수준(1.1 mV)으로 폭락해 있어, 심각한 먼 쪽 축삭 사멸 변성이 급격히 진행되고 있음을 정량적으로 평가합니다.",
             "눈깜빡반사(Blink Reflex) 검사 상 왼쪽 각막 자극 시 신호 지연이 심해, 뇌줄기(brain stem) 반사 회로가 기능 마비에 처했음을 보여줍니다.",
             "왼쪽 이마 주름 소실, 눈 감기 불능, 얼굴신경 자극 시 좌/우 진폭 비대칭성 격차 및 눈깜박반사 R1/R2 전도 이상을 종합하여 얼굴신경마비(Bell's palsy)로 최종 진단합니다."
         ],
         "emg_meaning": [
             "얼굴 근육의 원위 운동축삭 변성을 평가하기 위한 얼굴 복합근육활동전위(CMAP) 정량 분석과 뇌줄기 삼차-얼굴신경 반사궁 회로(Blink reflex)를 추적했습니다. 침근전도는 발병 초기(2~3주 미만)에는 검사 프로토콜 상 완전 제외됩니다."
         ],
-        "ddx": "중추성 얼굴마비(뇌졸중 등)는 이마 주름 잡기가 정상 보존되나 말초성 벨마비는 불가능하므로, 내원 시 이마 주름 형성 여부를 관찰하여 위운동신경세포(UMN)와 아래운동신경세포(LMN) 장애를 명확히 선별하십시오."
+        "ddx": "중추성 얼굴마비(뇌졸중 등)는 이마 주름 잡기가 정상 보존되나 말초성 벨마비는 불가능하므로, 내원 시 이마 주름 형성 여부를 관찰하여 위운동신경세포(UMN)와 아래운동신경세포(LMN) 장애를 명확히 선별하세요."
     }
 }
 
