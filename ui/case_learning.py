@@ -8,13 +8,13 @@ from ui.navigation import render_bottom_navigation
 
 def _get_ncs_line_text(raw_val):
     if raw_val == "ncs_delayed":
-        return "진폭: 정상 범위 / <span class='text-red' style='font-weight:700;'>잠복기: 지연 (정상측 대비 130% 이상)</span>"
+        return "진폭: 정상 범위 / <span class='text-red' style='font-weight:700;'>잠복기: 지연</span>"
     elif raw_val == "ncs_reduced":
-        return "<span class='text-red' style='font-weight:700;'>진폭: 감소 (정상측 대비 50% 이하)</span> / 잠복기: 정상 범위"
+        return "<span class='text-red' style='font-weight:700;'>진폭: 감소</span> / 잠복기: 정상 범위"
     elif raw_val == "ncs_absent":
-        return "<span class='text-red' style='font-weight:700;'>반응 소실 (전기 자극에 무반응)</span>"
+        return "<span class='text-red' style='font-weight:700;'>반응 소실</span>"
     else:
-        return "정상 범위 (within normal limits)"
+        return "정상 범위"
 
 def _get_emg_line_text(raw_val):
     if raw_val in ["emg_active_denervation", "emg_paraspinal_denervation"]:
@@ -27,7 +27,7 @@ def _get_emg_line_text(raw_val):
         return "휴식 시: <span class='text-red' style='font-weight:700;'>fibrillation potential, positive sharp wave</span> / 수의수축 시: <span class='text-red' style='font-weight:700;'>Giant MUAPs 출현 및 Reduced MU recruitment</span>"
     elif raw_val == "emg_fasciculation":
         return "휴식 시: <span class='text-red' style='font-weight:700;'>fasciculation potential</span> / 수의수축 시: <span class='text-red' style='font-weight:700;'>Reduced MU recruitment</span>"
-    else: # emg_normal
+    else: 
         return "휴식 시: <span class='text-blue' style='font-weight:700;'>Silent at rest</span> / 수의수축 시: <span class='text-blue' style='font-weight:700;'>Normal MU recruitment</span>"
 
 def _render_finding_block(title, findings, side):
@@ -73,14 +73,14 @@ def _render_finding_block(title, findings, side):
             if "감각" in title or "운동" in title:
                 if raw_val == "ncs_delayed":
                     lines.append(f'<div class="finding-subtext" style="font-size:0.82rem; margin-bottom:2px;">진폭: <span class="text-blue">정상 범위</span></div>')
-                    lines.append(f'<div class="finding-subtext" style="font-size:0.82rem; margin-bottom:2px;">잠복기: <span class="text-red" style="font-weight:800;">지연 (정상측 대비 130% 이상)</span></div>')
+                    lines.append(f'<div class="finding-subtext" style="font-size:0.82rem; margin-bottom:2px;">잠복기: <span class="text-red" style="font-weight:800;">지연</span></div>')
                 elif raw_val == "ncs_reduced":
-                    lines.append(f'<div class="finding-subtext" style="font-size:0.82rem; margin-bottom:2px;">진폭: <span class="text-red" style="font-weight:800;">감소 (정상측 대비 50% 이하)</span></div>')
+                    lines.append(f'<div class="finding-subtext" style="font-size:0.82rem; margin-bottom:2px;">진폭: <span class="text-red" style="font-weight:800;">감소</span></div>')
                     lines.append(f'<div class="finding-subtext" style="font-size:0.82rem; margin-bottom:2px;">잠복기: <span class="text-blue">정상 범위</span></div>')
                 elif raw_val == "ncs_absent":
                     lines.append(f'<div class="finding-subtext" style="font-size:0.82rem; margin-bottom:2px;">진폭: <span class="text-red" style="font-weight:800;">반응 소실</span></div>')
                     lines.append(f'<div class="finding-subtext" style="font-size:0.82rem; margin-bottom:2px;">잠복기: <span class="text-red" style="font-weight:800;">반응 소실</span></div>')
-                else: # ncs_normal
+                else: 
                     lines.append(f'<div class="finding-subtext" style="font-size:0.82rem; margin-bottom:2px;">진폭: <span class="text-blue">정상 범위</span></div>')
                     lines.append(f'<div class="finding-subtext" style="font-size:0.82rem; margin-bottom:2px;">잠복기: <span class="text-blue">정상 범위</span></div>')
                     
@@ -119,13 +119,13 @@ def _render_finding_block(title, findings, side):
                 elif raw_val == "blink_delayed_absent":
                     norm_val = "비정상 (눈깜빡반사 R2 유발 소실)"
                 elif raw_val == "h_reflex_hyperactive":
-                    norm_val = "비정상 [H-반사 최대 진폭 항진 (S1 위운동신경세포 병변)]"
+                    norm_val = "비정상 (H-반사 최대 진폭 항진)"
                 elif raw_val == "h_m_ratio_increased":
-                    norm_val = "비정상 [H/M ratio 증가 (중추성 가자미근 강직)]"
+                    norm_val = "비정상 (H/M ratio 증가)"
                 elif raw_val == "fwave_delayed_absent":
                     norm_val = "비정상 (F파 최소잠복기 지연 및 유발 소실)"
                 elif raw_val == "ncs_normal":
-                    norm_val = "정상 범위 (within normal limits)"
+                    norm_val = "정상 범위"
                 
                 lines.append(f'<div class="finding-subtext" style="font-size:0.82rem;">판독 결과: <span class="text-red" style="font-weight:700;">{norm_val}</span></div>')
                 if right and right not in ["ncs_normal", "NCS_NORMAL"]:
@@ -162,7 +162,6 @@ def render_case_list():
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # 사례 선택 즉시 실시간 통합 동시 렌더링
     if selected != "선택 안 함":
         case = CASE_LIBRARY[selected]
         patient = case["patient"]
@@ -285,7 +284,7 @@ def render_case_list():
                     st.markdown('<hr class="item-divider" style="margin: 6px 0;">')
             st.markdown('</div>', unsafe_allow_html=True)
 
-        # 다른 임상케이스 분석하기 버튼 동적 키 로테이션 리셋 바인딩 (에러 완벽 차단)
+        # 다른 임상케이스 분석하기 버튼 동적 키 로테이션 리셋 바인딩
         st.markdown('<div style="text-align: center; margin-top: 15px; margin-bottom: 15px;">', unsafe_allow_html=True)
         if st.button("🔄 다른 임상 케이스 분석하기", key="reset_case_radio_btn"):
             st.session_state["case_reset_counter"] += 1
@@ -293,7 +292,6 @@ def render_case_list():
         st.markdown('</div>', unsafe_allow_html=True)
 
     render_bottom_navigation()
-
 
 def render_case_detail():
     st.session_state["screen"] = "case_list"
