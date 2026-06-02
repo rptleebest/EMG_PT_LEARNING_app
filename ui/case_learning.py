@@ -259,7 +259,6 @@ def render_case_list():
             elif "눈꺼풀" in selected: _render_finding_block("눈깜빡반사 회로 분석: 병변측", merged, side)
             else: _render_finding_block("반사 및 후기반응 소견: 병변측", merged, side)
 
-        # 임상추론 파트 (간격 넓히고 가독성 향상)
         st.markdown('<div class="result-card">', unsafe_allow_html=True)
         st.markdown('<div class="result-title">✅ 임상 추론 및 해석 결과</div>', unsafe_allow_html=True)
         st.markdown(
@@ -285,9 +284,10 @@ def render_case_list():
                     else:
                         st.markdown(f'<div class="result-text" style="padding-left:8px;">• {x_strip}</div>', unsafe_allow_html=True)
 
-        if teaching.get("integ비율(ratio)n"):
+        # 🚨 KeyError 방지용 오타(integ비율(ratio)n -> integration) 완벽 수정됨
+        if teaching.get("integration"):
             st.markdown('<div class="result-label">통합 해석</div>', unsafe_allow_html=True)
-            for x in teaching["integ비율(ratio)n"]:
+            for x in teaching["integration"]:
                 st.markdown(f'<div class="result-text">• {x}</div>', unsafe_allow_html=True)
 
         st.markdown('</div>', unsafe_allow_html=True)
@@ -311,3 +311,10 @@ def render_case_list():
         st.markdown('</div>', unsafe_allow_html=True)
 
     render_bottom_navigation()
+
+
+# 🚨 ImportError를 발생시켰던 누락된 함수 완벽 복구
+def render_case_detail():
+    """router.py에서 호출하는 상세 화면 렌더링 (사례 목록으로 리디렉션)"""
+    st.session_state["screen"] = "case_list"
+    st.rerun()
