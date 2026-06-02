@@ -10,8 +10,8 @@ VIRTUAL_REPORTS = {
             ["자신경 (Ulnar SNAP)", "22 μV", "2.5 ms", "정상 범위"]
         ],
         "ncs_motor": [
-            ["정중신경 (Median CMAP)", "손목(Wrist) 자극", "8.5 mV", "3.5 ms", "정상 범위"],
-            ["정중신경 (Median CMAP)", "팔꿈치(Elbow) 자극", "8.1 mV", "7.8 ms", "정상 범위"]
+            ["정중신경 (Median CMAP)", "손목(Wrist)", "8.5 mV", "3.5 ms", "정상 범위"],
+            ["정중신경 (Median CMAP)", "팔꿈치(Elbow)", "8.1 mV", "7.8 ms", "정상 범위"]
         ],
         "emg": [
             ["위팔두갈래근 (Biceps brachii)", "C5-C6", "fibrillation potential, positive sharp wave", "Reduced MU recruitment", "비정상 (활동성 탈신경)"],
@@ -38,8 +38,8 @@ VIRTUAL_REPORTS = {
             ["자신경 (Ulnar SNAP)", "25 μV", "2.6 ms", "정상 범위"]
         ],
         "ncs_motor": [
-            ["정중신경 (Median CMAP)", "손목(Wrist) 자극", "3.1 mV", "5.5 ms", "진폭: 감소 / 잠복기: 지연"],
-            ["정중신경 (Median CMAP)", "팔꿈치(Elbow) 자극", "2.9 mV", "9.8 ms", "진폭: 감소"]
+            ["정중신경 (Median CMAP)", "손목(Wrist)", "3.1 mV", "5.5 ms", "진폭: 감소 / 잠복기: 지연"],
+            ["정중신경 (Median CMAP)", "팔꿈치(Elbow)", "2.9 mV", "9.8 ms", "진폭: 감소"]
         ],
         "emg": [
             ["짧은엄지벌림근 (APB)", "C8-T1", "Silent at rest", "Normal MU recruitment", "정상 범위"],
@@ -57,15 +57,15 @@ VIRTUAL_REPORTS = {
     },
 
     "왼쪽 허리 통증 및 엄지발가락 올림 약화 (L5 신경뿌리병증 의심)": {
-        "info": {"age": 58, "sex": "여성", "symptom": "왼쪽 허리통증(Lumbago)-종아리 가쪽 및 발등 통증, 보행 시 발목관절 등굽힘(Dorsiflexion) 약화로 발끝 끌림", "side": "왼쪽"},
+        "info": {"age": 58, "sex": "여성", "symptom": "왼쪽 허리통증(Lumbago)-종아리 가쪽 및 발등 통증, 보행 시 발목관절 등굽힘(Dorsiflexion) 근력 약화로 발끝 끌림", "side": "왼쪽"},
         "diagnosis": "왼쪽 L5 허리 신경뿌리병증(Lumbar radiculopathy)",
         "ncs_sensory": [
             ["얕은종아리신경 (Superficial Peroneal SNAP)", "12 μV", "2.9 ms", "정상 범위"],
             ["장딴지신경 (Sural SNAP)", "15 μV", "3.1 ms", "정상 범위"]
         ],
         "ncs_motor": [
-            ["종아리신경 (Peroneal CMAP)", "발목(Ankle) 자극", "3.5 mV", "4.5 ms", "정상 범위"],
-            ["종아리신경 (Peroneal CMAP)", "오금(Popliteal) 자극", "3.3 mV", "11.2 ms", "정상 범위"]
+            ["종아리신경 (Peroneal CMAP)", "발목(Ankle)", "3.5 mV", "4.5 ms", "정상 범위"],
+            ["종아리신경 (Peroneal CMAP)", "오금(Popliteal)", "3.3 mV", "11.2 ms", "정상 범위"]
         ],
         "emg": [
             ["앞정강근 (Tibialis Anterior)", "L4-L5", "fibrillation potential, positive sharp wave", "Reduced MU recruitment", "비정상 (활동성 탈신경)"],
@@ -91,8 +91,8 @@ VIRTUAL_REPORTS = {
             ["장딴지신경 (Sural SNAP)", "16 μV", "3.0 ms", "정상 범위"]
         ],
         "ncs_motor": [
-            ["종아리신경 (Peroneal CMAP)", "발목(Ankle) 자극", "4.5 mV", "4.8 ms", "정상 범위"],
-            ["종아리신경 (Peroneal CMAP)", "종아리뼈머리 위 자극", "1.1 mV", "무반응", "진폭: 감소 (국소 전도차단)"]
+            ["종아리신경 (Peroneal CMAP)", "발목(Ankle)", "4.5 mV", "4.8 ms", "정상 범위"],
+            ["종아리신경 (Peroneal CMAP)", "종아리뼈머리(fibular head)", "1.1 mV", "무반응", "진폭: 감소 (국소 전도차단)"]
         ],
         "emg": [
             ["앞정강근 (Tibialis Anterior)", "L4-L5", "Silent at rest", "No MUAPs on volition (동원 불가)", "비정상 (전도 완전 마비)"],
@@ -117,8 +117,8 @@ VIRTUAL_REPORTS = {
             ["정중신경 (Median SNAP) 오른쪽", "18 μV", "3.4 ms", "정상 범위"]
         ],
         "ncs_motor": [
-            ["정강신경 (Tibial CMAP) 오른쪽", "발목(Ankle) 자극", "1.5 mV", "6.2 ms", "진폭: 감소 / 잠복기: 지연"],
-            ["정강신경 (Tibial CMAP) 오른쪽", "오금(Popliteal) 자극", "1.2 mV", "15.2 ms", "진폭: 감소"]
+            ["정강신경 (Tibial CMAP) 오른쪽", "발목(Ankle)", "1.5 mV", "6.2 ms", "진폭: 감소 / 잠복기: 지연"],
+            ["정강신경 (Tibial CMAP) 오른쪽", "오금(Popliteal)", "1.2 mV", "15.2 ms", "진폭: 감소"]
         ],
         "emg": [
             ["앞정강근 (Tibialis Anterior)", "L4-L5", "fibrillation potential, positive sharp wave", "Reduced MU recruitment", "비정상 (대칭적 말초 축삭 퇴행)"],
@@ -142,8 +142,8 @@ VIRTUAL_REPORTS = {
             ["장딴지신경 (Sural SNAP)", "12 μV", "3.4 ms", "정상 범위 (Sural Sparing)"]
         ],
         "ncs_motor": [
-            ["종아리신경 (Peroneal CMAP)", "발목(Ankle) 자극", "3.0 mV", "8.5 ms", "잠복기: 지연"],
-            ["종아리신경 (Peroneal CMAP)", "종아리뼈머리 자극", "1.2 mV", "20.1 ms", "잠복기: 지연 / 전도속도 폭락"]
+            ["종아리신경 (Peroneal CMAP)", "발목(Ankle)", "3.0 mV", "8.5 ms", "잠복기: 지연"],
+            ["종아리신경 (Peroneal CMAP)", "종아리뼈머리(fibular head)", "1.2 mV", "20.1 ms", "잠복기: 지연 / 전도속도 폭락"]
         ],
         "emg": [
             ["앞정강근 (Tibialis Anterior)", "L4-L5", "Silent at rest", "Reduced MU recruitment", "비정상 (동원 결손)"],
@@ -167,8 +167,8 @@ VIRTUAL_REPORTS = {
             ["자신경 (Ulnar SNAP)", "24 μV", "2.4 ms", "정상 범위"]
         ],
         "ncs_motor": [
-            ["정중신경 (Median CMAP)", "손목(Wrist) 자극", "9.2 mV", "3.6 ms", "정상 범위"],
-            ["노신경 (Radial CMAP)", "아래팔 자극", "6.5 mV", "2.8 ms", "정상 범위"]
+            ["정중신경 (Median CMAP)", "손목(Wrist)", "9.2 mV", "3.6 ms", "정상 범위"],
+            ["노신경 (Radial CMAP)", "아래팔(forearm)", "6.5 mV", "2.8 ms", "정상 범위"]
         ],
         "emg": [
             ["위팔세갈래근 (Triceps brachii)", "C7-C8", "fibrillation potential, positive sharp wave", "Reduced MU recruitment", "비정상 (활동성 탈신경)"],
@@ -177,7 +177,7 @@ VIRTUAL_REPORTS = {
             ["목 척추주위근 (Cervical Paraspinal)", "C7", "fibrillation potential, positive sharp wave", "통증으로 인해 평가불가", "비정상 (활동성 탈신경)"]
         ],
         "interpretation": [
-            "가운데 손가락 저림 부위(C7 피부분절)에도 불구하고 정중신경 SNAP가 정상 범위인 것은 뒤뿌리신경절(Dorsal root ganglion, DRG)보다 몸쪽(Proximal) 목 신경뿌리 부위 병소임을 지지합니다.",
+            "가운데 손가락 저림 부위(C7 피부분절)에도 불구하고 정중신경 감각신경활동전위(SNAP)가 정상 범위인 것은 뒤뿌리신경절(Dorsal root ganglion, DRG)보다 몸쪽(Proximal) 목 신경뿌리 부위 병소임을 지지합니다.",
             "C7 지배 운동 영역의 핵심 축을 이루는 복수 근육들 및 제7 목 수준의 목 척추주위근육(Cervical paraspinal muscle)에서 일치된 탈신경 비정상 자발전위가 검출되어 C7 목 신경뿌리병증(Cervical radiculopathy)으로 확정됩니다."
         ],
         "emg_meaning": [
@@ -194,8 +194,8 @@ VIRTUAL_REPORTS = {
             ["얕은종아리신경 (Superficial Peroneal SNAP)", "11 μV", "2.8 ms", "정상 범위"]
         ],
         "ncs_motor": [
-            ["정강신경 (Tibial CMAP)", "발목(Ankle) 자극", "5.8 mV", "4.2 ms", "정상 범위"],
-            ["종아리신경 (Peroneal CMAP)", "발목(Ankle) 자극", "4.8 mV", "4.5 ms", "정상 범위"]
+            ["정강신경 (Tibial CMAP)", "발목(Ankle)", "5.8 mV", "4.2 ms", "정상 범위"],
+            ["종아리신경 (Peroneal CMAP)", "발목(Ankle)", "4.8 mV", "4.5 ms", "정상 범위"]
         ],
         "emg": [
             ["가자미근 (Soleus)", "S1-S2", "fibrillation potential, positive sharp wave", "Reduced MU recruitment", "비정상 (활동성 탈신경)"],
@@ -221,8 +221,8 @@ VIRTUAL_REPORTS = {
             ["안쪽아래팔피부신경 (MAC SNAP)", "2 μV", "3.9 ms", "진폭: 감소 / 잠복기: 지연"]
         ],
         "ncs_motor": [
-            ["정중신경 (Median CMAP)", "손목(Wrist) 자극", "3.8 mV", "4.0 ms", "진폭: 감소"],
-            ["자신경 (Ulnar CMAP)", "손목(Wrist) 자극", "4.1 mV", "3.2 ms", "정상 범위"]
+            ["정중신경 (Median CMAP)", "손목(Wrist)", "3.8 mV", "4.0 ms", "진폭: 감소"],
+            ["자신경 (Ulnar CMAP)", "손목(Wrist)", "4.1 mV", "3.2 ms", "정상 범위"]
         ],
         "emg": [
             ["짧은엄지벌림근 (APB)", "C8-T1", "Silent at rest", "Giant MUAPs 출현 및 Reduced MU recruitment", "비정상 (만성 축삭 손상에 따른 Gilliatt-Sumner 손 양상)"],
@@ -244,12 +244,12 @@ VIRTUAL_REPORTS = {
         "info": {"age": 29, "sex": "남성", "symptom": "급격히 발현된 왼쪽 얼굴 전반 이마 주름 소실, 왼쪽 안구 완전 감김(Closure) 불능, 입꼬리 대칭 이탈", "side": "왼쪽"},
         "diagnosis": "왼쪽 특발성 얼굴신경마비(Bell's palsy)",
         "ncs_sensory": [
-            ["오른쪽 이마 자극 (V1 분지)", "22 μV", "2.1 ms", "정상 범위"],
-            ["왼쪽 이마 자극 (V1 분지)", "21 μV", "2.2 ms", "정상 범위"]
+            ["오른쪽 이마 (V1 분지)", "22 μV", "2.1 ms", "정상 범위"],
+            ["왼쪽 이마 (V1 분지)", "21 μV", "2.2 ms", "정상 범위"]
         ],
         "ncs_motor": [
-            ["오른쪽 얼굴신경 (Facial CMAP)", "코근(nasalis) 자극", "3.2 mV", "2.8 ms", "정상 범위"],
-            ["왼쪽 얼굴신경 (Facial CMAP)", "코근(nasalis) 자극", "1.1 mV", "4.5 ms", "진폭: 감소 / 잠복기: 지연"]
+            ["오른쪽 얼굴신경 (Facial CMAP)", "코근(nasalis)", "3.2 mV", "2.8 ms", "정상 범위"],
+            ["왼쪽 얼굴신경 (Facial CMAP)", "코근(nasalis)", "1.1 mV", "4.5 ms", "진폭: 감소 / 잠복기: 지연"]
         ],
         "emg": [
             ["눈둘레근 (Orbicularis Oculi)", "얼굴신경 지배", "Silent at rest", "Normal MU recruitment", "정상 범위"]
