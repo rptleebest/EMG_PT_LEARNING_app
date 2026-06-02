@@ -14,7 +14,10 @@ def render_home():
     )
 
     st.markdown('<div class="warn-card" style="padding: 10px 8px; margin-bottom: 12px;">', unsafe_allow_html=True)
-    st.markdown("### 📌 학습 안내", style="font-size: 0.95rem; margin-bottom: 6px;")
+    
+    # [수정 핵심] TypeError 원인이 되었던 style 파라미터를 제거하고 표준 HTML 태그로 안전하게 인라인 스타일을 적용했습니다.
+    st.markdown('<h3 style="font-size: 0.95rem; margin-bottom: 6px; margin-top: 0px;">📌 학습 안내</h3>', unsafe_allow_html=True)
+    
     st.markdown('<div class="case-bullet" style="font-size:0.82rem; margin-bottom:4px;">• <b>사례 학습 모드</b>: 임상 증상, 이학적 검사, 전기진단 소견을 통합하여 병변 위치를 입체적으로 추론합니다.</div>', unsafe_allow_html=True)
     st.markdown('<div class="case-bullet" style="font-size:0.82rem; margin-bottom:4px;">• <b>가상 결과표 판독학습</b>: 정교하게 구축된 수치 데이터를 기반으로 결과표 해석 논리를 다각도로 훈련합니다.</div>', unsafe_allow_html=True)
     st.markdown('<div class="case-bullet" style="font-size:0.82rem; margin-bottom:4px;">• <b>고급 교육 포인트</b>: 신경뿌리(Nerve root), 신경얼기(Plexus), 말초신경(Peripheral nerve), 다발신경병증(Polyneuropathy), 반사경로(Reflex pathway)를 완벽하게 비교 학습합니다.</div>', unsafe_allow_html=True)
@@ -24,7 +27,6 @@ def render_home():
     st.markdown('<div class="section-card" style="padding: 10px 8px;">', unsafe_allow_html=True)
     st.markdown('<div class="case-section-label" style="font-size:0.92rem; margin-bottom: 8px;">📋 진행할 학습 모드 선택</div>', unsafe_allow_html=True)
 
-    # 상수 데이터 결합 방지를 위한 화면 표시 매핑 매트릭스 설계
     display_modes = {
         MODE_CASE: "사례 학습 모드",
         MODE_DIRECT: "가상 결과표 판독학습"
@@ -37,7 +39,6 @@ def render_home():
         key="home_mode_selector"
     )
 
-    # 역방향 바인딩을 통해 내부 상수 상태 매핑 무결성 유지
     mode = [k for k, v in display_modes.items() if v == selected_display][0]
 
     if mode == MODE_CASE:
