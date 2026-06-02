@@ -43,7 +43,7 @@ def _get_reflex_line_text(raw_val):
     elif raw_val == "h_reflex_hyperactive":
         return "비정상 (H-반사 최대 진폭 항진)"
     elif raw_val == "h_m_ratio_increased":
-        return "비정상 (H/M ratio 증가)"
+        return "비정상 (H/M 비율 증가)"
     elif raw_val in ["ncs_normal", "정상 범위"]:
         return "정상 범위"
     return raw_val
@@ -222,8 +222,8 @@ def render_case_list():
             <div class="warn-card">
                 <div class="finding-highlight" style="color: #7c3aed;">🎓 학생용 사고 프레임 (UMN H-reflex 판독)</div>
                 <div class="case-bullet">1. H-반사(H-reflex) 특성: 일반 신경전도(NCS)나 침근전도를 적용하지 않으며, 단일시냅스 척수 반사를 직접 평가합니다.</div>
-                <div class="case-bullet">2. 중추성 위운동신경세포(UMN) 병변: 알파운동신경세포의 과흥분성으로 <b>H-반사 최대 진폭 항진</b> 및 <b>H/M ratio 대폭 증가</b>가 발생합니다.</div>
-                <div class="case-bullet">3. 치료 완화 정량화: 물리치료 중재 적용 후 H/M ratio 수치의 유의미한 감소 여부로 경직 완화도를 정량 평가합니다.</div>
+                <div class="case-bullet">2. 중추성 위운동신경세포(UMN) 병변: 알파운동신경세포의 과흥분성으로 <b>H-반사 최대 진폭 항진</b> 및 <b>H/M 비율(ratio) 대폭 증가</b>가 발생합니다.</div>
+                <div class="case-bullet">3. 치료 완화 정량화: 물리치료 중재 적용 후 H/M 비율(ratio) 수치의 유의미한 감소 여부로 경직 완화도를 정량적으로 평가합니다.</div>
             </div>
             """, unsafe_allow_html=True)
         elif "눈꺼풀" in selected:
@@ -232,7 +232,7 @@ def render_case_list():
                 <div class="finding-highlight" style="color: #0d9488;">🎓 학생용 사고 프레임 (눈깜빡반사 판독)</div>
                 <div class="case-bullet">1. 들신경(삼차신경) 장애: 병변측 전기자극 시 양측 반응 R1, R2가 동시 지연/부재하며, 정상측 자극 시에는 정상입니다.</div>
                 <div class="case-bullet">2. 날신경(얼굴신경) 장애: 자극 방향에 상관없이 항상 병변측 근수축 반응만 손상/소실됩니다.</div>
-                <div class="case-bullet">3. 뇌간 반사 회로 평가: 반사궁 회로의 무결성만을 측정하므로 일반 침근전도는 배제됩니다.</div>
+                <div class="case-bullet">3. 뇌줄기 반사 회로 평가: 반사궁 회로의 무결성만을 측정하므로 일반 침근전도는 배제됩니다.</div>
             </div>
             """, unsafe_allow_html=True)
         else:
@@ -241,7 +241,7 @@ def render_case_list():
                 <div class="finding-highlight" style="color: #b45309;">🎓 학생용 사고 프레임 (NCS / EMG 판독)</div>
                 <div class="case-bullet">1. 진폭(Amplitude) 감소: 정상측 대비 <b>50% 이하</b> 시 축삭 손상(Axonal loss) 지시</div>
                 <div class="case-bullet">2. 잠복기(Latency) 지연: 정상측 대비 <b>130% 이상</b> 시 말이집탈락(Demyelinating) 지시</div>
-                <div class="case-bullet">3. 감각 전도 보존: 신경근병증(Radiculopathy)은 몸쪽 병변이므로 감각신경(SNAP)이 보존됨</div>
+                <div class="case-bullet">3. 감각 전도 보존: 신경뿌리병증(Radiculopathy)은 몸쪽 병변이므로 감각신경(SNAP)이 보존됨</div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -285,9 +285,9 @@ def render_case_list():
                     else:
                         st.markdown(f'<div class="result-text" style="padding-left:8px;">• {x_strip}</div>', unsafe_allow_html=True)
 
-        if teaching.get("integration"):
+        if teaching.get("integ비율(ratio)n"):
             st.markdown('<div class="result-label">통합 해석</div>', unsafe_allow_html=True)
-            for x in teaching["integration"]:
+            for x in teaching["integ비율(ratio)n"]:
                 st.markdown(f'<div class="result-text">• {x}</div>', unsafe_allow_html=True)
 
         st.markdown('</div>', unsafe_allow_html=True)
