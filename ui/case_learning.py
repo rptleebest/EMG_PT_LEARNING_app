@@ -28,13 +28,13 @@ def _render_finding_block(title, findings, side):
             pathological_val = right if (side == "오른쪽" or side == "우") else left
             norm_val = normalize_result_text(pathological_val)
 
-            # 감각/운동 신경전도검사 수치 판독 가이드 (정상측 대비 수치 기재)
+            # 감각/운동 신경전도검사 수치 판독 가이드 (정상측 대비 50%이하 / 130%이상 규칙 완벽 반영)
             if "감각" in title:
                 if "지연" in norm_val or "delayed" in norm_val.lower():
                     lines.append(f'<div class="finding-subtext">진폭: <span class="text-blue">정상 범위</span></div>')
-                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-red">비정상 (잠복기: 지연 / 정상측 대비 130% 이상)</span></div>')
+                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-red">비정상 [잠복기: 지연 (정상측 대비 130% 이상)]</span></div>')
                 elif "감소" in norm_val or "reduced" in norm_val.lower():
-                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-red">비정상 (진폭: 감소 / 정상측 대비 30% 미만)</span></div>')
+                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-red">비정상 [진폭: 감소 (정상측 대비 50% 이하)]</span></div>')
                     lines.append(f'<div class="finding-subtext">잠복기: <span class="text-blue">정상 범위</span></div>')
                 elif "소실" in norm_val or "absent" in norm_val.lower():
                     lines.append(f'<div class="finding-subtext">진폭: <span class="text-red">반응 소실 (전기 자극에 무반응)</span></div>')
@@ -46,9 +46,9 @@ def _render_finding_block(title, findings, side):
             elif "운동" in title:
                 if "지연" in norm_val or "delayed" in norm_val.lower():
                     lines.append(f'<div class="finding-subtext">진폭: <span class="text-blue">정상 범위</span></div>')
-                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-red">비정상 (잠복기: 지연 / 정상측 대비 130% 이상)</span></div>')
+                    lines.append(f'<div class="finding-subtext">잠복기: <span class="text-red">비정상 [잠복기: 지연 (정상측 대비 130% 이상)]</span></div>')
                 elif "감소" in norm_val or "reduced" in norm_val.lower():
-                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-red">비정상 (진폭: 감소 / 정상측 대비 30% 미만)</span></div>')
+                    lines.append(f'<div class="finding-subtext">진폭: <span class="text-red">비정상 [진폭: 감소 (정상측 대비 50% 이하)]</span></div>')
                     lines.append(f'<div class="finding-subtext">잠복기: <span class="text-blue">정상 범위</span></div>')
                 elif "차단" in norm_val or "block" in norm_val.lower():
                     lines.append(f'<div class="finding-subtext">진폭: <span class="text-red">비정상 (전도차단: 근위부/원위부 진폭 50% 이상 감소)</span></div>')
@@ -93,8 +93,13 @@ def _render_finding_block(title, findings, side):
                 rest_color = "text-red" if rest_val != "Silent at rest" else "text-blue"
                 vol_color = "text-red" if any(k in vol_val for k in ["Reduced", "Giant", "No MUAPs", "평가불가"]) else "text-blue"
 
-                lines.append(f'<div class="finding-subtext">- 휴식 시: <span class="{rest_color}">{rest_val}</span></div>')
-                lines.append(f'<div class="finding-subtext">- 수의수축 시: <span class="{vol_color}">{vol_val}</span></div>')
+                st.markdown(f"""
+                <div style="padding-left: 10px; margin-bottom: 8px;">
+                    <div class="finding-subtext" style="margin-bottom: 2px;">• 휴식 시: <span class="{rest_color}" style="font-weight: 700;">{rest_val}</span></div>
+                    <div class="finding-subtext">• 수의수축 시: <span class="{vol_color}" style="font-weight: 700;">{vol_val}</span></div>
+                </div>
+                """, unsafe_allow_html=True)
+                continue
             else:
                 # Blink Reflex, H-Reflex 등 후기반응 정량값 표현용 렌더링
                 lines.append(f'<div class="finding-subtext">검출치 및 임상소견: <span class="text-red">{norm_val}</span></div>')
@@ -169,12 +174,12 @@ def render_case_list():
                     exam_html.append(f'<div class="case-bullet">• {i}</div>')
         st.markdown(f'<div class="case-text-block">{"".join(exam_html)}</div>', unsafe_allow_html=True)
 
-        # 학생용 사고 프레임 가이드
+        # 학생용 사고 프레임 가이드 (정량 기준 정렬)
         st.markdown("""
         <div class="warn-card">
             <div class="finding-highlight" style="color: #b45309; border-bottom-color: #fde68a;">🎓 학생용 사고 프레임 (판독 기준)</div>
-            <div class="case-bullet-strong">1. 진폭(Amplitude) 감소: 정상 범위 대비 <b>50% 이하 (정상측 대비 30% 미만)</b>로 감소 시 운동/감각 축삭 손상(Axonal loss)을 의미합니다.</div>
-            <div class="case-bullet-strong">2. 잠복기(Latency) 지연: 정상 범위 대비 <b>130% 이상</b> 연장 시 말이집탈락성(Demyelinating) 변화 혹은 국소 포착성 압박을 의미합니다.</div>
+            <div class="case-bullet-strong">1. 진폭(Amplitude) 감소: 정상 범위 대비 <b>50% 이하 (정상측 대비 50% 이하)</b>로 감소 시 운동/감각 축삭 손상(Axonal loss)을 의미합니다.</div>
+            <div class="case-bullet-strong">2. 잠복기(Latency) 지연: 정상 범위 대비 <b>130% 이상 (정상측 대비 130% 이상)</b> 연장 시 말이집탈락성(Demyelinating) 변화 혹은 국소 포착성 압박을 의미합니다.</div>
             <div class="case-bullet-strong">3. 감각신경전도 보존: 신경근병증(Radiculopathy)은 병변이 뒤뿌리신경절(DRG)보다 근위부에 있으므로 말초 감각신경활동전위(SNAP)가 정상 범위로 보존됩니다.</div>
         </div>
         """, unsafe_allow_html=True)
@@ -261,8 +266,8 @@ def render_case_list():
 
     render_bottom_navigation()
 
-# 2. 라우터 파일과의 호환성 및 오버헤드 방지를 위한 안전 폴백 처리 함수 추가 (가장 중요)
+
 def render_case_detail():
-    # 단일 페이지 인터페이스 통합에 따라 불필요해진 세부 화면 진입 시, 즉각 리스트 화면으로 안전 리다이렉트
+    # 단일 페이지 실시간 학습 아키텍처 연동용 안전 상방 백패스 폴백
     st.session_state["screen"] = "case_list"
     st.rerun()
