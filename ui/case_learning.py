@@ -27,7 +27,7 @@ def _get_emg_line_text(raw_val):
         return "휴식 시: <span class='text-red' style='font-weight:700;'>fibrillation potential, positive sharp wave</span> / 수의수축 시: <span class='text-red' style='font-weight:700;'>Giant MUAPs 출현 및 Reduced MU recruitment</span>"
     elif raw_val == "emg_fasciculation":
         return "휴식 시: <span class='text-red' style='font-weight:700;'>fasciculation potential</span> / 수의수축 시: <span class='text-red' style='font-weight:700;'>Reduced MU recruitment</span>"
-    else: # emg_normal
+    else: 
         return "휴식 시: <span class='text-blue' style='font-weight:700;'>Silent at rest</span> / 수의수축 시: <span class='text-blue' style='font-weight:700;'>Normal MU recruitment</span>"
 
 def _render_finding_block(title, findings, side):
@@ -114,7 +114,6 @@ def _render_finding_block(title, findings, side):
                 continue
             else:
                 norm_val = raw_val
-                # [수정 핵심 1] F파(F-wave) 원시 상수를 유저 요청어인 'F파: 지연/부재'로 칼같이 맵핑
                 if raw_val == "fwave_delayed_absent":
                     norm_val = "F파: 지연/부재"
                 elif raw_val == "blink_delayed":
@@ -163,7 +162,6 @@ def render_case_list():
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # 사례 선택 즉시 실시간 통합 동시 렌더링
     if selected != "선택 안 함":
         case = CASE_LIBRARY[selected]
         patient = case["patient"]
@@ -176,11 +174,10 @@ def render_case_list():
         elif side == "좌": side = "왼쪽"
         elif side == "양측": side = "양쪽"
 
-        # 환자 기본 정보 카드
+        # [수정 핵심] 상단 카드에서 정답 스포일러 방지를 위해 "최종 교육용 진단" 행을 완전히 영구 삭제
         st.markdown(f'<div class="info-card" style="padding: 10px 8px;">', unsafe_allow_html=True)
         st.markdown(f'<div class="case-title-mobile" style="font-size:0.94rem;">👤 환자 사례: {selected}</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="case-subtitle-mobile" style="font-size:0.82rem; margin-top:2px;"><span class="label-strong text-blue">연령/성별:</span> <span class="result-value">{patient["age"]}세 / {patient["sex"]}</span> | <span class="label-strong text-blue">병변측:</span> <span class="result-value">{side}</span></div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="case-subtitle-mobile" style="font-size:0.82rem; margin-top:1px; line-height:1.4;"><span class="label-strong text-red">최종 교육용 진단:</span> <span class="result-value">{teaching.get("summary","")}</span></div>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
         # 주요 증상(Chief Complaints)
@@ -201,35 +198,32 @@ def render_case_list():
                     exam_html.append(f'<div class="case-bullet" style="font-size:0.82rem; margin-bottom:3px;">• {i}</div>')
         st.markdown(f'<div class="case-text-block" style="padding: 8px 10px;">{"".join(exam_html)}</div>', unsafe_allow_html=True)
 
-        # [수정 핵심 2] 선택된 증례별 성격에 적합하도록 "학생용 사고 프레임"을 동적 전면 리팩토링
+        # 학생용 사고 프레임 가이드
         if "뇌졸중" in selected:
-            # H-반사 전용 강직 정량 시뮬레이션 맞춤형 프레임
             st.markdown("""
             <div class="warn-card" style="padding: 8px 8px; margin-bottom:10px; border-left-color: #9333ea; background: #faf5ff;">
                 <div class="finding-highlight" style="color: #7c3aed; border-bottom-color: #f3e8ff; font-size:0.85rem; padding-bottom:2px; margin-top:2px;">🎓 학생용 사고 프레임 (UMN H-reflex 판독 기준)</div>
-                <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:3px; color:#5b21b6;">1. H-반사(H-reflex) 특성: 일반 신경전도(NCS)나 침근전도(Needle EMG)를 적용하지 않으며, 감각 섬유(Ia)와 운동 섬유를 경유하는 단일시냅스 척수 반사(Spinal reflex)를 직접 평가합니다.</div>
-                <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:3px; color:#5b21b6;">2. 중추성 위운동신경세포(UMN) 병변: 대뇌 피질의 하행성 억제 소실로 인해 자극 한계치 하강 및 알파운동신경세포의 비정상 과흥분성으로 <b>H-반사 최대 진폭 항진</b> 및 <b>H/M ratio 비율이 대폭 증가(> 40%)</b> 됩니다.</div>
-                <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:2px; color:#5b21b6;">3. 치료 완화 정량화: 스트레칭 및 전기자극 물리치료 중재 적용 후 H/M ratio 수치의 유의미한 감소 여부로 경직(Spasticity) 완화도를 객관적 수치로 평가합니다.</div>
+                <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:3px; color:#5b21b6;">1. H-반사(H-reflex) 특성: 일반 신경전도(NCS)나 침근전도(Needle EMG)를 적용하지 않으며, 단일시냅스 척수 반사(Spinal reflex)를 직접 평가합니다.</div>
+                <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:3px; color:#5b21b6;">2. 중추성 위운동신경세포(UMN) 병변: 하행성 억제 소실로 인해 알파운동신경세포의 과흥분성으로 <b>H-반사 최대 진폭 항진</b> 및 <b>H/M ratio 비율 대폭 증가(> 40%)</b> 됩니다.</div>
+                <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:2px; color:#5b21b6;">3. 치료 완화 정량화: 물리치료 중재 적용 후 H/M ratio 수치의 유의미한 감소 여부로 경직(Spasticity) 완화도를 정량적으로 평가합니다.</div>
             </div>
             """, unsafe_allow_html=True)
         elif "눈꺼풀" in selected:
-            # 눈깜빡반사 뇌신경(들신경/날신경) 회로 분석 맞춤형 프레임
             st.markdown("""
             <div class="warn-card" style="padding: 8px 8px; margin-bottom:10px; border-left-color: #0d9488; background: #f0fdfa;">
                 <div class="finding-highlight" style="color: #0d9488; border-bottom-color: #ccfbf1; font-size:0.85rem; padding-bottom:2px; margin-top:2px;">🎓 학생용 사고 프레임 (눈깜빡반사 Blink Reflex 판독 기준)</div>
                 <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:3px; color:#115e59;">1. 들신경(Afferent) 삼차신경 장애: 병변측 전기자극 시 양측 수축 반응 R1, R2가 동시에 지연 및 부재하며, 정상측 자극 시에는 양측 반응 모두 대칭성 정상을 나타냅니다.</div>
                 <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:3px; color:#115e59;">2. 날신경(Efferent) 얼굴신경 장애: 자극 방향에 상관없이 항상 병변측 근수축 반응 R1, R2가 모두 손상 및 소실됩니다.</div>
-                <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:2px; color:#115e59;">3. 뇌간 반사 회로 평가: 얼굴 표정근 마비 변성과 관계없이 들신경(삼차신경)과 날신경(얼굴신경) 및 삼차신경-얼굴신경 반사궁 회로의 무결성만을 순수 측정하므로 일반 침근전도는 배제됩니다.</div>
+                <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:2px; color:#115e59;">3. 뇌간 반사 회로 평가: 얼굴 표정근 마비 변성과 관계없이 반사궁 회로의 무결성만을 측정하므로 일반 침근전도는 배제됩니다.</div>
             </div>
             """, unsafe_allow_html=True)
         else:
-            # 일반 말초 NCS 및 침근전도 감별 학습 프레임
             st.markdown("""
             <div class="warn-card" style="padding: 8px 8px; margin-bottom:10px;">
                 <div class="finding-highlight" style="color: #b45309; border-bottom-color: #fde68a; font-size:0.85rem; padding-bottom:2px; margin-top:2px;">🎓 학생용 사고 프레임 (NCS / EMG 판독 기준)</div>
-                <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:3px;">1. 진폭(Amplitude) 감소: 정상측 대비 <b>50% 이하</b> 시 말초 운동/감각 신경의 축삭 손상(Axonal loss) 지시</div>
-                <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:3px;">2. 잠복기(Latency) 지연: 정상측 대비 <b>130% 이상</b> 시 신경 섬유의 말이집탈락(Demyelination) 또는 포착 압박 지시</div>
-                <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:2px;">3. 감각 전도 보존: 신경뿌리병증(Radiculopathy)은 뒤뿌리신경절(DRG) 몸쪽 병변이므로 감각 감각신경활동전위(SNAP)가 정상 범위로 온전하게 보존됨</div>
+                <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:3px;">1. 진폭(Amplitude) 감소: 정상측 대비 <b>50% 이하</b> 시 축삭 손상(Axonal loss) 지시</div>
+                <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:3px;">2. 잠복기(Latency) 지연: 정상측 대비 <b>130% 이상</b> 시 말이집털락 변화(Demyelinating) 또는 포착 지시</div>
+                <div class="case-bullet-strong" style="font-size:0.8rem; margin-bottom:2px;">3. 감각 전도 보존: 신경뿌리병증(Radiculopathy)은 뒤뿌리신경절(DRG) 몸쪽 병변이므로 감각신경활동전위(SNAP)가 정상 범위로 온전하게 보존됨</div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -256,10 +250,11 @@ def render_case_list():
             else:
                 _render_finding_block("반사 및 후기반응 소견: 병변측", merged, side)
 
-        # 추론 분석 보고서 영역 (수의수축 시 용어 단일화 준수)
+        # [수정 핵심] 중복을 철저히 배제하고 정합성을 극대화하기 위해, 최하단 리포트 요약 헤더를 "최종 교육용 진단"으로 고착화하여 렌더링
         st.markdown('<div class="result-card" style="padding: 10px 8px;">', unsafe_allow_html=True)
         st.markdown('<div class="result-title" style="font-size:0.92rem;">✅ 임상 추론 및 해석 결과</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="result-text" style="font-size:0.82rem;"><span class="label-strong text-blue" style="font-size:0.82rem;">요약:</span> <span class="result-value" style="font-size:0.82rem;">{teaching.get("summary","")}</span></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="result-text" style="font-size:0.84rem; background: #fff1f2; border: 1px solid #fecdd3; padding: 8px; border-radius:6px;"><span class="label-strong text-red" style="font-size:0.85rem; font-weight:800;">최종 교육용 진단:</span> <span class="result-value" style="font-weight: 800; font-size:0.88rem; color: #9f1239; margin-left: 4px;">{teaching.get("summary","")}</span></div>', unsafe_allow_html=True)
+        st.markdown('<div style="height: 10px;"></div>', unsafe_allow_html=True)
 
         if teaching.get("ncs_reason"):
             st.markdown('<div class="result-label" style="font-size:0.85rem; padding: 4px 6px;">신경전도 및 후기반응 해석 포인트</div>', unsafe_allow_html=True)
@@ -308,7 +303,7 @@ def render_case_list():
                     st.markdown('<hr class="item-divider" style="margin: 6px 0;">')
             st.markdown('</div>', unsafe_allow_html=True)
 
-        # 다른 임상케이스 분석하기 버튼 동적 키 로테이션 리셋 바인딩 (에러 완벽 차단)
+        # 다른 임상케이스 분석하기 버튼 동적 키 로테이션 리셋 바인딩
         st.markdown('<div style="text-align: center; margin-top: 15px; margin-bottom: 15px;">', unsafe_allow_html=True)
         if st.button("🔄 다른 임상 케이스 분석하기", key="reset_case_radio_btn"):
             st.session_state["case_reset_counter"] += 1
