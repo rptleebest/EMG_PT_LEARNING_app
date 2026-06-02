@@ -52,7 +52,7 @@ def _render_finding_block(title, findings, side):
         left = values[0] if len(values) > 0 else ""
         right = values[1] if len(values) > 1 else ""
 
-        # 정상측 정보는 배제하고 병변측 정보만 렌더링
+        # 정상측 정보는 배제하고 오직 병변측 정보만 렌더링
         lines = [f'<div class="finding-highlight">{item}</div>']
 
         if side == "양쪽" or side == "양측":
@@ -62,7 +62,7 @@ def _render_finding_block(title, findings, side):
             pathological_val = right if (side == "오른쪽" or side == "우") else left
             norm_val = normalize_result_text(pathological_val)
 
-            # 감각/운동 신경전도검사 수치 판독 가이드 (Request 1 정량화 반영)
+            # 감각/운동 신경전도검사 수치 판독 가이드 (정상측 대비 수치 기재)
             if "감각" in title:
                 if "지연" in norm_val or "delayed" in norm_val.lower():
                     lines.append(f'<div class="finding-subtext">진폭: <span class="text-blue">정상 범위</span></div>')
@@ -94,24 +94,34 @@ def _render_finding_block(title, findings, side):
                     lines.append(f'<div class="finding-subtext">진폭: <span class="text-blue">정상 범위</span></div>')
                     lines.append(f'<div class="finding-subtext">잠복기: <span class="text-blue">정상 범위</span></div>')
                     
+            # 침근전도 소견 포맷 및 한글 괄호 완전 배제
             elif "침근전도" in title:
                 rest_val = "Silent at rest"
                 vol_val = "Normal MU recruitment"
                 norm_val_lower = norm_val.lower()
                 
-                if any(k in norm_val_lower for k in ["fibrillation", "섬유자발전위", "psw", "양성예파", "positive sharp wave"]):
+                # 자발전위(Active Denervation)
+                if any(k in norm_val_lower for k in ["fibrillation", "섬유자발전위", "psw", "양성예파", "positive sharp wave", "active_denervation", "paraspinal_denervation"]):
                     rest_val = "fibrillation potential, positive sharp wave"
                     vol_val = "Reduced MU recruitment"
-                elif any(k in norm_val_lower for k in ["giant", "거대", "reinnervation", "재신경지배", "만성"]):
+                # 만성 재신경지배(Chronic Reinnervation)
+                elif any(k in norm_val_lower for k in ["giant", "거대", "reinnervation", "재신경지배", "만성", "chronic_reinnervation"]):
                     rest_val = "Silent at rest"
                     vol_val = "Giant MUAPs 출현 및 Reduced MU recruitment"
+                # 급성/만성 혼합상태 (Active + Chronic Reinnervation)
+                elif any(k in norm_val_lower for k in ["active_chronic", "mixed"]):
+                    rest_val = "fibrillation potential, positive sharp wave"
+                    vol_val = "Giant MUAPs 출현 및 Reduced MU recruitment"
+                # 근육다발수축(Fasciculation)
                 elif any(k in norm_val_lower for k in ["fasciculation", "근육다발수축", "다발수축"]):
                     rest_val = "fasciculation potential"
                     vol_val = "Reduced MU recruitment"
+                # 완전 운동마비(No MUAPs)
                 elif any(k in norm_val_lower for k in ["no muap", "무반응", "동원 불가", "동원 소실"]):
                     rest_val = "Silent at rest"
                     vol_val = "No MUAPs on volition (운동단위 동원 불가)"
                 
+                # 가인성 동원 불능(Pain, Pain limitation 등)
                 if any(k in norm_val_lower for k in ["평가불가", "제한", "통증"]):
                     vol_val = "통증으로 인해 평가불가"
 
@@ -121,7 +131,7 @@ def _render_finding_block(title, findings, side):
                 lines.append(f'<div class="finding-subtext">- 휴식 시: <span class="{rest_color}">{rest_val}</span></div>')
                 lines.append(f'<div class="finding-subtext">- 수의수축 시: <span class="{vol_color}">{vol_val}</span></div>')
             else:
-                # Blink Reflex, H-Reflex 등 후기반응 정량값 표현용 렌더링 바인딩
+                # Blink Reflex, H-Reflex 등 후기반응 정량값 표현용 렌더링
                 lines.append(f'<div class="finding-subtext">검출치 및 임상소견: <span class="text-red">{norm_val}</span></div>')
                 if right:
                     lines.append(f'<div class="finding-subtext">측정 데이터: <span class="text-blue">{right}</span></div>')
@@ -213,7 +223,7 @@ def render_case_detail():
         else:
             _render_finding_block("반사 및 후기반응 소견: 병변측", merged, side)
 
-    # 6. 추론 해석 포인트 렌더링
+    # 6. 추론 해석 포인트 렌더링 (수의수축 시 명칭 완전 단일화)
     st.markdown('<div class="result-card">', unsafe_allow_html=True)
     st.markdown('<div class="result-title">✅ 교육용 진단 요약</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="result-text"><span class="label-strong text-blue">요약:</span> <span class="result-value">{teaching.get("summary","")}</span></div>', unsafe_allow_html=True)
@@ -223,21 +233,31 @@ def render_case_detail():
         for x in teaching["ncs_reason"]:
             st.markdown(f'<div class="result-text">• {x}</div>', unsafe_allow_html=True)
 
-    # 침근전도가 불필요한 뇌신경 및 H-반사 단독 사례의 경우 하단 침근전도 해석 포인트 렌더링 예외 처리
-    if teaching.get("emg_reason") and "Blink reflex" not in str(teaching.get("emg_reason")) and "H-반사" not in str(teaching.get("emg_reason")):
-        # 침근전도가 생략된 특수 사례(눈꺼풀 떨림, 뇌졸중 H-반사)는 침근전도 해석 헤더를 출력하지 않음
-        is_emg_skipped = "Blink Reflex" in str(teaching["emg_reason"][0]) or "H-reflex" in str(teaching["emg_reason"][0])
+    # 침근전도가 생략된 특수 사례는 침근전도 해석 헤더를 출력하지 않음
+    if teaching.get("emg_reason"):
+        is_emg_skipped = "Blink Reflex" in str(teaching["emg_reason"][0]) or "H-reflex" in str(teaching["emg_reason"][0]) or "H 반사" in str(teaching["emg_reason"][0])
         
         if not is_emg_skipped:
             st.markdown('<div class="result-label">침근전도 해석 포인트</div>', unsafe_allow_html=True)
             for x in teaching["emg_reason"]:
                 x_strip = x.strip()
+                # 1), 2), 3) 번호 리스트 가독성 고도화 패치 (Request 3 스타일링 적용)
                 if x_strip.startswith(("1)", "2)", "3)", "4)", "5)")):
-                    st.markdown(f'<div class="result-text" style="padding-left: 14px; margin-bottom: 5px; line-height:1.6;">{x_strip}</div>', unsafe_allow_html=True)
+                    st.markdown(
+                        f'<div class="result-text" style="padding-left: 14px; margin-top: 10px; margin-bottom: 5px; line-height:1.6; font-weight: 800; color: #1e3a8a; font-size: 0.94rem;">{x_strip}</div>', 
+                        unsafe_allow_html=True
+                    )
+                # 타이틀 강조 제어 (마크다운 ** 및 [] 제거 후 파란색 강조 폰트 바인딩)
                 elif x_strip.endswith(":"):
-                    st.markdown(f'<div class="result-text" style="font-weight: 800; color: #1e40af; margin-top: 12px; margin-bottom: 6px; font-size:0.92rem;">{x_strip}</div>', unsafe_allow_html=True)
+                    st.markdown(
+                        f'<div class="result-text" style="font-weight: 800; color: #b45309; margin-top: 14px; margin-bottom: 6px; font-size:0.92rem;">{x_strip}</div>', 
+                        unsafe_allow_html=True
+                    )
                 else:
-                    st.markdown(f'<div class="result-text" style="line-height:1.6; margin-bottom:5px;">• {x_strip}</div>', unsafe_allow_html=True)
+                    st.markdown(
+                        f'<div class="result-text" style="line-height:1.6; margin-bottom:5px; padding-left: 10px; color: #334155;">• {x_strip}</div>', 
+                        unsafe_allow_html=True
+                    )
 
     if teaching.get("integration"):
         st.markdown('<div class="result-label">통합 해석</div>', unsafe_allow_html=True)
