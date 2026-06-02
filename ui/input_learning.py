@@ -26,10 +26,10 @@ VIRTUAL_REPORTS = {
         ],
         "interpretation": [
             "감각신경활동전위(Sensory Nerve Action Potential, SNAP)가 정상 범위로 보존됩니다. 이는 감각 세포체가 위치한 뒤뿌리신경절(Dorsal Root Ganglion, DRG)보다 몸쪽(Proximal)에서 목(Cervical) 신경뿌리 압박 병변이 일어났음을 생리학적으로 입증합니다.",
-            "침근전도검사(Needle EMG)에서 동일한 C6 신경 분절 지배를 공유하는 복수 근육들 및 목 척추주위근육(Cervical paraspinal muscle)에서 활동성 탈신경(Active denervation) 자발전위가 검출되어 최종적으로 C6 목 신경뿌리병증(Cervical radiculopathy)으로 확진합니다."
+            "침근전도검사(Needle EMG)에서 동일한 C6 신경 분절 지배를 공유하는 복수 근육들 및 목 척추주위근육(Cervical paraspinal muscle)에서 활동성 탈신경(Active denervation)을 의미하는 비정상적인 자발전위가 검출되어 최종적으로 C6 목 신경뿌리병증(Cervical radiculopathy)으로 확진합니다."
         ],
         "emg_meaning": [
-            "fibrillation potential, positive sharp wave: 신경 지배를 탈락한 개별 근섬유막의 전기적 불안정성을 고발하는 이상 자발전위입니다.",
+            "fibrillation potential, positive sharp wave: 신경 지배를 탈락한 개별 근섬유막의 전기적 불안정성을 고발하는 비정상적인 자발전위입니다.",
             "Reduced MU recruitment: 수의수축(Volition) 시 동원 및 결합되는 운동단위(Motor Unit, MU) 개수의 정량적 감소 상태를 뜻합니다."
         ],
         "ddx": "목(Cervical) 디스크 협착 병변을 감별하기 위해 목 MRI 정밀 영상 검사와의 대조 분석이 요구됩니다."
@@ -55,7 +55,7 @@ VIRTUAL_REPORTS = {
             "정중신경(Median nerve) 진폭의 유의미한 감소가 관찰되어, 단순 말이집탈락을 넘어 운동 축삭 손상(Axonal loss)이 함께 전개되고 있음을 의미합니다."
         ],
         "emg_meaning": [
-            "Silent at rest: 휴식 시 어떠한 비정상 전위 자발방전도 유발되지 않는 생리적 침묵 상태입니다.",
+            "Silent at rest: 휴식 시 어떠한 비정상 전위 자발방전도 유발되지 않는 생리적(전기적) 침묵 상태입니다.",
             "Normal MU recruitment: 등척성/등장성 수의수축 요구도에 맞추어 하위 운동 단위들이 조화롭게 동원되는 양상입니다."
         ],
         "ddx": "목(Cervical) 신경뿌리 장애와의 감별을 위해 이학적 반사 검사 및 손목 정중신경 주행 부위 티넬 징후(Tinel's sign) 확인이 동반되어야 합니다."
@@ -85,7 +85,7 @@ VIRTUAL_REPORTS = {
         "emg_meaning": [
             "Giant MUAP: 손상된 신경을 대신하여 생존 축삭이 발아(Sprouting)해 들어가 해당 탈신경 근섬유를 만성 재지배(Reinnervation)한 결과물입니다."
         ],
-        "ddx": "L4-L5 척수 신경근의 디스크 압박 수준을 진단하기 위해 요천추 MRI 검사 의뢰가 추천됩니다."
+        "ddx": "L4-L5 척수 신경근의 디스크 압박 수준을 진단하기 위해 허리엉치 MRI 검사 의뢰가 추천됩니다."
     },
 
     "오른쪽 발처짐 및 종아리 가쪽 감각 저하 (온종아리신경 마비 의심)": {
@@ -141,14 +141,14 @@ VIRTUAL_REPORTS = {
 
     "팔다리 대칭성 근력 저하 (급성 기얭-바레 증후군 의심)": {
         "info": {"age": 41, "sex": "여성", "symptom": "가벼운 장염을 앓고 난 뒤 2주 후부터 대칭적으로 무릎 이하 다리 근력이 빠지고 위쪽으로 상행하는 양상", "side": "양측"},
-        "diagnosis": "급성 염증성 탈수초성 다발신경근병증(GBS, Guillain-Barre Syndrome)",
+        "diagnosis": "급성 염증성 탈말이집성 다발신경근병증(Guillain-Barre Syndrome, GBS)",
         "ncs_sensory": [
             ["정중신경 (Median SNAP)", "22 μV", "3.8 ms", "잠복기: 지연"],
             ["장딴지신경 (Sural SNAP)", "12 μV", "3.4 ms", "정상 범위 (Sural Sparing)"]
         ],
         "ncs_motor": [
             ["종아리신경 (Peroneal CMAP)", "발목(Ankle) 자극", "3.0 mV", "8.5 ms", "잠복기: 지연"],
-            ["종아리신경 (Peroneal CMAP)", "종아리뼈머리 자극", "1.2 mV", "20.1 ms", "잠복기: 지연 / 전도속도 폭락"]
+            ["종아리신경 (Peroneal CMAP)", "종아리뼈머리 자극", "1.2 mV", "20.1 ms", "잠복기: 지연 / 전도속도 감소"]
         ],
         "emg": [
             ["앞정강근 (Tibialis Anterior)", "L4-L5", "Silent at rest", "Reduced MU recruitment", "비정상 (동원 결손)"],
@@ -156,16 +156,16 @@ VIRTUAL_REPORTS = {
         ],
         "interpretation": [
             "다수의 다리 전도 속도가 폭락하고 전달 잠복기가 130% 이상 대폭 늘어난 대칭 말이집탈락(Demyelination)성 이상 전도를 나타냅니다.",
-            "감각신경활동전위(SNAP)는 정상 범위로 생존하면서 오직 운동 신경 복합근육활동전위(CMAP)만 극도로 붕괴되는 기얭-바레 증후군의 전형적인 장단지 스페어링(Sural sparing) 양상을 만족합니다."
+            "감각신경활동전위(SNAP)는 정상 범위로 측정되면서 오직 운동 신경 복합근육활동전위(CMAP)만 극도로 저하되는 기얭-바레 증후군의 전형적인 장딴지 보존(Sural sparing) 양상을 만족합니다."
         ],
         "emg_meaning": [
-            "Sural sparing effect: 자가면역 수초 손상 시 하지 말단 감각인 장딴지신경 감각신경활동전위((Sural SNAP) 반응이 홀로 정상 유지되는 전형적 기얭-바레 증후군(Guillain-Barré Syndrome, GBS) 판독 감별점입니다."
+            "Sural sparing effect: 자가면역 말이집 손상 시 하지 말단 감각인 장딴지신경 감각신경활동전위((Sural SNAP) 반응이 홀로 정상 유지되는 전형적 기얭-바레 증후군(Guillain-Barré Syndrome, GBS) 판독 감별점입니다."
         ],
         "ddx": "급성 상행성 호흡 마비 유무 모니터링을 위해 호흡기 치료 연계 관리가 필수적입니다."
     },
 
     "오른쪽 팔꿈치 통증 및 손가락 힘 빠짐 (C7 신경뿌리병증 의심)": {
-        "info": {"age": 49, "sex": "여성", "symptom": "오른쪽 어깨 뒤부터 삼두근 부위를 지나 가운데 손가락으로 전개되는 방사통 및 팔꿉관절 폄(Extension) 위약", "side": "오른쪽"},
+        "info": {"age": 49, "sex": "여성", "symptom": "오른쪽 어깨 뒤부터 위팔세갈래근(triceps) 부위를 지나 가운데 손가락으로 전개되는 통증 및 팔꿉관절 폄근력 저하", "side": "오른쪽"},
         "diagnosis": "오른쪽 C7 목 신경뿌리병증(Cervical radiculopathy)",
         "ncs_sensory": [
             ["정중신경 (Median SNAP)", "28 μV", "2.9 ms", "정상 범위"],
@@ -186,12 +186,12 @@ VIRTUAL_REPORTS = {
             "C7 지배 운동 영역의 핵심 축을 이루는 복수 근육들 및 제7 목 수준의 목 척추주위근육(Cervical paraspinal muscle)에서 일치된 탈신경 비정상 자발방전이 검출되어 C7 목 신경뿌리병증(Cervical radiculopathy)으로 확정됩니다."
         ],
         "emg_meaning": [
-            "C7 Myotome mapping: 다른 말초 주행 경로를 가졌으나 오직 C7 분절 신경뿌리를 기원으로 묶이는 복수 표적근에서 동시 탈신경 자발방전이 터져 나오는 기법입니다."
+            "C7 Myotome mapping: 다른 말초 주행 경로를 가졌으나 오직 C7 분절 신경뿌리를 기원으로 묶이는 복수의 표적 근육에서 동시 탈신경 자발방전이 출현하는 기법입니다."
         ],
-        "ddx": "위팔세갈래근 반사(Triceps reflex) 감퇴 여부를 검증하고 목 MRI를 통한 제6-7목간 추간판 유착 확인을 연계합니다."
+        "ddx": "위팔세갈래근 반사(Triceps reflex) 감퇴 여부를 검증하고 목 MRI를 통한 제 6-7번 목 척추 추간판 유착 확인을 연계합니다."
     },
 
-    "8왼쪽 엉덩이 통증 및 발바닥 저림 (S1 신경뿌리병증 의심)": {
+    "왼쪽 엉덩이 통증 및 발바닥 저림 (S1 신경뿌리병증 의심)": {
         "info": {"age": 53, "sex": "남성", "symptom": "왼쪽 허리통증(Lumbago), 왼쪽 볼기에서 허벅지 뒤편을 관통하여 발등 가쪽 및 새끼발가락으로 흐르는 칼로 찌르는 듯한 통증", "side": "왼쪽"},
         "diagnosis": "왼쪽 S1 허리 신경뿌리병증(Lumbar radiculopathy)",
         "ncs_sensory": [
@@ -209,17 +209,17 @@ VIRTUAL_REPORTS = {
             ["허리 척추주위근 (Lumbar Paraspinal)", "S1", "fibrillation potential, positive sharp wave", "통증으로 인해 평가불가", "비정상 (활동성 탈신경)"]
         ],
         "interpretation": [
-            "새끼발가락 외측(S1 피부분절) 저림에도 불구하고 장딴지신경(Sural nerve) 감각신경활동전위(SNAP)가 정상 범위로 완전히 보존되어 병변이 후근신경절(DRG) 몸쪽(Proximal)의 척수 신경근 병소임을 대변합니다.",
-            "정강신경(Tibial nerve) 지배 하에 있으면서 S1 지배 하에 있는 가자미근 및 장딴지근에서 탈신경 자발전위가 방전되며, S1 허리 척추주위근육(Lumbar paraspinal muscle)에서 동반 방전되어 S1 허리 신경뿌리병증(Lumbar radiculopathy)으로 판독합니다."
+            "새끼발가락 가쪽(S1 피부분절) 저림에도 불구하고 장딴지신경(Sural nerve) 감각신경활동전위(SNAP)가 정상 범위로 완전히 보존되어 병변이 뒤뿌리신경절(DRG) 몸쪽(Proximal)의 척수 신경근 병소임을 대변합니다.",
+            "정강신경(Tibial nerve) 지배 하에 있으면서 S1 지배 하에 있는 가자미근(Soleus) 및 장딴지근(Gastrocnemius)에서 탈신경 자발전위가 방전되며, S1 허리 척추주위근육(Lumbar paraspinal muscle)에서 동반 방전되어 S1 허리 신경뿌리병증(Lumbar radiculopathy)으로 판독합니다."
         ],
         "emg_meaning": [
-            "S1 Myotome pathway: 아킬레스건 반사(Achilles tendon reflex) 경로를 구성하는 가자미근에서 발생하는 이상 자발 활동을 고지합니다."
+            "S1 Myotome pathway: 아킬레스힘줄 반사(Achilles tendon reflex) 경로를 구성하는 가자미근에서 발생하는 이상 자발 활동을 의미합니다."
         ],
-        "ddx": "좌골신경통(Sciatica)과의 구분을 위해 앙와위 직하지 거상(SLR) 물리치료 평가 검사와 요천추 MRI 정밀 확인을 권장합니다."
+        "ddx": "좌골신경통(Sciatica)과의 구분을 위해 바로누운자세 편다리올림검사(straight leg raising test, SLR test) 물리치료 평가 검사와 허리엉치 MRI 정밀 확인을 권장합니다."
     },
 
     "오른쪽 어깨 통증 및 손 내재근 위축 (가슴문증후군 의심)": {
-        "info": {"age": 38, "sex": "여성", "symptom": "오른쪽 어깨 및 빗장뼈(Clavicle) 하부 통증, 반지/새끼손가락 무감각, 손 내재근의 만성 마름 및 꺼짐", "side": "오른쪽"},
+        "info": {"age": 38, "sex": "여성", "symptom": "우측 어깨 및 빗장뼈(Clavicle) 하부 통증, 새끼손가락 쪽 감각 이상, 짧은엄지벌림근(APB)의 심한 위축으로 인한 Gilliatt-Sumner 손(Gilliatt-Sumner hand) 양상 동반", "side": "오른쪽"},
         "diagnosis": "오른쪽 가슴문증후군(Thoracic outlet syndrome, TOS)",
         "ncs_sensory": [
             ["가쪽아래팔피부신경 (LAC SNAP)", "25 μV", "2.1 ms", "정상 범위"],
@@ -246,7 +246,7 @@ VIRTUAL_REPORTS = {
     },
 
     "왼쪽 갑작스러운 한쪽 얼굴 마비 (얼굴신경마비 의심)": {
-        "info": {"age": 29, "sex": "남성", "symptom": "급격히 발현된 왼쪽 안면 전반 이마 주름 소실, 왼쪽 안구 완전 감김(Closure) 불능, 입꼬리 대칭 이탈", "side": "왼쪽"},
+        "info": {"age": 29, "sex": "남성", "symptom": "급격히 발현된 왼쪽 얼굴 전반 이마 주름 소실, 왼쪽 안구 완전 감김(Closure) 불능, 입꼬리 대칭 이탈", "side": "왼쪽"},
         "diagnosis": "왼쪽 특발성 얼굴신경마비(Bell's palsy)",
         "ncs_sensory": [
             ["오른쪽 이마 자극 (V1 분지)", "22 μV", "2.1 ms", "정상 범위"],
@@ -262,23 +262,23 @@ VIRTUAL_REPORTS = {
         "teaching_diagnosis": {
             "summary": "왼쪽 얼굴신경(뇌신경 VII)의 급성 축삭 손상을 동반한 특발성 얼굴신경마비(Bell's palsy) 상태입니다.",
             "ncs_reason": [
-                "왼쪽 안면 자극 시 운동 복합근육활동전위(CMAP) 최대 진폭이 정상측 대비 50% 이하인 34% 수준(1.1 mV)으로 폭락해 있어, 심각한 원위부 축삭 사멸 변성이 급격히 진행되고 있음을 정량 계측해 냅니다.",
-                "눈깜빡반사(Blink Reflex) 검사 상 왼쪽 각막 자극 시 신호 지연이 심해, 뇌간 반사 회로가 기능 마비에 처했음을 보여줍니다."
+                "왼쪽 얼굴 자극 시 운동 복합근육활동전위(CMAP) 최대 진폭이 정상측 대비 50% 이하인 34% 수준(1.1 mV)으로 폭락해 있어, 심각한 원위부 축삭 사멸 변성이 급격히 진행되고 있음을 정량 계측해 냅니다.",
+                "눈깜빡반사(Blink Reflex) 검사 상 왼쪽 각막 자극 시 신호 지연이 심해, 뇌줄기(brain stem) 반사 회로가 기능 마비에 처했음을 보여줍니다."
             ],
             "emg_reason": [
                 "1) 검사 선택의 전기생리학적 근거:",
-                "본 사례는 안면 근육의 원위 운동축삭 변성을 평가하기 위한 안면 복합근육활동전위(CMAP) 정량 분석과 뇌줄기 삼차-얼굴신경 반사궁 회로(Blink reflex)를 추적했습니다. 침근전도는 발병 초기(2~3주 미만)에는 검사 프로토콜 상 완전 제외됩니다."
+                "본 사례는 얼굴 근육의 원위 운동축삭 변성을 평가하기 위한 얼굴 복합근육활동전위(CMAP) 정량 분석과 뇌줄기 삼차-얼굴신경 반사궁 회로(Blink reflex)를 추적했습니다. 침근전도는 발병 초기(2~3주 미만)에는 검사 프로토콜 상 완전 제외됩니다."
             ],
             "integration": [
-                "왼쪽 이마 주름 소실, 눈 감기 불능, 얼굴신경 자극 시 좌/우 진폭 비대칭성 격차 및 Blink R1/R2 전도 이상을 종합하여 얼굴신경마비(Bell's palsy)로 진단합니다."
+                "왼쪽 이마 주름 소실, 눈 감기 불능, 얼굴신경 자극 시 좌/우 진폭 비대칭성 격차 및 눈깜박반사 R1/R2 전도 이상을 종합하여 얼굴신경마비(Bell's palsy)로 진단합니다."
             ]
         },
         "differential_diagnosis": [
             {
                 "name": "중추성 얼굴마비 (뇌졸중 등)",
                 "why_consider": "급격한 한쪽 얼굴 편마비 양상이 뇌줄기나 피질 병변과 매우 혼동하기 쉽습니다.",
-                "how_to_differentiate": "중추성 안면마비는 전두엽의 이중 지배 덕분에 이마 주름 잡기(이마근 수축)가 정상 보존되지만, 말초성 벨마비는 이마 주름을 잡는 것조차 불가능합니다.",
-                "practical_tip": "환자가 내원 시 이마 주름을 잡을 수 있는지를 우선 감별하여 상위운동신경과 하위운동신경 마비를 칼같이 선별하십시오."
+                "how_to_differentiate": "중추성 얼굴마비는 전두엽의 이중 지배 덕분에 이마 주름 잡기(이마근 수축)가 정상 보존되지만, 말초성 벨마비는 이마 주름을 잡는 것조차 불가능합니다.",
+                "practical_tip": "환자가 내원 시 이마 주름을 잡을 수 있는지를 우선 감별하여 위운동신경세포와 아래운동신경세포 마비를 선별하십시오."
             }
         ]
     }
