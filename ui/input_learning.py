@@ -4,217 +4,332 @@ import streamlit as st
 from ui.navigation import render_bottom_navigation
 
 # =====================================================================
-# 가상의 실제 수치 데이터 세팅 (방대하게 확장된 대표 임상 케이스 6종 완벽 복원)
-# 수치 데이터 입력 완료 및 침근전도 약어 정리 완료
+# 실제 임상 계측 수치 기반 10대 핵심 물리치료 연계 증례 데이터셋 (신용어 한글(영어) 완벽 반영)
 # =====================================================================
 VIRTUAL_REPORTS = {
-    "좌측 목/어깨 통증 및 팔 저림 (C6 신경뿌리병증 의심)": {
-        "info": {"age": 45, "sex": "남성", "symptom": "좌측 목 통증, 엄지/검지 저림, 위팔두갈래근 근력 약화", "side": "좌측"},
-        "diagnosis": "좌측 C6 신경뿌리병증 (C6 Radiculopathy)",
+    "1. 좌측 목/어깨 통증 및 팔 저림 (C6 신경뿌리병증 의심)": {
+        "info": {"age": 45, "sex": "남성", "symptom": "좌측 목(Cervical) 통증 및 무감각, 엄지/검지 손가락 끝 저림, 팔꿉관절 굽힘(Flexion)력 감소", "side": "좌측"},
+        "diagnosis": "좌측 C6 목 신경뿌리병증(Cervical radiculopathy)",
         "ncs_sensory": [
-            ["정중신경 (Median SNAP)", "25 μV", "2.8 ms", "정상 (정상범위: 잠복기 < 3.5ms, 진폭 > 20μV)"],
-            ["자신경 (Ulnar SNAP)", "22 μV", "2.5 ms", "정상 (정상범위: 잠복기 < 3.1ms, 진폭 > 15μV)"]
+            ["정중신경 (Median SNAP)", "25 μV", "2.8 ms", "정상 범위"],
+            ["자신경 (Ulnar SNAP)", "22 μV", "2.5 ms", "정상 범위"]
         ],
         "ncs_motor": [
-            ["정중신경 (Median CMAP)", "원위부 (손목)", "8.5 mV", "3.5 ms", "정상 (정상범위: 잠복기 < 4.2ms, 진폭 > 4.0mV)"],
-            ["정중신경 (Median CMAP)", "근위부 (팔꿈치)", "8.1 mV", "7.8 ms", "정상 (정상범위: 잠복기 < 4.2ms, 진폭 > 4.0mV)"]
+            ["정중신경 (Median CMAP)", "손목(Wrist) 자극", "8.5 mV", "3.5 ms", "정상 범위"],
+            ["정중신경 (Median CMAP)", "팔꿈치(Elbow) 자극", "8.1 mV", "7.8 ms", "정상 범위"]
         ],
         "emg": [
-            ["위팔두갈래근 (Biceps brachii)", "C5-C6", "Fibrillation potential, positive sharp wave", "Reduced MU recruitment", "비정상 (활동성 탈신경 상태)"],
-            ["노쪽손목폄근 (ECRL)", "C6-C7", "Fibrillation potential, positive sharp wave", "Giant MUAPs 출현 및 Reduced MU recruitment", "비정상 (만성 재신경지배 상태)"],
-            ["짧은엄지벌림근 (Abductor Pollicis APB)", "C8-T1", "Silent at rest", "Normal MU recruitment", "정상"],
-            ["목 척추주위근 (Cervical Paraspinal)", "C6", "Fibrillation potential, positive sharp wave", "통증으로 인해 평가불가", "비정상 (활동성 탈신경 상태)"]
+            ["위팔두갈래근 (Biceps brachii)", "C5-C6", "fibrillation potential, positive sharp wave", "Reduced MU recruitment", "비정상 (활동성 탈신경)"],
+            ["긴노쪽손목폄근 (ECRL)", "C6-C7", "fibrillation potential, positive sharp wave", "Giant MUAPs 출현 및 Reduced MU recruitment", "비정상 (만성 재신경지배 동반)"],
+            ["짧은엄지벌림근 (APB)", "C8-T1", "Silent at rest", "Normal MU recruitment", "정상 범위"],
+            ["목 척추주위근 (Cervical Paraspinal)", "C6", "fibrillation potential, positive sharp wave", "통증으로 인해 평가불가", "비정상 (활동성 탈신경)"]
         ],
         "interpretation": [
-            "감각신경전도검사(SNAP)가 모두 정상입니다. 이는 병변이 뒤뿌리신경절(DRG)보다 몸쪽(근위부)인 신경뿌리(Root)에 있음을 의미합니다.",
-            "침근전도에서 위팔두갈래근, 노쪽손목폄근 및 목 척추주위근에 비정상 자발전위가 대거 관찰됩니다.",
-            "이 근육들은 서로 다른 말초신경의 지배를 받지만, 공통적으로 C6 신경뿌리의 지배를 받으므로 C6 신경뿌리병증으로 확진합니다."
+            "감각신경활동전위(Sensory Nerve Action Potential, SNAP)가 정상 범위로 보존됩니다. 이는 감각 세포체가 위치한 뒤뿌리신경절(Dorsal Root Ganglion, DRG)보다 몸쪽(Proximal)에서 목(Cervical) 신경뿌리 압박 병변이 일어났음을 생리학적으로 입증합니다.",
+            "침근전도검사(Needle EMG)에서 동일한 C6 신경 분절 지배를 공유하는 복수 근육들 및 목 척추주위근육(Cervical paraspinal muscle)에서 활동성 탈신경(Active denervation) 자발전위가 검출되어 최종적으로 C6 목 신경뿌리병증(Cervical radiculopathy)으로 확진합니다."
         ],
         "emg_meaning": [
-            "Fibrillation / Positive sharp wave: 축삭 사멸로 인해 지배력을 잃은 근섬유가 자발적으로 미세 유발하는 급성 활동성 전위입니다.",
-            "Silent at rest: 휴식 시 어떠한 비정상 전기 활동도 관찰되지 않는 완벽한 전기적 침묵 상태입니다.",
-            "Normal MU recruitment: 근수축 요구도에 따라 정량적인 운동단위(Motor Unit) 결합 동원이 원활한 정상 상태입니다."
+            "fibrillation potential, positive sharp wave: 신경 지배를 탈락한 개별 근섬유막의 전기적 불안정성을 고발하는 이상 자발전위입니다.",
+            "Reduced MU recruitment: 수의수축(Volition) 시 동원 및 결합되는 운동단위(Motor Unit, MU) 개수의 정량적 감소 상태를 뜻합니다."
         ],
-        "ddx": "디스크 탈출증이나 척추관 협착증 확인을 위해 목 부위 MRI 검사 시행이 권장됩니다."
+        "ddx": "목(Cervical) 디스크 협착 병변을 감별하기 위해 경추 MRI 정밀 영상 검사와의 대조 분석이 요구됩니다."
     },
 
-    "우측 1~3번째 손가락 저림 및 야간통 (손목굴증후군 의심)": {
-        "info": {"age": 52, "sex": "여성", "symptom": "우측 1,2,3번째 손가락 저림, 밤에 통증 심해짐, 쥐기 약화", "side": "우측"},
-        "diagnosis": "우측 중증 손목굴증후군 (Severe Carpal Tunnel Syndrome)",
+    "2. 우측 1~3번째 손가락 저림 및 야간통 (손목굴증후군 의심)": {
+        "info": {"age": 52, "sex": "여성", "symptom": "우측 1, 2, 3번째 손가락 노쪽(Radial) 분포 영역 저림, 야간 통증 및 손목관절 굽힘(Flexion) 시 통증 악화", "side": "우측"},
+        "diagnosis": "우측 손목굴증후군(Carpal tunnel syndrome)",
         "ncs_sensory": [
-            ["정중신경 (Median SNAP)", "8 μV", "4.8 ms", "비정상 (정상범위: 잠복기 < 3.5ms, 진폭 > 20μV)"],
-            ["자신경 (Ulnar SNAP)", "25 μV", "2.6 ms", "정상 (정상범위: 잠복기 < 3.1ms, 진폭 > 15μV)"]
+            ["정중신경 (Median SNAP)", "8 μV", "4.8 ms", "진폭: 감소 / 잠복기: 지연"],
+            ["자신경 (Ulnar SNAP)", "25 μV", "2.6 ms", "정상 범위"]
         ],
         "ncs_motor": [
-            ["정중신경 (Median CMAP)", "원위부 (손목)", "3.1 mV", "5.5 ms", "비정상 (정상범위: 잠복기 < 4.2ms, 진폭 > 4.0mV)"],
-            ["정중신경 (Median CMAP)", "근위부 (팔꿈치)", "2.9 mV", "9.8 ms", "비정상"]
+            ["정중신경 (Median CMAP)", "손목(Wrist) 자극", "3.1 mV", "5.5 ms", "진폭: 감소 / 잠복기: 지연"],
+            ["정중신경 (Median CMAP)", "팔꿈치(Elbow) 자극", "2.9 mV", "9.8 ms", "진폭: 감소"]
         ],
         "emg": [
-            ["짧은엄지벌림근 (Abductor Pollicis APB)", "C8-T1", "Positive sharp waves 출현", "Giant MUAPs 출현 및 Reduced MU recruitment", "비정상 (만성 재신경지배 상태)"],
-            ["첫째등쪽뼈사이근 (First Dorsal FDI)", "C8-T1", "Silent at rest", "Normal MU recruitment", "정상"]
+            ["짧은엄지벌림근 (APB)", "C8-T1", "Silent at rest", "Normal MU recruitment", "정상 범위"],
+            ["첫째등쪽뼈사이근 (FDI)", "C8-T1", "Silent at rest", "Normal MU recruitment", "정상 범위"]
         ],
         "interpretation": [
-            "정중신경에서만 말이집탈락성을 의미하는 국소 전도 잠복기 지연 및 진폭 감소가 확인됩니다.",
-            "목 척추주위근이 완전히 정상이므로 C8-T1 신경뿌리병증을 원천 배제할 수 있으며, 손목 부위에 한정된 국소 포착성 단일신경병증입니다."
+            "정중신경(Median nerve) 감각전도 SNAP과 운동전도 CMAP의 잠복기 지연이 나타나 손목 영역의 국소 말이집탈락(Demyelination)성 압박 상태를 고시합니다.",
+            "정중신경(Median nerve) 진폭의 유의미한 감소가 관찰되어, 단순 말이집탈락을 넘어 운동 축삭 손상(Axonal loss)이 함께 전개되고 있음을 의미합니다."
         ],
         "emg_meaning": [
-            "진폭 감소 및 Giant MUAPs: 단순 말이집 손상 단계를 지나 신경 내부 축삭(axon) 사멸과 그에 따른 우회로 만성 측부 재지배가 일어났음을 나타냅니다."
+            "Silent at rest: 휴식 시 어떠한 비정상 전위 자발방전도 유발되지 않는 생리적 침묵 상태입니다.",
+            "Normal MU recruitment: 등척성/등장성 수의수축 요구도에 맞추어 하위 운동 단위들이 조화롭게 동원되는 양상입니다."
         ],
-        "ddx": "동일 수근관 부위 포착을 악화시키는 당뇨 및 갑상선 질환 등 전신 대사질환 배제가 병행되어야 합니다."
+        "ddx": "목(Cervical) 신경뿌리 장애와의 감별을 위해 이학적 반사 검사 및 손목 정중신경 주행 부위 티넬 징후(Tinel's sign) 확인이 동반되어야 합니다."
     },
 
-    "좌측 허리 통증 및 엄지발가락 올림 약화 (L5 신경뿌리병증 의심)": {
-        "info": {"age": 58, "sex": "여성", "symptom": "좌측 엉덩이부터 종아리 가쪽으로 방사통, 발처짐 증상", "side": "좌측"},
-        "diagnosis": "좌측 L5 신경뿌리병증 (L5 Radiculopathy)",
+    "3. 좌측 허리 통증 및 엄지발가락 올림 약화 (L5 신경뿌리병증 의심)": {
+        "info": {"age": 58, "sex": "여성", "symptom": "좌측 요통(Lumbago), 종아리 가쪽 및 발등 방사통, 보행 시 발목관절 등굽힘(Dorsiflexion) 약화로 발끝 끌림", "side": "좌측"},
+        "diagnosis": "좌측 L5 허리 신경뿌리병증(Lumbar radiculopathy)",
         "ncs_sensory": [
-            ["얕은종아리신경 (Superficial Peroneal SNAP)", "12 μV", "2.9 ms", "정상 (정상범위: 잠복기 < 3.5ms, 진폭 > 10μV)"],
-            ["장딴지신경 (Sural SNAP)", "15 μV", "3.1 ms", "정상 (정상범위: 잠복기 < 3.6ms, 진폭 > 10μV)"]
+            ["얕은종아리신경 (Superficial Peroneal SNAP)", "12 μV", "2.9 ms", "정상 범위"],
+            ["장딴지신경 (Sural SNAP)", "15 μV", "3.1 ms", "정상 범위"]
         ],
         "ncs_motor": [
-            ["종아리신경 (Peroneal CMAP)", "원위부 (발목)", "3.5 mV", "4.5 ms", "정상 (정상범위: 잠복기 < 6.0ms, 진폭 > 2.0mV)"],
-            ["종아리신경 (Peroneal CMAP)", "근위부 (오금)", "3.3 mV", "11.2 ms", "정상"]
+            ["종아리신경 (Peroneal CMAP)", "발목(Ankle) 자극", "3.5 mV", "4.5 ms", "정상 범위"],
+            ["종아리신경 (Peroneal CMAP)", "오금(Popliteal) 자극", "3.3 mV", "11.2 ms", "정상 범위"]
         ],
         "emg": [
-            ["앞정강근 (Tibialis Anterior)", "L4-L5", "Fibrillation potentials 및 Positive sharp waves 출현", "Reduced MU recruitment", "비정상 (활동성 탈신경 상태)"],
-            ["긴종아리근 (Peroneus Longus)", "L5-S1", "Positive sharp waves 출현", "Giant MUAPs 출현 및 Reduced MU recruitment", "비정상 (만성 재신경지배 상태)"],
-            ["가자미근 (Soleus)", "S1-S2", "Silent at rest", "Normal MU recruitment", "정상"],
-            ["허리 척추주위근 (Lumbar Paraspinal)", "L5", "Fibrillation potentials 출현", "평가불가", "비정상 (활동성 탈신경 상태)"]
+            ["앞정강근 (Tibialis Anterior)", "L4-L5", "fibrillation potential, positive sharp wave", "Reduced MU recruitment", "비정상 (활동성 탈신경)"],
+            ["긴종아리근 (Peroneus Longus)", "L5-S1", "fibrillation potential, positive sharp wave", "Giant MUAPs 출현 및 Reduced MU recruitment", "비정상 (만성 재신경지배 동반)"],
+            ["가자미근 (Soleus)", "S1-S2", "Silent at rest", "Normal MU recruitment", "정상 범위"],
+            ["허리 척추주위근 (Lumbar Paraspinal)", "L5", "fibrillation potential, positive sharp wave", "통증으로 인해 평가불가", "비정상 (활동성 탈신경)"]
         ],
         "interpretation": [
-            "다리의 감각신경전도검사(SNAP)가 완전히 정상입니다. 이는 병변이 말초신경이 아닌 요추 신경뿌리(Root)에 있음을 확인해 줍니다.",
-            "앞정강근(L4-L5)과 긴종아리근(L5-S1) 모두에서 비정상 자발전위가 나타났으며, 허리 척추주위근에서도 이상이 확인되어 L5 신경뿌리 병변으로 결론짓습니다."
+            "다리의 주요 표재 감각신경활동전위(SNAP)들이 정상 보존되어 병터가 요추 뒤뿌리신경절(Dorsal root ganglion, DRG)보다 몸쪽(Proximal)에 국한된 허리(Lumbar) 신경뿌리 장애임을 지시합니다.",
+            "L5 신경 분절의 지배를 받는 앞정강근 및 긴종아리근, 그리고 허리 척추주위근육(Lumbar paraspinal muscle)에서 비정상 자발전위가 동시에 터져 나와 L5 허리 신경뿌리병증(Lumbar radiculopathy)으로 정의됩니다."
         ],
         "emg_meaning": [
-            "감각신경 보존의 원리: 신경뿌리병증은 대개 뒤뿌리신경절(DRG)보다 근위부(척수 쪽)에서 발생하므로, 말초 쪽으로 뻗어나온 감각신경은 온전하게 유지됩니다."
+            "Giant MUAP: 손상된 신경을 대신하여 생존 축삭이 발아(Sprouting)해 들어가 해당 탈신경 근섬유를 만성 재지배(Reinnervation)한 결과물입니다."
         ],
-        "ddx": "L4-L5 추간판 탈출증 또는 허리 협착증 확인을 위해 요추 MRI 검사가 필요합니다."
+        "ddx": "L4-L5 척수 신경근의 디스크 압박 수준을 진단하기 위해 요천추 MRI 검사 의뢰가 추천됩니다."
     },
 
-    "우측 발처짐 및 종아리 가쪽 감각 저하 (종아리신경 마비 의심)": {
-        "info": {"age": 32, "sex": "남성", "symptom": "다리를 꼬고 잔 후 발생한 우측 발처짐, 허리 통증 없음", "side": "우측"},
-        "diagnosis": "우측 온종아리신경 마비 (Common Peroneal Neuropathy)",
+    "4. 우측 발처짐 및 종아리 가쪽 감각 저하 (온종아리신경 마비 의심)": {
+        "info": {"age": 32, "sex": "남성", "symptom": "오랫동안 다리를 꼬고 앉은 우측 발목관절 등굽힘(Dorsiflexion) 불능 및 보행 시 발처짐(Foot drop)", "side": "우측"},
+        "diagnosis": "우측 온종아리신경 마비(Common peroneal neuropathy)",
         "ncs_sensory": [
-            ["얕은종아리신경 (Superficial Peroneal SNAP)", "4 μV", "3.8 ms", "비정상 (정상범위: 잠복기 < 3.5ms, 진폭 > 10μV)"],
-            ["장딴지신경 (Sural SNAP)", "16 μV", "3.0 ms", "정상 (정상범위: 잠복기 < 3.6ms, 진폭 > 10μV)"]
+            ["얕은종아리신경 (Superficial Peroneal SNAP)", "4 μV", "3.8 ms", "진폭: 감소 / 잠복기: 지연"],
+            ["장딴지신경 (Sural SNAP)", "16 μV", "3.0 ms", "정상 범위"]
         ],
         "ncs_motor": [
-            ["종아리신경 (Peroneal CMAP)", "원위부 (발목)", "4.5 mV", "4.8 ms", "정상 (원위부 보존)"],
-            ["종아리신경 (Peroneal CMAP)", "근위부 (종아리뼈머리 위)", "1.1 mV", "무반응", "비정상 (전도차단 부위)"]
+            ["종아리신경 (Peroneal CMAP)", "발목(Ankle) 자극", "4.5 mV", "4.8 ms", "정상 범위"],
+            ["종아리신경 (Peroneal CMAP)", "종아리뼈머리 위 자극", "1.1 mV", "무반응", "진폭: 감소 (국소 전도차단)"]
         ],
         "emg": [
-            ["앞정강근 (Tibialis Anterior)", "L4-L5", "Silent at rest", "No MUAPs on volition", "비정상 (완전 동원 소실 상태)"],
-            ["긴종아리근 (Peroneus Longus)", "L5-S1", "Silent at rest", "Severely reduced MU recruitment", "비정상 (불완전 동원 감소 상태)"],
-            ["가자미근 (Soleus)", "S1-S2", "Silent at rest", "Normal MU recruitment", "정상"],
-            ["허리 척추주위근 (Lumbar Paraspinal)", "L5", "Silent at rest", "평가불가", "정상"]
+            ["앞정강근 (Tibialis Anterior)", "L4-L5", "Silent at rest", "No MUAPs on volition (동원 불가)", "비정상 (전도 완전 마비)"],
+            ["긴종아리근 (Peroneus Longus)", "L5-S1", "Silent at rest", "Reduced MU recruitment", "비정상 (동원 감소)"],
+            ["허리 척추주위근 (Lumbar Paraspinal)", "L5", "Silent at rest", "Normal MU recruitment", "정상 범위"]
         ],
         "interpretation": [
-            "종아리뼈머리(Fibular head) 부위를 가로질러 근위부 시 운동신경 진폭이 급격히 떨어지는 '전도차단(Conduction block)'이 관찰됩니다.",
-            "얕은종아리신경(감각)의 진폭이 감소하였고, 척추주위근은 정상이므로 요추 신경뿌리병증(L5)을 명확히 배제할 수 있습니다."
+            "종아리뼈머리(Fibular head) 가쪽을 주행하는 온종아리신경(Common peroneal nerve) 자극 시 CMAP 진폭이 50% 이상 감소하는 국소 전도차단(Conduction block)이 계측됩니다.",
+            "얕은종아리신경 감각신경활동전위(SNAP)의 비정상적 진폭 감소가 일어났으나, 허리 척추주위근육(Lumbar paraspinal muscle)은 완전히 정상 상태를 유지하므로 허리 신경뿌리병증(Lumbar radiculopathy)을 배제하고 종아리뼈머리 부위의 말초 포착성 종아리신경 마비로 단정합니다."
         ],
         "emg_meaning": [
-            "전도차단(Conduction block): 국소적인 말이집 압박으로 전기 신호가 그 지점을 통과하지 못하는 기능적 마비 상태입니다.",
-            "No MUAPs on volition: 수의적인 운동 신호가 차단 부위에 막혀 바늘근전도 상 운동단위가 전혀 동원되지 않는 완전 마비 상태입니다."
+            "Conduction Block: 신경 축삭의 물리적 사멸이 유도되지 않은 상황에서 국소 압박에 기인하여 전기 자극 전달이 순간 차단되는 상태입니다."
         ],
-        "ddx": "급성 압박성 신경병증. 다리 꼬는 습관 교정 및 발목 보조기(AFO) 착용 여부 평가가 필요합니다."
+        "ddx": "물리치료적으로 보행 보조기(AFO) 처방 검토와 종아리뼈머리 부위의 외부 가해 압박 해소가 중요합니다."
     },
 
-    "양측 발끝 저림 및 감각 저하 (당뇨병성 다발신경병증 의심)": {
-        "info": {"age": 68, "sex": "남성", "symptom": "양쪽 발바닥이 화끈거리고 감각 둔화 (장갑-양말 분포), 당뇨", "side": "양측"},
-        "diagnosis": "길이의존성 감각운동 다발신경병증 (Polyneuropathy)",
+    "5. 양측 발끝 저림 및 감각 저하 (당뇨병성 다발신경병증 의심)": {
+        "info": {"age": 68, "sex": "남성", "symptom": "양 발바닥이 대칭적으로 저리고 화끈거리며 무감각한 대칭성 장갑-양말형(Glove-stocking) 감각 마비", "side": "양측"},
+        "diagnosis": "길이의존성 축삭성 다발신경병증(Length-dependent axonal polyneuropathy)",
         "ncs_sensory": [
-            ["장딴지신경 (Sural SNAP) 우측", "무반응", "무반응", "비정상 (무반응)"],
-            ["정중신경 (Median SNAP) 우측", "18 μV", "3.4 ms", "정상 범위 (경미한 감소)"]
+            ["장딴지신경 (Sural SNAP) 우측", "무반응", "무반응", "반응 소실"],
+            ["정중신경 (Median SNAP) 우측", "18 μV", "3.4 ms", "정상 범위"]
         ],
         "ncs_motor": [
-            ["정강신경 (Tibial CMAP) 우측", "원위부 (발목)", "1.5 mV", "6.2 ms", "비정상 (정상범위: 잠복기 < 6.0ms, 진폭 > 4.0mV)"],
-            ["정강신경 (Tibial CMAP) 우측", "근위부 (오금)", "1.2 mV", "15.2 ms", "비정상 (정상범위: 잠복기 < 6.0ms, 진폭 > 4.0mV)"]
+            ["정강신경 (Tibial CMAP) 우측", "발목(Ankle) 자극", "1.5 mV", "6.2 ms", "진폭: 감소 / 잠복기: 지연"],
+            ["정강신경 (Tibial CMAP) 우측", "오금(Popliteal) 자극", "1.2 mV", "15.2 ms", "진폭: 감소"]
         ],
         "emg": [
-            ["앞정강근 (Tibialis Anterior)", "L4-L5", "Positive sharp waves 출현", "Reduced MU recruitment", "비정상 (활동성 탈신경 상태)"],
-            ["위팔두갈래근 (Biceps brachii)", "C5-C6", "Silent at rest", "Normal MU recruitment", "정상"]
+            ["앞정강근 (Tibialis Anterior)", "L4-L5", "fibrillation potential, positive sharp wave", "Reduced MU recruitment", "비정상 (대칭적 말초 축삭 퇴행)"],
+            ["위팔두갈래근 (Biceps brachii)", "C5-C6", "Silent at rest", "Normal MU recruitment", "정상 범위"]
         ],
         "interpretation": [
-            "가장 긴 신경인 하지 감각신경에서 반응 소실(No response)이 먼저 나타나며, 상지 신경은 비교적 보존되는 전형적인 '길이 의존성(Length-dependent)' 패턴입니다.",
-            "진폭 감소가 두드러지는 축삭 손상(Axonal loss) 우세형 다발신경병증입니다."
+            "다리의 먼쪽(Distal) 말단 감각전도인 장딴지신경(Sural nerve) SNAP가 대칭 반응 소실을 보여 축삭 손상(Axonal loss)을 고지합니다.",
+            "가장 길고 에너지 대사가 취약한 축삭 원단부부터 대칭 시들어 들어가는 당뇨성 길이의존성(Length-dependent, dying-back) 다발신경병증(Polyneuropathy) 기전과 일치합니다."
         ],
         "emg_meaning": [
-            "길이의존성 병태생리: 대사성/독성 원인에 의해 세포체에서 가장 멀리 떨어져 영양공급이 취약한 긴 신경의 끝부분부터 서서히 손상(Dying back)되는 양상입니다."
+            "Dying-back pattern: 대사 이상으로 인해 신경 가지 세포체에서 가장 거리가 먼 먼쪽(Distal) 신경망부터 퇴행성 사멸이 역행하여 진입하는 현상입니다."
         ],
-        "ddx": "비타민 B12 결핍, 알코올성 신경병증 감별 및 발 상처(당뇨발) 주의 교육 필수."
+        "ddx": "혈중 당화혈색소 수치 추적과 당뇨발 방지를 위한 압박 예방 보행 물리치료 중재가 추천됩니다."
     },
 
-    "팔다리 대칭성 근력 저하 (급성 기얭-바레 증후군 의심)": {
-        "info": {"age": 41, "sex": "여성", "symptom": "2주 전 장염, 다리에서 시작되어 팔로 올라오는 대칭성 근력 약화", "side": "양측"},
-        "diagnosis": "급성 염증성 말이집탈락성 다발신경병증 (GBS)",
+    "6. 상하지 대칭성 근력 저하 (급성 길랭-바레 증후군 의심)": {
+        "info": {"age": 41, "sex": "여성", "symptom": "가벼운 장염을 앓고 난 뒤 2주 후부터 대칭적으로 무릎 이하 다리 근력이 빠지고 위쪽으로 상행하는 양상", "side": "양측"},
+        "diagnosis": "급성 염증성 탈수초성 다발신경근병증(GBS, Guillain-Barre Syndrome)",
         "ncs_sensory": [
-            ["정중신경 (Median SNAP)", "22 μV", "3.8 ms", "비정상 (정상범위: 잠복기 < 3.5ms)"],
-            ["장딴지신경 (Sural SNAP)", "12 μV", "3.4 ms", "정상 (Sural sparing pattern)"]
+            ["정중신경 (Median SNAP)", "22 μV", "3.8 ms", "잠복기: 지연"],
+            ["장딴지신경 (Sural SNAP)", "12 μV", "3.4 ms", "정상 범위 (Sural Sparing)"]
         ],
         "ncs_motor": [
-            ["종아리신경 (Peroneal CMAP)", "원위부 (발목)", "3.0 mV", "8.5 ms", "비정상 (정상범위: 잠복기 < 6.0ms)"],
-            ["종아리신경 (Peroneal CMAP)", "근위부 (종아리뼈머리)", "1.2 mV", "20.1 ms", "비정상 (시간분산 출현)"]
+            ["종아리신경 (Peroneal CMAP)", "발목(Ankle) 자극", "3.0 mV", "8.5 ms", "잠복기: 지연"],
+            ["종아리신경 (Peroneal CMAP)", "종아리뼈머리 자극", "1.2 mV", "20.1 ms", "잠복기: 지연 / 전도속도 폭락"]
         ],
         "emg": [
-            ["앞정강근 (Tibialis Anterior)", "L4-L5", "Silent at rest", "Severely reduced MU recruitment", "비정상 (운동단위 동원 감소 상태)"],
-            ["허리 척추주위근 (Lumbar Paraspinal)", "L5", "Silent at rest", "평가불가", "정상"]
+            ["앞정강근 (Tibialis Anterior)", "L4-L5", "Silent at rest", "Reduced MU recruitment", "비정상 (동원 결손)"],
+            ["허리 척추주위근 (Lumbar Paraspinal)", "L5", "Silent at rest", "통증으로 인해 평가불가", "정상 범위"]
         ],
         "interpretation": [
-            "여러 운동신경에서 심한 잠복기 지연과 전도속도 저하가 나타나는 명확한 '말이집탈락성(Demyelinating)' 소견입니다.",
-            "상지 감각신경은 이상이 있으나, 하지 감각은 정상으로 보존되는 기얭-바레 증후군(Guillain-Barré Syndrome, GBS)의 특징적인 '장딴지 보존 패턴(Sural sparing pattern)'이 관찰됩니다."
+            "다수의 다리 전도 속도가 폭락하고 전달 잠복기가 130% 이상 대폭 늘어난 대칭 말이집탈락(Demyelination)성 이상 전도를 나타냅니다.",
+            "감각 SNAP은 정상 범위로 생존하면서 오직 운동 신경CMAP만 극도로 붕괴되는 길랭-바레 증후군의 전형적인 장단지 스페어링(Sural sparing) 양상을 만족합니다."
         ],
         "emg_meaning": [
-            "시간분산(Temporal dispersion): 근위부 시 말이집이 불규칙하게 벗겨져 전도 속도가 제각각이 되면서, 파형이 넓게 퍼지고 진폭이 흩어지는 현상입니다.",
-            "초기 Silent at rest: 발병 초기(2~3주 이내)에는 축삭 자체가 끊어지지 않아 탈신경 전위가 나타나지 않습니다."
+            "Sural sparing effect: 자가면역 수초 손상 시 하지 말단 감각인 Sural SNAP 반응이 홀로 정상 유지되는 전형적 GBS 판독 감별점입니다."
         ],
-        "ddx": "뇌척수액 검사(단백세포 해리 확인) 및 호흡근 마비 모니터링 필수."
+        "ddx": "급성 상행성 호흡 마비 유무 모니터링을 위해 호흡기 치료 연계 관리가 필수적입니다."
+    },
+
+    "7. 우측 팔꿈치 통증 및 손가락 힘 빠짐 (C7 신경뿌리병증 의심)": {
+        "info": {"age": 49, "sex": "여성", "symptom": "우측 어깨 뒤부터 삼두근 부위를 지나 가운데 손가락으로 전개되는 방사통 및 팔꿉관절 폄(Extension) 위약", "side": "우측"},
+        "diagnosis": "우측 C7 목 신경뿌리병증(Cervical radiculopathy)",
+        "ncs_sensory": [
+            ["정중신경 (Median SNAP)", "28 μV", "2.9 ms", "정상 범위"],
+            ["자신경 (Ulnar SNAP)", "24 μV", "2.4 ms", "정상 범위"]
+        ],
+        "ncs_motor": [
+            ["정중신경 (Median CMAP)", "손목(Wrist) 자극", "9.2 mV", "3.6 ms", "정상 범위"],
+            ["노신경 (Radial CMAP)", "아래팔 자극", "6.5 mV", "2.8 ms", "정상 범위"]
+        ],
+        "emg": [
+            ["위팔세갈래근 (Triceps brachii)", "C7-C8", "fibrillation potential, positive sharp wave", "Reduced MU recruitment", "비정상 (활동성 탈신경)"],
+            ["손목굽힘근 (Flexor carpi radialis)", "C6-C7", "fibrillation potential, positive sharp wave", "Reduced MU recruitment", "비정상 (활동성 탈신경)"],
+            ["위팔두갈래근 (Biceps brachii)", "C5-C6", "Silent at rest", "Normal MU recruitment", "정상 범위"],
+            ["목 척추주위근 (Cervical Paraspinal)", "C7", "fibrillation potential, positive sharp wave", "통증으로 인해 평가불가", "비정상 (활동성 탈신경)"]
+        ],
+        "interpretation": [
+            "가운데 손가락 저림 부위(C7 피부분절)에도 불구하고 정중신경 SNAP가 정상 범위인 것은 뒤뿌리신경절(Dorsal root ganglion, DRG)보다 몸쪽(Proximal) 목 신경뿌리 부위 병소임을 지지합니다.",
+            "C7 지배 운동 영역의 핵심 축을 이루는 복수 근육들 및 제7 경추 수준의 목 척추주위근육(Cervical paraspinal muscle)에서 일치된 탈신경 비정상 자발방전이 검출되어 C7 목 신경뿌리병증(Cervical radiculopathy)으로 확정됩니다."
+        ],
+        "emg_meaning": [
+            "C7 Myotome mapping: 다른 말초 주행 경로를 가졌으나 오직 C7 분절 신경뿌리를 기원으로 묶이는 복수 표적근에서 동시 탈신경 자발방전이 터져 나오는 기법입니다."
+        ],
+        "ddx": "위팔세갈래근 반사(Triceps reflex) 감퇴 여부를 검증하고 경추 MRI를 통한 제6-7경추간 추간판 유착 확인을 연계합니다."
+    },
+
+    "8. 좌측 엉덩이 통증 및 발바닥 저림 (S1 신경뿌리병증 의심)": {
+        "info": {"age": 53, "sex": "남성", "symptom": "좌측 요통(Lumbago), 좌측 볼기에서 허벅지 뒤편을 관통하여 발등 가쪽 및 새끼발가락으로 흐르는 칼로 찌르는 듯한 통증", "side": "좌측"},
+        "diagnosis": "좌측 S1 허리 신경뿌리병증(Lumbar radiculopathy)",
+        "ncs_sensory": [
+            ["장딴지신경 (Sural SNAP)", "14 μV", "3.0 ms", "정상 범위"],
+            ["얕은종아리신경 (Superficial Peroneal SNAP)", "11 μV", "2.8 ms", "정상 범위"]
+        ],
+        "ncs_motor": [
+            ["정강신경 (Tibial CMAP)", "발목(Ankle) 자극", "5.8 mV", "4.2 ms", "정상 범위"],
+            ["종아리신경 (Peroneal CMAP)", "발목(Ankle) 자극", "4.8 mV", "4.5 ms", "정상 범위"]
+        ],
+        "emg": [
+            ["가자미근 (Soleus)", "S1-S2", "fibrillation potential, positive sharp wave", "Reduced MU recruitment", "비정상 (활동성 탈신경)"],
+            ["장딴지근 (Gastrocnemius)", "S1-S2", "fibrillation potential, positive sharp wave", "Reduced MU recruitment", "비정상 (활동성 탈신경)"],
+            ["앞정강근 (Tibialis Anterior)", "L4-L5", "Silent at rest", "Normal MU recruitment", "정상 범위"],
+            ["허리 척추주위근 (Lumbar Paraspinal)", "S1", "fibrillation potential, positive sharp wave", "통증으로 인해 평가불가", "비정상 (활동성 탈신경)"]
+        ],
+        "interpretation": [
+            "새끼발가락 외측(S1 피부분절) 저림에도 불구하고 장딴지신경(Sural nerve) SNAP가 정상 범위로 완전히 보존되어 병변이 후근신경절(DRG) 몸쪽(Proximal)의 척수 신경근 병소임을 대변합니다.",
+            "정강신경(Tibial nerve) 지배 하에 있으면서 S1 지배 하에 있는 가자미근 및 장딴지근에서 탈신경 자발전위가 방전되며, S1 허리 척추주위근육(Lumbar paraspinal muscle)에서 동반 방전되어 S1 허리 신경뿌리병증(Lumbar radiculopathy)으로 판독합니다."
+        ],
+        "emg_meaning": [
+            "S1 Myotome pathway: 아킬레스건 반사(Achilles tendon reflex) 경로를 구성하는 가자미근에서 발생하는 이상 자발 활동을 고지합니다."
+        ],
+        "ddx": "좌골신경통(Sciatica)과의 구분을 위해 앙와위 직하지 거상(SLR) 물리치료 평가 검사와 요천추 MRI 정밀 확인을 권장합니다."
+    },
+
+    "9. 우측 어깨 통증 및 손 내재근 위축 (가슴문증후군 의심)": {
+        "info": {"age": 38, "sex": "여성", "symptom": "우측 어깨 및 빗장뼈(Clavicle) 하부 통증, 반지/새끼손가락 무감각, 손 내재근의 만성 마름 및 꺼짐", "side": "우측"},
+        "diagnosis": "우측 가슴문증후군(Thoracic outlet syndrome, TOS)",
+        "ncs_sensory": [
+            ["가쪽아래팔피부신경 (LAC SNAP)", "25 μV", "2.1 ms", "정상 범위"],
+            ["안쪽아래팔피부신경 (MAC SNAP)", "2 μV", "3.9 ms", "진폭: 감소 / 잠복기: 지연"]
+        ],
+        "ncs_motor": [
+            ["정중신경 (Median CMAP)", "손목(Wrist) 자극", "3.8 mV", "4.0 ms", "진폭: 감소"],
+            ["자신경 (Ulnar CMAP)", "손목(Wrist) 자극", "4.1 mV", "3.2 ms", "정상 범위"]
+        ],
+        "emg": [
+            ["짧은엄지벌림근 (APB)", "C8-T1", "Silent at rest", "Giant MUAPs 출현 및 Reduced MU recruitment", "비정상 (TOS 만성 축삭 손상)"],
+            ["첫째등쪽뼈사이근 (FDI)", "C8-T1", "Silent at rest", "Giant MUAPs 출현 및 Reduced MU recruitment", "비정상 (TOS 만성 축삭 손상)"],
+            ["위팔두갈래근 (Biceps brachii)", "C5-C6", "Silent at rest", "Normal MU recruitment", "정상 범위"],
+            ["목 척추주위근 (Cervical Paraspinal)", "C8-T1", "Silent at rest", "Normal MU recruitment", "정상 범위"]
+        ],
+        "interpretation": [
+            "상완신경총(Brachial plexus) 하부 신경줄기(Lower trunk)가 쇄골 하 통로에서 물리 압박을 받는 흉곽 탈출 기전입니다. 안쪽아래팔피부신경(MAC) SNAP의 진폭이 극적으로 감소(50% 이하)하여 신경얼기(Plexus) 수준의 먼쪽(Distal) 변성을 가리킵니다.",
+            "T1 우세 지배인 APB와 FDI에서 만성적인 Sprouting 결과물인 거대 Giant MUAP들이 듬성듬성 동원되는 반면, 목 척추주위근육(Cervical paraspinal muscle)은 완전 정상이므로 척수 신경근을 배제하고 가슴문(Thoracic outlet) 영역의 압박성 마비(TOS)로 확진합니다."
+        ],
+        "emg_meaning": [
+            "Gilliatt-Sumner hand: 가슴문(Thoracic outlet) 통과 T1 분절 운동다발 고사로 엄지벌림근(APB)이 푹 파이듯 소실되는 만성 변성 양상입니다."
+        ],
+        "ddx": "목갈비근(Scalene muscle) 단축 긴장을 감별하기 위한 Adson 검사 연계 및 이학적 가슴문 압박 가동 검사가 추천됩니다."
+    },
+
+    "10. 좌측 갑작스러운 한쪽 얼굴 마비 (얼굴신경마비 의심)": {
+        "info": {"age": 29, "sex": "남성", "symptom": "급격히 발현된 좌측 안면 전반 이마 주름 소실, 좌측 안구 완전 감김(Closure) 불능, 입꼬리 대칭 이탈", "side": "좌측"},
+        "diagnosis": "좌측 특발성 얼굴신경마비(Bell's palsy)",
+        "ncs_sensory": [
+            ["우측 이마 자극 (V1 분지)", "22 μV", "2.1 ms", "정상 범위"],
+            ["좌측 이마 자극 (V1 분지)", "21 μV", "2.2 ms", "정상 범위"]
+        ],
+        "ncs_motor": [
+            ["우측 얼굴신경 (Facial CMAP)", "비근 자극", "3.2 mV", "2.8 ms", "정상 범위"],
+            ["좌측 얼굴신경 (Facial CMAP)", "비근 자극", "1.1 mV", "4.5 ms", "진폭: 감소 / 잠복기: 지연"]
+        ],
+        "emg": [
+            ["눈둘레근 (Orbicularis Oculi)", "얼굴신경 지배", "Silent at rest", "Normal MU recruitment", "정상 범위"]
+        ],
+        "teaching_diagnosis": {
+            "summary": "좌측 얼굴신경(뇌신경 VII)의 급성 축삭 손상을 동반한 특발성 얼굴신경마비(Bell's palsy) 상태입니다.",
+            "ncs_reason": [
+                "좌측 안면 자극 시 운동 CMAP 최대 진폭이 정상측 대비 50% 이하인 34% 수준(1.1 mV)으로 폭락해 있어, 심각한 원위부 축삭 사멸 변성이 급격히 진행되고 있음을 정량 계측해 냅니다.",
+                "눈깜빡반사(Blink Reflex) 검사 상 좌측 각막 자극 시 신호 지연이 심해, 뇌간 반사 회로가 기능 마비에 처했음을 보여줍니다."
+            ],
+            "emg_reason": [
+                "1) 검사 선택의 전기생리학적 근거:",
+                "본 사례는 안면 근육의 원위 운동축삭 변성을 평가하기 위한 안면 CMAP 정량 분석과 뇌줄기 삼차-얼굴신경 반사궁 회로(Blink reflex)를 추적했습니다. 침근전도는 발병 초기(2~3주 미만)에는 검사 프로토콜 상 완전 제외됩니다."
+            ],
+            "integration": [
+                "좌측 이마 주름 소실, 눈 감기 불능, 얼굴신경 자극 시 좌/우 진폭 비대칭성 격차 및 Blink R1/R2 전도 이상을 종합하여 얼굴신경마비(Bell's palsy)로 진단합니다."
+            ]
+        },
+        "differential_diagnosis": [
+            {
+                "name": "중추성 얼굴마비 (뇌졸중 등)",
+                "why_consider": "급격한 한쪽 얼굴 편마비 양상이 뇌줄기나 피질 병변과 매우 혼동하기 쉽습니다.",
+                "how_to_differentiate": "중추성 안면마비는 전두엽의 이중 지배 덕분에 이마 주름 잡기(이마근 수축)가 정상 보존되지만, 말초성 벨마비는 이마 주름을 잡는 것조차 불가능합니다.",
+                "practical_tip": "환자가 내원 시 이마 주름을 잡을 수 있는지를 우선 감별하여 상위운동신경과 하위운동신경 마비를 칼같이 선별하십시오."
+            }
+        ]
     }
 }
 
-
 def render_input_learning():
-    if "selected_report_case" not in st.session_state:
-        st.session_state["selected_report_case"] = None
+    st.markdown('<div class="main-title">가상 결과표 판독학습</div>', unsafe_allow_html=True)
+    st.markdown('<div class="subtle" style="font-size:0.84rem; line-height:1.45; word-break:keep-all;">임상 수치 데이터 기반의 가상 결과지를 통해 전기생리학적 해석 논리를 훈련합니다.</div>', unsafe_allow_html=True)
 
-    if st.session_state["selected_report_case"] is None:
-        st.markdown('<div class="section-card">', unsafe_allow_html=True)
-        st.markdown('<div class="case-section-label">📋 학습할 환자 사례 선택 (6가지 전형적 케이스)</div>', unsafe_allow_html=True)
-        
-        chosen = st.radio(
-            "의심 질환 가이드 리스트",
-            ["선택 안 함"] + list(VIRTUAL_REPORTS.keys()),
-            key="virtual_report_case_selector"
-        )
-        
-        if chosen != "선택 안 함":
-            if st.button("🚀 결과지 판독 시작", key="start_report_btn"):
-                st.session_state["selected_report_case"] = chosen
-                st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
+    if "input_reset_counter" not in st.session_state:
+        st.session_state["input_reset_counter"] = 0
 
-    else:
-        case_name = st.session_state["selected_report_case"]
-        data = VIRTUAL_REPORTS[case_name]
+    dynamic_radio_key = f"input_report_selector_{st.session_state['input_reset_counter']}"
 
-        st.markdown('<div class="info-card">', unsafe_allow_html=True)
-        st.markdown(f'<div class="case-title-mobile">👤 환자 정보: {case_name}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="case-subtitle-mobile">연령/성별: {data["info"]["age"]}세 / {data["info"]["sex"]} | 병변측: {data["info"]["side"]}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="mobile-note">주요 임상 증상: {data["info"]["symptom"]}</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-card" style="padding: 10px 8px;">', unsafe_allow_html=True)
+    st.markdown('<div class="case-section-label" style="font-size:0.92rem;">📋 학습할 가상 결과지 선택 (실시간 판독형)</div>', unsafe_allow_html=True)
+
+    case_names = ["선택 안 함"] + list(VIRTUAL_REPORTS.keys())
+    
+    selected = st.radio(
+        "가상 결과지 리스트",
+        case_names,
+        key=dynamic_radio_key,
+        label_visibility="collapsed"
+    )
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    if selected != "선택 안 함":
+        data = VIRTUAL_REPORTS[selected]
+
+        # 환자 요약 정보 카드
+        st.markdown('<div class="info-card" style="padding: 10px 8px;">', unsafe_allow_html=True)
+        st.markdown(f'<div class="case-title-mobile" style="font-size:0.94rem;">👤 환자 사례: {selected}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="case-subtitle-mobile" style="font-size:0.82rem; margin-top:2px;">연령/성별: {data["info"]["age"]}세 / {data["info"]["sex"]} | 병변측: {data["info"]["side"]}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="mobile-note" style="font-size:0.8rem; line-height:1.4; color: #475569; background: #f8fafc; padding: 6px; border-radius:4px; margin-top:5px;"><b>주요 임상 증상:</b> {data["info"]["symptom"]}</div>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
         def create_responsive_table(headers, rows, table_id):
             css = f"""
             <style>
-                #{table_id} {{ width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 0.88rem; }}
-                #{table_id} th {{ background-color: #f1f5f9; padding: 10px; border-bottom: 2px solid #cbd5e1; text-align: center; color: #1e293b; font-weight: 800; }}
-                #{table_id} td {{ padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: center; color: #334155; line-height: 1.5; }}
+                #{table_id} {{ width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 0.8rem; }}
+                #{table_id} th {{ background-color: #f1f5f9; padding: 8px; border-bottom: 2px solid #cbd5e1; text-align: center; color: #1e293b; font-weight: 800; }}
+                #{table_id} td {{ padding: 8px; border-bottom: 1px solid #e2e8f0; text-align: center; color: #334155; line-height: 1.4; }}
                 #{table_id} td.left-align {{ text-align: left; font-weight: 700; color: #1e40af; }}
                 @media screen and (max-width: 768px) {{
                     #{table_id} thead {{ display: none; }}
-                    #{table_id} tr {{ display: block; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 12px; background: #fff; padding: 5px; }}
-                    #{table_id} td {{ display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding: 8px 10px; }}
+                    #{table_id} tr {{ display: block; border: 1px solid #cbd5e1; border-radius: 6px; margin-bottom: 8px; background: #fff; padding: 4px; }}
+                    #{table_id} td {{ display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding: 6px 8px; }}
                     #{table_id} td:last-child {{ border-bottom: none; }}
-                    #{table_id} td::before {{ content: attr(data-label); font-weight: 800; color: #64748b; text-align: left; }}
-                    #{table_id} td.left-align {{ justify-content: center; background: #f8fafc; border-radius: 6px 6px 0 0; text-align: center; padding: 10px; }}
+                    #{table_id} td::before {{ content: attr(data-label); font-weight: 800; color: #64748b; text-align: left; font-size:0.75rem; }}
+                    #{table_id} td.left-align {{ justify-content: center; background: #f8fafc; border-radius: 4px 4px 0 0; text-align: center; padding: 8px; }}
                     #{table_id} td.left-align::before {{ content: none; }}
                 }}
             </style>
@@ -228,7 +343,7 @@ def render_input_learning():
                     if idx == len(row) - 1:
                         if "정상" in col and "비정상" not in col:
                             color_style = "color: #16a34a; font-weight:700;"
-                        elif "비정상" in col or "침범" in col or "확진" in col or "마비" in col or "소실" in col:
+                        elif "비정상" in col or "침범" in col or "확진" in col or "마비" in col or "소실" in col or "감소" in col or "지연" in col:
                             color_style = "color: #dc2626; font-weight: 800;"
                     
                     formatted_col = col.replace(" / ", "<br/>") if "휴식" in headers[idx] else col
@@ -236,53 +351,50 @@ def render_input_learning():
                 tr_html += f"<tr>{td_html}</tr>"
             return f'{css}<table id="{table_id}"><thead><tr>{"".join([f"<th>{h}</th>" for h in headers])}</tr></thead><tbody>{tr_html}</tbody></table>'
 
-        st.markdown('<div class="section-card">', unsafe_allow_html=True)
-        st.markdown(f'<div class="case-section-label">📋 근전도 결과표 (NCS & Needle EMG): 병변측 ({data["info"]["side"]})</div>', unsafe_allow_html=True)
+        # 결과표 전도계 렌더링
+        st.markdown('<div class="section-card" style="padding: 10px 8px;">', unsafe_allow_html=True)
+        st.markdown(f'<div class="case-section-label" style="font-size:0.92rem;">📋 근전도 결과표 (NCS & Needle EMG): 병변측 ({data["info"]["side"]})</div>', unsafe_allow_html=True)
 
-        st.markdown('<div class="finding-highlight">⚡ 감각신경전도검사 (Sensory NCS)</div>', unsafe_allow_html=True)
-        st.markdown(create_responsive_table(["검사 신경", "진폭 수치", "잠복기 수치", "해석"], data["ncs_sensory"], "sensory_tbl"), unsafe_allow_html=True)
+        st.markdown('<div class="finding-highlight" style="font-size:0.86rem; border-bottom:none; color:#1e40af;">⚡ 감각신경전도검사 (Sensory NCS)</div>', unsafe_allow_html=True)
+        st.markdown(create_responsive_table(["검사 신경", "진폭 수치", "잠복기 수치", "최종 판정"], data["ncs_sensory"], "sensory_tbl"), unsafe_allow_html=True)
 
-        st.markdown('<div class="finding-highlight">⚡ 운동신경전도검사 (Motor NCS)</div>', unsafe_allow_html=True)
-        st.markdown(create_responsive_table(["검사 신경", "자극 위치", "진폭 수치", "잠복기 수치", "해석"], data["ncs_motor"], "motor_tbl"), unsafe_allow_html=True)
+        st.markdown('<div class="finding-highlight" style="font-size:0.86rem; border-bottom:none; color:#1e40af; margin-top:10px;">⚡ 운동신경전도검사 (Motor NCS)</div>', unsafe_allow_html=True)
+        st.markdown(create_responsive_table(["검사 신경", "자극 위치", "진폭 수치", "잠복기 수치", "최종 판정"], data["ncs_motor"], "motor_tbl"), unsafe_allow_html=True)
 
-        st.markdown('<div class="finding-highlight">🪡 침근전도검사 (Needle EMG)</div>', unsafe_allow_html=True)
-        st.markdown(create_responsive_table(["검사 근육", "해당 분절 (Root)", "휴식 시 반응 (Rest)", "근수축 시 반응 (Volition)", "해석"], data["emg"], "emg_tbl"), unsafe_allow_html=True)
+        is_emg_applicable = "눈꺼풀" not in selected and "뇌졸중" not in selected
+        if is_emg_applicable:
+            st.markdown('<div class="finding-highlight" style="font-size:0.86rem; border-bottom:none; color:#1e40af; margin-top:10px;">🪡 침근전도검사 (Needle EMG)</div>', unsafe_allow_html=True)
+            st.markdown(create_responsive_table(["검사 근육", "해당 분절 (Root)", "휴식 시 반응 (Rest)", "수의수축 시 반응 (Volition)", "근생리 상태 진단"], data["emg"], "emg_tbl"), unsafe_allow_html=True)
 
-        st.markdown("""
-        <div class="info-legend-box" style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:10px; margin-top:15px; font-size:0.83rem; line-height:1.45;">
-            ℹ️ <b>결과표 약어 해설 사전:</b><br/>
-            • <b>Silent at rest:</b> 휴식 시 생리적 무반응(정상 상태)<br/>
-            • <b>Fibrillation potential:</b> 섬유자발전위 (축삭 사멸 시 개별 근섬유의 단독 미세 수축)<br/>
-            • <b>Positive sharp wave:</b> 양성예파 (탈신경된 근섬유 침 자극 시 유발되는 비정상 자발활동)<br/>
-            • <b>MU recruitment:</b> 운동단위 동원패턴 (근수축 강도에 비례한 운동단위 참여도)<br/>
-            • <b>MUAPs:</b> 운동단위활동전위 (Motor Unit Action Potentials)<br/>
-            • <b>Giant MUAP:</b> 거대 운동단위전위 [탈신경 후 인접 생존 신경가지의 축삭발아(Sprouting) 재지배로 형성된 거대 파형]<br/>
-            • <b>No MUAPs on volition:</b> 의지적인 근수축(Volition) 시도에도 불구하고 운동단위 전위가 전혀 동원되지 않는 완전 마비 상태
-        </div>
-        """, unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-        st.markdown('<div class="result-card">', unsafe_allow_html=True)
-        st.markdown('<div class="result-title">✅ 임상 추론 및 생리학적 해석 결과</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="result-text"><span class="label-strong text-red" style="font-size:1.05rem;">최종 의심 진단명:</span> <span style="font-weight:800; color:#1e293b; font-size:1.05rem; margin-left:8px;">{data["diagnosis"]}</span></div>', unsafe_allow_html=True)
-        st.markdown('<hr class="item-divider">', unsafe_allow_html=True)
+        # 임상 추론 분석 카드
+        st.markdown('<div class="result-card" style="padding: 10px 8px;">', unsafe_allow_html=True)
+        st.markdown('<div class="result-title" style="font-size:0.92rem;">✅ 임상 추론 및 생리학적 해석 결과</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="result-text" style="font-size:0.82rem;"><span class="label-strong text-red" style="font-size:0.82rem;">최종 의심 진단명:</span> <span style="font-weight:800; color:#1e293b; font-size:0.82rem; margin-left:4px;">{data["diagnosis"]}</span></div>', unsafe_allow_html=True)
+        st.markdown('<hr class="item-divider" style="margin: 8px 0;">', unsafe_allow_html=True)
         
-        st.markdown('<div class="result-label">🧠 데이터 해석 논리</div>', unsafe_allow_html=True)
-        for i in data["interpretation"]: st.markdown(f'<div class="finding-subtext">• {i}</div>', unsafe_allow_html=True)
+        st.markdown('<div class="result-label" style="font-size:0.85rem; padding: 4px 6px;">🧠 데이터 해석 논리</div>', unsafe_allow_html=True)
+        for i in data["interpretation"]: 
+            st.markdown(f'<div class="finding-subtext" style="font-size:0.8rem; line-height:1.45;">• {i}</div>', unsafe_allow_html=True)
         
-        st.markdown('<div class="result-label" style="border-left-color: #d97706; background: #fffbeb;">🔬 근전도 소견 생리학적 의미</div>', unsafe_allow_html=True)
-        for m in data["emg_meaning"]:
-            parts = m.split(":", 1)
-            if len(parts) == 2: st.markdown(f'<div class="finding-subtext"><span class="label-strong text-blue">{parts[0]}:</span> {parts[1]}</div>', unsafe_allow_html=True)
-            else: st.markdown(f'<div class="finding-subtext">• {m}</div>', unsafe_allow_html=True)
+        if is_emg_applicable:
+            st.markdown('<div class="result-label" style="border-left-color: #d97706; background: #fffbeb; font-size:0.85rem; padding: 4px 6px;">🔬 침근전도 소견 생리학적 의미</div>', unsafe_allow_html=True)
+            for m in data["emg_meaning"]:
+                parts = m.split(":", 1)
+                if len(parts) == 2: 
+                    st.markdown(f'<div class="finding-subtext" style="font-size:0.8rem; line-height:1.45;"><span class="label-strong text-blue" style="font-size:0.8rem;">{parts[0]}:</span> {parts[1]}</div>', unsafe_allow_html=True)
+                else: 
+                    st.markdown(f'<div class="finding-subtext" style="font-size:0.8rem; line-height:1.45;">• {m}</div>', unsafe_allow_html=True)
 
-        st.markdown('<div class="result-label" style="border-left-color: #9333ea; background: #fdf4ff;">🧭 감별 진단 및 추가 검사</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="finding-subtext">• {data["ddx"]}</div>', unsafe_allow_html=True)
+        st.markdown('<div class="result-label" style="border-left-color: #9333ea; background: #fdf4ff; font-size:0.85rem; padding: 4px 6px;">🧭 감별 진단 및 추가 검사</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="finding-subtext" style="font-size:0.8rem; line-height:1.45;">• {data["ddx"]}</div>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-        st.markdown('<div style="text-align: center; margin-top: 15px; margin-bottom: 25px;">', unsafe_allow_html=True)
-        if st.button("🔄 다른 임상 케이스 분석하기", key="reset_report_case_btn"):
-            st.session_state["selected_report_case"] = None
+        # 동적 키 로테이션 리셋 버튼
+        st.markdown('<div style="text-align: center; margin-top: 15px; margin-bottom: 15px;">', unsafe_allow_html=True)
+        if st.button("🔄 다른 가상 결과지 분석하기", key="reset_input_report_btn"):
+            st.session_state["input_reset_counter"] += 1
             st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
 
