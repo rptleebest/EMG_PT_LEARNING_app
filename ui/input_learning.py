@@ -242,7 +242,7 @@ VIRTUAL_REPORTS = {
         "emg_meaning": [
             "Gilliatt-Sumner hand: 가슴문증후군(TOS) 장기화로 인해 T1 운동 지배 가지가 소실되어, 짧은엄지벌림근(APB)을 중심으로 손 자체기원근육(intrinsic)이 심하게 위축 및 함몰되는 임상적 변성 양상입니다."
         ],
-        "ddx": "목갈비근(Scalene muscle) 단축 긴장을 감별하기 위한 Adson 검사 연계 및 이학적 가슴문 압박 가동 검사가 추천됩니다."
+        "ddx": "목갈코근(nasalis)(Scalene muscle) 단축 긴장을 감별하기 위한 Adson 검사 연계 및 이학적 가슴문 압박 가동 검사가 추천됩니다."
     },
 
     "왼쪽 갑작스러운 한쪽 얼굴 마비 (얼굴신경마비 의심)": {
@@ -253,8 +253,8 @@ VIRTUAL_REPORTS = {
             ["왼쪽 이마 자극 (V1 분지)", "21 μV", "2.2 ms", "정상 범위"]
         ],
         "ncs_motor": [
-            ["오른쪽 얼굴신경 (Facial CMAP)", "비근 자극", "3.2 mV", "2.8 ms", "정상 범위"],
-            ["왼쪽 얼굴신경 (Facial CMAP)", "비근 자극", "1.1 mV", "4.5 ms", "진폭: 감소 / 잠복기: 지연"]
+            ["오른쪽 얼굴신경 (Facial CMAP)", "코근(nasalis) 자극", "3.2 mV", "2.8 ms", "정상 범위"],
+            ["왼쪽 얼굴신경 (Facial CMAP)", "코근(nasalis) 자극", "1.1 mV", "4.5 ms", "진폭: 감소 / 잠복기: 지연"]
         ],
         "emg": [
             ["눈둘레근 (Orbicularis Oculi)", "얼굴신경 지배", "Silent at rest", "Normal MU recruitment", "정상 범위"]
