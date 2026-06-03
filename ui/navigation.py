@@ -25,7 +25,7 @@ def render_bottom_navigation():
 
     st.markdown('<div style="height: 16px;"></div>', unsafe_allow_html=True)
 
-    # st.columns(2)를 생성하고 CSS(flex-wrap: nowrap)로 무조건 가로 중앙에 110px씩 배치함
+    # st.columns를 생성하고 CSS flex 설정을 통해 항상 가운데로 모이도록 함
     col1, col2 = st.columns(2)
 
     with col1:
