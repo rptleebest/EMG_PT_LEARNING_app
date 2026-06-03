@@ -25,7 +25,7 @@ def render_bottom_navigation():
 
     st.markdown('<div style="height: 12px;"></div>', unsafe_allow_html=True)
 
-    # st.columns를 화면 양쪽 여백(빈 컬럼)을 두어 가운데로 쏠리게 구성
+    # 4칸으로 나누어 1,2번째 가운데 칸에만 버튼을 배치 (가운데 정렬)
     col_space1, col1, col2, col_space2 = st.columns([1, 2, 2, 1])
 
     with col1:
