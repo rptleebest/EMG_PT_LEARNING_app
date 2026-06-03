@@ -304,8 +304,8 @@ def render_case_list():
             st.markdown('</div>', unsafe_allow_html=True)
 
         st.markdown('<div style="text-align: center; margin-top: 20px; margin-bottom: 20px;">', unsafe_allow_html=True)
-        # ★ type="secondary" 명시하여 상단 버튼을 회색으로 분리
-        if st.button("🔄 다른 임상 케이스 분석하기", type="secondary", key="reset_case_radio_btn"):
+        # ★ 문구 단축 및 type="secondary" (인디고 톤 입체버튼)
+        if st.button("🔄 다른 사례 분석", type="secondary", key="reset_case_radio_btn"):
             st.session_state["case_reset_counter"] += 1
             st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
