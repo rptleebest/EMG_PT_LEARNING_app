@@ -23,21 +23,19 @@ def render_bottom_navigation():
     if st.session_state.get("screen", "home") == "home":
         return
 
-    st.markdown('<div style="height: 12px;"></div>', unsafe_allow_html=True)
+    st.markdown('<div style="height: 16px;"></div>', unsafe_allow_html=True)
 
-    # 🚨 버튼 사이 간격을 좁히고 화면 정중앙에 오도록 여백 컬럼 배치
-    # 비율: 양끝 여백(1.5), 중앙 버튼(1, 1), 사이 간격(0.2)
-    col_left, col_home, col_gap, col_back, col_right = st.columns([1.5, 1, 0.2, 1, 1.5])
+    # 빈 컬럼을 활용하여 중앙의 두 버튼이 가로로 딱 붙어있도록 유도 (CSS와 결합됨)
+    col_l, col_btn1, col_btn2, col_r = st.columns([1, 0.8, 0.8, 1])
 
-    with col_home:
-        if st.button("처음", type="primary", use_container_width=True, key="nav_home_bottom"):
+    with col_btn1:
+        if st.button("처음", type="secondary", use_container_width=True, key="nav_home"):
             _go_home()
-
-    with col_back:
-        if st.button("이전", type="primary", use_container_width=True, key="nav_back_bottom"):
+    with col_btn2:
+        if st.button("이전", type="primary", use_container_width=True, key="nav_back"):
             _go_back()
 
-    st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
 
 def render_top_navigation():
     pass
