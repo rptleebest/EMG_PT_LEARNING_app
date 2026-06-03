@@ -25,17 +25,15 @@ def render_bottom_navigation():
 
     st.markdown('<div style="height: 16px;"></div>', unsafe_allow_html=True)
     
-    # 🚨 강제 CSS 너비를 없애고 Streamlit 컨테이너를 활용해 화면 잘림을 막음
-    st.markdown('<div class="nav-wrapper">', unsafe_allow_html=True)
+    # CSS에서 너비를 강제하므로 st.columns 개수만 선언하면 중앙에 딱 맞게 정렬됨
     col1, col2 = st.columns(2)
 
     with col1:
-        if st.button("처음", type="secondary", use_container_width=True, key="nav_home"):
+        if st.button("처음", type="secondary", key="nav_home"):
             _go_home()
     with col2:
-        if st.button("이전", type="primary", use_container_width=True, key="nav_back"):
+        if st.button("이전", type="primary", key="nav_back"):
             _go_back()
-    st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
 
