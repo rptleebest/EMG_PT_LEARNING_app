@@ -24,36 +24,33 @@ def render_router():
 def apply_mobile_first_style():
     st.markdown("""
     <style>
-    /* 가로 스크롤 및 오버플로우 완벽 차단 */
+    /* 전체 배경 및 스크롤 안정화 */
     html, body { overflow-x: hidden !important; background-color: #f8fafc !important; color: #1e293b !important; margin: 0; padding: 0; }
     .stApp { background-color: #f8fafc !important; overflow-x: hidden !important; }
     
-    /* 본문 패딩 최적화 */
-    .main .block-container { max-width: 860px; padding: 1.5rem 1rem 4rem 1rem; }
+    /* 모바일/PC 본문 여백 최적화 (양쪽 잘림 방지) */
+    .main .block-container { max-width: 860px; padding: 1.5rem 1.2rem 4rem 1.2rem; margin: 0 auto; }
 
-    /* 텍스트 양쪽 정렬 및 어색한 공백 방지 */
-    p, span, div, li { word-break: keep-all; line-height: 1.6; text-align: justify; }
+    /* 텍스트 정렬 (양쪽 정렬 부작용 해결 -> 왼쪽 정렬 + 단어 단위 줄바꿈 유지) */
+    p, span, div, li { word-break: keep-all; line-height: 1.6; text-align: left; }
 
-    /* 기본 컨테이너 (그림자 제거, 라인 단순화) */
-    .content-card { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    /* 카드 컨테이너 (깔끔한 테두리) */
+    .content-card { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 16px 14px; margin-bottom: 16px; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
     .info-card { background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
 
-    /* 대항목 제목 스타일 */
-    .title-box { margin-bottom: 16px; border-bottom: 2px solid #3b82f6; padding-bottom: 4px; }
-    .title-kor { font-size: 1.1rem; font-weight: 800; color: #0f172a; }
+    /* 대항목 제목 */
+    .section-title { font-size: 1.05rem; font-weight: 800; color: #0f172a; margin-bottom: 12px; border-bottom: 2px solid #3b82f6; padding-bottom: 4px; }
+    
+    /* 중항목 제목 (검사명 등) */
+    .sub-title { font-size: 0.95rem; font-weight: 800; color: #1e3a8a; margin-top: 16px; margin-bottom: 12px; border-bottom: 1px dashed #93c5fd; padding-bottom: 4px; }
 
-    /* 의심질환 추정 진단명 카드 (색상 톤 다운, 굵기 최적화) */
-    .diagnosis-box { background: #f8fafc; border-left: 4px solid #2563eb; padding: 14px; border-radius: 6px; margin-bottom: 20px; }
-    .diagnosis-label { font-size: 0.85rem; font-weight: 700; color: #475569; margin-bottom: 4px; }
-    .diagnosis-name { font-size: 1.05rem; font-weight: 800; color: #b91c1c; } /* 차분한 딥레드 */
-
-    /* 검사 결과 데이터 나열 레이아웃 */
-    .data-row { display: flex; flex-direction: row; align-items: flex-start; padding: 6px 0; border-bottom: 1px dashed #e2e8f0; }
+    /* 항목-데이터 나열 포맷 */
+    .data-row { display: flex; flex-direction: row; align-items: flex-start; padding: 4px 0; border-bottom: 1px solid #f8fafc; }
     .data-row:last-child { border-bottom: none; }
-    .data-label { flex: 0 0 90px; font-size: 0.9rem; font-weight: 700; color: #1e293b; }
-    .data-value { flex: 1; font-size: 0.9rem; font-weight: 400; color: #334155; }
+    .data-label { flex: 0 0 100px; font-size: 0.9rem; font-weight: 700; color: #1e293b; line-height: 1.5; }
+    .data-value { flex: 1; font-size: 0.9rem; font-weight: 400; color: #334155; line-height: 1.5; }
 
-    /* 색상 클래스 (눈 피로도 감소) */
+    /* 글자 색상 세팅 */
     .txt-normal { color: #334155 !important; }
     .txt-blue { color: #1d4ed8 !important; font-weight: 600 !important; }
     .txt-red { color: #b91c1c !important; font-weight: 600 !important; } 
@@ -68,23 +65,14 @@ def apply_mobile_first_style():
     div[data-testid="stButton"] > button[kind="primary"] { background-color: #2563eb !important; color: #ffffff !important; }
     div[data-testid="stButton"] > button[kind="secondary"] { background-color: #e2e8f0 !important; color: #1e293b !important; }
 
-    /* 🚨 단일 중앙 버튼 강제 고정 */
-    .center-btn div[data-testid="stButton"] > button { width: 220px !important; margin: 0 auto !important; display: block !important; }
-
-    /* 🚨 처음/이전 버튼 오버플로우 방지 및 강제 축소 정렬 */
-    div[data-testid="stHorizontalBlock"] { 
-        display: flex !important; flex-wrap: nowrap !important; justify-content: center !important; 
-        gap: 12px !important; max-width: 100vw !important; overflow: hidden !important; 
-    }
-    div[data-testid="stHorizontalBlock"] > div[data-testid="column"] { 
-        flex: 1 1 0 !important; max-width: 140px !important; min-width: 80px !important; 
-    }
-    div[data-testid="stHorizontalBlock"] button { width: 100% !important; padding: 0 !important; }
+    /* 🚨 네비게이션 버튼 짤림 방지 (Streamlit 기본 반응형 시스템 활용) */
+    .nav-wrapper { padding: 0 10%; margin-top: 10px; }
 
     @media (max-width: 768px) {
-        .main .block-container { padding: 1rem 0.5rem 3rem 0.5rem; }
+        .main .block-container { padding: 1rem 0.8rem 3rem 0.8rem; }
         .data-label { flex: 0 0 85px; font-size: 0.85rem; }
         .data-value { font-size: 0.85rem; }
+        .nav-wrapper { padding: 0 2%; } /* 모바일에서는 여백 최소화하여 버튼 짤림 방지 */
     }
     #top-anchor { display: none; }
     </style>
