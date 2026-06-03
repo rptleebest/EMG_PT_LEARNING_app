@@ -1,9 +1,25 @@
 # app.py
 
 import streamlit as st
-from utils.state import init_app_state
+from ui.home import render_home
+from ui.case_learning import render_case_list
+from ui.input_learning import render_input_learning
 from ui.navigation import render_top_navigation
-from ui.router import render_router
+
+def init_app_state():
+    defaults = {"screen": "home", "mode": "case", "case_reset_counter": 0, "input_reset_counter": 0}
+    for k, v in defaults.items():
+        if k not in st.session_state:
+            st.session_state[k] = v
+
+def render_router():
+    screen = st.session_state.get("screen", "home")
+    if screen == "case_list": 
+        render_case_list()
+    elif screen == "input_learning": 
+        render_input_learning()
+    else: 
+        render_home()
 
 def apply_mobile_first_style():
     st.markdown("""
@@ -68,8 +84,7 @@ def apply_mobile_first_style():
     div[data-testid="stButton"] > button[kind="secondary"] { background-color: #64748b !important; }
 
     /* 네비게이션 버튼 중앙 정렬 및 여백 축소 */
-    .nav-container { display: flex; justify-content: center; gap: 12px; margin-top: 10px; margin-bottom: 10px; width: 100%; }
-    div[data-testid="stHorizontalBlock"] { justify-content: center !important; gap: 10px !important; }
+    div[data-testid="stHorizontalBlock"] { display: flex !important; justify-content: center !important; gap: 10px !important; width: 100% !important; margin: 0 !important; }
     div[data-testid="stHorizontalBlock"] > div[data-testid="column"] { flex: 0 0 auto !important; width: auto !important; min-width: 0 !important; }
     
     /* 처음/이전 버튼 크기 축소 */
