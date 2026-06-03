@@ -1,7 +1,6 @@
 # ui/home.py
 
 import streamlit as st
-from data.constants import MODE_CASE, MODE_DIRECT
 
 def format_title_box(kor, eng):
     return f"<div class='title-box'><div class='title-kor'>{kor}</div><div class='title-eng'>{eng.lower()}</div></div>"
@@ -38,9 +37,10 @@ def render_home():
     st.markdown('<div class="section-card">', unsafe_allow_html=True)
     st.markdown(format_title_box("진행할 학습 모드 선택", "select learning mode"), unsafe_allow_html=True)
 
+    # 🚨 상수를 직접 딕셔너리에 넣어 import 에러 원천 차단
     display_modes = {
-        MODE_CASE: "사례 학습 모드",
-        MODE_DIRECT: "가상 결과표 판독학습"
+        "case": "사례 학습 모드",
+        "direct": "가상 결과표 판독학습"
     }
 
     selected_display = st.radio(
@@ -52,7 +52,7 @@ def render_home():
 
     mode = [k for k, v in display_modes.items() if v == selected_display][0]
 
-    if mode == MODE_CASE:
+    if mode == "case":
         st.markdown(f"""
         <div class="info-card">
             <div style="font-weight:800; color:#2563eb; margin-bottom:2px;">사례 학습 모드</div>
@@ -72,7 +72,7 @@ def render_home():
     st.markdown('<div class="center-btn-wrapper" style="margin-top: 24px; margin-bottom: 8px;">', unsafe_allow_html=True)
     if st.button("🚀 학습 시작", type="primary"):
         st.session_state["mode"] = mode
-        if mode == MODE_CASE:
+        if mode == "case":
             st.session_state["screen"] = "case_list"
         else:
             st.session_state["screen"] = "input_learning"
