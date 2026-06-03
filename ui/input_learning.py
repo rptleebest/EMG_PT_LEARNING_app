@@ -1,5 +1,6 @@
 # ui/input_learning.py
 
+import re
 import streamlit as st
 from ui.navigation import render_bottom_navigation
 
@@ -170,8 +171,6 @@ VIRTUAL_REPORTS = {
         ],
         "ddx": "목갈비근(Scalenus) 단축 긴장을 감별하기 위한 Adson 검사 연계 및 이학적 가슴문 압박 가동 검사가 추천됩니다."
     },
-    
-    # 🚨 1번 수정 핵심: '눈깜박반사' 관련 잘못된 텍스트 삭제 및 안면신경(Facial CMAP) 중심 해석으로 완벽 교정
     "왼쪽 갑작스러운 한쪽 얼굴 마비 (얼굴신경마비 의심)": {
         "info": {"age": 29, "sex": "남성", "symptom": "급격히 발현된 왼쪽 얼굴 전반 이마 주름 소실, 왼쪽 안구 완전 감김(Closure) 불능, 입꼬리 대칭 이탈", "side": "왼쪽"},
         "diagnosis": "왼쪽 특발성 얼굴신경마비(Bell's palsy)",
@@ -184,18 +183,30 @@ VIRTUAL_REPORTS = {
         ],
         "emg_meaning": [
             "얼굴 근육의 먼 쪽(distal) 운동축삭 변성 정도를 정량 평가하기 위해 얼굴신경 복합근육활동전위(Facial CMAP)를 분석했습니다.",
-            "침근전도의 경우, 급성기(발병 초기)에는 탈신경을 의미하는 비정상 자발전위(Fibrillation 등)가 아직 발현되지 않으므로 '휴식 시 정상(Silent at rest)'으로 판독됩니다."
+            "침근전도의 경우, 급성기(발병 초기)에는 탈신경을 의미하는 비정상 자발전위(Fibrillation 등)가 아직 발현되지 않으므로 '전기적 침묵(silent at rest)'으로 판독됩니다."
         ],
         "ddx": "중추성 얼굴마비(UMN)는 이마 주름 잡기가 보존되나 말초성 벨마비(LMN)는 불가능하므로, 내원 시 이마 주름 형성 여부를 관찰하여 중추신경계 장애와 말초신경계 장애를 선별하십시오."
     }
 }
 
+def format_eng_term(text):
+    if not text: return ""
+    text = str(text).replace(", ", "<br>")
+    def repl(m):
+        kor = m.group(1).strip()
+        eng = m.group(2).strip().lower()
+        for ac in ["snap", "cmap", "muap", "muaps", "ncs", "emg", "mas", "drt", "umn", "lmn", "ta", "ecr", "eip", "adm", "fdi", "ehl", "pl"]:
+            eng = re.sub(rf"\b{ac}\b", ac.upper(), eng)
+        return f"{kor}<br><span class='title-eng'>{eng}</span>"
+    return re.sub(r"([가-힣a-zA-Z0-9\s/]+)\s*\((.*?)\)", repl, text)
+
+def _get_ncs_row(lbl, val, is_bad=False):
+    color = "text-red" if is_bad else "text-blue"
+    return f'<div class="result-row"><div class="lbl">{lbl}</div><div class="val {color}">{val}</div></div>'
+
 def render_input_learning():
     st.markdown('<div class="main-title">가상 결과표 판독학습</div>', unsafe_allow_html=True)
-    st.markdown(
-        '<div class="subtle">임상 수치 데이터 기반의 가상 결과지를 통해 전기생리학적 해석 논리를 훈련합니다.</div>',
-        unsafe_allow_html=True
-    )
+    st.markdown('<div class="subtle">임상 수치 데이터 기반의 가상 결과지를 통해 전기생리학적 해석 논리를 훈련합니다.</div>', unsafe_allow_html=True)
 
     if "input_reset_counter" not in st.session_state:
         st.session_state["input_reset_counter"] = 0
@@ -203,125 +214,68 @@ def render_input_learning():
     dynamic_radio_key = f"input_report_selector_{st.session_state['input_reset_counter']}"
 
     st.markdown('<div class="section-card">', unsafe_allow_html=True)
-    st.markdown('<div class="case-section-label">📋 학습할 가상 결과지 선택 (실시간 판독형)</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="case-section-label">{format_eng_term("학습할 가상 결과지 선택(case selection)")}</div>', unsafe_allow_html=True)
 
     case_names = ["선택 안 함"] + list(VIRTUAL_REPORTS.keys())
 
-    selected = st.radio(
-        "가상 결과지 리스트",
-        case_names,
-        key=dynamic_radio_key,
-        label_visibility="collapsed"
-    )
+    selected = st.radio("가상 결과지 리스트", case_names, key=dynamic_radio_key, label_visibility="collapsed")
     st.markdown('</div>', unsafe_allow_html=True)
 
     if selected != "선택 안 함":
         data = VIRTUAL_REPORTS[selected]
 
         st.markdown('<div class="info-card">', unsafe_allow_html=True)
-        st.markdown(f'<div class="case-title-mobile">👤 환자 사례: {selected}</div>', unsafe_allow_html=True)
-        st.markdown(
-            f'<div class="case-subtitle-mobile"><span class="label-strong">연령/성별:</span> <span class="result-value">{data["info"]["age"]}세 / {data["info"]["sex"]}</span> &nbsp;|&nbsp; <span class="label-strong">병변측:</span> <span class="result-value">{data["info"]["side"]}</span></div>',
-            unsafe_allow_html=True
-        )
-        st.markdown(
-            f'<div class="case-text-block" style="margin-top:10px;"><span class="label-strong">주요 임상 증상:</span> <span class="result-value">{data["info"]["symptom"]}</span></div>',
-            unsafe_allow_html=True
-        )
+        st.markdown(f'<div class="lbl" style="font-size:1rem; margin-bottom:8px;">👤 환자 사례: {selected}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="val">연령/성별: {data["info"]["age"]}세 / {data["info"]["sex"]} &nbsp;|&nbsp; 병변측: {data["info"]["side"]}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="margin-top:10px;"><div class="lbl">주요 임상 증상:</div><div class="val" style="margin-top:4px;">{format_eng_term(data["info"]["symptom"])}</div></div>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-        def create_responsive_table(headers, rows, table_id):
-            css = f"""
-            <style>
-                #{table_id} {{ width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 0.86rem; }}
-                #{table_id} th {{ background-color: #f1f5f9; padding: 10px; border-bottom: 2px solid #cbd5e1; text-align: center; color: #1e293b; font-weight: 700; }}
-                #{table_id} td {{ padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: center; color: #334155; line-height: 1.5; font-weight: 400; }}
-                #{table_id} td.left-align {{ text-align: left; font-weight: 600; color: #1e3a8a; }}
-                @media screen and (max-width: 768px) {{
-                    #{table_id} thead {{ display: none; }}
-                    #{table_id} tr {{ display: block; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 12px; background: #fff; padding: 6px; }}
-                    #{table_id} td {{ display: flex; justify-content: space-between; align-items: center; gap: 12px; border-bottom: 1px solid #f1f5f9; padding: 8px 10px; text-align: right; }}
-                    #{table_id} td:last-child {{ border-bottom: none; }}
-                    #{table_id} td::before {{ content: attr(data-label); font-weight: 600; color: #475569; text-align: left; font-size:0.8rem; flex: 0 0 38%; }}
-                    #{table_id} td > span {{ flex: 1; text-align: right; word-break: keep-all; font-weight: 400; }}
-                    #{table_id} td.left-align {{ justify-content: center; background: #f8fafc; border-radius: 6px 6px 0 0; text-align: center; padding: 10px; }}
-                    #{table_id} td.left-align::before {{ content: none; }}
-                    #{table_id} td.left-align > span {{ text-align: center; font-weight: 600; }}
-                }}
-            </style>
-            """
-            tr_html = ""
-            for row in rows:
-                td_html = ""
-                for idx, col in enumerate(row):
-                    col = str(col)
-                    cls = "left-align" if idx == 0 else ""
-                    color_style = ""
-                    if idx == len(row) - 1:
-                        if "정상" in col and "비정상" not in col:
-                            color_style = "color: #15803d; font-weight:600;"
-                        elif any(x in col for x in ["비정상", "침범", "확진", "마비", "소실", "감소", "지연", "Gilliatt-Sumner"]):
-                            color_style = "color: #991b1b; font-weight: 600;"
-
-                    formatted_col = col.replace(" / ", "<br/>") if "휴식" in headers[idx] else col
-                    td_html += f"<td data-label='{headers[idx]}' class='{cls}' style='{color_style}'><span>{formatted_col}</span></td>"
-                tr_html += f"<tr>{td_html}</tr>"
-            return f'{css}<table id="{table_id}"><thead><tr>{"".join([f"<th>{h}</th>" for h in headers])}</tr></thead><tbody>{tr_html}</tbody></table>'
-
         st.markdown('<div class="section-card">', unsafe_allow_html=True)
-        st.markdown(
-            f'<div class="case-section-label">📋 근전도 결과표 (NCS & Needle EMG): 병변측 ({data["info"]["side"]})</div>',
-            unsafe_allow_html=True
-        )
+        st.markdown(f'<div class="case-section-label">{format_eng_term(f"근전도 결과표 (NCS & Needle EMG): 병변측 ({data['info']['side']})")}</div>', unsafe_allow_html=True)
 
-        st.markdown('<div class="finding-highlight">⚡ 감각신경전도검사 (Sensory NCS)</div>', unsafe_allow_html=True)
-        st.markdown(create_responsive_table(["검사 신경", "진폭 수치", "잠복기 수치", "판단"], data["ncs_sensory"], "sensory_tbl"), unsafe_allow_html=True)
+        # 표 생성기 (세로 나열 최적화)
+        def render_table_section(title, headers, rows):
+            st.markdown(f'<div class="finding-highlight">{format_eng_term(title)}</div>', unsafe_allow_html=True)
+            for row in rows:
+                nerve = format_eng_term(row[0])
+                st.markdown(f'<div style="background:#f8fafc; padding:8px 12px; border-radius:6px; margin-bottom:8px;">', unsafe_allow_html=True)
+                st.markdown(f'<div class="lbl" style="margin-bottom:6px; font-size:0.92rem;">{nerve}</div>', unsafe_allow_html=True)
+                for idx, col in enumerate(row[1:]):
+                    col_str = str(col).replace(" / ", "<br>")
+                    is_bad = any(x in col_str for x in ["비정상", "침범", "확진", "마비", "소실", "감소", "지연", "Gilliatt"])
+                    color = "text-red" if is_bad else ("text-green" if "정상" in col_str else "")
+                    st.markdown(f'<div class="result-row"><div class="lbl" style="flex:0 0 110px;">{format_eng_term(headers[idx+1])}</div><div class="val {color}">{format_eng_term(col_str)}</div></div>', unsafe_allow_html=True)
+                st.markdown('</div>', unsafe_allow_html=True)
 
-        st.markdown('<div class="finding-highlight">⚡ 운동신경전도검사 (Motor NCS)</div>', unsafe_allow_html=True)
-        st.markdown(create_responsive_table(["검사 신경", "자극 위치", "진폭 수치", "잠복기 수치", "판단"], data["ncs_motor"], "motor_tbl"), unsafe_allow_html=True)
+        render_table_section("감각신경전도검사(sensory NCS)", ["검사 신경", "진폭 수치", "잠복기 수치", "판단"], data["ncs_sensory"])
+        render_table_section("운동신경전도검사(motor NCS)", ["검사 신경", "자극 위치", "진폭 수치", "잠복기 수치", "판단"], data["ncs_motor"])
 
         is_emg_applicable = "눈꺼풀" not in selected and "뇌졸중" not in selected
         if is_emg_applicable:
-            st.markdown('<div class="finding-highlight">🪡 침근전도검사 (Needle EMG)</div>', unsafe_allow_html=True)
-            st.markdown(
-                create_responsive_table(
-                    ["검사 근육", "해당 분절 (Root)", "휴식 시 반응 (Rest)", "수의수축 시 반응 (Volition)", "판단"],
-                    data["emg"],
-                    "emg_tbl"
-                ),
-                unsafe_allow_html=True
-            )
+            render_table_section("침근전도검사(needle EMG)", ["검사 근육", "해당 분절(root)", "휴식 시(rest)", "수의적 수축 시(volition)", "판단"], data["emg"])
         st.markdown('</div>', unsafe_allow_html=True)
 
-        st.markdown('<div class="result-card">', unsafe_allow_html=True)
-        st.markdown('<div class="result-title">✅ 임상 추론 및 생리학적 해석 결과</div>', unsafe_allow_html=True)
-        st.markdown(
-            f'<div class="case-text-block" style="background:#fff1f2!important; border-left-color:#fecdd3!important;"><span class="label-strong text-red">최종 교육용 진단:</span> <span class="result-value text-red" style="font-weight:700!important;">{data["diagnosis"]}</span></div>',
-            unsafe_allow_html=True
-        )
+        st.markdown('<div class="diag-box">', unsafe_allow_html=True)
+        st.markdown(f'<div class="diag-name">{format_eng_term(data["diagnosis"])}</div>', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
         
-        # 🚨 2번 수정 핵심: 얼굴신경마비는 '데이터 해석 논리'로 정상 표기되도록 복구
-        st.markdown('<div class="result-label">🧠 데이터 해석 논리</div>', unsafe_allow_html=True)
-        for i in data["interpretation"]:
-            st.markdown(f'<div class="finding-subtext">• {i}</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-card">', unsafe_allow_html=True)
+        label = "눈깜박반사 해석 포인트" if ("눈꺼풀" in selected or "얼굴" in selected) else "H-반사 유발 해석 포인트" if "뇌졸중" in selected else "데이터 해석 논리"
+        st.markdown(f'<div class="result-label">{label}</div>', unsafe_allow_html=True)
+        for i in data["interpretation"]: st.markdown(f'<div class="case-bullet">• {format_eng_term(i)}</div>', unsafe_allow_html=True)
         
         if is_emg_applicable:
-            st.markdown('<div class="result-label" style="border-left-color:#d97706!important; background:#fffbeb!important;">🔬 침근전도 소견 생리학적 의미</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="result-label">{format_eng_term("침근전도 소견 생리학적 의미(EMG interpretation)")}</div>', unsafe_allow_html=True)
             for m in data["emg_meaning"]:
                 parts = m.split(":", 1)
-                if len(parts) == 2:
-                    st.markdown(
-                        f'<div class="finding-subtext"><span class="label-strong text-blue">{parts[0]}:</span><span class="result-value">{parts[1]}</span></div>',
-                        unsafe_allow_html=True
-                    )
-                else:
-                    st.markdown(f'<div class="finding-subtext">• {m}</div>', unsafe_allow_html=True)
+                if len(parts) == 2: st.markdown(f'<div class="result-row"><div class="lbl">{format_eng_term(parts[0])}</div><div class="val">{format_eng_term(parts[1])}</div></div>', unsafe_allow_html=True)
+                else: st.markdown(f'<div class="case-bullet">• {format_eng_term(m)}</div>', unsafe_allow_html=True)
 
-        st.markdown('<div class="result-label" style="border-left-color:#9333ea!important; background:#fdf4ff!important;">🧭 감별 진단 및 추가 검사</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="finding-subtext">• {data["ddx"]}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="result-label">{format_eng_term("감별진단 포인트(differential diagnosis)")}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="case-bullet">{format_eng_term(data["ddx"])}</div>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-        st.markdown('<div style="text-align: center; margin-top: 20px; margin-bottom: 20px;">', unsafe_allow_html=True)
+        st.markdown('<div class="center-btn-wrapper" style="margin-top: 16px; margin-bottom: 8px;">', unsafe_allow_html=True)
         if st.button("🔄 다른 결과 분석", type="secondary", key="reset_input_report_btn"):
             st.session_state["input_reset_counter"] += 1
             st.rerun()
