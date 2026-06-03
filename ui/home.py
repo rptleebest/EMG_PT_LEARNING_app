@@ -39,12 +39,9 @@ def render_home():
         </div>
         """, unsafe_allow_html=True)
 
-    st.markdown('<div style="text-align:center; margin-top: 24px;">', unsafe_allow_html=True)
-    # 버튼 중앙 배열 
-    col_l, col_c, col_r = st.columns([1, 1.5, 1])
-    with col_c:
-        if st.button("학습 시작", type="primary", use_container_width=True):
-            st.session_state["mode"] = mode
-            st.session_state["screen"] = "case_list" if mode == "case" else "input_learning"
-            st.rerun()
+    st.markdown('<div style="margin-top: 24px;">', unsafe_allow_html=True)
+    if st.button("학습 시작", type="primary"):
+        st.session_state["mode"] = mode
+        st.session_state["screen"] = "case_list" if mode == "case" else "input_learning"
+        st.rerun()
     st.markdown('</div></div>', unsafe_allow_html=True)
