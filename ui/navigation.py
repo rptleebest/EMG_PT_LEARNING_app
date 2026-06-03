@@ -25,13 +25,13 @@ def render_bottom_navigation():
 
     st.markdown('<div style="height: 16px;"></div>', unsafe_allow_html=True)
 
-    # 빈 컬럼을 활용하여 중앙의 두 버튼이 가로로 딱 붙어있도록 유도 (CSS와 결합됨)
-    col_l, col_btn1, col_btn2, col_r = st.columns([1, 0.8, 0.8, 1])
+    # st.columns(2)를 생성하고 CSS(flex-wrap: nowrap)로 무조건 가로 중앙에 110px씩 배치함
+    col1, col2 = st.columns(2)
 
-    with col_btn1:
+    with col1:
         if st.button("처음", type="secondary", use_container_width=True, key="nav_home"):
             _go_home()
-    with col_btn2:
+    with col2:
         if st.button("이전", type="primary", use_container_width=True, key="nav_back"):
             _go_back()
 
