@@ -92,7 +92,7 @@ def apply_mobile_first_style():
         align-items: center !important;
         transition: all 0.1s ease !important;
         text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25) !important;
-        margin-bottom: 6px !important; /* 3D 눌림 효과를 위한 하단 여유 공간 */
+        margin-bottom: 6px !important; 
     }
 
     /* 1. Primary 버튼 (처음, 이전, 학습시작) -> 생동감 있는 블루 & 3D 그림자 */
@@ -140,18 +140,17 @@ def apply_mobile_first_style():
             gap: 12px !important; 
             width: 100% !important;
             margin: 0 !important;
-            padding: 0 4px !important; /* 좌우 화면 바깥으로 튀어나감 방지 */
+            padding: 0 4px !important; 
             box-sizing: border-box !important;
         }
         div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {
-            width: calc(50% - 6px) !important; /* gap의 절반을 빼서 정확한 50% 분할 */
+            width: calc(50% - 6px) !important; 
             min-width: 0 !important;
             flex: 1 1 calc(50% - 6px) !important;
             padding: 0 !important;
             margin: 0 !important;
         }
         
-        /* 모바일에서는 버튼 최대 너비 제한 해제 후 부모 칸에 꽉 채움 */
         div[data-testid="stHorizontalBlock"] div[data-testid="stButton"] > button {
             max-width: 100% !important;
             font-size: 0.9rem !important;
@@ -161,23 +160,7 @@ def apply_mobile_first_style():
             white-space: nowrap !important;
         }
     }
-    
-    #top-anchor { display: none; }
     </style>
-    
-    <script>
-        const observer = new MutationObserver((mutations) => {
-            for (let mutation of mutations) {
-                if (mutation.type === 'childList') {
-                    window.scrollTo(0, 0);
-                    const mainContainer = parent.document.querySelector('.main');
-                    if (mainContainer) mainContainer.scrollTo(0, 0);
-                }
-            }
-        });
-        observer.observe(document.body, { childList: true, subtree: true });
-    </script>
-    <div id="top-anchor"></div>
     """, unsafe_allow_html=True)
 
 
