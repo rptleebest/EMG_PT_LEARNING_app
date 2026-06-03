@@ -10,6 +10,12 @@ from ui.router import render_router
 def apply_mobile_first_style():
     st.markdown("""
     <style>
+    /* ★ 가로 스크롤(옆으로 이동) 원천 차단 */
+    html, body {
+        overflow-x: hidden !important;
+        max-width: 100vw !important;
+    }
+
     :root {
         --bg: #f8fafc;
         --card: #ffffff;
@@ -27,9 +33,10 @@ def apply_mobile_first_style():
     }
 
     html, body, #root { background: var(--bg) !important; color: var(--text) !important; }
-    .stApp { background: var(--bg) !important; color: var(--text) !important; }
+    .stApp { background: var(--bg) !important; color: var(--text) !important; overflow-x: hidden !important; }
     [data-testid="stAppViewContainer"], [data-testid="stHeader"], [data-testid="stMain"], [data-testid="stMainBlockContainer"], section.main, .main, [data-testid="stSidebar"] {
         background: var(--bg) !important;
+        overflow-x: hidden !important;
     }
     [data-testid="stToolbar"] { background: transparent !important; }
 
@@ -39,6 +46,7 @@ def apply_mobile_first_style():
         padding-bottom: 4rem;
         padding-left: 0.85rem;
         padding-right: 0.85rem;
+        overflow-x: hidden !important;
     }
 
     div[data-testid="stMarkdownContainer"], div[data-testid="stText"], p, li, span, label { color: var(--text); }
@@ -77,7 +85,7 @@ def apply_mobile_first_style():
     div[role="radiogroup"] label p, div[data-testid="stRadio"] label p { color: var(--text) !important; word-break: keep-all !important; line-height: 1.6 !important; }
     label[data-testid="stWidgetLabel"] p { font-size: 0.88rem !important; font-weight: 700 !important; color: #334155 !important; line-height: 1.5 !important; }
 
-    /* ★ 3D 입체형 고급 버튼 스타일 적용 */
+    /* ★ 3D 입체형 고급 버튼 스타일 공통 */
     div[data-testid="stButton"] > button {
         font-weight: 800 !important;
         border-radius: 14px !important;
@@ -109,7 +117,7 @@ def apply_mobile_first_style():
         box-shadow: 0 0px 0px #1e40af, 0 2px 4px rgba(37, 99, 235, 0.3) !important;
     }
 
-    /* 2. Secondary 버튼 (다른 사례/결과 분석) -> 고급스러운 인디고(퍼플블루) 톤 */
+    /* 2. Secondary 버튼 (다른 사례 분석) -> 고급스러운 인디고 톤 */
     div[data-testid="stButton"] > button[kind="secondary"],
     div[data-testid="stButton"] > button[data-testid="baseButton-secondary"] {
         background: linear-gradient(180deg, #6366f1 0%, #4f46e5 100%) !important;
@@ -132,34 +140,43 @@ def apply_mobile_first_style():
         .label-strong, .result-value { font-size: 0.86rem !important; }
         .finding-highlight { font-size: 0.92rem !important; margin-top: 12px; margin-bottom: 8px; }
         
-        /* ★ 모바일 가로 스크롤 완벽 제거 및 한 줄 2개 배치 로직 */
+        /* ★ 모바일 가로 스크롤 완벽 차단 및 50:50 정렬 */
         div[data-testid="stHorizontalBlock"] {
             display: flex !important;
             flex-direction: row !important;
             flex-wrap: nowrap !important;
-            gap: 12px !important; 
+            gap: 10px !important; 
             width: 100% !important;
+            max-width: 100vw !important;
             margin: 0 !important;
-            padding: 0 4px !important; 
+            padding: 0 !important; 
             box-sizing: border-box !important;
+            overflow: hidden !important;
         }
         div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {
-            width: calc(50% - 6px) !important; 
-            min-width: 0 !important;
-            flex: 1 1 calc(50% - 6px) !important;
+            flex: 1 1 0 !important; /* 남은 공간을 정확히 1:1로 나눔 */
+            width: 100% !important; 
+            min-width: 0 !important; /* 버튼이 화면 밖으로 밀어내는 현상 방지 */
             padding: 0 !important;
             margin: 0 !important;
         }
         
+        /* 모바일에서는 버튼이 컬럼 크기(50%)에 맞게 줄어들도록 강제 지정 */
         div[data-testid="stHorizontalBlock"] div[data-testid="stButton"] > button {
+            width: 100% !important;
             max-width: 100% !important;
-            font-size: 0.9rem !important;
-            min-height: 44px !important;
+            min-width: 0 !important; 
+            font-size: 0.92rem !important;
+            min-height: 48px !important;
             padding: 0 !important;
             margin: 0 0 6px 0 !important;
             white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important; /* 글씨가 혹시라도 넘치면 ... 처리 */
         }
     }
+    
+    #top-anchor { display: none; }
     </style>
     """, unsafe_allow_html=True)
 
