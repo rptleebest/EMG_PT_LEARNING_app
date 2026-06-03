@@ -193,9 +193,10 @@ def format_title_box(kor, eng):
     return f"<div class='title-box'><div class='title-kor'>{kor}</div><div class='title-eng'>{eng.lower()}</div></div>"
 
 def format_inline_eng(text):
+    """영문을 소문자로 괄호 안에 인라인 병기 (약어 대문자 유지)"""
     if not text: return ""
     text = str(text)
-    text = re.sub(r'\s+\(', '(', text)
+    text = re.sub(r'\s+\(', ' (', text)
     def repl(m):
         content = m.group(1)
         if not re.search('[a-zA-Z]', content): return f"({content})"
@@ -203,7 +204,7 @@ def format_inline_eng(text):
         res = []
         acronyms = {"SNAP", "CMAP", "MUAP", "MUAPS", "NCS", "EMG", "MAS", "DRT", "UMN", "LMN", "TA", "ECR", "EIP", "ADM", "FDI", "EHL", "PL", "R1", "R2"}
         for w in words:
-            clean_w = re.sub(r'[^a-zA-Z0-9-]', '', w).upper()
+            clean_w = re.sub(r'[^a-zA-Z]', '', w).upper()
             if clean_w in acronyms: res.append(w.upper())
             else: res.append(w.lower())
         return f"({' '.join(res)})"
@@ -212,18 +213,22 @@ def format_inline_eng(text):
 def _get_data_row(lbl, val, is_bad=False):
     val_formatted = str(val).replace(", ", "<br>")
     color = "txt-red" if is_bad else ("txt-green" if "정상" in val_formatted else "txt-normal")
-    return f'<div class="data-row"><div class="data-label">{lbl}</div><div class="data-value {color}">{format_inline_eng(val_formatted)}</div></div>'
+    # 🚨 SyntaxError의 원인이 되었던 따옴표 겹침 문제를 완벽히 해결한 안전한 f-string
+    html = f'<div class="data-row"><div class="data-label">{lbl}</div><div class="data-value {color}">{format_inline_eng(val_formatted)}</div></div>'
+    return html
 
 def render_interpretation_text(lines):
     for x in lines:
         if ":" in x:
             parts = x.split(":", 1)
-            st.markdown(f'<div style="font-size:0.9rem; line-height:1.6; margin-bottom:6px;"><span style="font-weight:700; color:#1d4ed8;">{format_inline_eng(parts[0])}:</span> <span style="color:#334155;">{format_inline_eng(parts[1])}</span></div>', unsafe_allow_html=True)
+            html = f'<div style="font-size:0.9rem; line-height:1.6; margin-bottom:6px;"><span style="font-weight:800; color:#1d4ed8;">{format_inline_eng(parts[0])}:</span> <span style="color:#334155;">{format_inline_eng(parts[1])}</span></div>'
+            st.markdown(html, unsafe_allow_html=True)
         else:
-            st.markdown(f'<div style="font-size:0.9rem; color:#334155; line-height:1.6; margin-bottom:6px;">• {format_inline_eng(x)}</div>', unsafe_allow_html=True)
+            html = f'<div style="font-size:0.9rem; color:#334155; line-height:1.6; margin-bottom:6px;">• {format_inline_eng(x)}</div>'
+            st.markdown(html, unsafe_allow_html=True)
 
 def render_input_learning():
-    st.markdown('<div style="margin-bottom:16px;"><div style="font-size:1.3rem; font-weight:800; color:#0f172a;">가상 결과표 판독학습</div><div style="font-size:0.85rem; color:#64748b;">report analysis mode</div></div>', unsafe_allow_html=True)
+    st.markdown('<div style="margin-bottom:16px;"><div style="font-size:1.25rem; font-weight:800; color:#0f172a;">가상 결과표 판독학습</div><div style="font-size:0.85rem; color:#64748b;">report analysis mode</div></div>', unsafe_allow_html=True)
     st.markdown('<div class="subtle">임상 수치 데이터 기반의 가상 결과지를 통해 전기생리학적 해석 논리를 훈련합니다.</div>', unsafe_allow_html=True)
 
     if "input_reset_counter" not in st.session_state:
@@ -240,9 +245,9 @@ def render_input_learning():
         data = VIRTUAL_REPORTS[selected]
 
         st.markdown('<div class="info-card">', unsafe_allow_html=True)
-        st.markdown(f'<div style="font-weight:800; color:#0f172a; margin-bottom:6px;">👤 환자 사례: {selected}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="font-weight:800; font-size:1rem; color:#0f172a; margin-bottom:6px;">👤 환자 사례: {selected}</div>', unsafe_allow_html=True)
         st.markdown(f'<div style="font-size:0.9rem; color:#475569;">연령/성별: {data["info"]["age"]}세 / {data["info"]["sex"]} &nbsp;|&nbsp; 병변측: {data["info"]["side"]}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div style="margin-top:10px;"><div style="font-size:0.9rem; font-weight:700;">주요 임상 증상:</div><div style="font-size:0.9rem; color:#334155; margin-top:4px;">{format_inline_eng(data["info"]["symptom"])}</div></div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="margin-top:10px;"><div style="font-size:0.9rem; font-weight:800;">주요 임상 증상:</div><div style="font-size:0.9rem; color:#334155; margin-top:4px;">{format_inline_eng(data["info"]["symptom"])}</div></div>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
         def render_table_section(title_kor, title_eng, headers, rows):
@@ -251,7 +256,7 @@ def render_input_learning():
                 nerve = format_inline_eng(row[0])
                 m = re.match(r'^(.*?)\s*\((.*?)\)$', nerve)
                 if m:
-                    head = f"<div style='font-size:0.95rem; font-weight:800; color:#1e293b;'>{m.group(1)}</div><div style="font-size:0.8rem; color:#64748b;">{m.group(2).lower()}</div>"
+                    head = f"<div style='font-size:0.95rem; font-weight:800; color:#1e293b;'>{m.group(1)}</div><div style='font-size:0.85rem; color:#64748b;'>({m.group(2).lower()})</div>"
                 else:
                     head = f"<div style='font-size:0.95rem; font-weight:800; color:#1e293b;'>{nerve}</div>"
 
@@ -273,7 +278,7 @@ def render_input_learning():
             render_table_section("침근전도검사", "needle EMG", ["검사 근육", "해당 분절(root)", "휴식 시(rest)", "수의적 수축 시(volition)", "판단"], data["emg"])
         st.markdown('</div>', unsafe_allow_html=True)
 
-        # 🚨 진단명 좌측정렬 카드 포맷
+        # 🚨 진단명 좌측정렬 포맷 지정 (의심질환 추정 진단명:)
         st.markdown(f"""
         <div class="diagnosis-box">
             <div class="diagnosis-label">의심질환 추정 진단명:</div>
