@@ -28,26 +28,24 @@ def apply_mobile_first_style():
     html, body { overflow-x: hidden !important; background-color: #f8fafc !important; color: #1e293b !important; margin: 0; padding: 0; }
     .stApp { background-color: #f8fafc !important; overflow-x: hidden !important; }
     
-    /* 모바일/PC 본문 여백 최적화 (양쪽 잘림 방지) */
     .main .block-container { max-width: 860px; padding: 1.5rem 1.2rem 4rem 1.2rem; margin: 0 auto; }
-
-    /* 텍스트 정렬 (양쪽 정렬 부작용 해결 -> 왼쪽 정렬 + 단어 단위 줄바꿈 유지) */
     p, span, div, li { word-break: keep-all; line-height: 1.6; text-align: left; }
 
-    /* 카드 컨테이너 (깔끔한 테두리) */
+    /* 카드 컨테이너 */
     .content-card { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 16px 14px; margin-bottom: 16px; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
     .info-card { background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
 
-    /* 대항목 제목 */
+    /* 제목 스타일 */
     .section-title { font-size: 1.05rem; font-weight: 800; color: #0f172a; margin-bottom: 12px; border-bottom: 2px solid #3b82f6; padding-bottom: 4px; }
-    
-    /* 중항목 제목 (검사명 등) */
     .sub-title { font-size: 0.95rem; font-weight: 800; color: #1e3a8a; margin-top: 16px; margin-bottom: 12px; border-bottom: 1px dashed #93c5fd; padding-bottom: 4px; }
 
-    /* 항목-데이터 나열 포맷 */
-    .data-row { display: flex; flex-direction: row; align-items: flex-start; padding: 4px 0; border-bottom: 1px solid #f8fafc; }
+    /* 🚨 신경/근육 그룹 박스 (항목별 명확한 구분) */
+    .nerve-block { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+
+    /* 데이터 항목(좌) / 값(우) */
+    .data-row { display: flex; flex-direction: row; align-items: flex-start; padding: 5px 0; border-bottom: 1px solid #f1f5f9; }
     .data-row:last-child { border-bottom: none; }
-    .data-label { flex: 0 0 100px; font-size: 0.9rem; font-weight: 700; color: #1e293b; line-height: 1.5; }
+    .data-label { flex: 0 0 95px; font-size: 0.9rem; font-weight: 700; color: #1e293b; line-height: 1.5; }
     .data-value { flex: 1; font-size: 0.9rem; font-weight: 400; color: #334155; line-height: 1.5; }
 
     /* 글자 색상 세팅 */
@@ -56,23 +54,38 @@ def apply_mobile_first_style():
     .txt-red { color: #b91c1c !important; font-weight: 600 !important; } 
     .txt-green { color: #15803d !important; font-weight: 600 !important; }
 
-    /* 🚨 2D 플랫 버튼 스타일 */
+    /* 🚨 진단명 카드 (해석 하단에 배치됨) */
+    .diagnosis-box { background: #f8fafc; border-left: 5px solid #b91c1c; padding: 16px; border-radius: 6px; margin-top: 20px; margin-bottom: 10px; }
+    .diagnosis-label { font-size: 0.9rem; font-weight: 700; color: #475569; margin-bottom: 4px; }
+    .diagnosis-name { font-size: 1.05rem; font-weight: 800; color: #b91c1c; }
+
+    /* 🚨 2D 플랫 버튼 스타일 (적절한 너비로 중앙 고정) */
     div[data-testid="stButton"] > button {
         border-radius: 6px !important; border: none !important; box-shadow: none !important;
-        font-weight: 600 !important; font-size: 0.95rem !important; min-height: 44px !important; 
+        font-weight: 600 !important; font-size: 0.95rem !important; min-height: 42px !important; 
         transition: background-color 0.2s ease !important; transform: none !important;
+        width: 160px !important; margin: 0 auto !important; display: block !important;
     }
     div[data-testid="stButton"] > button[kind="primary"] { background-color: #2563eb !important; color: #ffffff !important; }
     div[data-testid="stButton"] > button[kind="secondary"] { background-color: #e2e8f0 !important; color: #1e293b !important; }
 
-    /* 🚨 네비게이션 버튼 짤림 방지 (Streamlit 기본 반응형 시스템 활용) */
-    .nav-wrapper { padding: 0 10%; margin-top: 10px; }
+    /* 🚨 네비게이션 버튼 가로 묶음 고정 (모바일 깨짐 완벽 방지) */
+    div[data-testid="stHorizontalBlock"] { 
+        display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; 
+        justify-content: center !important; gap: 12px !important; align-items: center !important; 
+    }
+    div[data-testid="stHorizontalBlock"] > div[data-testid="column"] { 
+        flex: 0 0 120px !important; width: 120px !important; min-width: 120px !important; 
+    }
+    div[data-testid="stHorizontalBlock"] button { width: 100% !important; }
 
     @media (max-width: 768px) {
         .main .block-container { padding: 1rem 0.8rem 3rem 0.8rem; }
         .data-label { flex: 0 0 85px; font-size: 0.85rem; }
         .data-value { font-size: 0.85rem; }
-        .nav-wrapper { padding: 0 2%; } /* 모바일에서는 여백 최소화하여 버튼 짤림 방지 */
+        /* 모바일에서는 버튼 크기를 조금 더 줄임 */
+        div[data-testid="stHorizontalBlock"] > div[data-testid="column"] { flex: 0 0 100px !important; width: 100px !important; min-width: 100px !important; }
+        div[data-testid="stButton"] > button { width: 180px !important; } /* 단일 버튼 크기 축소 */
     }
     #top-anchor { display: none; }
     </style>
