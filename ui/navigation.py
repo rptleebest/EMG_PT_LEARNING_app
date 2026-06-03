@@ -24,8 +24,9 @@ def render_bottom_navigation():
         return
 
     st.markdown('<div style="height: 16px;"></div>', unsafe_allow_html=True)
-
-    # st.columns(2)를 생성하되, CSS가 개입하여 화면 중앙에 버튼 두 개가 꽉 맞물려 들어가게 함
+    
+    # 🚨 강제 CSS 너비를 없애고 Streamlit 컨테이너를 활용해 화면 잘림을 막음
+    st.markdown('<div class="nav-wrapper">', unsafe_allow_html=True)
     col1, col2 = st.columns(2)
 
     with col1:
@@ -34,6 +35,7 @@ def render_bottom_navigation():
     with col2:
         if st.button("이전", type="primary", use_container_width=True, key="nav_back"):
             _go_back()
+    st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
 
