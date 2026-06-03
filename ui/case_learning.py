@@ -20,11 +20,10 @@ def format_title_box(kor, icon=""):
     return f"<div class='title-box' style='background:#f1f5f9; padding:10px; border-radius:6px; border-left:4px solid #3b82f6;'><div class='title-kor'>{icon_html}{kor}</div></div>"
 
 def format_middle_title(kor):
-    # 중항목(섹션 내 구분) 제목
     return f"<div style='font-size:0.95rem; font-weight:800; color:#1e3a8a; border-bottom:2px solid #93c5fd; padding-bottom:4px; margin-top:16px; margin-bottom:12px;'>{kor}</div>"
 
 def format_inline_eng(text):
-    """영문을 인라인 괄호로 표기하며, 약어는 무조건 대문자, 나머지는 소문자로 강제 변환. 공백 찢어짐(justify) 방지용 keep-all"""
+    """영문을 인라인 괄호로 표기하며, 약어는 대문자, 나머지는 소문자로 변환 (글자 깨짐 버그 해결)"""
     if not text: return ""
     text = str(text)
     text = re.sub(r'\s+\(', ' (', text)
@@ -39,7 +38,9 @@ def format_inline_eng(text):
             if clean_w in acronyms: res.append(w.upper())
             else: res.append(w.lower())
         return f"({' '.join(res)})"
-    return f"<span style='word-break:keep-all; text-align:left;'>{re.sub(r'((.*?))', repl, text)}</span>"
+    # 🚨 버그 해결: 괄호 인식을 위한 역슬래시(\) 추가로 정상적인 한글 렌더링 복구
+    formatted = re.sub(r'\((.*?)\)', repl, text)
+    return f"<span style='word-break:keep-all; text-align:left;'>{formatted}</span>"
 
 def _get_data_row(lbl, val, is_bad=False):
     color = "txt-red" if is_bad else ("txt-green" if "정상" in val else "txt-normal")
@@ -76,7 +77,6 @@ def _render_finding_block(title_kor, findings, side):
     for item, values in items:
         left, right = (values[0] if len(values) > 0 else ""), (values[1] if len(values) > 1 else "")
         
-        # 🚨 소항목: 근육/신경별 시각적 블록 처리
         st.markdown(f'<div class="muscle-block">', unsafe_allow_html=True)
         m = re.match(r'^(.*?)\s*\((.*?)\)$', item)
         if m:
@@ -142,7 +142,6 @@ def render_case_list():
         for sec_name, items in patient.get("physical_exam", {}).items():
             st.markdown(format_middle_title(format_inline_eng(sec_name)), unsafe_allow_html=True)
             for i in items:
-                # 🚨 MMT 및 반사검사 들여쓰기/총알 기호 완벽 분리
                 if "맨손근력" in sec_name or "MMT" in sec_name.upper():
                     parts = i.split(" - ", 1)
                     if len(parts) == 2:
@@ -158,7 +157,6 @@ def render_case_list():
                         st.markdown(f'<div style="font-size:0.9rem; color:#334155; margin-bottom:6px; word-break:keep-all;">• {format_inline_eng(i)}</div>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-        # 🚨 판독 기준 팁 박스
         st.markdown("""
         <div style="background:#fffbeb; border:1px solid #fde68a; padding:12px; border-radius:6px; margin-bottom:16px;">
             <div style="font-size:0.85rem; font-weight:800; color:#d97706; margin-bottom:4px;">💡 근전도 판독 기준 팁 (정상측 대비)</div>
@@ -169,17 +167,16 @@ def render_case_list():
         st.markdown('<div class="content-card">', unsafe_allow_html=True)
         st.markdown(format_title_box(f"근전도 검사 결과 (병변측: {side})", "⚡"), unsafe_allow_html=True)
         grouped = split_findings_by_domain(findings)
-        if grouped["sensory"]: _render_finding_block("감각신경전도검사 (Sensory NCS)", grouped["sensory"], side)
-        if grouped["motor"]: _render_finding_block("운동신경전도검사 (Motor NCS)", grouped["motor"], side)
-        if grouped["muscle"] and "눈꺼풀" not in selected and "뇌졸중" not in selected: _render_finding_block("침근전도검사 소견 (Needle EMG)", grouped["muscle"], side)
+        if grouped["sensory"]: _render_finding_block("감각신경전도검사", grouped["sensory"], side)
+        if grouped["motor"]: _render_finding_block("운동신경전도검사", grouped["motor"], side)
+        if grouped["muscle"] and "눈꺼풀" not in selected and "뇌졸중" not in selected: _render_finding_block("침근전도검사 소견", grouped["muscle"], side)
         if grouped["reflex"] or grouped["other"]:
             merged = {**grouped["reflex"], **grouped["other"]}
-            if "뇌졸중" in selected: _render_finding_block("H-반사 유발 검사 (H-reflex)", merged, side)
-            elif "눈꺼풀" in selected: _render_finding_block("눈깜빡반사 회로 분석 (Blink reflex)", merged, side)
-            else: _render_finding_block("반사 및 후기반응 소견 (Late response)", merged, side)
+            if "뇌졸중" in selected: _render_finding_block("H-반사 유발 검사", merged, side)
+            elif "눈꺼풀" in selected: _render_finding_block("눈깜빡반사 회로 분석", merged, side)
+            else: _render_finding_block("반사 및 후기반응 소견", merged, side)
         st.markdown('</div>', unsafe_allow_html=True)
 
-        # 🚨 진단명 좌측 정렬 지정 포맷 (크기 축소, 대비 증가)
         diag_name = f"{side} {case.get('category', '')}" if "뇌졸중" not in selected else "위운동신경세포(UMN) 중증 경직 소견"
         st.markdown(f"""
         <div class="diagnosis-box">
@@ -210,7 +207,6 @@ def render_case_list():
             st.markdown(format_title_box("감별진단 포인트", "🧭"), unsafe_allow_html=True)
             for idx, d in enumerate(diff_dx):
                 st.markdown(f'<div style="font-weight:800; font-size:0.95rem; color:#0f172a; margin-top:8px; margin-bottom:8px;">{format_inline_eng(d.get("name",""))}</div>', unsafe_allow_html=True)
-                # 🚨 물음표(?) 삽입 및 콜론(:) 인라인 포맷 적용
                 st.markdown(f'<div style="font-size:0.9rem; margin-bottom:6px; word-break:keep-all;"><span style="font-weight:700; color:#1d4ed8;">왜 고려하나?:</span> <span style="color:#334155;">{format_inline_eng(d.get("why_consider",""))}</span></div>', unsafe_allow_html=True)
                 st.markdown(f'<div style="font-size:0.9rem; margin-bottom:6px; word-break:keep-all;"><span style="font-weight:700; color:#1d4ed8;">어떻게 구분하나?:</span> <span style="color:#334155;">{format_inline_eng(d.get("how_to_differentiate",""))}</span></div>', unsafe_allow_html=True)
                 st.markdown(f'<div style="font-size:0.9rem; margin-bottom:6px; word-break:keep-all;"><span style="font-weight:700; color:#15803d;">실전 팁:</span> <span style="color:#15803d; font-weight:500;">{format_inline_eng(d.get("practical_tip",""))}</span></div>', unsafe_allow_html=True)
