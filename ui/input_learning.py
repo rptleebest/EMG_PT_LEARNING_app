@@ -192,10 +192,7 @@ VIRTUAL_REPORTS = {
 def format_title_box(kor, eng):
     return f"<div class='title-box'><div class='title-kor'>{kor}</div><div class='title-eng'>{eng.lower()}</div></div>"
 
-def format_result_label(kor, eng):
-    return f"<div class='result-label-box'><div class='title-kor'>{kor}</div><div class='title-eng'>{eng.lower()}</div></div>"
-
-def format_inline_term(text):
+def format_inline_eng(text):
     if not text: return ""
     text = str(text)
     text = re.sub(r'\s+\(', '(', text)
@@ -204,7 +201,7 @@ def format_inline_term(text):
         if not re.search('[a-zA-Z]', content): return f"({content})"
         words = content.split()
         res = []
-        acronyms = {"SNAP", "CMAP", "MUAP", "MUAPS", "NCS", "EMG", "MAS", "DRT", "UMN", "LMN", "TA", "ECR", "EIP", "ADM", "FDI", "EHL", "PL", "R1", "R2", "F-WAVE", "H-REFLEX", "V1", "C5", "C6", "C7", "C8", "T1", "L4", "L5", "S1", "S2"}
+        acronyms = {"SNAP", "CMAP", "MUAP", "MUAPS", "NCS", "EMG", "MAS", "DRT", "UMN", "LMN", "TA", "ECR", "EIP", "ADM", "FDI", "EHL", "PL", "R1", "R2"}
         for w in words:
             clean_w = re.sub(r'[^a-zA-Z0-9-]', '', w).upper()
             if clean_w in acronyms: res.append(w.upper())
@@ -212,58 +209,61 @@ def format_inline_term(text):
         return f"({' '.join(res)})"
     return re.sub(r'\((.*?)\)', repl, text)
 
-def _get_ncs_row(lbl, val, is_bad=False):
-    # 🚨 콤마(,) 세로 분할 로직 적용
-    val = str(val).replace(", ", "<br>")
-    color = "text-red" if is_bad else ("text-green" if "정상" in val else "")
-    return f'<div class="data-line"><div class="data-lbl">{lbl}</div><div class="data-val {color}">{val}</div></div>'
+def _get_data_row(lbl, val, is_bad=False):
+    val_formatted = str(val).replace(", ", "<br>")
+    color = "txt-red" if is_bad else ("txt-green" if "정상" in val_formatted else "txt-normal")
+    return f'<div class="data-row"><div class="data-label">{lbl}</div><div class="data-value {color}">{format_inline_eng(val_formatted)}</div></div>'
+
+def render_interpretation_text(lines):
+    for x in lines:
+        if ":" in x:
+            parts = x.split(":", 1)
+            st.markdown(f'<div style="font-size:0.9rem; line-height:1.6; margin-bottom:6px;"><span style="font-weight:700; color:#1d4ed8;">{format_inline_eng(parts[0])}:</span> <span style="color:#334155;">{format_inline_eng(parts[1])}</span></div>', unsafe_allow_html=True)
+        else:
+            st.markdown(f'<div style="font-size:0.9rem; color:#334155; line-height:1.6; margin-bottom:6px;">• {format_inline_eng(x)}</div>', unsafe_allow_html=True)
 
 def render_input_learning():
-    st.markdown('<div class="main-title-kor">가상 결과표 판독학습</div>', unsafe_allow_html=True)
-    st.markdown('<div class="main-title-eng">report analysis mode</div>', unsafe_allow_html=True)
+    st.markdown('<div style="margin-bottom:16px;"><div style="font-size:1.3rem; font-weight:800; color:#0f172a;">가상 결과표 판독학습</div><div style="font-size:0.85rem; color:#64748b;">report analysis mode</div></div>', unsafe_allow_html=True)
     st.markdown('<div class="subtle">임상 수치 데이터 기반의 가상 결과지를 통해 전기생리학적 해석 논리를 훈련합니다.</div>', unsafe_allow_html=True)
 
     if "input_reset_counter" not in st.session_state:
         st.session_state["input_reset_counter"] = 0
 
-    dynamic_radio_key = f"input_report_selector_{st.session_state['input_reset_counter']}"
-
-    st.markdown('<div class="section-card">', unsafe_allow_html=True)
+    st.markdown('<div class="content-card">', unsafe_allow_html=True)
     st.markdown(format_title_box("학습할 가상 결과지 선택", "case selection"), unsafe_allow_html=True)
 
     case_names = ["선택 안 함"] + list(VIRTUAL_REPORTS.keys())
-
-    selected = st.radio("가상 결과지 리스트", case_names, key=dynamic_radio_key, label_visibility="collapsed")
+    selected = st.radio("결과지 선택", case_names, key=f"report_{st.session_state['input_reset_counter']}", label_visibility="collapsed")
     st.markdown('</div>', unsafe_allow_html=True)
 
     if selected != "선택 안 함":
         data = VIRTUAL_REPORTS[selected]
 
         st.markdown('<div class="info-card">', unsafe_allow_html=True)
-        st.markdown(f'<div class="data-lbl" style="font-size:1rem; margin-bottom:8px;">👤 환자 사례: {selected}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="data-val">연령/성별: {data["info"]["age"]}세 / {data["info"]["sex"]} &nbsp;|&nbsp; 병변측: {data["info"]["side"]}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div style="margin-top:10px;"><div class="data-lbl">주요 임상 증상:</div><div class="data-val" style="margin-top:4px;">{format_inline_term(data["info"]["symptom"])}</div></div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="font-weight:800; color:#0f172a; margin-bottom:6px;">👤 환자 사례: {selected}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="font-size:0.9rem; color:#475569;">연령/성별: {data["info"]["age"]}세 / {data["info"]["sex"]} &nbsp;|&nbsp; 병변측: {data["info"]["side"]}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="margin-top:10px;"><div style="font-size:0.9rem; font-weight:700;">주요 임상 증상:</div><div style="font-size:0.9rem; color:#334155; margin-top:4px;">{format_inline_eng(data["info"]["symptom"])}</div></div>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
         def render_table_section(title_kor, title_eng, headers, rows):
             st.markdown(format_title_box(title_kor, title_eng), unsafe_allow_html=True)
             for row in rows:
-                nerve = format_inline_term(row[0])
+                nerve = format_inline_eng(row[0])
                 m = re.match(r'^(.*?)\s*\((.*?)\)$', nerve)
                 if m:
-                    head = f"<div class='finding-highlight-kor'>{m.group(1)}</div><div class='finding-highlight-eng'>{m.group(2)}</div>"
+                    head = f"<div style='font-size:0.95rem; font-weight:800; color:#1e293b;'>{m.group(1)}</div><div style="font-size:0.8rem; color:#64748b;">{m.group(2).lower()}</div>"
                 else:
-                    head = f"<div class='finding-highlight-kor'>{nerve}</div><div class='finding-highlight-eng' style='color:transparent;'>-</div>"
+                    head = f"<div style='font-size:0.95rem; font-weight:800; color:#1e293b;'>{nerve}</div>"
 
-                st.markdown(f'<div style="background:#f8fafc; padding:8px 12px; border-radius:8px; margin-bottom:12px;">{head}', unsafe_allow_html=True)
+                st.markdown(f'<div style="background:#f8fafc; padding:12px; border-radius:8px; margin-bottom:12px;">{head}<div style="margin-top:8px;">', unsafe_allow_html=True)
                 for idx, col in enumerate(row[1:]):
                     col_str = str(col).replace(" / ", "<br>")
                     is_bad = any(x in col_str for x in ["비정상", "침범", "확진", "마비", "소실", "감소", "지연", "Gilliatt"])
-                    st.markdown(_get_ncs_row(format_inline_term(headers[idx+1]), format_inline_term(col_str), is_bad), unsafe_allow_html=True)
-                st.markdown('</div>', unsafe_allow_html=True)
+                    st.markdown(_get_data_row(format_inline_eng(headers[idx+1]), format_inline_eng(col_str), is_bad), unsafe_allow_html=True)
+                st.markdown('</div></div>', unsafe_allow_html=True)
 
-        st.markdown('<div class="section-card">', unsafe_allow_html=True)
-        st.markdown(f'<div style="font-weight:800; font-size:1.05rem; color:#1e40af; margin-bottom:16px;">📋 근전도 결과표 병변측({data["info"]["side"]})</div>', unsafe_allow_html=True)
+        st.markdown('<div class="content-card">', unsafe_allow_html=True)
+        st.markdown(f'<div style="font-weight:800; font-size:1.1rem; color:#1e40af; margin-bottom:16px;">📋 근전도 결과표 병변측({data["info"]["side"]})</div>', unsafe_allow_html=True)
 
         render_table_section("감각신경전도검사", "sensory NCS", ["검사 신경", "진폭 수치", "잠복기 수치", "판단"], data["ncs_sensory"])
         render_table_section("운동신경전도검사", "motor NCS", ["검사 신경", "자극 위치", "진폭 수치", "잠복기 수치", "판단"], data["ncs_motor"])
@@ -273,32 +273,31 @@ def render_input_learning():
             render_table_section("침근전도검사", "needle EMG", ["검사 근육", "해당 분절(root)", "휴식 시(rest)", "수의적 수축 시(volition)", "판단"], data["emg"])
         st.markdown('</div>', unsafe_allow_html=True)
 
-        # 🚨 진단명 깔끔한 중앙 카드 포맷
+        # 🚨 진단명 좌측정렬 카드 포맷
         st.markdown(f"""
-        <div class="diag-box">
-            <div class="diag-kor">{data["diagnosis"].split('(')[0].strip()}</div>
-            <div class="diag-eng">{"(" + data["diagnosis"].split('(')[1] if '(' in data["diagnosis"] else ""}</div>
+        <div class="diagnosis-box">
+            <div class="diagnosis-label">의심질환 추정 진단명:</div>
+            <div class="diagnosis-name">{format_inline_eng(data["diagnosis"])}</div>
         </div>
         """, unsafe_allow_html=True)
         
-        st.markdown('<div class="section-card">', unsafe_allow_html=True)
+        st.markdown('<div class="content-card">', unsafe_allow_html=True)
         label = "눈깜박반사 해석 포인트" if ("눈꺼풀" in selected or "얼굴" in selected) else "H-반사 유발 해석 포인트" if "뇌졸중" in selected else "데이터 해석 논리"
-        st.markdown(format_result_label(label, "data interpretation"), unsafe_allow_html=True)
-        for i in data["interpretation"]: st.markdown(f'<div class="case-bullet">• {format_inline_term(i)}</div>', unsafe_allow_html=True)
+        st.markdown(format_title_box(label, "data interpretation"), unsafe_allow_html=True)
+        render_interpretation_text(data["interpretation"])
+        st.markdown('<div style="height:12px;"></div>', unsafe_allow_html=True)
         
         if is_emg_applicable:
-            st.markdown(format_result_label("침근전도 소견 생리학적 의미", "EMG interpretation"), unsafe_allow_html=True)
-            for m in data["emg_meaning"]:
-                parts = m.split(":", 1)
-                if len(parts) == 2: st.markdown(_get_ncs_row(format_inline_term(parts[0]), format_inline_term(parts[1])), unsafe_allow_html=True)
-                else: st.markdown(f'<div class="case-bullet">• {format_inline_term(m)}</div>', unsafe_allow_html=True)
+            st.markdown(format_title_box("침근전도 소견 생리학적 의미", "EMG interpretation"), unsafe_allow_html=True)
+            render_interpretation_text(data["emg_meaning"])
+            st.markdown('<div style="height:12px;"></div>', unsafe_allow_html=True)
 
-        st.markdown(format_result_label("감별진단 포인트", "differential diagnosis"), unsafe_allow_html=True)
-        st.markdown(f'<div class="case-bullet">{format_inline_term(data["ddx"])}</div>', unsafe_allow_html=True)
+        st.markdown(format_title_box("감별진단 포인트", "differential diagnosis"), unsafe_allow_html=True)
+        st.markdown(f'<div class="case-bullet">{format_inline_eng(data["ddx"])}</div>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-        st.markdown('<div class="center-btn-wrapper" style="margin-top: 24px; margin-bottom: 8px;">', unsafe_allow_html=True)
-        if st.button("🔄 다른 결과 분석", type="secondary", key="reset_input_report_btn"):
+        st.markdown('<div class="center-btn" style="margin-top: 24px; margin-bottom: 12px;">', unsafe_allow_html=True)
+        if st.button("다른 결과 분석", type="primary", key="reset_input_btn"):
             st.session_state["input_reset_counter"] += 1
             st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
