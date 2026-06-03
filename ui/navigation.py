@@ -25,15 +25,16 @@ def render_bottom_navigation():
 
     st.markdown('<div style="height: 12px;"></div>', unsafe_allow_html=True)
 
-    # 4칸으로 나누어 1,2번째 가운데 칸에만 버튼을 배치 (가운데 정렬)
-    col_space1, col1, col2, col_space2 = st.columns([1, 2, 2, 1])
+    # 🚨 버튼 사이 간격을 좁히고 화면 정중앙에 오도록 여백 컬럼 배치
+    # 비율: 양끝 여백(1.5), 중앙 버튼(1, 1), 사이 간격(0.2)
+    col_left, col_home, col_gap, col_back, col_right = st.columns([1.5, 1, 0.2, 1, 1.5])
 
-    with col1:
-        if st.button("🏠 처음", type="primary", use_container_width=True, key="nav_home_bottom"):
+    with col_home:
+        if st.button("처음", type="primary", use_container_width=True, key="nav_home_bottom"):
             _go_home()
 
-    with col2:
-        if st.button("⬅️ 이전", type="primary", use_container_width=True, key="nav_back_bottom"):
+    with col_back:
+        if st.button("이전", type="primary", use_container_width=True, key="nav_back_bottom"):
             _go_back()
 
     st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
