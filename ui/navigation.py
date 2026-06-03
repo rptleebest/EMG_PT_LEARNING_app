@@ -30,15 +30,14 @@ def render_bottom_navigation():
 
     st.markdown('<div style="height: 24px;"></div>', unsafe_allow_html=True)
 
-    col1, col2 = st.columns(2)
+    # st.columns(2)를 명확하게 배분
+    col1, col2 = st.columns([1, 1])
 
     with col1:
-        # type="primary"를 주어 무조건 파란색이 되도록 지정
         if st.button("🏠 처음으로", type="primary", use_container_width=True, key="nav_home_bottom"):
             _go_home()
 
     with col2:
-        # type="primary"를 주어 무조건 파란색이 되도록 지정
         if st.button("⬅️ 이전으로", type="primary", use_container_width=True, key="nav_back_bottom"):
             _go_back()
 
