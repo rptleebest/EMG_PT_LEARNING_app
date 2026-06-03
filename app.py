@@ -10,7 +10,7 @@ from ui.router import render_router
 def apply_mobile_first_style():
     st.markdown("""
     <style>
-    /* ★ 가로 스크롤(옆으로 이동) 원천 차단 */
+    /* ★ 화면 가로 스크롤 원천 차단 */
     html, body {
         overflow-x: hidden !important;
         max-width: 100vw !important;
@@ -85,7 +85,7 @@ def apply_mobile_first_style():
     div[role="radiogroup"] label p, div[data-testid="stRadio"] label p { color: var(--text) !important; word-break: keep-all !important; line-height: 1.6 !important; }
     label[data-testid="stWidgetLabel"] p { font-size: 0.88rem !important; font-weight: 700 !important; color: #334155 !important; line-height: 1.5 !important; }
 
-    /* ★ 3D 입체형 고급 버튼 스타일 공통 */
+    /* ★ 3D 입체형 고급 버튼 스타일 적용 */
     div[data-testid="stButton"] > button {
         font-weight: 800 !important;
         border-radius: 14px !important;
@@ -100,7 +100,7 @@ def apply_mobile_first_style():
         align-items: center !important;
         transition: all 0.1s ease !important;
         text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25) !important;
-        margin-bottom: 6px !important; 
+        margin: 0 auto 6px auto !important; 
     }
 
     /* 1. Primary 버튼 (처음, 이전, 학습시작) -> 생동감 있는 블루 & 3D 그림자 */
@@ -108,8 +108,7 @@ def apply_mobile_first_style():
     div[data-testid="stButton"] > button[data-testid="baseButton-primary"] {
         background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%) !important;
         box-shadow: 0 5px 0px #1e40af, 0 8px 12px rgba(37, 99, 235, 0.3) !important;
-        max-width: 280px !important;
-        margin: 0 auto 6px auto !important;
+        max-width: 320px !important;
     }
     div[data-testid="stButton"] > button[kind="primary"]:active,
     div[data-testid="stButton"] > button[data-testid="baseButton-primary"]:active {
@@ -117,13 +116,12 @@ def apply_mobile_first_style():
         box-shadow: 0 0px 0px #1e40af, 0 2px 4px rgba(37, 99, 235, 0.3) !important;
     }
 
-    /* 2. Secondary 버튼 (다른 사례 분석) -> 고급스러운 인디고 톤 */
+    /* 2. Secondary 버튼 (다른 사례/결과 분석) -> 고급스러운 인디고(퍼플블루) 톤 */
     div[data-testid="stButton"] > button[kind="secondary"],
     div[data-testid="stButton"] > button[data-testid="baseButton-secondary"] {
         background: linear-gradient(180deg, #6366f1 0%, #4f46e5 100%) !important;
         box-shadow: 0 5px 0px #3730a3, 0 8px 12px rgba(79, 70, 229, 0.3) !important;
-        max-width: 280px !important;
-        margin: 0 auto 6px auto !important;
+        max-width: 320px !important;
     }
     div[data-testid="stButton"] > button[kind="secondary"]:active,
     div[data-testid="stButton"] > button[data-testid="baseButton-secondary"]:active {
@@ -132,7 +130,7 @@ def apply_mobile_first_style():
     }
 
     @media (max-width: 768px) {
-        .main .block-container { padding-top: 1rem; padding-bottom: 3rem; padding-left: 0.75rem; padding-right: 0.75rem; overflow-x: hidden !important; }
+        .main .block-container { padding-top: 1rem; padding-bottom: 3rem; padding-left: 0.75rem; padding-right: 0.75rem; }
         .main-title { font-size: 1.2rem; } .subtle { font-size: 0.88rem; }
         .section-card, .result-card, .warn-card, .info-card { padding: 14px 12px; margin-bottom: 14px; }
         .big-section-title, .case-section-label, .result-label { font-size: 0.92rem; padding: 10px 10px; margin-bottom: 12px; }
@@ -140,39 +138,31 @@ def apply_mobile_first_style():
         .label-strong, .result-value { font-size: 0.86rem !important; }
         .finding-highlight { font-size: 0.92rem !important; margin-top: 12px; margin-bottom: 8px; }
         
-        /* ★ 모바일 가로 스크롤 완벽 차단 및 50:50 정렬 */
+        /* 🚨 버그 원인(Flexbox) 제거! 수학적 분할을 위한 CSS Grid 도입 */
         div[data-testid="stHorizontalBlock"] {
-            display: flex !important;
-            flex-direction: row !important;
-            flex-wrap: nowrap !important;
-            gap: 10px !important; 
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important; /* 화면을 강제로 반반(50:50)으로 분할 */
+            gap: 12px !important; /* 버튼 사이 간격 */
             width: 100% !important;
-            max-width: 100vw !important;
+            max-width: 100vw !important; /* 화면 밖으로 밀려나가는 것 방지 */
             margin: 0 !important;
-            padding: 0 !important; 
-            box-sizing: border-box !important;
-            overflow: hidden !important;
-        }
-        div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {
-            flex: 1 1 0 !important; /* 남은 공간을 정확히 1:1로 나눔 */
-            width: 100% !important; 
-            min-width: 0 !important; /* 버튼이 화면 밖으로 밀어내는 현상 방지 */
             padding: 0 !important;
-            margin: 0 !important;
         }
         
-        /* 모바일에서는 버튼이 컬럼 크기(50%)에 맞게 줄어들도록 강제 지정 */
-        div[data-testid="stHorizontalBlock"] div[data-testid="stButton"] > button {
-            width: 100% !important;
-            max-width: 100% !important;
+        /* 컬럼(각 버튼 컨테이너)의 너비 오류 방지 */
+        div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {
+            width: 100% !important; 
             min-width: 0 !important; 
-            font-size: 0.92rem !important;
-            min-height: 48px !important;
+            margin: 0 !important;
             padding: 0 !important;
-            margin: 0 0 6px 0 !important;
-            white-space: nowrap !important;
-            overflow: hidden !important;
-            text-overflow: ellipsis !important; /* 글씨가 혹시라도 넘치면 ... 처리 */
+        }
+        
+        /* 모바일에서는 버튼 자체의 최대 크기 제한을 풀어서 배정받은 공간에 딱 맞게 맞춤 */
+        div[data-testid="stHorizontalBlock"] div[data-testid="stButton"] > button {
+            max-width: 100% !important;
+            font-size: 0.9rem !important;
+            padding: 0 !important;
+            white-space: nowrap !important; /* 글자 억지로 줄바꿈되는 것 방지 */
         }
     }
     
