@@ -8,8 +8,8 @@ VIRTUAL_REPORTS = {
     "왼쪽 목/어깨 통증 및 팔 저림 (C6 신경뿌리병증 의심)": {
         "info": {"age": 45, "sex": "남성", "symptom": "왼쪽 목(Cervical) 통증 및 무감각, 엄지/검지 손가락 끝 저림, 팔꿉관절 굽힘(Flexion)력 감소", "side": "왼쪽"},
         "diagnosis": "왼쪽 C6 목 신경뿌리병증(Cervical radiculopathy)",
-        "ncs_sensory": [["정중신경 (Median SNAP)", "25 μV", "2.8 ms", "정상 범위"], ["자신경 (Ulnar SNAP)", "22 μV", "2.5 ms", "정상 범위"]],
-        "ncs_motor": [["정중신경 (Median CMAP)", "손목(Wrist) 자극", "8.5 mV", "3.5 ms", "정상 범위"], ["정중신경 (Median CMAP)", "팔꿈치(Elbow) 자극", "8.1 mV", "7.8 ms", "정상 범위"]],
+        "ncs_sensory": [["정중신경 감각신경활동전위 (Median SNAP)", "25 μV", "2.8 ms", "정상 범위"], ["자신경 감각신경활동전위 (Ulnar SNAP)", "22 μV", "2.5 ms", "정상 범위"]],
+        "ncs_motor": [["정중신경 복합근육활동전위 (Median CMAP)", "손목", "8.5 mV", "3.5 ms", "정상 범위"], ["정중신경 복합근육활동전위 (Median CMAP)", "팔꿈치", "8.1 mV", "7.8 ms", "정상 범위"]],
         "emg": [
             ["위팔두갈래근 (Biceps brachii)", "C5-C6", "fibrillation potential, positive sharp wave", "Reduced MU recruitment", "비정상 (활동성 탈신경)"],
             ["긴노쪽손목폄근 (ECRL)", "C6-C7", "fibrillation potential, positive sharp wave", "Giant MUAPs 출현 및 Reduced MU recruitment", "비정상 (만성 재신경지배 동반)"],
@@ -29,8 +29,8 @@ VIRTUAL_REPORTS = {
     "오른쪽 1~3번째 손가락 저림 및 야간통 (손목굴증후군 의심)": {
         "info": {"age": 52, "sex": "여성", "symptom": "오른쪽 1, 2, 3번째 손가락 노쪽(Radial) 분포 영역 저림, 야간 통증 및 손목관절 굽힘(Flexion) 시 통증 악화", "side": "오른쪽"},
         "diagnosis": "오른쪽 손목굴증후군(Carpal tunnel syndrome)",
-        "ncs_sensory": [["정중신경 (Median SNAP)", "8 μV", "4.8 ms", "진폭: 감소 / 잠복기: 지연"], ["자신경 (Ulnar SNAP)", "25 μV", "2.6 ms", "정상 범위"]],
-        "ncs_motor": [["정중신경 (Median CMAP)", "손목", "3.1 mV", "5.5 ms", "진폭: 감소 / 잠복기: 지연"], ["정중신경 (Median CMAP)", "팔꿈치 자극", "2.9 mV", "9.8 ms", "진폭: 감소"]],
+        "ncs_sensory": [["정중신경 감각신경활동전위 (Median SNAP)", "8 μV", "4.8 ms", "진폭: 감소 / 잠복기: 지연"], ["자신경 감각신경활동전위 (Ulnar SNAP)", "25 μV", "2.6 ms", "정상 범위"]],
+        "ncs_motor": [["정중신경 복합근육활동전위 (Median CMAP)", "손목", "3.1 mV", "5.5 ms", "진폭: 감소 / 잠복기: 지연"], ["정중신경 복합근육활동전위 (Median CMAP)", "팔꿈치 자극", "2.9 mV", "9.8 ms", "진폭: 감소"]],
         "emg": [["짧은엄지벌림근 (APB)", "C8-T1", "Silent at rest", "Normal MU recruitment", "정상 범위"], ["첫째등쪽뼈사이근 (FDI)", "C8-T1", "Silent at rest", "Normal MU recruitment", "정상 범위"]],
         "interpretation": [
             "정중신경(Median nerve) 감각전도 SNAP과 운동전도 복합근육활동전위(CMAP)의 잠복기 지연이 나타나 손목 영역의 국소 말이집탈락(Demyelination)성 압박 상태를 고시합니다.",
@@ -45,8 +45,8 @@ VIRTUAL_REPORTS = {
     "왼쪽 허리 통증 및 엄지발가락 올림 약화 (L5 신경뿌리병증 의심)": {
         "info": {"age": 58, "sex": "여성", "symptom": "왼쪽 허리통증(Lumbago)-종아리 가쪽 및 발등 통증, 보행 시 발목관절 등굽힘(Dorsiflexion) 약화로 발끝 끌림", "side": "왼쪽"},
         "diagnosis": "왼쪽 L5 허리 신경뿌리병증(Lumbar radiculopathy)",
-        "ncs_sensory": [["얕은종아리신경 (Superficial Peroneal SNAP)", "12 μV", "2.9 ms", "정상 범위"], ["장딴지신경 (Sural SNAP)", "15 μV", "3.1 ms", "정상 범위"]],
-        "ncs_motor": [["종아리신경 (Peroneal CMAP)", "발목", "3.5 mV", "4.5 ms", "정상 범위"], ["종아리신경 (Peroneal CMAP)", "오금", "3.3 mV", "11.2 ms", "정상 범위"]],
+        "ncs_sensory": [["얕은종아리신경 감각신경활동전위 (Superficial Peroneal SNAP)", "12 μV", "2.9 ms", "정상 범위"], ["장딴지신경 감각신경활동전위 (Sural SNAP)", "15 μV", "3.1 ms", "정상 범위"]],
+        "ncs_motor": [["종아리신경 복합근육활동전위 (Peroneal CMAP)", "발목", "3.5 mV", "4.5 ms", "정상 범위"], ["종아리신경 복합근육활동전위 (Peroneal CMAP)", "오금", "3.3 mV", "11.2 ms", "정상 범위"]],
         "emg": [
             ["앞정강근 (Tibialis Anterior)", "L4-L5", "fibrillation potential, positive sharp wave", "Reduced MU recruitment", "비정상 (활동성 탈신경)"],
             ["긴종아리근 (Peroneus Longus)", "L5-S1", "fibrillation potential, positive sharp wave", "Giant MUAPs 출현 및 Reduced MU recruitment", "비정상 (만성 재신경지배 동반)"],
@@ -65,8 +65,8 @@ VIRTUAL_REPORTS = {
     "오른쪽 발처짐 및 종아리 가쪽 감각 저하 (온종아리신경 마비 의심)": {
         "info": {"age": 32, "sex": "남성", "symptom": "오랫동안 다리를 꼬고 앉은 오른쪽 발목관절 등굽힘(Dorsiflexion) 불능 및 보행 시 발처짐(Foot drop)", "side": "오른쪽"},
         "diagnosis": "오른쪽 온종아리신경 마비(Common peroneal neuropathy)",
-        "ncs_sensory": [["얕은종아리신경 (Superficial Peroneal SNAP)", "4 μV", "3.8 ms", "진폭: 감소 / 잠복기: 지연"], ["장딴지신경 (Sural SNAP)", "16 μV", "3.0 ms", "정상 범위"]],
-        "ncs_motor": [["종아리신경 (Peroneal CMAP)", "발목", "4.5 mV", "4.8 ms", "정상 범위"], ["종아리신경 (Peroneal CMAP)", "종아리뼈머리 자극", "1.1 mV", "무반응", "진폭: 감소 (국소 전도차단)"]],
+        "ncs_sensory": [["얕은종아리신경 감각신경활동전위 (Superficial Peroneal SNAP)", "4 μV", "3.8 ms", "진폭: 감소 / 잠복기: 지연"], ["장딴지신경 감각신경활동전위 (Sural SNAP)", "16 μV", "3.0 ms", "정상 범위"]],
+        "ncs_motor": [["종아리신경 복합근육활동전위 (Peroneal CMAP)", "발목", "4.5 mV", "4.8 ms", "정상 범위"], ["종아리신경 복합근육활동전위 (Peroneal CMAP)", "종아리뼈머리", "1.1 mV", "무반응", "진폭: 감소 (국소 전도차단)"]],
         "emg": [
             ["앞정강근 (Tibialis Anterior)", "L4-L5", "Silent at rest", "No MUAPs on volition (동원 불가)", "비정상 (전도 완전 마비)"],
             ["긴종아리근 (Peroneus Longus)", "L5-S1", "Silent at rest", "Reduced MU recruitment", "비정상 (동원 감소)"],
@@ -84,8 +84,8 @@ VIRTUAL_REPORTS = {
     "양측 발끝 저림 및 감각 저하 (당뇨병성 다발신경병증 의심)": {
         "info": {"age": 68, "sex": "남성", "symptom": "양 발바닥이 대칭적으로 저리고 화끈거리며 무감각한 대칭성 장갑-양말형(Glove-stocking) 감각 마비", "side": "양측"},
         "diagnosis": "길이의존성 축삭성 다발신경병증(Length-dependent axonal polyneuropathy)",
-        "ncs_sensory": [["장딴지신경 (Sural SNAP) 오른쪽", "무반응", "무반응", "반응 소실"], ["정중신경 (Median SNAP) 오른쪽", "18 μV", "3.4 ms", "정상 범위"]],
-        "ncs_motor": [["정강신경 (Tibial CMAP) 오른쪽", "발목", "1.5 mV", "6.2 ms", "진폭: 감소 / 잠복기: 지연"], ["정강신경 (Tibial CMAP) 오른쪽", "오금", "1.2 mV", "15.2 ms", "진폭: 감소"]],
+        "ncs_sensory": [["장딴지신경 감각신경활동전위 (Sural SNAP) 우측", "무반응", "무반응", "반응 소실"], ["정중신경 감각신경활동전위 (Median SNAP) 우측", "18 μV", "3.4 ms", "정상 범위"]],
+        "ncs_motor": [["정강신경 복합근육활동전위 (Tibial CMAP) 우측", "발목", "1.5 mV", "6.2 ms", "진폭: 감소 / 잠복기: 지연"], ["정강신경 복합근육활동전위 (Tibial CMAP) 우측", "오금", "1.2 mV", "15.2 ms", "진폭: 감소"]],
         "emg": [["앞정강근 (Tibialis Anterior)", "L4-L5", "fibrillation potential, positive sharp wave", "Reduced MU recruitment", "비정상 (대칭적 말초 축삭 퇴행)"], ["위팔두갈래근 (Biceps brachii)", "C5-C6", "Silent at rest", "Normal MU recruitment", "정상 범위"]],
         "interpretation": [
             "다리의 먼쪽(Distal) 말단 감각전도인 장딴지신경(Sural nerve) 감각신경활동전위(SNAP)가 대칭 반응 소실을 보여 축삭 손상(Axonal loss)을 고지합니다.",
@@ -99,8 +99,8 @@ VIRTUAL_REPORTS = {
     "팔다리 대칭성 근력 저하 (급성 기얭-바레 증후군 의심)": {
         "info": {"age": 41, "sex": "여성", "symptom": "가벼운 장염을 앓고 난 뒤 2주 후부터 대칭적으로 무릎 이하 다리 근력이 빠지고 위쪽으로 상행하는 양상", "side": "양측"},
         "diagnosis": "급성 염증성 탈말이집성 다발신경뿌리병증(Guillain-Barre Syndrome, GBS)",
-        "ncs_sensory": [["정중신경 (Median SNAP)", "22 μV", "3.8 ms", "잠복기: 지연"], ["장딴지신경 (Sural SNAP)", "12 μV", "3.4 ms", "정상 범위 (Sural Sparing)"]],
-        "ncs_motor": [["종아리신경 (Peroneal CMAP)", "발목", "3.0 mV", "8.5 ms", "잠복기: 지연"], ["종아리신경 (Peroneal CMAP)", "종아리뼈머리 자극", "1.2 mV", "20.1 ms", "잠복기: 지연 / 전도속도 급감"]],
+        "ncs_sensory": [["정중신경 감각신경활동전위 (Median SNAP)", "22 μV", "3.8 ms", "잠복기: 지연"], ["장딴지신경 감각신경활동전위 (Sural SNAP)", "12 μV", "3.4 ms", "정상 범위 (Sural Sparing)"]],
+        "ncs_motor": [["종아리신경 복합근육활동전위 (Peroneal CMAP)", "발목", "3.0 mV", "8.5 ms", "잠복기: 지연"], ["종아리신경 복합근육활동전위 (Peroneal CMAP)", "종아리뼈머리", "1.2 mV", "20.1 ms", "잠복기: 지연 / 전도속도 급감"]],
         "emg": [["앞정강근 (Tibialis Anterior)", "L4-L5", "Silent at rest", "Reduced MU recruitment", "비정상 (동원 결손)"], ["허리 척추주위근 (Lumbar Paraspinal)", "L5", "Silent at rest", "통증으로 인해 평가불가", "정상 범위"]],
         "interpretation": [
             "다수의 다리 전도 속도가 폭락하고 전달 잠복기가 130% 이상 대폭 늘어난 대칭 말이집탈락(Demyelination)성 이상 전도를 나타냅니다.",
@@ -114,8 +114,8 @@ VIRTUAL_REPORTS = {
     "오른쪽 팔꿈치 통증 및 손가락 힘 빠짐 (C7 신경뿌리병증 의심)": {
         "info": {"age": 49, "sex": "여성", "symptom": "오른쪽 어깨 뒤부터 삼두근 부위를 지나 가운데 손가락으로 전개되는 통증 및 팔꿉관절 폄(Extension) 근력저하", "side": "오른쪽"},
         "diagnosis": "오른쪽 C7 목 신경뿌리병증(Cervical radiculopathy)",
-        "ncs_sensory": [["정중신경 (Median SNAP)", "28 μV", "2.9 ms", "정상 범위"], ["자신경 (Ulnar SNAP)", "24 μV", "2.4 ms", "정상 범위"]],
-        "ncs_motor": [["정중신경 (Median CMAP)", "손목", "9.2 mV", "3.6 ms", "정상 범위"], ["노신경 (Radial CMAP)", "아래팔", "6.5 mV", "2.8 ms", "정상 범위"]],
+        "ncs_sensory": [["정중신경 감각신경활동전위 (Median SNAP)", "28 μV", "2.9 ms", "정상 범위"], ["자신경 감각신경활동전위 (Ulnar SNAP)", "24 μV", "2.4 ms", "정상 범위"]],
+        "ncs_motor": [["정중신경 복합근육활동전위 (Median CMAP)", "손목", "9.2 mV", "3.6 ms", "정상 범위"], ["노신경 복합근육활동전위 (Radial CMAP)", "아래팔", "6.5 mV", "2.8 ms", "정상 범위"]],
         "emg": [
             ["위팔세갈래근 (Triceps brachii)", "C7-C8", "fibrillation potential, positive sharp wave", "Reduced MU recruitment", "비정상 (활동성 탈신경)"],
             ["손목굽힘근 (Flexor carpi radialis)", "C6-C7", "fibrillation potential, positive sharp wave", "Reduced MU recruitment", "비정상 (활동성 탈신경)"],
@@ -134,8 +134,8 @@ VIRTUAL_REPORTS = {
     "S1 신경뿌리병증 의심 사례": {
         "info": {"age": 53, "sex": "남성", "symptom": "왼쪽 허리통증(Lumbago), 왼쪽 볼기에서 허벅지 뒤편을 관통하여 발등 가쪽 및 새끼발가락으로 흐르는 칼로 찌르는 듯한 통증", "side": "왼쪽"},
         "diagnosis": "왼쪽 S1 허리 신경뿌리병증(Lumbar radiculopathy)",
-        "ncs_sensory": [["장딴지신경 (Sural SNAP)", "14 μV", "3.0 ms", "정상 범위"], ["얕은종아리신경 (Superficial Peroneal SNAP)", "11 μV", "2.8 ms", "정상 범위"]],
-        "ncs_motor": [["정강신경 (Tibial CMAP)", "발목", "5.8 mV", "4.2 ms", "정상 범위"], ["종아리신경 (Peroneal CMAP)", "발목", "4.8 mV", "4.5 ms", "정상 범위"]],
+        "ncs_sensory": [["장딴지신경 감각신경활동전위 (Sural SNAP)", "14 μV", "3.0 ms", "정상 범위"], ["얕은종아리신경 감각신경활동전위 (Superficial Peroneal SNAP)", "11 μV", "2.8 ms", "정상 범위"]],
+        "ncs_motor": [["정강신경 복합근육활동전위 (Tibial CMAP)", "발목", "5.8 mV", "4.2 ms", "정상 범위"], ["종아리신경 복합근육활동전위 (Peroneal CMAP)", "발목", "4.8 mV", "4.5 ms", "정상 범위"]],
         "emg": [
             ["가자미근 (Soleus)", "S1-S2", "fibrillation potential, positive sharp wave", "Reduced MU recruitment", "비정상 (활동성 탈신경)"],
             ["장딴지근 (Gastrocnemius)", "S1-S2", "fibrillation potential, positive sharp wave", "Reduced MU recruitment", "비정상 (활동성 탈신경)"],
@@ -154,8 +154,8 @@ VIRTUAL_REPORTS = {
     "오른쪽 어깨 통증 및 손 내재근 위축 (가슴문증후군 의심)": {
         "info": {"age": 38, "sex": "여성", "symptom": "오른쪽 어깨 및 빗장뼈(Clavicle) 하부 통증, 새끼손가락 쪽 감각 이상, 짧은엄지벌림근 위축 양상 동반", "side": "오른쪽"},
         "diagnosis": "오른쪽 가슴문증후군(Thoracic outlet syndrome, TOS)",
-        "ncs_sensory": [["가쪽아래팔피부신경 (LAC SNAP)", "25 μV", "2.1 ms", "정상 범위"], ["안쪽아래팔피부신경 (MAC SNAP)", "2 μV", "3.9 ms", "진폭: 감소 / 잠복기: 지연"]],
-        "ncs_motor": [["정중신경 (Median CMAP)", "손목", "3.8 mV", "4.0 ms", "진폭: 감소"], ["자신경 (Ulnar CMAP)", "손목", "4.1 mV", "3.2 ms", "정상 범위"]],
+        "ncs_sensory": [["가쪽아래팔피부신경 감각신경활동전위 (LAC SNAP)", "25 μV", "2.1 ms", "정상 범위"], ["안쪽아래팔피부신경 감각신경활동전위 (MAC SNAP)", "2 μV", "3.9 ms", "진폭: 감소 / 잠복기: 지연"]],
+        "ncs_motor": [["정중신경 복합근육활동전위 (Median CMAP)", "손목", "3.8 mV", "4.0 ms", "진폭: 감소"], ["자신경 복합근육활동전위 (Ulnar CMAP)", "손목", "4.1 mV", "3.2 ms", "정상 범위"]],
         "emg": [
             ["짧은엄지벌림근 (APB)", "C8-T1", "Silent at rest", "Giant MUAPs 출현 및 Reduced MU recruitment", "비정상 (손 양상)"],
             ["첫째등쪽뼈사이근 (FDI)", "C8-T1", "Silent at rest", "Giant MUAPs 출현 및 Reduced MU recruitment", "비정상 (손 내재근 위축)"],
@@ -174,8 +174,8 @@ VIRTUAL_REPORTS = {
     "왼쪽 갑작스러운 한쪽 얼굴 마비 (얼굴신경마비 의심)": {
         "info": {"age": 29, "sex": "남성", "symptom": "급격히 발현된 왼쪽 얼굴 전반 이마 주름 소실, 왼쪽 안구 완전 감김(Closure) 불능, 입꼬리 대칭 이탈", "side": "왼쪽"},
         "diagnosis": "왼쪽 특발성 얼굴신경마비(Bell's palsy)",
-        "ncs_sensory": [["오른쪽 이마 자극 (V1 분지)", "22 μV", "2.1 ms", "정상 범위"], ["왼쪽 이마 자극 (V1 분지)", "21 μV", "2.2 ms", "정상 범위"]],
-        "ncs_motor": [["오른쪽 얼굴신경 (Facial CMAP)", "코근", "3.2 mV", "2.8 ms", "정상 범위"], ["왼쪽 얼굴신경 (Facial CMAP)", "코근", "1.1 mV", "4.5 ms", "진폭: 감소 / 잠복기: 지연"]],
+        "ncs_sensory": [["오른쪽 이마 자극 (V1)", "22 μV", "2.1 ms", "정상 범위"], ["왼쪽 이마 자극 (V1)", "21 μV", "2.2 ms", "정상 범위"]],
+        "ncs_motor": [["오른쪽 얼굴신경 복합근육활동전위 (Facial CMAP)", "코근", "3.2 mV", "2.8 ms", "정상 범위"], ["왼쪽 얼굴신경 복합근육활동전위 (Facial CMAP)", "코근", "1.1 mV", "4.5 ms", "진폭: 감소 / 잠복기: 지연"]],
         "emg": [["눈둘레근 (Orbicularis Oculi)", "얼굴신경 지배", "Silent at rest", "Normal MU recruitment", "정상 범위"]],
         "interpretation": [
             "왼쪽 얼굴 자극 시 운동 복합근육활동전위(Facial CMAP) 최대 진폭이 정상측 대비 50% 이하로 크게 감소해 있어, 심각한 먼쪽(distal) 운동 축삭 사멸 변성이 진행되고 있음을 측정해 냅니다.",
@@ -189,23 +189,38 @@ VIRTUAL_REPORTS = {
     }
 }
 
-def format_eng_term(text):
+def format_title_box(kor, eng):
+    return f"<div class='title-box'><div class='title-kor'>{kor}</div><div class='title-eng'>{eng.lower()}</div></div>"
+
+def format_result_label(kor, eng):
+    return f"<div class='result-label-box'><div class='title-kor'>{kor}</div><div class='title-eng'>{eng.lower()}</div></div>"
+
+def format_inline_term(text):
     if not text: return ""
-    text = str(text).replace(", ", "<br>")
+    text = str(text)
+    text = re.sub(r'\s+\(', '(', text)
     def repl(m):
-        kor = m.group(1).strip()
-        eng = m.group(2).strip().lower()
-        for ac in ["snap", "cmap", "muap", "muaps", "ncs", "emg", "mas", "drt", "umn", "lmn", "ta", "ecr", "eip", "adm", "fdi", "ehl", "pl"]:
-            eng = re.sub(rf"\b{ac}\b", ac.upper(), eng)
-        return f"{kor}<br><span class='title-eng'>{eng}</span>"
-    return re.sub(r"([가-힣a-zA-Z0-9\s/]+)\s*\((.*?)\)", repl, text)
+        content = m.group(1)
+        if not re.search('[a-zA-Z]', content): return f"({content})"
+        words = content.split()
+        res = []
+        acronyms = {"SNAP", "CMAP", "MUAP", "MUAPS", "NCS", "EMG", "MAS", "DRT", "UMN", "LMN", "TA", "ECR", "EIP", "ADM", "FDI", "EHL", "PL", "R1", "R2", "F-WAVE", "H-REFLEX", "V1", "C5", "C6", "C7", "C8", "T1", "L4", "L5", "S1", "S2"}
+        for w in words:
+            clean_w = re.sub(r'[^a-zA-Z0-9-]', '', w).upper()
+            if clean_w in acronyms: res.append(w.upper())
+            else: res.append(w.lower())
+        return f"({' '.join(res)})"
+    return re.sub(r'\((.*?)\)', repl, text)
 
 def _get_ncs_row(lbl, val, is_bad=False):
-    color = "text-red" if is_bad else "text-blue"
-    return f'<div class="result-row"><div class="lbl">{lbl}</div><div class="val {color}">{val}</div></div>'
+    # 🚨 콤마(,) 세로 분할 로직 적용
+    val = str(val).replace(", ", "<br>")
+    color = "text-red" if is_bad else ("text-green" if "정상" in val else "")
+    return f'<div class="data-line"><div class="data-lbl">{lbl}</div><div class="data-val {color}">{val}</div></div>'
 
 def render_input_learning():
-    st.markdown('<div class="main-title">가상 결과표 판독학습</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-title-kor">가상 결과표 판독학습</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-title-eng">report analysis mode</div>', unsafe_allow_html=True)
     st.markdown('<div class="subtle">임상 수치 데이터 기반의 가상 결과지를 통해 전기생리학적 해석 논리를 훈련합니다.</div>', unsafe_allow_html=True)
 
     if "input_reset_counter" not in st.session_state:
@@ -214,7 +229,7 @@ def render_input_learning():
     dynamic_radio_key = f"input_report_selector_{st.session_state['input_reset_counter']}"
 
     st.markdown('<div class="section-card">', unsafe_allow_html=True)
-    st.markdown(f'<div class="case-section-label">{format_eng_term("학습할 가상 결과지 선택(case selection)")}</div>', unsafe_allow_html=True)
+    st.markdown(format_title_box("학습할 가상 결과지 선택", "case selection"), unsafe_allow_html=True)
 
     case_names = ["선택 안 함"] + list(VIRTUAL_REPORTS.keys())
 
@@ -225,57 +240,64 @@ def render_input_learning():
         data = VIRTUAL_REPORTS[selected]
 
         st.markdown('<div class="info-card">', unsafe_allow_html=True)
-        st.markdown(f'<div class="lbl" style="font-size:1rem; margin-bottom:8px;">👤 환자 사례: {selected}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="val">연령/성별: {data["info"]["age"]}세 / {data["info"]["sex"]} &nbsp;|&nbsp; 병변측: {data["info"]["side"]}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div style="margin-top:10px;"><div class="lbl">주요 임상 증상:</div><div class="val" style="margin-top:4px;">{format_eng_term(data["info"]["symptom"])}</div></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="data-lbl" style="font-size:1rem; margin-bottom:8px;">👤 환자 사례: {selected}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="data-val">연령/성별: {data["info"]["age"]}세 / {data["info"]["sex"]} &nbsp;|&nbsp; 병변측: {data["info"]["side"]}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="margin-top:10px;"><div class="data-lbl">주요 임상 증상:</div><div class="data-val" style="margin-top:4px;">{format_inline_term(data["info"]["symptom"])}</div></div>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-        st.markdown('<div class="section-card">', unsafe_allow_html=True)
-        st.markdown(f'<div class="case-section-label">{format_eng_term(f"근전도 결과표 (NCS & Needle EMG): 병변측 ({data['info']['side']})")}</div>', unsafe_allow_html=True)
-
-        # 표 생성기 (세로 나열 최적화)
-        def render_table_section(title, headers, rows):
-            st.markdown(f'<div class="finding-highlight">{format_eng_term(title)}</div>', unsafe_allow_html=True)
+        def render_table_section(title_kor, title_eng, headers, rows):
+            st.markdown(format_title_box(title_kor, title_eng), unsafe_allow_html=True)
             for row in rows:
-                nerve = format_eng_term(row[0])
-                st.markdown(f'<div style="background:#f8fafc; padding:8px 12px; border-radius:6px; margin-bottom:8px;">', unsafe_allow_html=True)
-                st.markdown(f'<div class="lbl" style="margin-bottom:6px; font-size:0.92rem;">{nerve}</div>', unsafe_allow_html=True)
+                nerve = format_inline_term(row[0])
+                m = re.match(r'^(.*?)\s*\((.*?)\)$', nerve)
+                if m:
+                    head = f"<div class='finding-highlight-kor'>{m.group(1)}</div><div class='finding-highlight-eng'>{m.group(2)}</div>"
+                else:
+                    head = f"<div class='finding-highlight-kor'>{nerve}</div><div class='finding-highlight-eng' style='color:transparent;'>-</div>"
+
+                st.markdown(f'<div style="background:#f8fafc; padding:8px 12px; border-radius:8px; margin-bottom:12px;">{head}', unsafe_allow_html=True)
                 for idx, col in enumerate(row[1:]):
                     col_str = str(col).replace(" / ", "<br>")
                     is_bad = any(x in col_str for x in ["비정상", "침범", "확진", "마비", "소실", "감소", "지연", "Gilliatt"])
-                    color = "text-red" if is_bad else ("text-green" if "정상" in col_str else "")
-                    st.markdown(f'<div class="result-row"><div class="lbl" style="flex:0 0 110px;">{format_eng_term(headers[idx+1])}</div><div class="val {color}">{format_eng_term(col_str)}</div></div>', unsafe_allow_html=True)
+                    st.markdown(_get_ncs_row(format_inline_term(headers[idx+1]), format_inline_term(col_str), is_bad), unsafe_allow_html=True)
                 st.markdown('</div>', unsafe_allow_html=True)
 
-        render_table_section("감각신경전도검사(sensory NCS)", ["검사 신경", "진폭 수치", "잠복기 수치", "판단"], data["ncs_sensory"])
-        render_table_section("운동신경전도검사(motor NCS)", ["검사 신경", "자극 위치", "진폭 수치", "잠복기 수치", "판단"], data["ncs_motor"])
+        st.markdown('<div class="section-card">', unsafe_allow_html=True)
+        st.markdown(f'<div style="font-weight:800; font-size:1.05rem; color:#1e40af; margin-bottom:16px;">📋 근전도 결과표 병변측({data["info"]["side"]})</div>', unsafe_allow_html=True)
+
+        render_table_section("감각신경전도검사", "sensory NCS", ["검사 신경", "진폭 수치", "잠복기 수치", "판단"], data["ncs_sensory"])
+        render_table_section("운동신경전도검사", "motor NCS", ["검사 신경", "자극 위치", "진폭 수치", "잠복기 수치", "판단"], data["ncs_motor"])
 
         is_emg_applicable = "눈꺼풀" not in selected and "뇌졸중" not in selected
         if is_emg_applicable:
-            render_table_section("침근전도검사(needle EMG)", ["검사 근육", "해당 분절(root)", "휴식 시(rest)", "수의적 수축 시(volition)", "판단"], data["emg"])
+            render_table_section("침근전도검사", "needle EMG", ["검사 근육", "해당 분절(root)", "휴식 시(rest)", "수의적 수축 시(volition)", "판단"], data["emg"])
         st.markdown('</div>', unsafe_allow_html=True)
 
-        st.markdown('<div class="diag-box">', unsafe_allow_html=True)
-        st.markdown(f'<div class="diag-name">{format_eng_term(data["diagnosis"])}</div>', unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+        # 🚨 진단명 깔끔한 중앙 카드 포맷
+        st.markdown(f"""
+        <div class="diag-box">
+            <div class="diag-kor">{data["diagnosis"].split('(')[0].strip()}</div>
+            <div class="diag-eng">{"(" + data["diagnosis"].split('(')[1] if '(' in data["diagnosis"] else ""}</div>
+        </div>
+        """, unsafe_allow_html=True)
         
         st.markdown('<div class="section-card">', unsafe_allow_html=True)
         label = "눈깜박반사 해석 포인트" if ("눈꺼풀" in selected or "얼굴" in selected) else "H-반사 유발 해석 포인트" if "뇌졸중" in selected else "데이터 해석 논리"
-        st.markdown(f'<div class="result-label">{label}</div>', unsafe_allow_html=True)
-        for i in data["interpretation"]: st.markdown(f'<div class="case-bullet">• {format_eng_term(i)}</div>', unsafe_allow_html=True)
+        st.markdown(format_result_label(label, "data interpretation"), unsafe_allow_html=True)
+        for i in data["interpretation"]: st.markdown(f'<div class="case-bullet">• {format_inline_term(i)}</div>', unsafe_allow_html=True)
         
         if is_emg_applicable:
-            st.markdown(f'<div class="result-label">{format_eng_term("침근전도 소견 생리학적 의미(EMG interpretation)")}</div>', unsafe_allow_html=True)
+            st.markdown(format_result_label("침근전도 소견 생리학적 의미", "EMG interpretation"), unsafe_allow_html=True)
             for m in data["emg_meaning"]:
                 parts = m.split(":", 1)
-                if len(parts) == 2: st.markdown(f'<div class="result-row"><div class="lbl">{format_eng_term(parts[0])}</div><div class="val">{format_eng_term(parts[1])}</div></div>', unsafe_allow_html=True)
-                else: st.markdown(f'<div class="case-bullet">• {format_eng_term(m)}</div>', unsafe_allow_html=True)
+                if len(parts) == 2: st.markdown(_get_ncs_row(format_inline_term(parts[0]), format_inline_term(parts[1])), unsafe_allow_html=True)
+                else: st.markdown(f'<div class="case-bullet">• {format_inline_term(m)}</div>', unsafe_allow_html=True)
 
-        st.markdown(f'<div class="result-label">{format_eng_term("감별진단 포인트(differential diagnosis)")}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="case-bullet">{format_eng_term(data["ddx"])}</div>', unsafe_allow_html=True)
+        st.markdown(format_result_label("감별진단 포인트", "differential diagnosis"), unsafe_allow_html=True)
+        st.markdown(f'<div class="case-bullet">{format_inline_term(data["ddx"])}</div>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-        st.markdown('<div class="center-btn-wrapper" style="margin-top: 16px; margin-bottom: 8px;">', unsafe_allow_html=True)
+        st.markdown('<div class="center-btn-wrapper" style="margin-top: 24px; margin-bottom: 8px;">', unsafe_allow_html=True)
         if st.button("🔄 다른 결과 분석", type="secondary", key="reset_input_report_btn"):
             st.session_state["input_reset_counter"] += 1
             st.rerun()
