@@ -267,7 +267,14 @@ def render_case_list():
         )
 
         if teaching.get("ncs_reason"):
-            st.markdown('<div class="result-label">신경전도 및 후기반응 해석 포인트</div>', unsafe_allow_html=True)
+            # ★ 1번 수정 핵심: '눈꺼풀' 또는 '얼굴' 포함 시 동적으로 문구 변경
+            if "눈꺼풀" in selected or "얼굴" in selected:
+                st.markdown('<div class="result-label">눈깜박반사 해석 포인트</div>', unsafe_allow_html=True)
+            elif "뇌졸중" in selected:
+                st.markdown('<div class="result-label">H-반사 유발 해석 포인트</div>', unsafe_allow_html=True)
+            else:
+                st.markdown('<div class="result-label">신경전도 및 후기반응 해석 포인트</div>', unsafe_allow_html=True)
+                
             for x in teaching["ncs_reason"]:
                 st.markdown(f'<div class="result-text">• {x}</div>', unsafe_allow_html=True)
 
@@ -304,7 +311,6 @@ def render_case_list():
             st.markdown('</div>', unsafe_allow_html=True)
 
         st.markdown('<div style="text-align: center; margin-top: 20px; margin-bottom: 20px;">', unsafe_allow_html=True)
-        # ★ 문구 단축 및 type="secondary" (인디고 톤 입체버튼)
         if st.button("🔄 다른 사례 분석", type="secondary", key="reset_case_radio_btn"):
             st.session_state["case_reset_counter"] += 1
             st.rerun()
