@@ -3,7 +3,6 @@
 import streamlit as st
 from ui.navigation import render_bottom_navigation
 
-# (데이터 딕셔너리 VIRTUAL_REPORTS는 기존과 동일하게 유지 - 분량상 생략 없이 모두 포함)
 VIRTUAL_REPORTS = {
     "왼쪽 목/어깨 통증 및 팔 저림 (C6 신경뿌리병증 의심)": {
         "info": {"age": 45, "sex": "남성", "symptom": "왼쪽 목(Cervical) 통증 및 무감각, 엄지/검지 손가락 끝 저림, 팔꿉관절 굽힘(Flexion)력 감소", "side": "왼쪽"},
@@ -84,7 +83,7 @@ VIRTUAL_REPORTS = {
     "양측 발끝 저림 및 감각 저하 (당뇨병성 다발신경병증 의심)": {
         "info": {"age": 68, "sex": "남성", "symptom": "양 발바닥이 대칭적으로 저리고 화끈거리며 무감각한 대칭성 장갑-양말형(Glove-stocking) 감각 마비", "side": "양측"},
         "diagnosis": "길이의존성 축삭성 다발신경병증(Length-dependent axonal polyneuropathy)",
-        "ncs_sensory": [["장딴지신경 (Sural SNAP) 오른쪽", "무반응", "무반응", "반응 소실"], ["정중신경 (Median SNAP)) 오른쪽", "18 μV", "3.4 ms", "정상 범위"]],
+        "ncs_sensory": [["장딴지신경 (Sural SNAP) 오른쪽", "무반응", "무반응", "반응 소실"], ["정중신경 (Median SNAP) 오른쪽", "18 μV", "3.4 ms", "정상 범위"]],
         "ncs_motor": [["정강신경 (Tibial CMAP) 오른쪽", "발목 자극", "1.5 mV", "6.2 ms", "진폭: 감소 / 잠복기: 지연"], ["정강신경 (Tibial CMAP) 오른쪽", "오금 자극", "1.2 mV", "15.2 ms", "진폭: 감소"]],
         "emg": [["앞정강근 (Tibialis Anterior)", "L4-L5", "fibrillation potential, positive sharp wave", "Reduced MU recruitment", "비정상 (대칭적 말초 축삭 퇴행)"], ["위팔두갈래근 (Biceps brachii)", "C5-C6", "Silent at rest", "Normal MU recruitment", "정상 범위"]],
         "interpretation": [
@@ -188,7 +187,6 @@ VIRTUAL_REPORTS = {
         "ddx": "중추성 얼굴마비는 이마 주름 잡기가 보존되나 말초성 벨마비는 불가능하므로, 내원 시 이마 주름 형성 여부를 관찰하여 위운동신경세포와 아래운동신경세포 장애를 선별하십시오."
     }
 }
-
 
 def render_input_learning():
     st.markdown('<div class="main-title">가상 결과표 판독학습</div>', unsafe_allow_html=True)
@@ -321,7 +319,8 @@ def render_input_learning():
         st.markdown('</div>', unsafe_allow_html=True)
 
         st.markdown('<div style="text-align: center; margin-top: 20px; margin-bottom: 20px;">', unsafe_allow_html=True)
-        if st.button("🔄 다른 가상 결과지 분석하기", key="reset_input_report_btn"):
+        # ★ type="secondary" 명시하여 상단 버튼을 회색으로 분리
+        if st.button("🔄 다른 가상 결과지 분석하기", type="secondary", key="reset_input_report_btn"):
             st.session_state["input_reset_counter"] += 1
             st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
