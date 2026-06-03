@@ -3,12 +3,19 @@
 import re
 import streamlit as st
 from data.cases import CASE_LIBRARY
-from data.constants import ANATOMY
-from engine.inference import split_findings_by_domain
 from ui.navigation import render_bottom_navigation
 
+def split_findings_by_domain(findings):
+    grouped = {"sensory": {}, "motor": {}, "muscle": {}, "reflex": {}}
+    for item, vals in findings.items():
+        name = item.lower()
+        if "snap" in name or "감각" in name: grouped["sensory"][item] = vals
+        elif "cmap" in name or "운동" in name: grouped["motor"][item] = vals
+        elif "반사" in name or "f파" in name or "r1" in name or "r2" in name or "h/m" in name or "blink" in name: grouped["reflex"][item] = vals
+        else: grouped["muscle"][item] = vals
+    return grouped
+
 def format_eng_term(text):
-    """(영문) 형태를 줄바꿈 및 소문자 포맷으로 변경 (약어는 대문자 유지)"""
     if not text: return ""
     text = str(text).replace(", ", "<br>")
     def repl(m):
@@ -128,7 +135,7 @@ def render_case_list():
                 else: exam_html.append(f'<div class="case-bullet">• {format_eng_term(i)}</div>')
         st.markdown(f'<div class="case-text-block">{"".join(exam_html)}</div>', unsafe_allow_html=True)
 
-        grouped = split_findings_by_domain(findings, ANATOMY)
+        grouped = split_findings_by_domain(findings)
         if grouped["sensory"]: _render_finding_block("감각신경전도검사(sensory NCS)", grouped["sensory"], side)
         if grouped["motor"]: _render_finding_block("운동신경전도검사(motor NCS)", grouped["motor"], side)
         if grouped["muscle"] and "눈꺼풀" not in selected and "뇌졸중" not in selected: _render_finding_block("침근전도검사 소견(needle EMG)", grouped["muscle"], side)
@@ -139,6 +146,7 @@ def render_case_list():
             else: _render_finding_block("반사 및 후기반응 소견(late response)", merged, side)
 
         st.markdown('<div class="diag-box">', unsafe_allow_html=True)
+        # 교육용 진단 요약 글자 삭제, 진단명만 노출
         st.markdown(f'<div class="diag-name">{format_eng_term(teaching.get("summary",""))}</div>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
