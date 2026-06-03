@@ -3,6 +3,7 @@
 import streamlit as st
 
 def format_title_box(kor, eng):
+    # 제목만 한글 아래 영문 배치
     return f"<div class='title-box'><div class='title-kor'>{kor}</div><div class='title-eng'>{eng.lower()}</div></div>"
 
 def render_home():
@@ -15,6 +16,7 @@ def render_home():
     st.markdown('<div style="font-size:0.9rem; margin-bottom:8px;"><span style="font-weight:700; color:#1e293b;">• 가상 결과표 판독:</span> 수치 데이터를 기반으로 결과표 해석 논리 훈련</div>', unsafe_allow_html=True)
     
     st.markdown('<div style="font-size:0.9rem; font-weight:700; color:#1e293b; margin-top:12px;">• 고급 교육 포인트:</div>', unsafe_allow_html=True)
+    # 본문은 모두 인라인 영문 병기
     st.markdown('<div style="font-size:0.85rem; color:#475569; margin-left:14px; line-height:1.6;">- 신경뿌리(nerve root)<br>- 신경얼기(plexus)<br>- 말초신경(peripheral nerve)<br>- 다발신경병증(polyneuropathy)<br>- 반사경로(reflex pathway)</div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
