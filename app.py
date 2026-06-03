@@ -24,75 +24,63 @@ def render_router():
 def apply_mobile_first_style():
     st.markdown("""
     <style>
-    /* 가로 스크롤 완벽 차단 */
-    html, body { overflow-x: hidden !important; max-width: 100vw !important; margin: 0; padding: 0; }
+    /* 화면 기본 설정 및 가로 스크롤 방지 */
+    html, body { overflow-x: hidden !important; background-color: #f8fafc !important; color: #1e293b !important; }
+    .stApp { background-color: #f8fafc !important; overflow-x: hidden !important; }
+    .main .block-container { max-width: 900px; padding: 1.5rem 1rem 4rem 1rem; }
+
+    /* 텍스트 기본 가독성 */
+    p, span, div { word-break: keep-all; line-height: 1.6; }
     
-    :root {
-        --bg: #f8fafc; --card: #ffffff; --text: #0f172a; --muted: #475569;
-        --line: #e2e8f0; --blue: #2563eb; --red: #dc2626;
-    }
-    
-    .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"], [data-testid="stMain"] { 
-        background: var(--bg) !important; color: var(--text) !important; overflow-x: hidden !important; 
-    }
-    [data-testid="stToolbar"] { background: transparent !important; }
+    /* 카드 컨테이너 (그림자 최소화, 깔끔한 테두리) */
+    .content-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px 16px; margin-bottom: 16px; }
+    .info-card { background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
 
-    .main .block-container { max-width: 980px; padding: 1rem 0.75rem 3rem 0.75rem; overflow-x: hidden !important; }
+    /* 제목 스타일 (한글 아래 영문 바짝 붙이기) */
+    .title-box { margin-bottom: 14px; border-bottom: 2px solid #3b82f6; padding-bottom: 6px; }
+    .title-kor { font-size: 1.15rem; font-weight: 800; color: #0f172a; line-height: 1.2; margin-bottom: 2px; }
+    .title-eng { font-size: 0.85rem; font-weight: 500; color: #64748b; line-height: 1.0; margin-top: 0px; letter-spacing: -0.01em; }
 
-    /* 기본 텍스트 스타일 */
-    .subtle { font-size: 0.88rem; font-weight: 400; color: #64748b; line-height: 1.6; margin-bottom: 1.2rem; word-break: keep-all; }
+    /* 항목(굵게)과 내용(얇게) 분리 레이아웃 */
+    .data-row { display: flex; flex-direction: row; align-items: flex-start; padding: 6px 0; border-bottom: 1px solid #f1f5f9; }
+    .data-row:last-child { border-bottom: none; }
+    .data-label { flex: 0 0 100px; font-size: 0.9rem; font-weight: 700; color: #1e293b; line-height: 1.5; }
+    .data-value { flex: 1; font-size: 0.9rem; font-weight: 400; color: #334155; line-height: 1.5; }
 
-    /* 카드 스타일 */
-    .section-card, .info-card, .warn-card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 12px; margin-bottom: 14px; }
-    .info-card { background: #f8fbff; border-color: #dbeafe; }
-    .warn-card { background: #fffaf3; border-color: #fed7aa; }
+    /* 색상 톤 다운 (눈 피로도 감소) */
+    .txt-normal { color: #334155 !important; }
+    .txt-blue { color: #2563eb !important; font-weight: 500 !important; }
+    .txt-red { color: #b91c1c !important; font-weight: 600 !important; } /* 쨍한 빨강 대신 차분한 딥레드 */
+    .txt-green { color: #15803d !important; font-weight: 600 !important; }
 
-    /* 🚨 영문 제목 분리 및 간격/톤 최적화 */
-    .title-box { background: #f1f5f9; border-left: 4px solid var(--blue); border-radius: 6px; padding: 8px 10px; margin-bottom: 12px; line-height: 1.15; }
-    .title-kor { font-size: 0.95rem; font-weight: 800; color: #0f172a; margin-bottom: 2px; }
-    .title-eng { font-size: 0.75rem; font-weight: 400; color: #64748b; letter-spacing: -0.01em; }
-    
-    .main-title-kor { font-size: 1.25rem; font-weight: 800; color: #0f172a; margin-bottom: 2px; line-height: 1.2; word-break: keep-all; }
-    .main-title-eng { font-size: 0.85rem; font-weight: 400; color: #64748b; margin-bottom: 10px; line-height: 1.1; }
+    /* 의심질환 추정 진단명 카드 (좌측 정렬) */
+    .diagnosis-box { background: #f8fafc; border-left: 5px solid #3b82f6; padding: 16px; border-radius: 6px; margin-bottom: 20px; }
+    .diagnosis-label { font-size: 0.85rem; font-weight: 600; color: #64748b; margin-bottom: 4px; }
+    .diagnosis-name { font-size: 1.1rem; font-weight: 800; color: #0f172a; }
 
-    .result-label-box { background: #f0f9ff; border-left: 4px solid #0ea5e9; border-radius: 6px; padding: 8px 10px; margin-top: 16px; margin-bottom: 10px; line-height: 1.15; }
-
-    /* 🚨 진단명 스타일 (문장/글자 삭제, 중앙 정렬의 깔끔한 폰트) */
-    .diag-box { background: #fdf2f8; border: 1px solid #fce7f3; padding: 16px 12px; border-radius: 10px; margin-bottom: 16px; text-align: center; line-height: 1.2; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
-    .diag-kor { font-size: 1.1rem; font-weight: 800; color: #991b1b; margin-bottom: 3px; word-break: keep-all; }
-    .diag-eng { font-size: 0.8rem; font-weight: 400; color: #f87171; letter-spacing: -0.01em; }
-
-    /* 목록 스타일 */
-    .case-bullet { font-size: 0.88rem; font-weight: 400; color: #334155; line-height: 1.6; margin-bottom: 8px; word-break: keep-all; }
-    .finding-highlight-kor { font-size: 0.92rem; font-weight: 800; color: #1e3a8a; margin-top: 14px; margin-bottom: 1px; }
-    .finding-highlight-eng { font-size: 0.75rem; font-weight: 400; color: #64748b; margin-bottom: 8px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; }
-
-    /* 🚨 결과표/항목 가독성 역전 해결 (항목은 진하게, 설명은 가늘게) */
-    .data-line { display: flex; flex-direction: row; align-items: flex-start; margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px solid #f8fafc; }
-    .data-line:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-    .data-lbl { flex: 0 0 95px; font-size: 0.86rem; font-weight: 800; color: #0f172a; line-height: 1.4; }
-    .data-val { flex: 1; font-size: 0.86rem; font-weight: 400; color: #475569; line-height: 1.5; word-break: keep-all; }
-    
-    .text-blue { color: #2563eb !important; font-weight: 600 !important; }
-    .text-red { color: #dc2626 !important; font-weight: 600 !important; }
-    .text-green { color: #16a34a !important; font-weight: 600 !important; }
-
-    /* 🚨 2D 플랫 버튼 스타일 (입체감 완전 제거, 깔끔한 곡선 처리) */
+    /* 2D 플랫 버튼 스타일 */
     div[data-testid="stButton"] > button {
         border-radius: 6px !important; border: none !important; box-shadow: none !important;
-        font-weight: 600 !important; font-size: 0.92rem !important; min-height: 44px !important; 
-        color: #ffffff !important; transition: opacity 0.2s ease !important;
-        transform: none !important; /* 클릭 시 눌리는 효과 제거 (순수 2D) */
+        font-weight: 600 !important; font-size: 0.95rem !important; min-height: 44px !important; 
+        transition: background-color 0.2s ease !important; transform: none !important;
     }
-    div[data-testid="stButton"] > button:active { opacity: 0.7 !important; }
-    div[data-testid="stButton"] > button[kind="primary"] { background-color: #3b82f6 !important; }
-    div[data-testid="stButton"] > button[kind="secondary"] { background-color: #64748b !important; }
+    div[data-testid="stButton"] > button[kind="primary"] { background-color: #2563eb !important; color: #ffffff !important; }
+    div[data-testid="stButton"] > button[kind="secondary"] { background-color: #e2e8f0 !important; color: #1e293b !important; }
 
-    /* 단일 중앙 버튼 강제 지정 */
-    .center-btn-wrapper div[data-testid="stButton"] > button {
-        width: 220px !important; margin: 0 auto !important; display: block !important;
+    /* 단일 버튼 중앙 정렬 */
+    .center-btn div[data-testid="stButton"] > button { width: 200px !important; margin: 0 auto !important; display: block !important; }
+
+    /* 네비게이션(처음/이전) 강제 가로 중앙 정렬 (모바일 세로쌓임 방지) */
+    .nav-container { display: flex !important; flex-direction: row !important; justify-content: center !important; gap: 12px !important; width: 100% !important; }
+    div[data-testid="stHorizontalBlock"] { display: flex !important; flex-wrap: nowrap !important; justify-content: center !important; gap: 12px !important; }
+    div[data-testid="stHorizontalBlock"] > div[data-testid="column"] { flex: 0 0 auto !important; width: 120px !important; min-width: 120px !important; }
+    div[data-testid="stHorizontalBlock"] button { width: 100% !important; }
+
+    @media (max-width: 768px) {
+        .main .block-container { padding: 1rem 0.5rem 3rem 0.5rem; }
+        .data-label { flex: 0 0 85px; font-size: 0.85rem; }
+        .data-value { font-size: 0.85rem; }
     }
-
     #top-anchor { display: none; }
     </style>
     """, unsafe_allow_html=True)
