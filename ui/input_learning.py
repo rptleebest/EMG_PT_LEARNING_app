@@ -285,7 +285,7 @@ def render_input_learning():
             st.markdown('<div class="finding-highlight">🪡 침근전도검사 (Needle EMG)</div>', unsafe_allow_html=True)
             st.markdown(
                 create_responsive_table(
-                    ["검사 근육", "해당 분절 (Root)", "휴식 시 반응 (Rest)", "수의수축 시 반응 (Volition)", "근생리 상태 진단"],
+                    ["검사 근육", "해당 분절 (Root)", "휴식 시 반응 (Rest)", "수의수축 시 반응 (Volition)", "판단"],
                     data["emg"],
                     "emg_tbl"
                 ),
