@@ -222,8 +222,8 @@ def render_case_list():
             <div class="warn-card">
                 <div class="finding-highlight" style="color: #7c3aed;">🎓 학생용 사고 프레임 (UMN H-reflex 판독)</div>
                 <div class="case-bullet">1. H-반사(H-reflex) 특성: 일반 신경전도(NCS)나 침근전도를 적용하지 않으며, 단일시냅스 척수 반사를 직접 평가합니다.</div>
-                <div class="case-bullet">2. 중추성 위운동신경세포(UMN) 병변: 알파운동신경세포의 과흥분성으로 <b>H-반사 최대 진폭 항진</b> 및 <b>H/M 비율(ratio) 대폭 증가</b>가 발생합니다.</div>
-                <div class="case-bullet">3. 치료 완화 정량화: 물리치료 중재 적용 후 H/M 비율(ratio) 수치의 유의미한 감소 여부로 경직 완화도를 정량적으로 평가합니다.</div>
+                <div class="case-bullet">2. 중추성 위운동신경세포(UMN) 병변: 알파운동신경세포의 과흥분성으로 <b>H-반사 최대 진폭 항진</b> 및 <b>H/M 비율 대폭 증가</b>가 발생합니다.</div>
+                <div class="case-bullet">3. 치료 완화 정량화: 물리치료 중재 적용 후 H/M 비율 수치의 유의미한 감소 여부로 경직 완화도를 정량적으로 평가합니다.</div>
             </div>
             """, unsafe_allow_html=True)
         elif "눈꺼풀" in selected:
@@ -284,7 +284,6 @@ def render_case_list():
                     else:
                         st.markdown(f'<div class="result-text" style="padding-left:8px;">• {x_strip}</div>', unsafe_allow_html=True)
 
-        # 🚨 KeyError 방지용 오타(integ비율(ratio)n -> integration) 완벽 수정됨
         if teaching.get("integration"):
             st.markdown('<div class="result-label">통합 해석</div>', unsafe_allow_html=True)
             for x in teaching["integration"]:
@@ -305,7 +304,8 @@ def render_case_list():
             st.markdown('</div>', unsafe_allow_html=True)
 
         st.markdown('<div style="text-align: center; margin-top: 20px; margin-bottom: 20px;">', unsafe_allow_html=True)
-        if st.button("🔄 다른 임상 케이스 분석하기", key="reset_case_radio_btn"):
+        # ★ type="secondary" 명시하여 상단 버튼을 회색으로 분리
+        if st.button("🔄 다른 임상 케이스 분석하기", type="secondary", key="reset_case_radio_btn"):
             st.session_state["case_reset_counter"] += 1
             st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
@@ -313,8 +313,6 @@ def render_case_list():
     render_bottom_navigation()
 
 
-# 🚨 ImportError를 발생시켰던 누락된 함수 완벽 복구
 def render_case_detail():
-    """router.py에서 호출하는 상세 화면 렌더링 (사례 목록으로 리디렉션)"""
     st.session_state["screen"] = "case_list"
     st.rerun()
