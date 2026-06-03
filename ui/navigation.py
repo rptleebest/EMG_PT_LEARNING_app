@@ -25,7 +25,7 @@ def render_bottom_navigation():
 
     st.markdown('<div style="height: 16px;"></div>', unsafe_allow_html=True)
 
-    # st.columns를 생성하고 CSS flex 설정을 통해 항상 가운데로 모이도록 함
+    # st.columns(2)를 생성하되, CSS가 개입하여 화면 중앙에 버튼 두 개가 꽉 맞물려 들어가게 함
     col1, col2 = st.columns(2)
 
     with col1:
