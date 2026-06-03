@@ -30,15 +30,16 @@ def render_bottom_navigation():
 
     st.markdown('<div style="height: 24px;"></div>', unsafe_allow_html=True)
 
-    # st.columns(2)를 명확하게 배분
     col1, col2 = st.columns([1, 1])
 
     with col1:
-        if st.button("🏠 처음으로", type="primary", use_container_width=True, key="nav_home_bottom"):
+        # 글자수를 최소화하여 모바일에서 한 줄 배치가 안정적이도록 수정
+        if st.button("🏠 처음", type="primary", use_container_width=True, key="nav_home_bottom"):
             _go_home()
 
     with col2:
-        if st.button("⬅️ 이전으로", type="primary", use_container_width=True, key="nav_back_bottom"):
+        # 글자수를 최소화
+        if st.button("⬅️ 이전", type="primary", use_container_width=True, key="nav_back_bottom"):
             _go_back()
 
     st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
