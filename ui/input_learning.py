@@ -859,6 +859,517 @@ VIRTUAL_REPORTS = {
     },
 }
 
+# =============================================================================
+# 추가 가상 결과표 4개: 총 10개 복구용
+# =============================================================================
+
+VIRTUAL_REPORTS.update(
+    {
+        "실제형 결과표 7: 오른쪽 팔꿈치굴증후군 의심": {
+            "meta": {
+                "age": 49,
+                "sex": "남성",
+                "side": "오른쪽",
+                "chief": "오른쪽 새끼손가락과 약지 자쪽 저림. 팔꿈치를 오래 굽히면 증상 악화. 손가락 벌림 약화 동반.",
+                "clinical_hint": "자신경 감각반응 감소와 팔꿈치 구간 운동전도 저하를 통해 자신경 포착 위치를 해석하는 사례입니다.",
+            },
+            "diagnosis": "오른쪽 팔꿈치굴증후군, 팔꿈치 부위 자신경병증(Ulnar neuropathy at the elbow)",
+            "lesion": "오른쪽 팔꿈치굴 또는 팔꿈치 주변 자신경",
+            "sensory_ncs": [
+                {
+                    "nerve": "자신경 감각신경활동전위(Ulnar SNAP)",
+                    "recording": "새끼손가락",
+                    "stimulation": "손목",
+                    "side": "우측",
+                    "amplitude": "6 μV",
+                    "latency": "3.5 ms",
+                    "velocity": "38 m/s",
+                },
+                {
+                    "nerve": "자신경 감각신경활동전위(Ulnar SNAP)",
+                    "recording": "새끼손가락",
+                    "stimulation": "손목",
+                    "side": "좌측",
+                    "amplitude": "23 μV",
+                    "latency": "2.6 ms",
+                    "velocity": "54 m/s",
+                },
+                {
+                    "nerve": "정중신경 감각신경활동전위(Median SNAP)",
+                    "recording": "검지",
+                    "stimulation": "손목",
+                    "side": "우측",
+                    "amplitude": "25 μV",
+                    "latency": "2.9 ms",
+                    "velocity": "52 m/s",
+                },
+            ],
+            "motor_ncs": [
+                {
+                    "nerve": "자신경 복합근육활동전위(Ulnar CMAP)",
+                    "recording": "새끼벌림근(ADM)",
+                    "stimulation": "손목",
+                    "side": "우측",
+                    "amplitude": "7.2 mV",
+                    "latency": "2.8 ms",
+                    "velocity": "-",
+                },
+                {
+                    "nerve": "자신경 복합근육활동전위(Ulnar CMAP)",
+                    "recording": "새끼벌림근(ADM)",
+                    "stimulation": "팔꿈치 아래",
+                    "side": "우측",
+                    "amplitude": "6.8 mV",
+                    "latency": "6.4 ms",
+                    "velocity": "49 m/s",
+                },
+                {
+                    "nerve": "자신경 복합근육활동전위(Ulnar CMAP)",
+                    "recording": "새끼벌림근(ADM)",
+                    "stimulation": "팔꿈치 위",
+                    "side": "우측",
+                    "amplitude": "3.1 mV",
+                    "latency": "10.9 ms",
+                    "velocity": "28 m/s",
+                },
+                {
+                    "nerve": "정중신경 복합근육활동전위(Median CMAP)",
+                    "recording": "짧은엄지벌림근(APB)",
+                    "stimulation": "손목",
+                    "side": "우측",
+                    "amplitude": "8.0 mV",
+                    "latency": "3.4 ms",
+                    "velocity": "-",
+                },
+            ],
+            "late_response": [],
+            "needle_emg": [
+                {
+                    "muscle": "첫째등쪽뼈사이근(FDI)",
+                    "root": "C8-T1",
+                    "nerve": "자신경",
+                    "rest": "fibrillation potential, positive sharp wave",
+                    "volition": "Reduced MU recruitment",
+                },
+                {
+                    "muscle": "새끼벌림근(ADM)",
+                    "root": "C8-T1",
+                    "nerve": "자신경",
+                    "rest": "fibrillation potential, positive sharp wave",
+                    "volition": "Reduced MU recruitment",
+                },
+                {
+                    "muscle": "짧은엄지벌림근(APB)",
+                    "root": "C8-T1",
+                    "nerve": "정중신경",
+                    "rest": "Silent at rest",
+                    "volition": "Normal MU recruitment",
+                },
+                {
+                    "muscle": "목 척추주위근(Cervical paraspinal)",
+                    "root": "C8-T1",
+                    "nerve": "후지",
+                    "rest": "Silent at rest",
+                    "volition": "평가 제한",
+                },
+            ],
+            "interpretation": {
+                "sensory": [
+                    "오른쪽 자신경 SNAP 진폭이 정상측보다 뚜렷하게 감소하여 자신경 감각섬유 침범을 시사합니다.",
+                    "정중신경 SNAP는 보존되어 있어 손 전체 다발신경병증보다는 자신경 단일신경병증 가능성이 큽니다.",
+                ],
+                "motor": [
+                    "자신경 운동전도에서 팔꿈치 아래 자극과 팔꿈치 위 자극 사이에 진폭 감소와 전도속도 저하가 나타납니다.",
+                    "이는 팔꿈치 구간에서 국소 전도차단 또는 말이집탈락성 포착이 있음을 시사합니다.",
+                ],
+                "emg": [
+                    "자신경 지배 근육인 FDI와 ADM에서 탈신경 소견과 운동단위 동원감소가 관찰됩니다.",
+                    "정중신경 지배 APB와 목 척추주위근은 정상으로, C8-T1 신경뿌리병증 가능성은 낮아집니다.",
+                ],
+                "integration": [
+                    "자쪽 손가락 저림, 자신경 감각반응 감소, 팔꿈치 구간 운동전도 저하, 자신경 지배 손근육 탈신경을 종합하면 오른쪽 팔꿈치굴증후군이 가장 타당합니다.",
+                    "병변 위치는 손목이 아니라 팔꿈치 주변 자신경으로 추정됩니다.",
+                ],
+                "differential": [
+                    "C8-T1 신경뿌리병증: SNAP가 보존되는 경우가 많고, 목 척추주위근 이상이 동반될 수 있습니다.",
+                    "하부상완신경총병증: 자신경뿐 아니라 정중신경 일부와 안쪽아래팔피부신경 이상이 함께 나타날 수 있습니다.",
+                    "손목 부위 자신경병증: 팔꿈치 구간 전도 저하 없이 손목 이하 자신경 지배 근육 위주로 이상이 나타납니다.",
+                ],
+                "additional": [
+                    "팔꿈치 굴곡 자세 제한, 야간 팔꿈치 보조기, 작업 자세 교정이 필요합니다.",
+                    "신경초음파로 팔꿈치 부위 자신경 비후나 탈구 여부를 확인할 수 있습니다.",
+                ],
+            },
+        },
+
+        "실제형 결과표 8: 왼쪽 상부상완신경총병증 의심": {
+            "meta": {
+                "age": 37,
+                "sex": "여성",
+                "side": "왼쪽",
+                "chief": "갑작스러운 왼쪽 어깨 통증 이후 어깨 벌림과 팔꿉관절 굽힘 약화. 위팔 가쪽 감각 저하.",
+                "clinical_hint": "가쪽아래팔피부신경 SNAP 감소와 C5-C6 관련 여러 말초신경 근육 이상을 통해 상부상완신경총병증을 해석하는 사례입니다.",
+            },
+            "diagnosis": "왼쪽 상부상완신경총병증(Upper trunk brachial plexopathy)",
+            "lesion": "왼쪽 상완신경총 상부줄기, 주로 C5-C6 섬유",
+            "sensory_ncs": [
+                {
+                    "nerve": "가쪽아래팔피부신경 감각신경활동전위(Lateral antebrachial cutaneous SNAP)",
+                    "recording": "아래팔 가쪽",
+                    "stimulation": "팔꿈치 근처",
+                    "side": "좌측",
+                    "amplitude": "4 μV",
+                    "latency": "3.3 ms",
+                    "velocity": "35 m/s",
+                },
+                {
+                    "nerve": "가쪽아래팔피부신경 감각신경활동전위(Lateral antebrachial cutaneous SNAP)",
+                    "recording": "아래팔 가쪽",
+                    "stimulation": "팔꿈치 근처",
+                    "side": "우측",
+                    "amplitude": "18 μV",
+                    "latency": "2.4 ms",
+                    "velocity": "52 m/s",
+                },
+                {
+                    "nerve": "정중신경 감각신경활동전위(Median SNAP)",
+                    "recording": "검지",
+                    "stimulation": "손목",
+                    "side": "좌측",
+                    "amplitude": "22 μV",
+                    "latency": "2.9 ms",
+                    "velocity": "51 m/s",
+                },
+            ],
+            "motor_ncs": [
+                {
+                    "nerve": "겨드랑신경 복합근육활동전위(Axillary CMAP)",
+                    "recording": "삼각근",
+                    "stimulation": "Erb's point",
+                    "side": "좌측",
+                    "amplitude": "1.8 mV",
+                    "latency": "5.1 ms",
+                    "velocity": "-",
+                },
+                {
+                    "nerve": "겨드랑신경 복합근육활동전위(Axillary CMAP)",
+                    "recording": "삼각근",
+                    "stimulation": "Erb's point",
+                    "side": "우측",
+                    "amplitude": "6.5 mV",
+                    "latency": "3.4 ms",
+                    "velocity": "-",
+                },
+                {
+                    "nerve": "근육피부신경 복합근육활동전위(Musculocutaneous CMAP)",
+                    "recording": "위팔두갈래근",
+                    "stimulation": "Erb's point",
+                    "side": "좌측",
+                    "amplitude": "2.0 mV",
+                    "latency": "4.8 ms",
+                    "velocity": "-",
+                },
+            ],
+            "late_response": [],
+            "needle_emg": [
+                {
+                    "muscle": "삼각근(Deltoid)",
+                    "root": "C5-C6",
+                    "nerve": "겨드랑신경",
+                    "rest": "fibrillation potential, positive sharp wave",
+                    "volition": "Reduced MU recruitment",
+                },
+                {
+                    "muscle": "위팔두갈래근(Biceps brachii)",
+                    "root": "C5-C6",
+                    "nerve": "근육피부신경",
+                    "rest": "fibrillation potential, positive sharp wave",
+                    "volition": "Reduced MU recruitment",
+                },
+                {
+                    "muscle": "가시아래근(Infraspinatus)",
+                    "root": "C5-C6",
+                    "nerve": "어깨위신경",
+                    "rest": "fibrillation potential, positive sharp wave",
+                    "volition": "Reduced MU recruitment",
+                },
+                {
+                    "muscle": "목 척추주위근(Cervical paraspinal)",
+                    "root": "C5-C6",
+                    "nerve": "후지",
+                    "rest": "Silent at rest",
+                    "volition": "평가 제한",
+                },
+            ],
+            "interpretation": {
+                "sensory": [
+                    "가쪽아래팔피부신경 SNAP가 정상측보다 감소하여 병변이 뒤뿌리신경절보다 말초 쪽, 즉 상완신경총 수준일 가능성을 시사합니다.",
+                    "신경뿌리병증에서는 SNAP가 보존되는 경우가 많기 때문에, SNAP 감소는 신경얼기병증 감별에 중요합니다.",
+                ],
+                "motor": [
+                    "겨드랑신경과 근육피부신경 CMAP 진폭이 감소하여 C5-C6 섬유를 포함하는 상부상완신경총 침범을 시사합니다.",
+                    "정중신경 원위부 반응이 비교적 보존되면 손목 부위 단일 포착병변 가능성은 낮아집니다.",
+                ],
+                "emg": [
+                    "삼각근, 위팔두갈래근, 가시아래근은 서로 다른 말초신경 지배를 받지만 C5-C6 및 상부줄기와 관련됩니다.",
+                    "목 척추주위근이 보존되어 있어 C5-C6 신경뿌리병증보다는 상부상완신경총병증을 더 지지합니다.",
+                ],
+                "integration": [
+                    "어깨 통증 후 근력저하, 가쪽아래팔피부신경 SNAP 감소, C5-C6 관련 여러 말초신경 지배 근육의 탈신경, 척추주위근 보존을 종합하면 왼쪽 상부상완신경총병증이 가장 타당합니다.",
+                ],
+                "differential": [
+                    "C5-C6 신경뿌리병증: 목 척추주위근 이상이 동반될 수 있고 SNAP는 보존되는 경우가 많습니다.",
+                    "겨드랑신경 단독병증: 삼각근 위주 이상으로 제한되고 위팔두갈래근이나 가시아래근 이상은 설명하기 어렵습니다.",
+                    "Parsonage-Turner syndrome: 급성 어깨 통증 후 다초점 신경침범 양상으로 나타날 수 있어 임상적으로 함께 고려합니다.",
+                ],
+                "additional": [
+                    "상완신경총 MRI 또는 신경초음파를 고려합니다.",
+                    "초기 통증 조절, 견관절 구축 예방, 견갑대 안정화 훈련이 중요합니다.",
+                ],
+            },
+        },
+
+        "실제형 결과표 9: 오른쪽 말초성 얼굴신경마비 의심": {
+            "meta": {
+                "age": 29,
+                "sex": "여성",
+                "side": "오른쪽",
+                "chief": "오른쪽 눈 감기 어려움, 입꼬리 처짐, 이마 주름 감소. 발병 10일째.",
+                "clinical_hint": "얼굴신경 CMAP 진폭 감소와 눈깜빡반사 R1/R2 이상을 해석하는 사례입니다.",
+            },
+            "diagnosis": "오른쪽 말초성 얼굴신경마비, Bell palsy 가능성",
+            "lesion": "오른쪽 얼굴신경 말초부, 얼굴신경관 또는 그 원위부",
+            "sensory_ncs": [],
+            "motor_ncs": [
+                {
+                    "nerve": "얼굴신경 복합근육활동전위(Facial CMAP)",
+                    "recording": "눈둘레근(Orbicularis oculi)",
+                    "stimulation": "귓바퀴 앞",
+                    "side": "우측",
+                    "amplitude": "0.7 mV",
+                    "latency": "4.9 ms",
+                    "velocity": "-",
+                },
+                {
+                    "nerve": "얼굴신경 복합근육활동전위(Facial CMAP)",
+                    "recording": "눈둘레근(Orbicularis oculi)",
+                    "stimulation": "귓바퀴 앞",
+                    "side": "좌측",
+                    "amplitude": "3.8 mV",
+                    "latency": "3.2 ms",
+                    "velocity": "-",
+                },
+                {
+                    "nerve": "얼굴신경 복합근육활동전위(Facial CMAP)",
+                    "recording": "입둘레근(Orbicularis oris)",
+                    "stimulation": "귓바퀴 앞",
+                    "side": "우측",
+                    "amplitude": "0.5 mV",
+                    "latency": "5.1 ms",
+                    "velocity": "-",
+                },
+            ],
+            "late_response": [
+                {
+                    "test": "눈깜빡반사 우측 자극-우측 R1",
+                    "side": "우측",
+                    "latency": "소실",
+                    "amplitude": "-",
+                },
+                {
+                    "test": "눈깜빡반사 우측 자극-우측 R2",
+                    "side": "우측",
+                    "latency": "소실",
+                    "amplitude": "-",
+                },
+                {
+                    "test": "눈깜빡반사 우측 자극-좌측 R2",
+                    "side": "좌측",
+                    "latency": "정상 범위",
+                    "amplitude": "보존",
+                },
+                {
+                    "test": "눈깜빡반사 좌측 자극-좌측 R1",
+                    "side": "좌측",
+                    "latency": "정상 범위",
+                    "amplitude": "보존",
+                },
+            ],
+            "needle_emg": [
+                {
+                    "muscle": "눈둘레근(Orbicularis oculi)",
+                    "root": "CN VII",
+                    "nerve": "얼굴신경",
+                    "rest": "fibrillation potential, positive sharp wave",
+                    "volition": "Reduced MU recruitment",
+                },
+                {
+                    "muscle": "입둘레근(Orbicularis oris)",
+                    "root": "CN VII",
+                    "nerve": "얼굴신경",
+                    "rest": "fibrillation potential, positive sharp wave",
+                    "volition": "Reduced MU recruitment",
+                },
+                {
+                    "muscle": "깨물근(Masseter)",
+                    "root": "CN V",
+                    "nerve": "삼차신경",
+                    "rest": "Silent at rest",
+                    "volition": "Normal MU recruitment",
+                },
+            ],
+            "interpretation": {
+                "sensory": [
+                    "얼굴신경은 주로 운동신경 평가가 핵심이며, 일반적인 사지 SNAP와 같은 방식으로 해석하지 않습니다.",
+                    "임상적으로 이마 주름 감소와 눈 감기 어려움이 동반되면 말초성 얼굴신경마비 가능성이 높습니다.",
+                ],
+                "motor": [
+                    "오른쪽 얼굴신경 CMAP 진폭이 정상측보다 현저히 감소하여 얼굴신경 운동축삭 침범 가능성을 시사합니다.",
+                    "잠복기 지연과 진폭 감소가 함께 있어 말이집탈락과 축삭 손상이 혼재된 양상으로 교육적으로 해석할 수 있습니다.",
+                ],
+                "emg": [
+                    "오른쪽 얼굴신경 지배 근육에서 비정상 자발전위와 운동단위 동원감소가 관찰됩니다.",
+                    "삼차신경 지배 깨물근은 정상으로 보존되어 얼굴신경 병변에 국한된 양상입니다.",
+                ],
+                "integration": [
+                    "오른쪽 얼굴 표정근 약화, 얼굴신경 CMAP 진폭 감소, 눈깜빡반사 우측 반응 소실, 얼굴 표정근 탈신경 소견을 종합하면 오른쪽 말초성 얼굴신경마비가 가장 타당합니다.",
+                    "발병 10일째에 탈신경 전위가 관찰되면 축삭 손상 정도를 추정하는 데 도움이 됩니다.",
+                ],
+                "differential": [
+                    "중추성 얼굴마비: 이마 근육은 비교적 보존되는 경우가 많고, 상위운동신경징후가 동반될 수 있습니다.",
+                    "삼차신경 병변: 감각저하 또는 깨물근 이상이 동반될 수 있습니다.",
+                    "뇌줄기 병변: 다른 뇌신경 징후, 운동·감각로 이상이 함께 나타날 수 있습니다.",
+                ],
+                "additional": [
+                    "눈 보호, 인공눈물, 각막 손상 예방 교육이 중요합니다.",
+                    "발병 시기와 중증도에 따라 전문의 협진 및 약물치료 여부를 확인합니다.",
+                    "표정근 재교육, 과도한 연합운동 예방, 단계적 안면운동 훈련을 고려합니다.",
+                ],
+            },
+        },
+
+        "실제형 결과표 10: 뇌졸중 후 경직 H-반사 평가": {
+            "meta": {
+                "age": 63,
+                "sex": "남성",
+                "side": "왼쪽",
+                "chief": "오른쪽 뇌졸중 후 왼쪽 발목 저측굴곡 경직 증가. 보행 시 첨족 양상.",
+                "clinical_hint": "일반적인 말초신경병증 판독이 아니라 H-반사와 H/M 비율을 통해 척수 반사 흥분성을 해석하는 사례입니다.",
+            },
+            "diagnosis": "뇌졸중 후 왼쪽 하지 경직 증가, 척수 반사 흥분성 증가",
+            "lesion": "중추신경계 병변 후 왼쪽 가자미근-정강신경 H-반사 회로 흥분성 증가",
+            "sensory_ncs": [
+                {
+                    "nerve": "장딴지신경 감각신경활동전위(Sural SNAP)",
+                    "recording": "가쪽 발목",
+                    "stimulation": "종아리 뒤쪽",
+                    "side": "좌측",
+                    "amplitude": "16 μV",
+                    "latency": "3.0 ms",
+                    "velocity": "47 m/s",
+                },
+                {
+                    "nerve": "장딴지신경 감각신경활동전위(Sural SNAP)",
+                    "recording": "가쪽 발목",
+                    "stimulation": "종아리 뒤쪽",
+                    "side": "우측",
+                    "amplitude": "17 μV",
+                    "latency": "2.9 ms",
+                    "velocity": "48 m/s",
+                },
+            ],
+            "motor_ncs": [
+                {
+                    "nerve": "정강신경 복합근육활동전위(Tibial CMAP)",
+                    "recording": "엄지벌림근(AH)",
+                    "stimulation": "발목",
+                    "side": "좌측",
+                    "amplitude": "8.0 mV",
+                    "latency": "4.2 ms",
+                    "velocity": "-",
+                },
+                {
+                    "nerve": "정강신경 복합근육활동전위(Tibial CMAP)",
+                    "recording": "엄지벌림근(AH)",
+                    "stimulation": "오금",
+                    "side": "좌측",
+                    "amplitude": "7.7 mV",
+                    "latency": "12.1 ms",
+                    "velocity": "45 m/s",
+                },
+            ],
+            "late_response": [
+                {
+                    "test": "H-반사(H-reflex)",
+                    "side": "좌측",
+                    "latency": "정상 범위",
+                    "amplitude": "증가",
+                },
+                {
+                    "test": "H-반사(H-reflex)",
+                    "side": "우측",
+                    "latency": "정상 범위",
+                    "amplitude": "정상 범위",
+                },
+                {
+                    "test": "H/M 비율",
+                    "side": "좌측",
+                    "latency": "-",
+                    "amplitude": "0.62",
+                },
+                {
+                    "test": "H/M 비율",
+                    "side": "우측",
+                    "latency": "-",
+                    "amplitude": "0.28",
+                },
+            ],
+            "needle_emg": [
+                {
+                    "muscle": "가자미근(Soleus)",
+                    "root": "S1-S2",
+                    "nerve": "정강신경",
+                    "rest": "Silent at rest",
+                    "volition": "Normal MU recruitment",
+                },
+                {
+                    "muscle": "앞정강근(Tibialis anterior)",
+                    "root": "L4-L5",
+                    "nerve": "깊은종아리신경",
+                    "rest": "Silent at rest",
+                    "volition": "Normal MU recruitment",
+                },
+            ],
+            "interpretation": {
+                "sensory": [
+                    "장딴지신경 SNAP는 양측 모두 보존되어 말초 감각신경병증을 시사하는 소견은 없습니다.",
+                    "이 사례의 핵심은 감각신경전도 이상이 아니라 중추신경계 병변 후 반사 흥분성 변화입니다.",
+                ],
+                "motor": [
+                    "정강신경 CMAP 진폭과 전도속도는 보존되어 말초 운동신경 전도 장애는 뚜렷하지 않습니다.",
+                    "따라서 발목 경직과 첨족 양상은 말초신경 손상보다는 중추성 운동조절 이상으로 해석해야 합니다.",
+                ],
+                "emg": [
+                    "침근전도에서 휴식 시 비정상 자발전위가 없고 수의수축 시 운동단위동원도 보존됩니다.",
+                    "이는 하위운동신경계 축삭 손상보다 중추성 경직 평가에 초점을 맞춰야 함을 의미합니다.",
+                ],
+                "integration": [
+                    "왼쪽 H-반사 진폭 증가와 H/M 비율 증가는 척수 단일시냅스 반사 회로의 흥분성 증가를 시사합니다.",
+                    "뇌졸중 후 하행 억제 조절이 감소하면 가자미근 H-반사가 커지고, 이는 임상적 경직 증가와 연결될 수 있습니다.",
+                ],
+                "differential": [
+                    "말초 S1 신경뿌리병증: H-반사 지연 또는 소실이 나타날 수 있으며, 침근전도 탈신경 소견이 동반될 수 있습니다.",
+                    "정강신경병증: 정강신경 CMAP 이상과 정강신경 지배 근육 탈신경이 나타날 수 있습니다.",
+                    "근긴장이상 또는 구축: H-반사 증가만으로 설명되지 않으며 관절가동범위와 수동 저항 평가가 필요합니다.",
+                ],
+                "additional": [
+                    "Modified Ashworth Scale, Tardieu scale, 발목 클로누스, 보행분석을 함께 시행합니다.",
+                    "경직 억제 운동, 가자미근·장딴지근 신장, 체중부하 훈련, 보행훈련 전후 H/M 비율 변화를 교육적으로 비교할 수 있습니다.",
+                ],
+            },
+        },
+    }
+)
 
 # =============================================================================
 # 화면 렌더링 유틸 함수
