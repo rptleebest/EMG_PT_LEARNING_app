@@ -51,6 +51,10 @@ def _get_value_for_lesion_side(values, side):
 def _render_learning_frame(selected):
     """
     사례 학습 모드의 공통 사고 프레임.
+    요청사항 반영:
+    - 사례 학습은 수치표보다 임상 추론 중심.
+    - 진폭/잠복기 기준에는 '정상측 대비' 문구를 포함.
+    - 침근전도는 사례 학습에서는 단순화하고, 실제 전위명은 기준 팁에서 설명.
     """
     if "뇌졸중" in selected:
         st.markdown(
@@ -137,27 +141,31 @@ def _render_symptoms(patient):
 def _strip_basic_html_tags(text):
     """
     data/cases.py 안에 과거 HTML 문자열, escape된 HTML 문자열,
-    이중 escape된 HTML 문자열이 섞여 있어도 화면에 태그가 보이지 않도록 정리합니다.
+    이중 escape된 HTML 문자열이 섞여 있어도 화면에 태그가 노출되지 않도록 정리합니다.
     """
     if text is None:
         return ""
 
     cleaned = str(text)
 
-    # &lt;div&gt;, &amp;lt;div&amp;gt; 같은 escape/double-escape를 복원합니다.
-    for _ in range(3):
+    # &lt;div&gt;, &amp;lt;div&amp;gt; 같은 escape/double escape 복원
+    for _ in range(5):
         unescaped = html_lib.unescape(cleaned)
         if unescaped == cleaned:
             break
         cleaned = unescaped
 
     cleaned = cleaned.replace("\xa0", " ")
+    cleaned = cleaned.replace("&nbsp;", " ")
 
-    # 줄 구분이 필요한 닫는 태그는 먼저 줄바꿈으로 바꿉니다.
+    # 줄바꿈 의미가 있는 태그는 먼저 줄바꿈으로 변환
     cleaned = re.sub(r"<\s*br\s*/?\s*>", "\n", cleaned, flags=re.IGNORECASE)
     cleaned = re.sub(r"</\s*(div|p|li)\s*>", "\n", cleaned, flags=re.IGNORECASE)
 
-    # 주요 시작 태그 제거
+    # span 닫힘은 label/value가 붙을 수 있도록 공백으로 변환
+    cleaned = re.sub(r"</\s*(span|b|strong|em|i)\s*>", " ", cleaned, flags=re.IGNORECASE)
+
+    # 시작 태그 제거
     cleaned = re.sub(
         r"<\s*(div|p|span|b|strong|em|i|ul|ol|li)[^>]*>",
         "",
@@ -165,9 +173,9 @@ def _strip_basic_html_tags(text):
         flags=re.IGNORECASE,
     )
 
-    # 주요 종료 태그 제거
+    # 남은 종료 태그 제거
     cleaned = re.sub(
-        r"</\s*(span|b|strong|em|i|ul|ol)\s*>",
+        r"</\s*(ul|ol)\s*>",
         "",
         cleaned,
         flags=re.IGNORECASE,
@@ -176,8 +184,14 @@ def _strip_basic_html_tags(text):
     # 혹시 남은 기타 HTML 태그 제거
     cleaned = re.sub(r"<[^>]+>", "", cleaned)
 
-    # 불필요한 공백 정리
-    cleaned = re.sub(r"[ \t]+", " ", cleaned)
+    # 줄별 공백 정리
+    lines = []
+    for line in cleaned.splitlines():
+        line = re.sub(r"[ \t]+", " ", line).strip()
+        if line:
+            lines.append(line)
+
+    cleaned = "\n".join(lines)
     cleaned = re.sub(r"\n\s*\n+", "\n", cleaned)
 
     return cleaned.strip()
@@ -185,7 +199,7 @@ def _strip_basic_html_tags(text):
 
 def _iter_exam_items(items):
     """
-    physical_exam의 items가 list/tuple이 아닌 문자열로 들어온 경우도 안전하게 처리합니다.
+    physical_exam의 items가 list/tuple이 아닌 단일 문자열로 들어와도 안전하게 처리합니다.
     """
     if items is None:
         return []
@@ -196,6 +210,42 @@ def _iter_exam_items(items):
     return [items]
 
 
+def _split_exam_lines(text):
+    """
+    과거 HTML 블록이 여러 줄로 남아 있던 경우를 실제 검사 항목 단위로 재구성합니다.
+
+    예:
+    엄지발가락 폄근:
+    Poor (2/5) - 깊은종아리신경...
+    =>
+    엄지발가락 폄근: Poor (2/5) - 깊은종아리신경...
+    """
+    if not text:
+        return []
+
+    lines = [line.strip() for line in str(text).splitlines() if line.strip()]
+    rebuilt = []
+    idx = 0
+
+    while idx < len(lines):
+        current = lines[idx]
+
+        # label만 있고 다음 줄이 value인 경우 결합
+        if current.endswith(":") and idx + 1 < len(lines):
+            next_line = lines[idx + 1].strip()
+
+            # 다음 줄이 새 섹션명이 아니면 합침
+            if not next_line.startswith("["):
+                rebuilt.append(f"{current} {next_line}".strip())
+                idx += 2
+                continue
+
+        rebuilt.append(current)
+        idx += 1
+
+    return rebuilt
+
+
 def _append_physical_exam_line(
     exam_html,
     line,
@@ -203,7 +253,7 @@ def _append_physical_exam_line(
     is_special_section=False,
 ):
     """
-    이학적 검사 한 줄을 카드 안에 출력합니다.
+    이학적 검사 한 줄을 HTML 카드 내부 항목으로 추가합니다.
     """
     if not line:
         return
@@ -263,15 +313,16 @@ def _render_physical_exam(patient):
     """
     이학적 검사결과 렌더링.
 
-    보강 사항:
-    - 기존 data/cases.py에 HTML 문자열이 섞여 있어도 태그가 화면에 노출되지 않도록 정리합니다.
-    - escape된 HTML, 이중 escape된 HTML도 처리합니다.
-    - HTML 블록 안에 여러 항목이 섞여 있어도 줄 단위로 분리해 출력합니다.
-    - [반사 검사], [특수 검사] 같은 섹션명이 문자열 안에 섞인 경우도 최대한 인식합니다.
+    핵심 개선:
+    - data/cases.py 안에 과거 HTML이 섞여 있어도 태그를 제거합니다.
+    - escape된 HTML, 이중 escape된 HTML도 제거합니다.
+    - 여러 줄 HTML 블록이 Markdown 코드블록처럼 보이는 문제를 방지합니다.
+    - [반사 검사] 같은 섹션명이 문자열 내부에 섞여 있어도 새 섹션으로 인식합니다.
     """
     st.markdown('<div class="case-section-label">🧪 이학적 검사결과</div>', unsafe_allow_html=True)
 
     physical_exam = patient.get("physical_exam", {})
+
     if not physical_exam:
         st.markdown(
             '<div class="case-text-block"><div class="case-bullet">• 등록된 이학적 검사결과가 없습니다.</div></div>',
@@ -298,12 +349,12 @@ def _render_physical_exam(patient):
             if not item_clean:
                 continue
 
-            # 과거 HTML 블록이 한 item에 여러 줄로 들어간 경우 분리
-            lines = [line.strip() for line in item_clean.splitlines() if line.strip()]
+            lines = _split_exam_lines(item_clean)
 
             for line in lines:
-                # 문자열 내부에 [반사 검사] 같은 섹션명이 섞여 있는 경우 처리
-                section_match = re.fullmatch(r"\[(.+?)\]", line)
+                # 문자열 내부에 [반사 검사] 같은 섹션명이 섞인 경우
+                section_match = re.fullmatch(r"\[(.+?)\]", line.strip())
+
                 if section_match:
                     current_section_name = section_match.group(1).strip() or current_section_name
                     is_reflex_section = "반사" in current_section_name
@@ -359,6 +410,10 @@ def _render_simple_table(headers, rows):
 def _render_ncs_block(title, findings, side):
     """
     사례 학습용 NCS 표.
+    요청사항 반영:
+    - 판단 열 삭제
+    - 진폭/잠복기에는 감소, 지연, 정상 범위 등만 기재
+    - 괄호 설명 삭제
     """
     if not findings:
         return
@@ -419,6 +474,10 @@ def _render_ncs_block(title, findings, side):
 def _render_emg_block(title, findings, side):
     """
     사례 학습용 침근전도 표.
+    요청사항 반영:
+    - 판단 열 삭제
+    - 실제 전위명 대신 비정상 자발전위/운동단위 동원감소 등으로 단순화
+    - 자세한 생리학적 해석은 통합 해석에서 설명
     """
     if not findings:
         return
@@ -697,7 +756,6 @@ def render_case_list():
             unsafe_allow_html=True,
         )
 
-        # 내부 계산에는 화면 표시용 side가 아니라 원본 raw_side를 사용합니다.
         if grouped["sensory"]:
             _render_ncs_block("감각신경전도검사: 병변측 핵심 변화", grouped["sensory"], raw_side)
 
