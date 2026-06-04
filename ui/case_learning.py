@@ -153,10 +153,14 @@ def _strip_basic_html_tags(text):
 
     # style이 포함된 span/div 태그가 남아 있는 경우를 대비한 단순 제거
     import re
+    cleaned = re.sub(r"<br\s*/?>", " ", cleaned)
+    cleaned = re.sub(r"</p>", " ", cleaned)
+    cleaned = re.sub(r"<p[^>]*>", "", cleaned)
     cleaned = re.sub(r"<div[^>]*>", "", cleaned)
     cleaned = re.sub(r"<span[^>]*>", "", cleaned)
     cleaned = re.sub(r"</span>", "", cleaned)
     cleaned = re.sub(r"</div>", "", cleaned)
+    cleaned = re.sub(r"\s+", " ", cleaned)
 
     return cleaned.strip()
 
