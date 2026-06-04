@@ -4,21 +4,58 @@ import streamlit as st
 
 
 def _go_home():
+    """
+    메인 화면(처음)으로 이동합니다.
+    모든 모드 선택 및 세부 데이터 바인딩을 리셋하고 홈으로 돌아갑니다.
+    """
     st.session_state["screen"] = "home"
     st.session_state["selected_case"] = None
     st.session_state["analysis_text"] = None
     st.session_state["last_result"] = None
+
+    # 라디오 선택 버튼 상태도 자동으로 '선택 안 함'으로 초기화되도록 카운터 증가
+    st.session_state["case_reset_counter"] = st.session_state.get("case_reset_counter", 0) + 1
+    st.session_state["input_reset_counter"] = st.session_state.get("input_reset_counter", 0) + 1
+
     st.rerun()
 
 
 def _go_back():
-    current = st.session_state.get("screen", "home")
+    """
+    이전 단계로 지능형 이동합니다.
+    - 세부 결과표/임상사례 상세 화면이 열려 있을 때: 해당 학습 모드의 '목록 화면(선택 안 함)'으로 돌아갑니다.
+    - 이미 목록 화면일 때: 메인 홈 화면으로 돌아갑니다.
+    """
+    current_screen = st.session_state.get("screen", "home")
 
-    if current == "case_detail":
-        st.session_state["screen"] = "case_list"
-    elif current in ["case_list", "input_learning"]:
-        st.session_state["screen"] = "home"
+    if current_screen == "case_list":
+        # 1. 사례 학습 모드 단계 확인
+        counter = st.session_state.get("case_reset_counter", 0)
+        radio_key = f"case_radio_selector_{counter}"
+        current_selection = st.session_state.get(radio_key, "선택 안 함")
+
+        if current_selection != "선택 안 함":
+            # 상세 분석을 보던 중이면 목록 화면으로 1단계 이전 (카운터 증가로 라디오 리셋)
+            st.session_state["case_reset_counter"] = counter + 1
+        else:
+            # 이미 목록 화면 상태이면 메인 홈으로 이동
+            st.session_state["screen"] = "home"
+
+    elif current_screen == "input_learning":
+        # 2. 가상 결과표 판독 모드 단계 확인
+        counter = st.session_state.get("input_reset_counter", 0)
+        radio_key = f"input_report_selector_{counter}"
+        current_selection = st.session_state.get(radio_key, "선택 안 함")
+
+        if current_selection != "선택 안 함":
+            # 가상 결과표 상세 분석 중이면 목록 화면으로 1단계 이전 (카운터 증가로 라디오 리셋)
+            st.session_state["input_reset_counter"] = counter + 1
+        else:
+            # 이미 목록 화면 상태이면 메인 홈으로 이동
+            st.session_state["screen"] = "home"
+
     else:
+        # 기타 화면은 홈으로 이동
         st.session_state["screen"] = "home"
 
     st.rerun()
@@ -26,10 +63,8 @@ def _go_back():
 
 def render_bottom_navigation():
     """
-    하단 내비게이션.
-    개선점:
-    - 기존 st.columns가 전체 본문 폭을 차지하면서 모바일에서 버튼이 양끝으로 밀리는 문제가 있었음.
-    - .nav-actions 래퍼 안에서 고정 폭 2열을 구성해 '처음 / 이전'이 항상 중앙에 바로 붙어 보이도록 수정.
+    하단 내비게이션 바 렌더링.
+    모바일 화면에서도 본문 중앙 정렬 및 여백 레이아웃이 무너지지 않도록 설정합니다.
     """
     if st.session_state.get("screen", "home") == "home":
         return
@@ -51,7 +86,6 @@ def render_bottom_navigation():
 
 def render_top_navigation():
     """
-    현재는 상단 내비게이션을 사용하지 않습니다.
-    필요 시 여기에 간단한 홈 버튼 또는 앱 제목 바를 추가할 수 있습니다.
+    필요 시 상단 바 구현을 위한 플레이스홀더 함수입니다.
     """
-    return
+    pass
