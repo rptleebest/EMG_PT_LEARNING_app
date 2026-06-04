@@ -1,5 +1,8 @@
 # formatters.py
 
+import html
+
+
 def normalize_result_text(value):
     """
     화면 표시용 결과 텍스트 간략화.
@@ -42,7 +45,6 @@ def normalize_result_text(value):
         "지연 또는 소실 (Delayed/Absent)": "지연 또는 소실",
         "항진 또는 문턱값 감소 (Hyperactive / lower threshold)": "항진",
         "증가 가능 (May be increased)": "증가",
-        "지연 (Delayed)": "지연",
         "소실 (Absent)": "소실",
     }
 
@@ -86,20 +88,13 @@ def severity_text(total_abnormal, no_response_count):
 
 def html_escape(text):
     """
-    간단 HTML escape.
-    streamlit markdown에서 unsafe_allow_html을 사용할 때 텍스트 안전성을 높입니다.
+    unsafe_allow_html=True로 HTML 레이아웃을 쓸 때,
+    사용자/데이터 텍스트만 안전하게 escape합니다.
     """
     if text is None:
         return ""
 
-    return (
-        str(text)
-        .replace("&", "&amp;")
-        .replace("<", "&lt;")
-        .replace(">", "&gt;")
-        .replace('"', "&quot;")
-        .replace("'", "&#x27;")
-    )
+    return html.escape(str(text), quote=True)
 
 
 def color_class_for_result(text):
