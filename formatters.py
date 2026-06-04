@@ -3,10 +3,19 @@
 import html
 
 
+def clean_html(html_str):
+    """
+    HTML 문자열 내부에 포함된 줄바꿈과 줄 시작 공백을 제거하여
+    Streamlit 마크다운 파서가 코드 블록(회색 상자)으로 오인하는 현상을 차단합니다.
+    """
+    if not html_str:
+        return ""
+    return "".join([line.strip() for line in html_str.splitlines() if line.strip()])
+
+
 def normalize_result_text(value):
     """
     화면 표시용 결과 텍스트 간략화.
-    표 안에서는 괄호 설명을 줄이고, 자세한 기준은 판독 기준 팁에서 설명합니다.
     """
     if value is None:
         return ""
@@ -89,11 +98,10 @@ def severity_text(total_abnormal, no_response_count):
 def html_escape(text):
     """
     unsafe_allow_html=True로 HTML 레이아웃을 쓸 때,
-    사용자/데이터 텍스트만 안전하게 escape합니다.
+    텍스트 데이터만 안전하게 이스케이프합니다.
     """
     if text is None:
         return ""
-
     return html.escape(str(text), quote=True)
 
 
