@@ -1235,46 +1235,6 @@ VIRTUAL_REPORTS.update(
             },
             "diagnosis": "뇌졸중 후 왼쪽 하지 경직 증가, 척수 반사 흥분성 증가",
             "lesion": "중추신경계 병변 후 왼쪽 가자미근-정강신경 H-반사 회로 흥분성 증가",
-            "sensory_ncs": [
-                {
-                    "nerve": "장딴지신경 감각신경활동전위(Sural SNAP)",
-                    "recording": "가쪽 발목",
-                    "stimulation": "종아리 뒤쪽",
-                    "side": "좌측",
-                    "amplitude": "16 μV",
-                    "latency": "3.0 ms",
-                    "velocity": "47 m/s",
-                },
-                {
-                    "nerve": "장딴지신경 감각신경활동전위(Sural SNAP)",
-                    "recording": "가쪽 발목",
-                    "stimulation": "종아리 뒤쪽",
-                    "side": "우측",
-                    "amplitude": "17 μV",
-                    "latency": "2.9 ms",
-                    "velocity": "48 m/s",
-                },
-            ],
-            "motor_ncs": [
-                {
-                    "nerve": "정강신경 복합근육활동전위(Tibial CMAP)",
-                    "recording": "엄지벌림근(AH)",
-                    "stimulation": "발목",
-                    "side": "좌측",
-                    "amplitude": "8.0 mV",
-                    "latency": "4.2 ms",
-                    "velocity": "-",
-                },
-                {
-                    "nerve": "정강신경 복합근육활동전위(Tibial CMAP)",
-                    "recording": "엄지벌림근(AH)",
-                    "stimulation": "오금",
-                    "side": "좌측",
-                    "amplitude": "7.7 mV",
-                    "latency": "12.1 ms",
-                    "velocity": "45 m/s",
-                },
-            ],
             "late_response": [
                 {
                     "test": "H-반사(H-reflex)",
@@ -1301,35 +1261,7 @@ VIRTUAL_REPORTS.update(
                     "amplitude": "0.28",
                 },
             ],
-            "needle_emg": [
-                {
-                    "muscle": "가자미근(Soleus)",
-                    "root": "S1-S2",
-                    "nerve": "정강신경",
-                    "rest": "Silent at rest",
-                    "volition": "Normal MU recruitment",
-                },
-                {
-                    "muscle": "앞정강근(Tibialis anterior)",
-                    "root": "L4-L5",
-                    "nerve": "깊은종아리신경",
-                    "rest": "Silent at rest",
-                    "volition": "Normal MU recruitment",
-                },
-            ],
             "interpretation": {
-                "sensory": [
-                    "장딴지신경 SNAP는 양측 모두 보존되어 말초 감각신경병증을 시사하는 소견은 없습니다.",
-                    "이 사례의 핵심은 감각신경전도 이상이 아니라 중추신경계 병변 후 반사 흥분성 변화입니다.",
-                ],
-                "motor": [
-                    "정강신경 CMAP 진폭과 전도속도는 보존되어 말초 운동신경 전도 장애는 뚜렷하지 않습니다.",
-                    "따라서 발목 경직과 첨족 양상은 말초신경 손상보다는 중추성 운동조절 이상으로 해석해야 합니다.",
-                ],
-                "emg": [
-                    "침근전도에서 휴식 시 비정상 자발전위가 없고 수의수축 시 운동단위동원도 보존됩니다.",
-                    "이는 하위운동신경계 축삭 손상보다 중추성 경직 평가에 초점을 맞춰야 함을 의미합니다.",
-                ],
                 "integration": [
                     "왼쪽 H-반사 진폭 증가와 H/M 비율 증가는 척수 단일시냅스 반사 회로의 흥분성 증가를 시사합니다.",
                     "뇌졸중 후 하행 억제 조절이 감소하면 가자미근 H-반사가 커지고, 이는 임상적 경직 증가와 연결될 수 있습니다.",
