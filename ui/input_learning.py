@@ -1,34 +1,11 @@
 # ui/input_learning.py
 
 import streamlit as st
-
 from ui.navigation import render_bottom_navigation
-
-try:
-    from formatters import html_escape
-except ImportError:
-    def html_escape(text):
-        if text is None:
-            return ""
-        return (
-            str(text)
-            .replace("&", "&amp;")
-            .replace("<", "&lt;")
-            .replace(">", "&gt;")
-            .replace('"', "&quot;")
-            .replace("'", "&#x27;")
-        )
-
+from formatters import html_escape, clean_html
 
 # =============================================================================
-# 가상 결과표 판독학습 데이터
-# =============================================================================
-# 설계 원칙
-# 1. 가상 결과표 판독학습은 실제 근전도 결과표와 비슷하게 수치 중심으로 구성합니다.
-# 2. 판단 열은 삭제합니다.
-# 3. 감각신경전도검사와 운동신경전도검사는 자극 위치, 기록 위치, 진폭, 잠복기, 전도속도를 분리합니다.
-# 4. 침근전도검사는 휴식 시 반응과 수의수축 시 운동단위동원 양상을 실제 용어로 제시합니다.
-# 5. 해석 영역에서 표 읽는 법, 핵심 요약, 의심 질환, 손상 위치, 감별진단, 추가검사를 자세히 설명합니다.
+# 가상 결과표 판독학습 데이터 (10개 완전판)
 # =============================================================================
 
 VIRTUAL_REPORTS = {
@@ -149,7 +126,7 @@ VIRTUAL_REPORTS = {
             ],
             "integration": [
                 "증상 분포, 정중신경 감각·운동전도 지연, 짧은엄지벌림근의 탈신경 소견을 종합하면 오른쪽 손목굴증후군이 가장 타당합니다.",
-                "정상측 대비 정중신경 진폭 감소가 뚜렷하므로 단순 경도 포착보다는 축삭 손상이 동반된 중등도 이상의 병변으로 교육적으로 해석할 수 있습니다.",
+                "정상측 대비 정중신경 진폭 감소가 뚜렷하므로 단순 말이집탈락을 넘어 운동 축삭 손상(Axonal loss)이 함께 전개되고 있음을 의미합니다.",
             ],
             "differential": [
                 "C6 또는 C8 신경뿌리병증: 감각신경활동전위가 보존되는 경우가 많고, 목 척추주위근 또는 같은 분절의 여러 말초신경 지배 근육 이상이 동반될 수 있습니다.",
@@ -284,7 +261,7 @@ VIRTUAL_REPORTS = {
             ],
             "integration": [
                 "감각신경전도 보존, 말초 운동전도 보존, C6 분절 근육과 목 척추주위근의 탈신경 소견을 종합하면 왼쪽 C6 신경뿌리병증이 가장 적절합니다.",
-                "침근전도에서 활동성 탈신경과 만성 재신경지배 소견이 함께 관찰되므로 급성 악화가 만성 병변 위에 겹친 양상으로 교육적으로 해석할 수 있습니다.",
+                "침근전도에서 활동성 탈신경과 만성 재신경지배 소견이 함께 관찰되므로 급성 악화가 만성 병변 위에 겹친 양상으로 해석할 수 있습니다.",
             ],
             "differential": [
                 "손목굴증후군: 정중신경 SNAP와 CMAP의 손목 부위 지연이 주로 관찰됩니다.",
@@ -831,19 +808,19 @@ VIRTUAL_REPORTS = {
         "interpretation": {
             "sensory": [
                 "상지 감각신경에서 잠복기 지연과 전도속도 저하가 관찰되지만, 장딴지신경은 상대적으로 보존되어 있습니다.",
-                "이러한 sural sparing 양상은 급성 탈말이집성 다발신경뿌리병증에서 교육적으로 중요한 단서가 될 수 있습니다.",
+                "이러한 sural sparing 양상은 급성 말이집탈락성 다발신경뿌리병증에서 교육적으로 중요한 단서가 될 수 있습니다.",
             ],
             "motor": [
                 "여러 운동신경에서 원위잠복기가 길고 전도속도가 느려져 있습니다.",
-                "진폭 감소보다 잠복기 지연과 전도속도 저하가 두드러지므로 축삭성 병변보다 탈말이집성 병변을 우선 고려합니다.",
+                "진폭 감소보다 잠복기 지연과 전도속도 저하가 두드러지므로 축삭성 병변보다 말이집탈락성 병변을 우선 고려합니다.",
             ],
             "emg": [
                 "침근전도에서 휴식 시 비정상 자발전위가 뚜렷하지 않을 수 있습니다.",
-                "수의수축 시 운동단위동원 감소는 말초신경 전도 장애로 실제 수축에 참여하는 운동단위가 줄어든 결과로 해석할 수 있습니다.",
+                "수의수축 시 운동단위동원 감소는 실제 수축에 참여하는 운동단위가 줄어든 결과로 해석할 수 있습니다.",
             ],
             "integration": [
-                "급성 상행성 근력저하, 반사 저하, 다발 운동신경의 탈말이집성 전도 이상, F파 소실을 종합하면 AIDP 또는 Guillain-Barre syndrome spectrum을 의심해야 합니다.",
-                "F파 소실은 원위부뿐 아니라 근위부 신경뿌리 전도 이상이 있음을 시사합니다.",
+                "급성 상행성 근력저하, 반사 저하, 다발 운동신경의 말이집탈락성 전도 이상, F파 소실을 종합하면 AIDP 또는 Guillain-Barre syndrome spectrum을 의심해야 합니다.",
+                "F파 소실은 근위부 신경뿌리 전도 이상이 있음을 시사합니다.",
             ],
             "differential": [
                 "축삭성 다발신경병증: 진폭 감소가 더 핵심이며 대개 만성 또는 아급성 경과가 많습니다.",
@@ -1225,7 +1202,7 @@ VIRTUAL_REPORTS.update(
                 ],
                 "motor": [
                     "오른쪽 얼굴신경 CMAP 진폭이 정상측보다 현저히 감소하여 얼굴신경 운동축삭 침범 가능성을 시사합니다.",
-                    "잠복기 지연과 진폭 감소가 함께 있어 말이집탈락과 축삭 손상이 혼재된 양상으로 교육적으로 해석할 수 있습니다.",
+                    "잠복기 지연과 진폭 감소가 함께 있어 말이집탈락과 축삭 손상이 혼재된 양상으로 해석할 수 있습니다.",
                 ],
                 "emg": [
                     "오른쪽 얼굴신경 지배 근육에서 비정상 자발전위와 운동단위 동원감소가 관찰됩니다.",
@@ -1410,10 +1387,6 @@ def _value_class(value):
 
 
 def _render_mobile_table(headers, rows, table_id):
-    """
-    모바일에서 카드형으로 접히는 반응형 표를 생성합니다.
-    판단 열 없이 결과표 수치 자체만 제시합니다.
-    """
     safe_table_id = html_escape(table_id)
 
     css = f"""
@@ -1543,7 +1516,7 @@ def _render_mobile_table(headers, rows, table_id):
 
         body_html += f"<tr>{cell_html}</tr>"
 
-    return (
+    return clean_html(
         css
         + f'<table id="{safe_table_id}">'
         + f"<thead><tr>{header_html}</tr></thead>"
@@ -1555,67 +1528,59 @@ def _render_mobile_table(headers, rows, table_id):
 def _render_patient_summary(title, report):
     meta = report["meta"]
 
-    st.markdown('<div class="info-card">', unsafe_allow_html=True)
-
     st.markdown(
-        f'<div class="case-title-mobile">👤 {html_escape(title)}</div>',
-        unsafe_allow_html=True,
-    )
-
-    st.markdown(
-        f"""
-        <div class="case-subtitle-mobile">
-            <span class="label-strong">연령/성별:</span>
-            <span class="result-value">{html_escape(meta.get("age", "-"))}세 / {html_escape(meta.get("sex", "-"))}</span>
-            &nbsp;|&nbsp;
-            <span class="label-strong">병변측:</span>
-            <span class="result-value">{html_escape(meta.get("side", "-"))}</span>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown(
-        f"""
-        <div class="case-text-block" style="margin-top:0.8rem;">
-            <div class="case-bullet">
-                <span class="label-strong">주요 임상 정보:</span>
-                <span class="result-value"> {html_escape(meta.get("chief", ""))}</span>
+        clean_html(
+            f"""
+            <div class="info-card">
+                <div class="case-title-mobile">👤 {html_escape(title)}</div>
+                <div class="case-subtitle-mobile">
+                    <span class="label-strong">연령/성별:</span>
+                    <span class="result-value">{html_escape(meta.get("age", "-"))}세 / {html_escape(meta.get("sex", "-"))}</span>
+                    &nbsp;|&nbsp;
+                    <span class="label-strong">병변측:</span>
+                    <span class="result-value">{html_escape(meta.get("side", "-"))}</span>
+                </div>
+                <div class="case-text-block" style="margin-top:0.8rem;">
+                    <div class="case-bullet">
+                        <span class="label-strong">주요 임상 정보:</span>
+                        <span class="result-value"> {html_escape(meta.get("chief", ""))}</span>
+                    </div>
+                    <div class="case-bullet">
+                        <span class="label-strong text-blue">판독 힌트:</span>
+                        <span class="result-value"> {html_escape(meta.get("clinical_hint", ""))}</span>
+                    </div>
+                </div>
             </div>
-            <div class="case-bullet">
-                <span class="label-strong text-blue">판독 힌트:</span>
-                <span class="result-value"> {html_escape(meta.get("clinical_hint", ""))}</span>
-            </div>
-        </div>
-        """,
+            """
+        ),
         unsafe_allow_html=True,
     )
-
-    st.markdown("</div>", unsafe_allow_html=True)
 
 
 def _render_reading_guide():
     st.markdown(
-        """
-        <div class="warn-card">
-            <div class="finding-highlight" style="color:#b45309;">🎓 실제형 결과표 판독 순서</div>
-            <div class="case-bullet">
-                1. 먼저 <b>감각신경전도검사(SNAP)</b>에서 진폭이 정상측 대비 감소했는지 확인합니다.
-                감각반응이 보존되면 신경뿌리병증 가능성이 올라가고, 감소하면 말초신경 또는 신경얼기 병변 가능성이 커집니다.
+        clean_html(
+            """
+            <div class="warn-card">
+                <div class="finding-highlight" style="color:#b45309;">🎓 실제형 결과표 판독 순서</div>
+                <div class="case-bullet">
+                    1. 먼저 <b>감각신경전도검사(SNAP)</b>에서 진폭이 정상측 대비 감소했는지 확인합니다.
+                    감각반응이 보존되면 신경뿌리병증 가능성이 올라가고, 감소하면 말초신경 또는 신경얼기 병변 가능성이 커집니다.
+                </div>
+                <div class="case-bullet">
+                    2. 다음으로 <b>운동신경전도검사(CMAP)</b>에서 원위잠복기, 진폭, 자극 위치별 진폭 변화를 봅니다.
+                    근위부 자극에서 진폭이 크게 떨어지면 국소 전도차단을 의심합니다.
+                </div>
+                <div class="case-bullet">
+                    3. 마지막으로 <b>침근전도검사(Needle EMG)</b>에서 휴식 시 비정상 자발전위와 수의수축 시 운동단위동원 양상을 확인합니다.
+                    서로 다른 말초신경이지만 같은 척수 분절을 공유하는 근육들이 함께 침범되면 신경뿌리병증을 의심합니다.
+                </div>
+                <div class="case-bullet">
+                    4. 표의 수치만 보지 말고, 증상 분포·감각전도 보존 여부·운동전도 위치별 변화·침근전도 분절 패턴을 통합해야 합니다.
+                </div>
             </div>
-            <div class="case-bullet">
-                2. 다음으로 <b>운동신경전도검사(CMAP)</b>에서 원위잠복기, 진폭, 자극 위치별 진폭 변화를 봅니다.
-                근위부 자극에서 진폭이 크게 떨어지면 국소 전도차단을 의심합니다.
-            </div>
-            <div class="case-bullet">
-                3. 마지막으로 <b>침근전도검사(Needle EMG)</b>에서 휴식 시 비정상 자발전위와 수의수축 시 운동단위동원 양상을 확인합니다.
-                서로 다른 말초신경이지만 같은 척수 분절을 공유하는 근육들이 함께 침범되면 신경뿌리병증을 의심합니다.
-            </div>
-            <div class="case-bullet">
-                4. 표의 수치만 보지 말고, 증상 분포·감각전도 보존 여부·운동전도 위치별 변화·침근전도 분절 패턴을 통합해야 합니다.
-            </div>
-        </div>
-        """,
+            """
+        ),
         unsafe_allow_html=True,
     )
 
@@ -1749,20 +1714,22 @@ def _render_interpretation(report):
     st.markdown('<div class="result-title">✅ 검사 결과 통합 해석</div>', unsafe_allow_html=True)
 
     st.markdown(
-        f"""
-        <div class="case-text-block" style="background:#fff1f2!important; border-left-color:#fecdd3!important;">
-            <div class="case-bullet">
-                <span class="label-strong text-red">최종 교육용 의심 진단:</span>
-                <span class="result-value text-red" style="font-weight:800!important;">
-                    {html_escape(report.get("diagnosis", ""))}
-                </span>
+        clean_html(
+            f"""
+            <div class="case-text-block" style="background:#fff1f2!important; border-left-color:#fecdd3!important;">
+                <div class="case-bullet">
+                    <span class="label-strong text-red">최종 교육용 의심 진단:</span>
+                    <span class="result-value text-red" style="font-weight:800!important;">
+                        {html_escape(report.get("diagnosis", ""))}
+                    </span>
+                </div>
+                <div class="case-bullet">
+                    <span class="label-strong">추정 손상 위치:</span>
+                    <span class="result-value"> {html_escape(report.get("lesion", ""))}</span>
+                </div>
             </div>
-            <div class="case-bullet">
-                <span class="label-strong">추정 손상 위치:</span>
-                <span class="result-value"> {html_escape(report.get("lesion", ""))}</span>
-            </div>
-        </div>
-        """,
+            """
+        ),
         unsafe_allow_html=True,
     )
 
@@ -1782,11 +1749,13 @@ def _render_interpretation(report):
             continue
 
         st.markdown(
-            f"""
-            <div class="result-label" style="border-left-color:{border_color}!important; background:{bg_color}!important;">
-                {html_escape(title)}
-            </div>
-            """,
+            clean_html(
+                f"""
+                <div class="result-label" style="border-left-color:{border_color}!important; background:{bg_color}!important;">
+                    {html_escape(title)}
+                </div>
+                """
+            ),
             unsafe_allow_html=True,
         )
 
@@ -1801,26 +1770,28 @@ def _render_interpretation(report):
 
 def _render_numeric_criteria_tip():
     st.markdown(
-        """
-        <div class="info-card">
-            <div class="finding-highlight">📌 수치 판독 기준 기억하기</div>
-            <div class="case-bullet">
-                • <b>진폭</b>은 주로 축삭 손상 정도를 반영합니다. 병변측 진폭이 정상측 대비 약 50% 이하로 감소하면 의미 있는 축삭 손상을 의심합니다.
+        clean_html(
+            """
+            <div class="info-card">
+                <div class="finding-highlight">📌 수치 판독 기준 기억하기</div>
+                <div class="case-bullet">
+                    • <b>진폭</b>은 주로 축삭 손상 정도를 반영합니다. 병변측 진폭이 정상측 대비 약 50% 이하로 감소하면 의미 있는 축삭 손상을 의심합니다.
+                </div>
+                <div class="case-bullet">
+                    • <b>잠복기</b>는 자극 후 반응이 시작될 때까지의 시간입니다. 병변측 잠복기가 정상측 대비 약 130% 이상 길어지면 말이집탈락 또는 국소 전도 지연을 의심합니다.
+                </div>
+                <div class="case-bullet">
+                    • <b>전도차단</b>은 원위부 자극에서는 반응이 비교적 보존되지만, 병변을 지나 근위부 자극했을 때 진폭이 크게 감소하는 패턴입니다.
+                </div>
+                <div class="case-bullet">
+                    • <b>침근전도 휴식 시 비정상 자발전위</b>에는 fibrillation potential, positive sharp wave, fasciculation potential 등이 포함됩니다.
+                </div>
+                <div class="case-bullet">
+                    • <b>수의수축 시 Reduced MU recruitment</b>는 동원 가능한 운동단위 수가 줄었다는 뜻이며, 하위운동신경계 병변에서 중요한 단서입니다.
+                </div>
             </div>
-            <div class="case-bullet">
-                • <b>잠복기</b>는 자극 후 반응이 시작될 때까지의 시간입니다. 병변측 잠복기가 정상측 대비 약 130% 이상 길어지면 말이집탈락 또는 국소 전도 지연을 의심합니다.
-            </div>
-            <div class="case-bullet">
-                • <b>전도차단</b>은 원위부 자극에서는 반응이 비교적 보존되지만, 병변을 지나 근위부 자극했을 때 진폭이 크게 감소하는 패턴입니다.
-            </div>
-            <div class="case-bullet">
-                • <b>침근전도 휴식 시 비정상 자발전위</b>에는 fibrillation potential, positive sharp wave, fasciculation potential 등이 포함됩니다.
-            </div>
-            <div class="case-bullet">
-                • <b>수의수축 시 Reduced MU recruitment</b>는 동원 가능한 운동단위 수가 줄었다는 뜻이며, 하위운동신경계 병변에서 중요한 단서입니다.
-            </div>
-        </div>
-        """,
+            """
+        ),
         unsafe_allow_html=True,
     )
 
@@ -1864,15 +1835,17 @@ def render_input_learning():
 
     if selected == "선택 안 함":
         st.markdown(
-            """
-            <div class="info-card">
-                <div class="finding-highlight">학습 방법</div>
-                <div class="case-bullet">
-                    위 목록에서 결과표를 선택하면 실제 임상 결과표와 유사한 표가 나타납니다.
-                    먼저 표를 스스로 읽어본 뒤, 아래의 단계별 해석을 확인해 보세요.
+            clean_html(
+                """
+                <div class="info-card">
+                    <div class="finding-highlight">학습 방법</div>
+                    <div class="case-bullet">
+                        위 목록에서 결과표를 선택하면 실제 임상 결과표와 유사한 표가 나타납니다.
+                        먼저 표를 스스로 읽어본 뒤, 아래의 단계별 해석을 확인해 보세요.
+                    </div>
                 </div>
-            </div>
-            """,
+                """
+            ),
             unsafe_allow_html=True,
         )
 
