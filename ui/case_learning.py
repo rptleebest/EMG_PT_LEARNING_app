@@ -122,25 +122,73 @@ def _render_symptoms(patient):
     )
 
 
+def _strip_basic_html_tags(text):
+    """
+    data/cases.py 안에 과거 버전의 HTML 문자열이 섞여 들어간 경우,
+    화면에 <div>, <span> 태그가 그대로 보이지 않도록 간단히 정리합니다.
+    """
+    if text is None:
+        return ""
+
+    cleaned = str(text)
+
+    replacements = {
+        "<div class=\"case-bullet\">": "",
+        "</div>": "",
+        "<span class=\"label-strong\">": "",
+        "<span class=\"result-value\">": "",
+        "</span>": "",
+        "<b>": "",
+        "</b>": "",
+        "&nbsp;": " ",
+        "&#x27;": "'",
+        "&quot;": '"',
+        "&lt;": "<",
+        "&gt;": ">",
+        "&amp;": "&",
+    }
+
+    for old, new in replacements.items():
+        cleaned = cleaned.replace(old, new)
+
+    # style이 포함된 span/div 태그가 남아 있는 경우를 대비한 단순 제거
+    import re
+    cleaned = re.sub(r"<div[^>]*>", "", cleaned)
+    cleaned = re.sub(r"<span[^>]*>", "", cleaned)
+    cleaned = re.sub(r"</span>", "", cleaned)
+    cleaned = re.sub(r"</div>", "", cleaned)
+
+    return cleaned.strip()
+
+
 def _render_physical_exam(patient):
     """
-    요청사항 반영:
+    이학적 검사결과 렌더링.
+
+    수정 사항:
     - 반사 검사 항목은 더 굵게 표시합니다.
+    - data/cases.py 안에 HTML 문자열이 섞여 있어도 화면에 태그가 그대로 보이지 않도록 정리합니다.
+    - 특수검사 항목도 일반 텍스트로 안정적으로 출력합니다.
     """
     st.markdown('<div class="case-section-label">🧪 이학적 검사결과</div>', unsafe_allow_html=True)
 
     exam_html = []
 
     for section_name, items in patient.get("physical_exam", {}).items():
-        section_name_escaped = html_escape(section_name)
-        is_reflex_section = "반사" in section_name_escaped
+        section_name_clean = _strip_basic_html_tags(section_name)
+        section_name_escaped = html_escape(section_name_clean)
+
+        is_reflex_section = "반사" in section_name_clean
+        is_special_section = "특수" in section_name_clean
 
         exam_html.append(
             f'<div class="finding-highlight" style="color:#475569;">[{section_name_escaped}]</div>'
         )
 
         for item in items:
-            item_escaped = html_escape(item)
+            item_clean = _strip_basic_html_tags(item)
+            item_escaped = html_escape(item_clean)
+
             parts = item_escaped.split(":", 1)
 
             if len(parts) == 2:
@@ -152,6 +200,15 @@ def _render_physical_exam(patient):
                         f"""
                         <div class="case-bullet">
                             <span class="label-strong" style="font-weight:900!important; color:#0f172a!important;">{label}:</span>
+                            <span class="result-value"> {value}</span>
+                        </div>
+                        """
+                    )
+                elif is_special_section:
+                    exam_html.append(
+                        f"""
+                        <div class="case-bullet">
+                            <span class="label-strong" style="font-weight:850!important; color:#1e3a8a!important;">{label}:</span>
                             <span class="result-value"> {value}</span>
                         </div>
                         """
@@ -168,16 +225,17 @@ def _render_physical_exam(patient):
             else:
                 if is_reflex_section:
                     exam_html.append(
-                        f'<div class="case-bullet" style="font-weight:800; color:#0f172a;">• {item_escaped}</div>'
+                        f'<div class="case-bullet" style="font-weight:850; color:#0f172a;">• {item_escaped}</div>'
                     )
                 else:
-                    exam_html.append(f'<div class="case-bullet">• {item_escaped}</div>')
+                    exam_html.append(
+                        f'<div class="case-bullet">• {item_escaped}</div>'
+                    )
 
     st.markdown(
         f'<div class="case-text-block">{"".join(exam_html)}</div>',
         unsafe_allow_html=True,
     )
-
 
 def _render_simple_table(headers, rows):
     thead = "".join([f"<th>{html_escape(h)}</th>" for h in headers])
