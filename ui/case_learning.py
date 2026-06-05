@@ -116,7 +116,7 @@ def _render_learning_frame(selected):
             clean_html(
                 """
                 <div class="warn-card">
-                    <div class="finding-highlight" style="color:#7c3aed;">🎓 학생용 사고 프레임: H-반사와 경직 평가</div>
+                    <div class="finding-highlight" style="color:#7c3aed;">🎓 학생용 사고 프레임: H-반사와 경직(spasticity) 평가</div>
                     <div class="case-bullet">1. H-반사는 말초 운동신경 전도검사라기보다 척수 단일시냅스 반사고리의 흥분성을 보는 검사입니다.</div>
                     <div class="case-bullet">2. 위운동신경세포(UMN) 병변 이후에는 척수 반사 흥분성이 증가하여 H-반사 진폭 또는 H/M 비율이 증가할 수 있습니다.</div>
                     <div class="case-bullet">3. 물리치료 중재 전후 H/M 비율 변화를 비교하면 경직 완화 정도를 정량적으로 설명하는 데 도움이 됩니다.</div>
@@ -152,7 +152,7 @@ def _render_learning_frame(selected):
                 <div class="case-bullet">2. <b>잠복기 지연</b>: 병변측 잠복기가 정상측 대비 약 130% 이상 길어지면 말이집탈락 또는 국소 포착성 전도 지연 가능성을 의심합니다.</div>
                 <div class="case-bullet">3. <b>감각신경활동전위 보존</b>: 신경뿌리병증(Radiculopathy)은 뒤뿌리신경절(DRG)보다 몸쪽(Proximal) 병변이므로 말초 감각신경활동전위(SNAP)가 보존되는 경우가 많습니다.</div>
                 <div class="case-bullet">4. <b>비정상 자발전위</b>: 실제 전위명으로는 fibrillation potential, positive sharp wave, fasciculation potential 등이 있으며, 사례 학습 표에서는 이해를 돕기 위해 간략화해 표시합니다.</div>
-                <div class="case-bullet">5. <b>운동단위 동원감소</b>: 수의수축 시 동원 가능한 운동단위 수가 줄어든 상태로, 운동축삭 손상 또는 하위운동신경계(LMN) 병변을 시사합니다.</div>
+                <div class="case-bullet">5. <b>운동단위 동원감소</b>: 수의수축 시 동원 가능한 운동단위 수가 줄어든 상태로, 운동축삭 손상 또는 아래운동신경세포(LMN) 병변을 시사합니다.</div>
             </div>
             """
         ),
@@ -564,17 +564,17 @@ def _render_teaching_result(selected, teaching, diff_dx):
     """
     중복 레이아웃 해결:
     최종 교육용 의심 진단이라는 문구는 과감히 삭제하고,
-    '검사 결과 통합해석'을 고대비 메인 테마의 '검사결과 통합해석 및 의심진단'으로 병합 및 개편했습니다.
+    '검사 결과 통합해석'을 고대비 메인 테마의 '검사결과 통합해석 및 추정 질환'으로 병합 및 개편했습니다.
     """
     st.markdown('<div class="result-card">', unsafe_allow_html=True)
-    st.markdown('<div class="result-title">✅ 검사결과 통합해석 및 의심진단</div>', unsafe_allow_html=True)
+    st.markdown('<div class="result-title">✅ 검사결과 통합해석 및 추정 질환</div>', unsafe_allow_html=True)
 
-    # 1. 의심진단 정보 카드 최상단에 배치
+    # 1. 추정 질환 정보 카드 최상단에 배치
     st.markdown(
         clean_html(
             f"""
             <div class="case-text-block" style="background:#fff1f2!important; border-left-color:#dc2626!important; padding: 12px 14px!important; margin-bottom: 18px!important;">
-                <span class="label-strong text-red" style="font-weight:900!important; font-size:1.02rem!important;">물리치료 의심진단(Suspected Diagnosis):</span>
+                <span class="label-strong text-red" style="font-weight:900!important; font-size:1.02rem!important;">추정 질환 진단(Suspected Diagnosis):</span>
                 <span class="result-value text-red" style="font-weight:900!important; font-size:1.02rem!important; display:block; margin-top:4px;">
                     {html_escape(teaching.get("summary", ""))}
                 </span>
@@ -631,7 +631,7 @@ def _render_teaching_result(selected, teaching, diff_dx):
                         unsafe_allow_html=True,
                     )
 
-    # 4. 검사 결과 통합 해석 (의심 질환 및 손상 위치 추정 포함)
+    # 4. 검사 결과 통합 해석 (추정 질환 및 손상 위치 추정 포함)
     if teaching.get("integration"):
         st.markdown('<div class="result-label" style="border-left-color: #dc2626!important; background-color: #fef2f2!important; font-weight:850!important;">검사 결과 통합 물리치료 의사결정</div>', unsafe_allow_html=True)
 
