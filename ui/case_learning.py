@@ -156,3 +156,9 @@ def render_case_list():
             st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
     render_bottom_navigation()
+
+# === 누락되었던 필수 라우팅 함수 복원 ===
+def render_case_detail():
+    """router.py에서 호출하는 상세 페이지 렌더링 함수"""
+    st.session_state["screen"] = "case_list"
+    st.rerun()
