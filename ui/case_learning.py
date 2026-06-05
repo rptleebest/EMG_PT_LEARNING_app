@@ -86,8 +86,19 @@ def _render_physical_exam(patient):
     st.markdown(f'<div class="case-text-block">{"".join(html)}</div>', unsafe_allow_html=True)
 
 def _render_simple_table(headers, rows):
+    # NameError의 원인이 되었던 복잡한 코드를 안전하고 확실하게 풀어서 수정했습니다.
     th = "".join([f"<th>{html_escape(h)}</th>" for h in headers])
-    tr = "".join([f"<tr>{''.join([f'<td class=\"left\"' if i==0 else f'<td class=\"{_color_class_for_text(col)}\"' for i, col in enumerate(row)])}>{html_escape(str(col))}</td>" for row in rows])
+    
+    tbody_rows = []
+    for row in rows:
+        cells = []
+        for i, col in enumerate(row):
+            col_text = "" if col is None else str(col)
+            css_class = "left" if i == 0 else _color_class_for_text(col_text)
+            cells.append(f'<td class="{css_class}">{html_escape(col_text)}</td>')
+        tbody_rows.append(f"<tr>{''.join(cells)}</tr>")
+        
+    tr = "".join(tbody_rows)
     return clean_html(f'<div class="edu-table-wrap"><table class="edu-table"><thead><tr>{th}</tr></thead><tbody>{tr}</tbody></table></div>')
 
 def _render_teaching_result(teaching, diff_dx):
@@ -157,7 +168,7 @@ def render_case_list():
         st.markdown("</div>", unsafe_allow_html=True)
     render_bottom_navigation()
 
-# === 누락되었던 필수 라우팅 함수 복원 ===
+# === 필수 라우팅 함수 복원 ===
 def render_case_detail():
     """router.py에서 호출하는 상세 페이지 렌더링 함수"""
     st.session_state["screen"] = "case_list"
