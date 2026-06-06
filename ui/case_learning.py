@@ -1,4 +1,4 @@
-# ui/case_learning.py
+# ui/case_learning.py [Part 5/6]
 
 import html as html_lib
 import re
@@ -23,7 +23,7 @@ def _get_value_for_lesion_side(values, side):
 def _color_class_for_text(text):
     text = str(text)
     abnormals = ["반응 소실", "소실", "지연", "감소", "느림", "전도차단", "증가", "Absent", "Delayed", "Reduced", "No Response", "fibrillation", "positive sharp", "Reduced MU recruitment", "Giant"]
-    normals = ["Silent", "Normal", "정상", "보존", "Normal Range"]
+    normals = ["Silent", "Normal", "정상", "보존", "Normal Range", "통증 및 협조 부족으로 검사 제한"]
     if any(a in text for a in abnormals): return "text-red"
     if any(n in text for n in normals): return "text-blue"
     return "text-normal"
@@ -37,32 +37,61 @@ def _count_abnormalities(findings, side, parser_func):
         if _is_bilateral_side(side):
             left = parser_func(values[0] if len(values) > 0 else "")
             right = parser_func(values[1] if len(values) > 1 else "")
-            if _count_abnormality_in_dict(left) or _count_abnormality_in_dict(right):
-                count += 1
+            if _count_abnormality_in_dict(left) or _count_abnormality_in_dict(right): count += 1
         else:
             lesion_val = parser_func(_get_value_for_lesion_side(values, side))
-            if _count_abnormality_in_dict(lesion_val):
-                count += 1
+            if _count_abnormality_in_dict(lesion_val): count += 1
     return count
 
 def _inject_css():
     st.markdown(
         """
         <style>
+            /* 텍스트 가독성 */
             .case-text-block, .result-text, .case-bullet { text-align: justify !important; text-justify: inter-word !important; line-height: 1.6 !important; }
+            
+            /* 이학적 검사 파스텔톤 부드러운 헤더 */
             .exam-header-sensory { color: #1e3a8a !important; background-color: #eff6ff !important; font-weight: 800 !important; font-size: 0.95rem !important; padding: 6px 12px !important; border-left: 5px solid #3b82f6 !important; border-radius: 4px !important; margin-top: 14px !important; margin-bottom: 8px !important; }
             .exam-header-motor { color: #14532d !important; background-color: #f0fdf4 !important; font-weight: 800 !important; font-size: 0.95rem !important; padding: 6px 12px !important; border-left: 5px solid #10b981 !important; border-radius: 4px !important; margin-top: 14px !important; margin-bottom: 8px !important; }
             .exam-header-reflex { color: #7f1d1d !important; background-color: #fef2f2 !important; font-weight: 800 !important; font-size: 0.95rem !important; padding: 6px 12px !important; border-left: 5px solid #ef4444 !important; border-radius: 4px !important; margin-top: 14px !important; margin-bottom: 8px !important; }
             .exam-header-default { color: #0f172a !important; background-color: #f8fafc !important; font-weight: 800 !important; font-size: 0.95rem !important; padding: 6px 12px !important; border-left: 5px solid #9ca3af !important; border-radius: 4px !important; margin-top: 14px !important; margin-bottom: 8px !important; }
-            .edu-table th { background-color: #f8fafc !important; color: #334155 !important; border: 1px solid #e2e8f0 !important; padding: 8px; text-align: center; }
-            .edu-table td { border: 1px solid #e2e8f0 !important; color: #475569; padding: 8px; text-align: center; vertical-align: middle; }
-            .edu-table td.left { font-weight: 700 !important; color: #0f172a !important; background-color: #f0fdfa !important; text-align: left; }
-            .text-red { color: #dc2626 !important; font-weight: 600; background-color: #fef2f2; border-radius: 4px; padding: 2px 4px; }
-            .text-blue { color: #2563eb !important; font-weight: 600; background-color: #eff6ff; border-radius: 4px; padding: 2px 4px; }
-            /* Radio button 100% width formatting for uniform boxes */
-            div[role="radiogroup"] > label { width: 100%; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; margin-bottom: 5px; background-color: #ffffff; transition: 0.2s; }
-            div[role="radiogroup"] > label:first-child { background-color: #f8fafc; border-left: 4px solid #94a3b8; }
-            div[role="radiogroup"] > label:hover { background-color: #f1f5f9; }
+            
+            /* 라디오 버튼 균일 너비 및 시각적 위계 스타일링 */
+            div[role="radiogroup"] > label {
+                width: 100% !important;
+                background-color: #f0fdf4 !important;
+                border: 1px solid #bbf7d0 !important;
+                border-left: 5px solid #10b981 !important;
+                border-radius: 8px !important;
+                padding: 10px 15px !important;
+                margin-bottom: 8px !important;
+                transition: all 0.2s ease;
+                display: flex;
+            }
+            div[role="radiogroup"] > label:first-child {
+                background-color: #f1f5f9 !important;
+                border: 1px solid #e2e8f0 !important;
+                border-left: 5px solid #64748b !important;
+            }
+            
+            /* 반응형 테이블 (색상 대비 강화) */
+            .edu-table th { background-color: #f1f5f9 !important; color: #1e293b !important; border: 1px solid #cbd5e1 !important; padding: 10px; text-align: center; }
+            .edu-table td { border: 1px solid #cbd5e1 !important; color: #334155; padding: 10px; text-align: center; vertical-align: middle; }
+            .edu-table td.left { font-weight: 800 !important; color: #0f172a !important; background-color: #f8fafc !important; text-align: left; }
+            .text-red { color: #b91c1c !important; font-weight: 800; background-color: #fef2f2; border-radius: 4px; padding: 3px 6px; }
+            .text-blue { color: #1d4ed8 !important; font-weight: 800; background-color: #eff6ff; border-radius: 4px; padding: 3px 6px; }
+            
+            @media screen and (max-width: 700px) {
+                .edu-table thead { display: none; }
+                .edu-table tr { display: block; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 0.8rem; background: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+                .edu-table td { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; border: none; border-bottom: 1px solid #f8fafc; padding: 0.6rem 0.7rem; text-align: right; }
+                .edu-table td:last-child { border-bottom: none; }
+                .edu-table td::before { content: attr(data-label); font-weight: 800; color: #475569; text-align: left; font-size: 0.8rem; flex: 0 0 38%; }
+                .edu-table td > span { flex: 1; text-align: right; word-break: keep-all; }
+                .edu-table td.left { display: block; background: #f8fafc; text-align: left; padding: 0.7rem; color: #0f172a; font-weight: 800; border-radius: 8px 8px 0 0; }
+                .edu-table td.left::before { content: none; }
+                .edu-table td.left > span { display: block; text-align: left; }
+            }
         </style>
         """, unsafe_allow_html=True
     )
@@ -88,13 +117,13 @@ def _render_physical_exam(patient):
         html.append(f'<div class="{h_class}">[{html_escape(sn)}]</div>')
         for line in items:
             parts = line.split(":", 1)
-            if len(parts) == 2: html.append(f'<div class="case-bullet"><span style="font-weight:700; color:#334155;">{html_escape(parts[0].strip())}:</span> {html_escape(parts[1].strip())}</div>')
+            if len(parts) == 2: html.append(f'<div class="case-bullet"><span style="font-weight:800; color:#1e293b;">{html_escape(parts[0].strip())}:</span> {html_escape(parts[1].strip())}</div>')
             else: html.append(f'<div class="case-bullet">- {html_escape(line)}</div>')
     st.markdown(f'<div class="case-text-block">{"".join(html)}</div>', unsafe_allow_html=True)
 
 def _render_simple_table(headers, rows):
     th = "".join([f"<th>{html_escape(h)}</th>" for h in headers])
-    tr = "".join([f"<tr>{''.join([f'<td class=\"left\"' if i==0 else f'<td class=\"{_color_class_for_text(col)}\"' for i, col in enumerate(row)])}>{html_escape(str(col))}</td>" for row in rows])
+    tr = "".join([f"<tr>{''.join([f'<td class=\"left\" data-label=\"{html_escape(headers[i])}\"><span>{html_escape(str(col))}</span></td>' if i==0 else f'<td class=\"{_color_class_for_text(col)}\" data-label=\"{html_escape(headers[i])}\"><span>{html_escape(str(col))}</span></td>' for i, col in enumerate(row)])}</tr>" for row in rows])
     return clean_html(f'<div style="overflow-x:auto; margin-bottom:1rem;"><table class="edu-table" style="width:100%; border-collapse:collapse;"><thead><tr>{th}</tr></thead><tbody>{tr}</tbody></table></div>')
 
 def _render_teaching_result(teaching, diff_dx):
@@ -103,74 +132,81 @@ def _render_teaching_result(teaching, diff_dx):
     for key, label, c1, c2 in [("ncs_reason", "1단계: 신경전도검사(NCS) 해석", "#3b82f6", "#eff6ff"), ("emg_reason", "2단계: 침근전도검사(Needle EMG) 해석", "#10b981", "#ecfdf5")]:
         items = teaching.get(key, [])
         if items:
-            st.markdown(f'<div style="border-left: 4px solid {c1}; background-color: {c2}; padding: 8px 12px; font-weight: 800; color: #1e293b; margin-bottom: 8px;">{label}</div>', unsafe_allow_html=True)
-            for t in items: 
-                # 번호로 시작하면 불릿 없이 진하게, 아니면 불릿 처리
+            st.markdown(f'<div style="border-left: 5px solid {c1}; background-color: {c2}; padding: 10px 14px; font-weight: 800; font-size: 1.05rem; color: #0f172a; margin-bottom: 10px; border-radius: 0 6px 6px 0;">{label}</div>', unsafe_allow_html=True)
+            for t in items:
                 clean_t = html_escape(t)
-                if re.match(r"^\d+\)", t):
-                    st.markdown(f'<div style="color: #0f172a; font-size: 0.95rem; font-weight: 700; margin-top: 10px; margin-bottom: 4px; padding-left: 5px;">{clean_t}</div>', unsafe_allow_html=True)
+                # 숫자로 시작하는 문구는 불릿 기호 삭제 및 굵게 표시
+                if re.match(r"^\d+[\)\.]", t.strip()):
+                    st.markdown(f'<div style="color: #0f172a; font-size: 1.0rem; font-weight: 800; margin-top: 12px; margin-bottom: 4px; padding-left: 5px;">{clean_t}</div>', unsafe_allow_html=True)
                 else:
-                    st.markdown(f'<div style="color: #334155; font-size: 0.95rem; margin-bottom: 6px; padding-left: 15px;">- {clean_t}</div>', unsafe_allow_html=True)
+                    st.markdown(f'<div style="color: #334155; font-size: 0.95rem; line-height: 1.6; margin-bottom: 8px; padding-left: 15px;">- {clean_t}</div>', unsafe_allow_html=True)
+            st.markdown("<br/>", unsafe_allow_html=True)
 
-    st.markdown('<div style="border-left: 4px solid #dc2626; background-color: #fef2f2; padding: 8px 12px; font-weight: 800; color: #991b1b; margin-top: 15px; margin-bottom: 12px;">3단계: 검사결과 추정 질환</div>', unsafe_allow_html=True)
+    st.markdown('<div style="border-left: 5px solid #dc2626; background-color: #fef2f2; padding: 10px 14px; font-weight: 800; font-size: 1.05rem; color: #7f1d1d; margin-top: 5px; margin-bottom: 12px; border-radius: 0 6px 6px 0;">3단계: 검사결과 추정 질환</div>', unsafe_allow_html=True)
     for t in teaching.get("integration", []):
-        if "추정 질환:" in t:
-            parts = t.split(":")
-            st.markdown(f'<div style="color: #1e293b; font-size: 1.05rem; font-weight:800; line-height: 1.6; margin-bottom: 8px; padding-left: 5px;">▶ 추정 질환:<span style="color:#dc2626;">{html_escape(parts[1])}</span></div>', unsafe_allow_html=True)
+        t_clean = t.replace("▶", "").strip()
+        if t_clean.startswith("추정 질환:"):
+            name = t_clean.replace("추정 질환:", "").strip()
+            st.markdown(f'<div style="color: #dc2626; font-size: 1.15rem; font-weight:900; margin-bottom: 10px; padding-left: 5px;">🎯 {html_escape(name)}</div>', unsafe_allow_html=True)
+        elif t_clean.startswith("추정 근거:") or t_clean.startswith("추정한 이유:"):
+            reason = t_clean.replace("추정 근거:", "").replace("추정한 이유:", "").strip()
+            st.markdown(f'<div style="color: #1e293b; font-size: 0.95rem; line-height: 1.6; margin-bottom: 8px; padding-left: 5px;">💡 <span style="font-weight:800; color:#b45309;">추정한 이유:</span> {html_escape(reason)}</div>', unsafe_allow_html=True)
         else:
-            st.markdown(f'<div style="color: #334155; font-size: 0.95rem; line-height: 1.6; margin-bottom: 8px; padding-left: 15px;">{html_escape(t)}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div style="color: #1e293b; font-size: 0.95rem; line-height: 1.6; margin-bottom: 8px; padding-left: 5px;">{html_escape(t_clean)}</div>', unsafe_allow_html=True)
     
     if diff_dx:
-        st.markdown('<div style="border-left: 4px solid #9333ea; background-color: #faf5ff; padding: 8px 12px; font-weight: 800; color: #6b21a8; margin-top: 15px; margin-bottom: 8px;">감별진단 가이드</div>', unsafe_allow_html=True)
+        st.markdown('<div style="border-left: 5px solid #9333ea; background-color: #faf5ff; padding: 10px 14px; font-weight: 800; font-size: 1.05rem; color: #581c87; margin-top: 20px; margin-bottom: 10px; border-radius: 0 6px 6px 0;">감별진단 가이드</div>', unsafe_allow_html=True)
         for item in diff_dx:
-            st.markdown(f'<div style="color: #4c1d95; font-weight:800; font-size: 0.95rem; padding-left: 5px; margin-top: 5px;">{html_escape(item.get("name"))}</div><div style="color: #334155; font-size: 0.9rem; margin-bottom: 10px; padding-left: 20px;">- 감별점: {html_escape(item.get("how_to_differentiate"))}</div>', unsafe_allow_html=True)
+            name_clean = item.get("name", "").replace("▶", "").strip()
+            st.markdown(f'<div style="color: #7e22ce; font-weight:900; font-size: 1.05rem; padding-left: 5px; margin-top: 5px; margin-bottom: 4px;">⚖️ {html_escape(name_clean)}</div><div style="color: #334155; font-size: 0.95rem; line-height: 1.6; margin-bottom: 10px; padding-left: 20px;">- <span style="font-weight:800; color:#4c1d95;">구분점:</span> {html_escape(item.get("how_to_differentiate"))}</div>', unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
 def render_case_list():
     _inject_css()
-    st.markdown('<div style="font-size: 1.5rem; font-weight: 800; color: #1e293b; margin-bottom: 1rem;">📊 사례 학습 모드</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size: 1.6rem; font-weight: 900; color: #0f172a; margin-bottom: 1rem;">📊 사례 학습 모드</div>', unsafe_allow_html=True)
     
     if "case_reset_counter" not in st.session_state: st.session_state["case_reset_counter"] = 0
-    st.markdown('<div style="font-weight: 700; color: #1e293b; margin-bottom: 10px;">학습할 임상 증상 선택</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-weight: 800; color: #1e293b; margin-bottom: 12px; font-size: 1.05rem;">학습할 임상 증상 선택</div>', unsafe_allow_html=True)
     selected = st.radio("학습할 임상 증상 선택", ["선택 안 함"] + list(CASE_LIBRARY.keys()), key=f"sel_{st.session_state['case_reset_counter']}", label_visibility="collapsed")
     
     if selected != "선택 안 함":
         case = CASE_LIBRARY[selected]
         pat = case["patient"]
         raw_side = pat.get("side", "-")
-        st.markdown(f'<div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; margin-bottom: 15px; margin-top: 20px;"><div style="font-size: 1.1rem; font-weight: 800; color: #1e293b; margin-bottom: 8px;">👤 환자 기본 정보</div><div style="font-size: 0.9rem; color: #475569;"><b>연령/성별:</b> {pat.get("age")} / {pat.get("sex")} &nbsp;|&nbsp; <b>병변측:</b> {raw_side}</div><div style="font-size: 0.9rem; color: #334155; margin-top:8px; line-height: 1.5;"><b>주요 증상:</b> {", ".join(pat.get("symptoms", []))}</div></div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="background-color: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 18px; margin-bottom: 20px; margin-top: 20px;"><div style="font-size: 1.15rem; font-weight: 900; color: #0f172a; margin-bottom: 12px;">👤 환자 기본 정보</div><div style="font-size: 0.95rem; color: #334155;"><b>연령/성별:</b> {pat.get("age")} / {pat.get("sex")} &nbsp;|&nbsp; <b>병변측:</b> {raw_side}</div><div style="font-size: 0.95rem; color: #1e293b; margin-top:10px; line-height: 1.6;"><b>주요 증상:</b><br/> {"<br/>".join(pat.get("symptoms", []))}</div></div>', unsafe_allow_html=True)
         
-        st.markdown('<div style="font-size: 0.85rem; color: #64748b; margin-bottom: 15px;">💡 팁: 아래 신경전도검사 및 침근전도검사 표는 병변측(증상 발생 위치)의 주요 검사 결과를 간략히 요약한 것입니다. 각 검사의 이상 여부를 먼저 파악해 보세요.</div>', unsafe_allow_html=True)
+        # 공통 안내 팁
+        st.markdown(
+            """<div style="background-color: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 12px; margin-bottom: 15px;">
+               <div style="font-size: 0.95rem; color: #b45309; font-weight: 800; line-height: 1.5;">💡 학습 팁: 아래 신경전도검사 및 침근전도검사 표는 주요 병변측(증상 발생 위치)을 중심으로 간략히 작성되었습니다.</div>
+               </div>""", unsafe_allow_html=True)
+               
         _render_physical_exam(pat)
 
         findings = case.get("findings", {})
         grouped = split_findings_by_domain(findings, ANATOMY)
 
-        st.markdown('<div style="margin-top: 25px; padding-top: 15px; border-top: 2px dashed #e2e8f0;">', unsafe_allow_html=True)
+        st.markdown('<div style="margin-top: 30px; padding-top: 15px; border-top: 2px dashed #cbd5e1;">', unsafe_allow_html=True)
         
         if grouped["sensory"]:
-            cnt = _count_abnormalities(grouped["sensory"], raw_side, ncs_amplitude_latency)
-            st.markdown(f'<div style="font-weight: 800; color: #1e3a8a; margin-top: 15px; margin-bottom: 5px;">감각신경전도검사 (SNAP) <span style="color:#ef4444; font-size:0.85em; background:#fef2f2; padding:2px 6px; border-radius:10px;">이상 소견: {cnt}개 신경</span></div>', unsafe_allow_html=True)
+            st.markdown(f'<div style="font-weight: 900; color: #1e3a8a; font-size: 1.1rem; margin-top: 15px; margin-bottom: 8px;">⚡ 감각신경전도검사 (SNAP)</div>', unsafe_allow_html=True)
             rows = [[k, ncs_amplitude_latency(_get_value_for_lesion_side(v, raw_side)).get("amplitude"), ncs_amplitude_latency(_get_value_for_lesion_side(v, raw_side)).get("latency")] for k, v in grouped["sensory"].items()]
             st.markdown(_render_simple_table(["검사 신경", "진폭", "잠복기"], rows), unsafe_allow_html=True)
 
         if grouped["motor"]:
-            cnt = _count_abnormalities(grouped["motor"], raw_side, ncs_amplitude_latency)
-            st.markdown(f'<div style="font-weight: 800; color: #14532d; margin-top: 15px; margin-bottom: 5px;">운동신경전도검사 (CMAP) <span style="color:#ef4444; font-size:0.85em; background:#fef2f2; padding:2px 6px; border-radius:10px;">이상 소견: {cnt}개 신경</span></div>', unsafe_allow_html=True)
+            st.markdown(f'<div style="font-weight: 900; color: #14532d; font-size: 1.1rem; margin-top: 15px; margin-bottom: 8px;">⚡ 운동신경전도검사 (CMAP)</div>', unsafe_allow_html=True)
             rows = [[k, ncs_amplitude_latency(_get_value_for_lesion_side(v, raw_side)).get("amplitude"), ncs_amplitude_latency(_get_value_for_lesion_side(v, raw_side)).get("latency")] for k, v in grouped["motor"].items()]
             st.markdown(_render_simple_table(["검사 신경", "진폭", "잠복기"], rows), unsafe_allow_html=True)
 
         if grouped["muscle"]:
-            cnt = _count_abnormalities(grouped["muscle"], raw_side, emg_case_label)
-            st.markdown(f'<div style="font-weight: 800; color: #b45309; margin-top: 15px; margin-bottom: 5px;">침근전도검사 (Needle EMG) <span style="color:#ef4444; font-size:0.85em; background:#fef2f2; padding:2px 6px; border-radius:10px;">이상 소견: {cnt}개 근육</span></div>', unsafe_allow_html=True)
+            st.markdown(f'<div style="font-weight: 900; color: #b45309; font-size: 1.1rem; margin-top: 15px; margin-bottom: 8px;">🪡 침근전도검사 (Needle EMG)</div>', unsafe_allow_html=True)
             rows = [[k, emg_case_label(_get_value_for_lesion_side(v, raw_side)).get("rest"), emg_case_label(_get_value_for_lesion_side(v, raw_side)).get("volition")] for k, v in grouped["muscle"].items()]
             st.markdown(_render_simple_table(["검사 근육", "휴식 시", "자발적 근수축 시"], rows), unsafe_allow_html=True)
 
         if grouped.get("reflex") or grouped.get("other"):
             merged_reflex = {**grouped.get("reflex", {}), **grouped.get("other", {})}
             if merged_reflex:
-                cnt = _count_abnormalities(merged_reflex, raw_side, special_term_label)
-                st.markdown(f'<div style="font-weight: 800; color: #6b21a8; margin-top: 15px; margin-bottom: 5px;">특수 및 반사 검사 <span style="color:#ef4444; font-size:0.85em; background:#fef2f2; padding:2px 6px; border-radius:10px;">이상 소견: {cnt}개 항목</span></div>', unsafe_allow_html=True)
+                st.markdown(f'<div style="font-weight: 900; color: #6b21a8; font-size: 1.1rem; margin-top: 15px; margin-bottom: 8px;">⏱️ 특수 및 반사 검사</div>', unsafe_allow_html=True)
                 rows = []
                 for k, v in merged_reflex.items():
                     if _is_bilateral_side(raw_side):
@@ -183,8 +219,8 @@ def render_case_list():
         st.markdown('</div>', unsafe_allow_html=True)
         _render_teaching_result(case.get("teaching_diagnosis", {}), case.get("differential_diagnosis", []))
 
-        st.markdown('<div style="margin-top:30px;">', unsafe_allow_html=True)
-        if st.button("🔄 다른 사례 분석", type="secondary", use_container_width=True):
+        st.markdown('<div style="margin-top:35px;">', unsafe_allow_html=True)
+        if st.button("🔄 다른 사례 분석", type="primary", use_container_width=True):
             st.session_state["case_reset_counter"] += 1
             st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
