@@ -1,16 +1,31 @@
 # data/constants.py
 
 """
-앱 전역 상수.
+앱 전역 상수, 결과 옵션, 섹션 구성.
 
-개선 방향:
-- constants.py와 anatomy.py에 ANATOMY가 중복 정의되어 있었으므로,
-  해부학 정보는 data.anatomy.ANATOMY를 단일 기준으로 사용합니다.
-- 사례 학습에서는 결과를 간략화해서 제시하고,
-  가상 결과표 판독에서는 수치 기반 결과표를 사용하도록 구분합니다.
+주의:
+- 해부학 메타데이터 ANATOMY는 data.anatomy를 단일 원본으로 사용합니다.
+- 기존 코드 호환을 위해 이 파일에서 ANATOMY를 재노출합니다.
 """
 
 from data.anatomy import ANATOMY
+from data.terms import (
+    NCS_NORMAL,
+    NCS_DELAYED,
+    NCS_REDUCED,
+    NCS_ABSENT,
+    NCS_CONDUCTION_BLOCK,
+    EMG_NORMAL,
+    EMG_ACTIVE_DENERVATION,
+    EMG_CHRONIC_REINNERVATION,
+    EMG_FASCICULATION,
+    EMG_NO_RESPONSE,
+    FWAVE_DELAYED_ABSENT,
+    H_REFLEX_HYPERACTIVE,
+    H_M_RATIO_INCREASED,
+    BLINK_DELAYED,
+    BLINK_DELAYED_ABSENT,
+)
 
 MODE_CASE = "사례 학습"
 MODE_DIRECT = "가상 결과표 판독 학습"
@@ -19,36 +34,26 @@ MODE_DIRECT = "가상 결과표 판독 학습"
 # 공통 결과 옵션
 # -------------------------------------------------------------------
 RESULT_OPTION_NONE = "미선택"
-RESULT_NORMAL = "정상 범위"
+RESULT_NORMAL = "정상 범위(within normal limits)"
 
 # NCS
-RESULT_DELAYED = "잠복기 지연"
-RESULT_REDUCED = "진폭 감소"
-RESULT_CONDUCTION_BLOCK = "전도차단"
-RESULT_ABSENT = "반응 소실"
-RESULT_DELAYED_OR_ABSENT = "잠복기 지연 또는 반응 소실"
+RESULT_DELAYED = "잠복기 지연 (Delayed latency) - 정상 대비 130% 이상 초과"
+RESULT_REDUCED = "진폭 감소 (Reduced amplitude) - 정상 대비 50% 이하 감소"
+RESULT_CONDUCTION_BLOCK = "전도차단 (Conduction block) - 근위부/원위부 진폭 50% 이상 감소"
+RESULT_ABSENT = "반응 소실 (Absent response) - 전기 자극에 무반응"
+RESULT_DELAYED_OR_ABSENT = "잠복기 지연 또는 반응 소실(delayed or absent response)"
 
 # F-wave / Blink / H-reflex
-RESULT_F_WAVE_ABN = "F파 최소잠복기 지연 또는 소실"
-RESULT_H_REFLEX_HYPER = "H-반사 항진 또는 문턱값 감소"
-RESULT_HM_RATIO_INC = "H/M 비율 증가"
+RESULT_F_WAVE_ABN = "F파 최소잠복기 지연 또는 소실(delayed or absent F-wave)"
+RESULT_H_REFLEX_HYPER = "H-반사 항진 또는 문턱값 감소(hyperactive H-reflex) - 위운동신경세포 병변 시사"
+RESULT_HM_RATIO_INC = "H/M 비율 증가 가능(increased H/M ratio possible)"
 
-# EMG - 사례 학습용 간략 표기
-RESULT_EMG_NORMAL = "정상 반응"
-RESULT_EMG_ACTIVE_DENERVATION = "비정상 자발전위 출현 / 운동단위 동원감소"
-RESULT_EMG_CHRONIC_REINNERVATION = "만성 재신경지배 소견 / 운동단위 동원감소"
-RESULT_EMG_ACTIVE_CHRONIC = "비정상 자발전위 및 만성 재신경지배 소견"
-RESULT_EMG_FASCICULATION = "근육다발수축전위 출현"
-RESULT_EMG_NO_RESPONSE = "수의수축 시 운동단위 동원 불가"
-
-# EMG - 실제 결과표 학습용 용어 안내
-EMG_REST_NORMAL = "Silent at rest"
-EMG_REST_ABNORMAL_SPONT = "fibrillation potential, positive sharp wave"
-EMG_REST_FASCICULATION = "fasciculation potential"
-EMG_VOL_NORMAL = "Normal MU recruitment"
-EMG_VOL_REDUCED = "Reduced MU recruitment"
-EMG_VOL_GIANT_REDUCED = "Giant MUAPs with reduced recruitment"
-EMG_VOL_NO_MUAP = "No MUAPs on volition"
+# EMG
+RESULT_EMG_NORMAL = "휴식 시 Silent at rest (전기적 침묵) / 근수축 시 Normal MU recruitment"
+RESULT_EMG_ACTIVE_DENERVATION = "휴식 시 Fibrillation 및 Positive sharp wave 출현 / 근수축 시 Reduced MU recruitment"
+RESULT_EMG_CHRONIC_REINNERVATION = "휴식 시 Silent at rest / 근수축 시 Giant MUAPs 출현 및 Reduced MU recruitment"
+RESULT_EMG_FASCICULATION = "휴식 시 Fasciculation potentials 출현 / 근수축 시 Reduced MU recruitment"
+RESULT_EMG_NO_RESPONSE = "휴식 시 Silent at rest / 근수축 시 No MUAPs on volition (운동단위 동원 불가)"
 
 RESULT_OPTIONS = [
     RESULT_OPTION_NONE,
@@ -64,7 +69,6 @@ RESULT_OPTIONS = [
     RESULT_EMG_NORMAL,
     RESULT_EMG_ACTIVE_DENERVATION,
     RESULT_EMG_CHRONIC_REINNERVATION,
-    RESULT_EMG_ACTIVE_CHRONIC,
     RESULT_EMG_FASCICULATION,
     RESULT_EMG_NO_RESPONSE,
 ]
@@ -87,7 +91,6 @@ DOMAIN_RESULT_OPTIONS = {
         RESULT_EMG_NORMAL,
         RESULT_EMG_ACTIVE_DENERVATION,
         RESULT_EMG_CHRONIC_REINNERVATION,
-        RESULT_EMG_ACTIVE_CHRONIC,
         RESULT_EMG_FASCICULATION,
         RESULT_EMG_NO_RESPONSE,
     ],
@@ -110,9 +113,17 @@ DOMAIN_RESULT_OPTIONS = {
     ],
 }
 
-# -------------------------------------------------------------------
-# 검사 섹션
-# -------------------------------------------------------------------
+# 내부 코드값 선택지가 필요한 경우
+DOMAIN_CODE_OPTIONS = {
+    "sensory": [NCS_NORMAL, NCS_DELAYED, NCS_REDUCED, NCS_ABSENT],
+    "motor": [NCS_NORMAL, NCS_DELAYED, NCS_REDUCED, NCS_CONDUCTION_BLOCK, NCS_ABSENT],
+    "muscle": [EMG_NORMAL, EMG_ACTIVE_DENERVATION, EMG_CHRONIC_REINNERVATION, EMG_FASCICULATION, EMG_NO_RESPONSE],
+    "h_reflex": [NCS_NORMAL, FWAVE_DELAYED_ABSENT, H_REFLEX_HYPERACTIVE],
+    "h_ratio": [NCS_NORMAL, H_M_RATIO_INCREASED],
+    "f_wave": [NCS_NORMAL, FWAVE_DELAYED_ABSENT],
+    "blink": [NCS_NORMAL, BLINK_DELAYED, BLINK_DELAYED_ABSENT],
+}
+
 SECTIONS = {
     "팔 감각신경전도검사 (arm sensory NCS)": [
         "정중신경 감각신경활동전위 (Median SNAP)",
@@ -136,6 +147,7 @@ SECTIONS = {
         "가시아래근 (Infraspinatus)",
         "삼각근 (Deltoid)",
         "위팔두갈래근 (Biceps Brachii)",
+        "위팔세갈래근 (Triceps Brachii)",
         "목 척추주위근 (Cervical Paraspinal)",
     ],
     "다리 감각신경전도검사 (leg sensory NCS)": [
@@ -179,18 +191,26 @@ SECTIONS = {
 
 SECTION_HINTS = {
     "팔 감각신경전도검사 (arm sensory NCS)": "감각신경전도 보존 여부는 신경뿌리병증과 말초신경병증 감별에 중요합니다.",
-    "팔 운동신경전도검사 (arm motor NCS)": "CMAP 진폭 감소는 운동축삭 손상 가능성을 시사합니다.",
-    "팔 침근전도검사 근육 (arm needle EMG muscles)": "서로 다른 말초신경이지만 같은 척수 분절을 공유하는 근육의 동시 침범 여부를 확인합니다.",
-    "다리 감각신경전도검사 (leg sensory NCS)": "발처짐 또는 다리 저림에서 SNAP 보존 여부는 L5 신경뿌리병증과 종아리신경병증 감별에 유용합니다.",
-    "다리 운동신경전도검사 (leg motor NCS)": "운동신경전도 이상은 원위부 말초신경 침범 여부 판단에 도움됩니다.",
-    "다리 침근전도검사 근육 (leg needle EMG muscles)": "척추주위근과 근위부 근육 침범 여부를 함께 보면 신경뿌리병증 감별이 쉬워집니다.",
-    "H반사 / 경직 평가": "H-반사 지연/소실은 말초 S1 경로 이상, 항진은 중추성 반사 흥분성 증가 해석에 도움됩니다.",
-    "F파 검사 (F-wave study)": "원위부 전도가 보존되어도 F파 이상은 근위부 전도 이상을 시사할 수 있습니다.",
+    "팔 운동신경전도검사 (arm motor NCS)": "CMAP 진폭 감소는 운동축삭 손상 가능성을 시사할 수 있습니다.",
+    "팔 침근전도검사 근육 (arm needle EMG muscles)": "서로 다른 말초신경이지만 같은 분절을 공유하는 근육의 동시 침범 여부를 보세요.",
+    "다리 감각신경전도검사 (leg sensory NCS)": "발처짐이나 다리 저림에서 SNAP 보존 여부는 L5 root와 종아리신경병증 감별에 유용합니다.",
+    "다리 운동신경전도검사 (leg motor NCS)": "운동신경전도 이상은 원위부 말초신경 침범 여부를 판단하는 데 도움됩니다.",
+    "다리 침근전도검사 근육 (leg needle EMG muscles)": "척추주위근과 중간볼기근 등 근위부 근육 침범 여부를 함께 보세요.",
+    "H반사 / 경직 평가": "반사 저하/소실은 S1 근위부 경로 이상, 항진은 중추성 반사 흥분성 증가 해석에 도움됩니다.",
+    "F파 검사 (F-wave study)": "원위부 전도가 비교적 보존되어도 F파 이상은 근위부 전도 이상을 시사할 수 있습니다.",
     "눈깜빡반사검사 (Blink reflex)": "자극측과 반응측을 분리해 삼차신경-뇌줄기-얼굴신경 반사경로를 해석합니다.",
 }
 
 
 def get_result_options_for_item(item_name: str):
+    """검사항목명에 맞는 화면용 결과 옵션을 반환합니다."""
     meta = ANATOMY.get(item_name, {})
     domain = meta.get("domain")
     return DOMAIN_RESULT_OPTIONS.get(domain, RESULT_OPTIONS)
+
+
+def get_code_options_for_item(item_name: str):
+    """검사항목명에 맞는 내부 코드값 선택지를 반환합니다."""
+    meta = ANATOMY.get(item_name, {})
+    domain = meta.get("domain")
+    return DOMAIN_CODE_OPTIONS.get(domain, [])
