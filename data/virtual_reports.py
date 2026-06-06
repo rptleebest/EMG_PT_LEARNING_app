@@ -1,4 +1,4 @@
-# data/virtual_reports.py
+# data/virtual_reports.py [Part 4/6]
 
 """
 가상 결과표 판독학습용 데이터베이스 및 영문 변환 모듈.
@@ -59,11 +59,12 @@ ENG_MAP = {
     "근육피부신경": "Musculocutaneous Nerve", "겨드랑신경": "Axillary Nerve",
     "뒤가지(posterior ramus)": "Posterior Ramus", "깊은종아리신경": "Deep Peroneal Nerve",
     "얕은종아리신경": "Superficial Peroneal Nerve", "정강신경": "Tibial Nerve",
-    "위볼기신경": "Superior Gluteal Nerve", "넓적다리신경": "Femoral Nerve", "얼굴신경": "Facial Nerve", "삼차신경": "Trigeminal Nerve",
+    "위볼기신경": "Superior Gluteal Nerve", "넓적다리신경": "Femoral Nerve",
+    "얼굴신경": "Facial Nerve", "삼차신경": "Trigeminal Nerve",
     
     # Results
     "반응 소실": "No Response", "소실": "Absent", "지연": "Delayed", "감소": "Reduced",
-    "정상 범위": "Normal Range", "보존": "Preserved", "통증으로 인한 검사 불가": "Limited by Pain",
+    "정상 범위": "Normal Range", "보존": "Preserved", "통증 및 협조 부족으로 검사 제한": "Limited by Pain",
     "Silent at rest": "Silent at rest",
     "Reduced MU recruitment": "Reduced MU recruitment",
     "Normal MU recruitment": "Normal MU recruitment"
@@ -93,7 +94,7 @@ VIRTUAL_REPORTS = {
         "needle_emg": [
             {"muscle": "짧은엄지벌림근", "root": "C8-T1", "nerve": "정중신경", "rest": "fibrillation potential, positive sharp wave", "volition": "Reduced MU recruitment"},
             {"muscle": "첫째등쪽뼈사이근", "root": "C8-T1", "nerve": "자신경", "rest": "Silent at rest", "volition": "Normal MU recruitment"},
-            {"muscle": "목 척추주위근", "root": "C8-T1", "nerve": "뒤가지(posterior ramus)", "rest": "Silent at rest", "volition": "통증으로 인한 검사 불가"}
+            {"muscle": "목 척추주위근", "root": "C8-T1", "nerve": "뒤가지(posterior ramus)", "rest": "Silent at rest", "volition": "통증 및 협조 부족으로 검사 제한"}
         ],
         "interpretation": {
             "sensory": [
@@ -105,15 +106,15 @@ VIRTUAL_REPORTS = {
                 "진폭(3.0 mV) 또한 저하되어 있어 단순 압박을 넘어 운동 신경의 먼쪽(distal) 축삭 파괴가 동반되었음을 지시합니다."
             ],
             "emg": [
-                "정중신경 지배를 받는 먼쪽 근육인 짧은엄지벌림근에서 휴식 시 비정상 자발전위(섬유성연축 등)가 검출되어 활동성 손상을 확인합니다.",
+                "정중신경 지배를 받는 먼쪽 근육인 짧은엄지벌림근에서 휴식 시 비정상 자발전위가 검출되어 활동성 손상을 확인합니다.",
                 "경추 신경뿌리 손상을 대변하는 척추주위근 및 자신경 지배 근육은 전기적으로 조용(Silent at rest)하여 정상입니다."
             ],
             "integration": [
-                "▶ 추정 질환: 오른쪽 손목굴증후군(Carpal tunnel syndrome)",
-                "▶ 추정 근거: 자신경과 목 척추주위근이 완벽히 정상인 상태에서, 정중신경 지배 영역에 국한된 운동/감각 전도 지연 및 진폭 감소가 도출되었습니다. 침근전도에서 짧은엄지벌림근의 단독 탈신경 소견이 일치하므로 손목굴 부위의 정중신경 포착으로 최종 확진합니다."
+                "▶ 추정 질환: 오른쪽 손목굴증후군 (Carpal tunnel syndrome)",
+                "▶ 추정한 이유: 자신경과 목 척추주위근이 완벽히 정상인 상태에서, 정중신경 지배 영역에 국한된 운동/감각 전도 지연 및 진폭 감소가 도출되었습니다. 침근전도에서 짧은엄지벌림근의 단독 탈신경 소견이 일치하므로 손목굴 부위의 정중신경 포착으로 최종 확진합니다."
             ],
             "differential": [
-                "▶ C6 목 신경뿌리병증: 감각신경전도(SNAP)가 정상으로 보존되며, 목 척추주위근 침근전도에서 탈신경 자발전위가 나타나야 합니다."
+                "▶ C6 목 신경뿌리병증: 감각신경전도(SNAP)가 대개 보존되며, 목 척추주위근 침근전도에서 탈신경 자발전위가 나타나야 합니다."
             ]
         }
     },
@@ -134,7 +135,7 @@ VIRTUAL_REPORTS = {
         "needle_emg": [
             {"muscle": "위팔두갈래근", "root": "C5-C6", "nerve": "근육피부신경", "rest": "fibrillation potential, positive sharp wave", "volition": "Reduced MU recruitment"},
             {"muscle": "노쪽손목폄근", "root": "C6-C7", "nerve": "노신경", "rest": "fibrillation potential, positive sharp wave", "volition": "Giant MUAPs with reduced recruitment"},
-            {"muscle": "목 척추주위근", "root": "C6", "nerve": "뒤가지(posterior ramus)", "rest": "fibrillation potential, positive sharp wave", "volition": "통증으로 인한 검사 불가"}
+            {"muscle": "목 척추주위근", "root": "C6", "nerve": "뒤가지(posterior ramus)", "rest": "fibrillation potential, positive sharp wave", "volition": "통증 및 협조 부족으로 검사 제한"}
         ],
         "interpretation": {
             "sensory": [
@@ -149,11 +150,11 @@ VIRTUAL_REPORTS = {
                 "결정적으로 척수 신경뿌리 손상을 직접 대변하는 목 척추주위근(뒤가지)에서도 비정상적인 자발전위가 도출되었습니다."
             ],
             "integration": [
-                "▶ 추정 질환: 왼쪽 C6 목 신경뿌리병증(Cervical radiculopathy)",
-                "▶ 추정 근거: 감각신경전도의 완전한 보존 소견과 함께, 서로 다른 말초신경의 지배를 받으나 C6 척수 분절을 공유하는 다발 근육군 및 목 척추주위근에 탈신경 현상이 동시 관찰되므로 C6 척수 신경뿌리 병변으로 확진합니다."
+                "▶ 추정 질환: 왼쪽 C6 목 신경뿌리병증 (C6 Cervical radiculopathy)",
+                "▶ 추정한 이유: 감각신경전도의 완전한 보존 소견과 함께, 서로 다른 말초신경의 지배를 받으나 C6 척수 분절을 공유하는 다발 근육군 및 목 척추주위근에 탈신경 현상이 동시 관찰되므로 C6 척수 신경뿌리 병변으로 확진합니다."
             ],
             "differential": [
-                "▶ 왼쪽 상부 위팔신경얼기병증(Upper trunk plexopathy): 신경뿌리가 아닌 얼기 수준의 손상이면 말초 감각신경 진폭 감소가 동반되어야 하며, 척추주위근은 정상이어야 합니다."
+                "▶ 왼쪽 상부 위팔신경얼기병증: 신경뿌리가 아닌 얼기 수준의 손상이면 말초 감각신경 진폭 감소가 동반되어야 하며, 척추주위근은 정상이어야 합니다."
             ]
         }
     },
@@ -165,7 +166,6 @@ VIRTUAL_REPORTS = {
         },
         "sensory_ncs": [
             {"nerve": "얕은종아리신경 감각신경활동전위(Superficial peroneal SNAP)", "recording": "발등", "stimulation": "종아리 가쪽", "side": "오른쪽", "amplitude": "4 μV", "latency": "3.6 ms", "velocity": "36 m/s"},
-            {"nerve": "얕은종아리신경 감각신경활동전위(Superficial peroneal SNAP)", "recording": "발등", "stimulation": "종아리 가쪽", "side": "왼쪽", "amplitude": "14 μV", "latency": "2.8 ms", "velocity": "48 m/s"},
             {"nerve": "장딴지신경 감각신경활동전위(Sural SNAP)", "recording": "가쪽 발목", "stimulation": "종아리 뒤쪽", "side": "오른쪽", "amplitude": "16 μV", "latency": "3.0 ms", "velocity": "47 m/s"}
         ],
         "motor_ncs": [
@@ -174,7 +174,7 @@ VIRTUAL_REPORTS = {
         ],
         "needle_emg": [
             {"muscle": "앞정강근", "root": "L4-L5", "nerve": "깊은종아리신경", "rest": "fibrillation potential, positive sharp wave", "volition": "Reduced MU recruitment"},
-            {"muscle": "허리 척추주위근", "root": "L5", "nerve": "뒤가지(posterior ramus)", "rest": "Silent at rest", "volition": "통증으로 인한 검사 불가"}
+            {"muscle": "허리 척추주위근", "root": "L5", "nerve": "뒤가지(posterior ramus)", "rest": "Silent at rest", "volition": "통증 및 협조 부족으로 검사 제한"}
         ],
         "interpretation": {
             "sensory": [
@@ -190,12 +190,51 @@ VIRTUAL_REPORTS = {
                 "반면, 허리 척추주위근은 전기적으로 조용하여 요추 신경뿌리 병변을 완벽하게 감별해 줍니다."
             ],
             "integration": [
-                "▶ 추정 질환: 오른쪽 온종아리신경병증(Common peroneal neuropathy)",
-                "▶ 추정 근거: 종아리뼈머리 구간의 명확한 운동 전도차단, 얕은종아리신경 감각 진폭 감소, 요추 척추주위근 정상 소견을 통해 종아리뼈머리 부위의 외부 기계적 압박에 의한 단일 신경 마비임을 확증합니다."
+                "▶ 추정 질환: 오른쪽 온종아리신경병증 (Common peroneal neuropathy)",
+                "▶ 추정한 이유: 종아리뼈머리 구간의 명확한 운동 전도차단, 얕은종아리신경 감각 진폭 감소, 요추 척추주위근 정상 소견을 통해 종아리뼈머리 부위의 외부 기계적 압박에 의한 단일 신경 마비임을 확증합니다."
             ],
             "differential": [
                 "▶ L5 허리 신경뿌리병증: 얕은종아리신경 감각전도가 정상으로 완벽히 보존되어야 하며, 침근전도에서 허리 척추주위근과 중간볼기근 이상이 동반되어야 합니다."
             ]
         }
-    }
-}
+    },
+
+    "왼쪽 L5 신경뿌리병증 의심": {
+        "meta": {
+            "age": 58, "sex": "여성", "side": "왼쪽",
+            "chief": "한 달 전 무거운 화분을 든 이후 허리에서 좌측 엉치, 종아리 가쪽을 타고 발등까지 전기가 통하듯 뻗치는 방사통. 발처짐 증상 발생."
+        },
+        "sensory_ncs": [
+            {"nerve": "얕은종아리신경 감각신경활동전위(Superficial peroneal SNAP)", "recording": "발등", "stimulation": "종아리 가쪽", "side": "왼쪽", "amplitude": "13 μV", "latency": "2.9 ms", "velocity": "47 m/s"},
+            {"nerve": "장딴지신경 감각신경활동전위(Sural SNAP)", "recording": "가쪽 발목", "stimulation": "종아리 뒤쪽", "side": "왼쪽", "amplitude": "15 μV", "latency": "3.1 ms", "velocity": "46 m/s"}
+        ],
+        "motor_ncs": [
+            {"nerve": "종아리신경 복합근육활동전위(Peroneal CMAP)", "recording": "짧은발가락폄근", "stimulation": "발목", "side": "왼쪽", "amplitude": "3.9 mV", "latency": "4.5 ms", "velocity": "-"},
+            {"nerve": "정강신경 복합근육활동전위(Tibial CMAP)", "recording": "엄지벌림근", "stimulation": "발목", "side": "왼쪽", "amplitude": "7.4 mV", "latency": "4.2 ms", "velocity": "-"}
+        ],
+        "needle_emg": [
+            {"muscle": "앞정강근", "root": "L4-L5", "nerve": "깊은종아리신경", "rest": "fibrillation potential, positive sharp wave", "volition": "Reduced MU recruitment"},
+            {"muscle": "중간볼기근", "root": "L5", "nerve": "위볼기신경", "rest": "fibrillation potential, positive sharp wave", "volition": "Reduced MU recruitment"},
+            {"muscle": "허리 척추주위근", "root": "L5", "nerve": "뒤가지(posterior ramus)", "rest": "fibrillation potential, positive sharp wave", "volition": "통증 및 협조 부족으로 검사 제한"}
+        ],
+        "interpretation": {
+            "sensory": [
+                "다리 감각을 담당하는 얕은종아리신경과 장딴지신경의 감각신경 전도가 완전히 보존됩니다.",
+                "이는 뒤뿌리신경절(DRG) 상위인 신경뿌리의 압박을 강력히 지지하는 전형적인 소견입니다."
+            ],
+            "motor": [
+                "종아리신경 운동검사에서 말초 부위 전도차단이나 국소 속도 저하 소견이 발견되지 않아 무릎 주변 포착 마비를 배제합니다."
+            ],
+            "emg": [
+                "허리 척추주위근, 앞정강근, 중간볼기근에서 탈신경 자발전위가 대거 관찰됩니다.",
+                "깊은종아리신경과 위볼기신경 등 서로 다른 신경 지배를 받으나 L5 분절을 공유하는 근육들의 동시 탈신경입니다."
+            ],
+            "integration": [
+                "▶ 추정 질환: 왼쪽 L5 허리 신경뿌리병증 (L5 Lumbar radiculopathy)",
+                "▶ 추정한 이유: 말초 감각신경 전도가 대칭적으로 정상 보존되고, 침근전도에서 L5 지배 다발 근육 및 핵심적인 요추 척추주위근 침범이 확인되어 척수 신경뿌리 압박으로 확진합니다."
+            ],
+            "differential": [
+                "▶ 온종아리신경병증: 얕은종아리신경 감각 진폭이 감소하고, 허리 척추주위근 및 위볼기신경 지배인 중간볼기근은 정상이어야 합니다."
+            ]
+        }
+    },
