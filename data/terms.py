@@ -31,13 +31,12 @@ def emg_case_label(val):
     if "paraspinal_denervation" in s:
         return {"rest": "비정상적 자발전위 출현", "volition": "통증/협조 부족으로 검사 제한"}
     if "chronic_reinnervation" in s:
-        return {"rest": "전기적 침묵 (정상 반응)", "volition": "증가된 운동단위 동원패턴 (거대 전위)"}
+        return {"rest": "전기적 침묵 (정상 반응)", "volition": "증가된 운동단위 동원패턴"}
     if "active_chronic" in s:
         return {"rest": "비정상적 자발전위 출현", "volition": "감소된 운동단위 동원패턴"}
     return {"rest": "-", "volition": "-"}
 
 def special_term_label(val):
-    """특수/반사 검사 결과 용어 매핑"""
     if not val: return ""
     s = str(val[0] if isinstance(val, tuple) else val).lower()
     if "normal" in s or "정상" in s: return "정상 범위"
