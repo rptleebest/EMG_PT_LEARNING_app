@@ -1,15 +1,12 @@
 # utils/state.py
 
 import streamlit as st
+
 from data.constants import MODE_CASE
 
 
 def init_app_state():
-    """
-    앱 전체 세션 상태 초기화.
-    기존 코드에서 app.py와 utils/state.py에 초기화 함수가 중복되어 있었으므로
-    이 파일을 단일 기준으로 사용합니다.
-    """
+    """Streamlit session_state 기본값을 초기화합니다."""
     defaults = {
         "screen": "home",
         "mode": MODE_CASE,
@@ -23,3 +20,22 @@ def init_app_state():
     for key, value in defaults.items():
         if key not in st.session_state:
             st.session_state[key] = value
+
+
+def reset_analysis_state():
+    """분석 결과 관련 session_state만 초기화합니다."""
+    st.session_state["analysis_text"] = None
+    st.session_state["last_result"] = None
+
+
+def reset_case_selection():
+    """사례 선택 상태를 초기화합니다."""
+    st.session_state["selected_case"] = None
+    st.session_state["case_reset_counter"] = st.session_state.get("case_reset_counter", 0) + 1
+    reset_analysis_state()
+
+
+def reset_input_selection():
+    """가상 결과표 선택 상태를 초기화합니다."""
+    st.session_state["input_reset_counter"] = st.session_state.get("input_reset_counter", 0) + 1
+    reset_analysis_state()
