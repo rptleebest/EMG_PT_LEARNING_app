@@ -4,10 +4,21 @@ import re
 import streamlit as st
 from data.cases import CASE_LIBRARY
 from data.terms import ncs_amplitude_latency, emg_case_label, special_term_label
-from engine.inference import categorize_findings
+# 에러 원인이었던 외부 의존성을 제거하고 아래에 내부 함수로 내장했습니다.
 from ui.navigation import render_bottom_navigation
 from helpers import lesion_side_index
 from formatters import html_escape, clean_html
+
+def _categorize_findings(findings):
+    """외부 모듈 의존성 에러 방지를 위해 파일 내부에 엔진을 내장합니다."""
+    grouped = {"sensory": {}, "motor": {}, "muscle": {}, "reflex": {}}
+    for k, v in findings.items():
+        k_up = k.upper()
+        if "SNAP" in k_up or "감각" in k: grouped["sensory"][k] = v
+        elif "CMAP" in k_up or "운동" in k: grouped["motor"][k] = v
+        elif any(x in k for x in ["반사", "F파", "H/M", "비율", "눈깜빡"]): grouped["reflex"][k] = v
+        else: grouped["muscle"][k] = v
+    return grouped
 
 def _get_value_for_lesion_side(values, side):
     idx = lesion_side_index(side)
@@ -101,9 +112,9 @@ def render_case_list():
         
         st.markdown('<div style="background-color: #fffbeb; border: 1px solid #fde68a; border-radius: 6px; padding: 12px; margin-top: 20px; color: #b45309; font-size: 0.9rem; font-weight: 600;">💡 학습 팁: 아래 표는 병변측의 검사 결과만을 요약한 것이며, 의협 6.1판 신용어를 따릅니다.</div>', unsafe_allow_html=True)
 
-        grouped = categorize_findings(case.get("findings", {}))
+        # 내장된 엔진 호출로 에러 방지
+        grouped = _categorize_findings(case.get("findings", {}))
         
-        # 표 렌더링 영역 (감각, 운동, 침근, 특수 순)
         configs = [
             ("sensory", "⚡ 감각신경전도검사 (SNAP)", ["검사 신경", "진폭", "잠복기"], ncs_amplitude_latency),
             ("motor", "⚡ 운동신경전도검사 (CMAP)", ["검사 신경", "진폭", "잠복기"], ncs_amplitude_latency),
@@ -130,3 +141,7 @@ def render_case_list():
             st.rerun()
     else:
         render_bottom_navigation()
+
+def render_case_detail():
+    st.session_state["screen"] = "case_list"
+    st.rerun()
