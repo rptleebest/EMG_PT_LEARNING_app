@@ -1,490 +1,437 @@
 # data/anatomy.py
 
 """
-해부학 및 검사 항목 메타데이터.
+검사항목별 해부학적 메타데이터.
 
-이 파일은 앱 전체에서 검사 항목을 다음 범주로 분류하기 위해 사용합니다.
-
-domain:
-- sensory: 감각신경전도검사
-- motor: 운동신경전도검사
-- muscle: 침근전도검사 근육
-- h_reflex: H-반사
-- h_ratio: H/M 비율
-- f_wave: F파
-- blink: 눈깜빡반사
-- other: 기타
-
-주의:
-- data.constants.py에서 from data.anatomy import ANATOMY 형태로 불러옵니다.
-- 따라서 이 파일이 없으면 ModuleNotFoundError가 발생합니다.
+이 파일을 단일 기준으로 사용합니다.
+data.constants 안에 중복 ANATOMY를 두지 않고, constants.py에서 이 ANATOMY를 import하여 재노출합니다.
 """
 
-
 ANATOMY = {
-    # ------------------------------------------------------------------
-    # 팔 감각신경전도검사
-    # ------------------------------------------------------------------
+    # -----------------------------------------------------------------
+    # Upper limb sensory NCS
+    # -----------------------------------------------------------------
     "정중신경 감각신경활동전위 (Median SNAP)": {
+        "nerve": "정중신경(Median nerve)",
+        "level": "손목/아래팔, C6-T1",
         "domain": "sensory",
-        "korean": "정중신경 감각신경활동전위",
-        "english": "Median sensory nerve action potential",
-        "abbr": "Median SNAP",
-        "nerve": "정중신경",
-        "roots": "C6-C8",
-        "clinical_point": "손목굴증후군, 정중신경병증, 상완신경총병증 감별에 중요합니다.",
+        "region": "arm",
     },
     "자신경 감각신경활동전위 (Ulnar SNAP)": {
+        "nerve": "자신경(Ulnar nerve)",
+        "level": "손목/팔꿈치, C8-T1",
         "domain": "sensory",
-        "korean": "자신경 감각신경활동전위",
-        "english": "Ulnar sensory nerve action potential",
-        "abbr": "Ulnar SNAP",
-        "nerve": "자신경",
-        "roots": "C8-T1",
-        "clinical_point": "자신경병증, 하부상완신경총병증, C8-T1 병변 감별에 사용합니다.",
+        "region": "arm",
+    },
+    "노신경 감각신경활동전위 (Radial SNAP)": {
+        "nerve": "노신경(Radial nerve)",
+        "level": "아래팔/손등, C5-C8",
+        "domain": "sensory",
+        "region": "arm",
     },
     "노신경 표재감각신경활동전위 (Superficial Radial SNAP)": {
+        "nerve": "노신경 표재감각분지(Superficial radial sensory branch)",
+        "level": "아래팔/손등, C6-C8",
         "domain": "sensory",
-        "korean": "노신경 표재감각신경활동전위",
-        "english": "Superficial radial sensory nerve action potential",
-        "abbr": "Superficial radial SNAP",
-        "nerve": "노신경 표재감각분지",
-        "roots": "C6-C8",
-        "clinical_point": "노신경병증, 상완신경총병증, 감각신경 보존 여부 판단에 사용합니다.",
+        "region": "arm",
     },
     "가쪽아래팔피부신경 감각신경활동전위 (Lateral Antebrachial Cutaneous SNAP)": {
+        "nerve": "가쪽아래팔피부신경(Lateral antebrachial cutaneous nerve)",
+        "level": "근육피부신경 말단 감각분지, C5-C6",
         "domain": "sensory",
-        "korean": "가쪽아래팔피부신경 감각신경활동전위",
-        "english": "Lateral antebrachial cutaneous sensory nerve action potential",
-        "abbr": "LAC SNAP",
-        "nerve": "가쪽아래팔피부신경",
-        "roots": "C5-C6",
-        "clinical_point": "상부상완신경총병증과 C5-C6 신경뿌리병증 감별에 도움됩니다.",
-    },
-    "안쪽아래팔피부신경 감각신경활동전위 (Medial Antebrachial Cutaneous SNAP)": {
-        "domain": "sensory",
-        "korean": "안쪽아래팔피부신경 감각신경활동전위",
-        "english": "Medial antebrachial cutaneous sensory nerve action potential",
-        "abbr": "MAC SNAP",
-        "nerve": "안쪽아래팔피부신경",
-        "roots": "C8-T1",
-        "clinical_point": "하부상완신경총병증과 C8-T1 신경뿌리병증 감별에 유용합니다.",
+        "region": "arm",
     },
 
-    # ------------------------------------------------------------------
-    # 팔 운동신경전도검사
-    # ------------------------------------------------------------------
+    # -----------------------------------------------------------------
+    # Upper limb motor NCS
+    # -----------------------------------------------------------------
     "정중신경 복합근육활동전위 (Median CMAP)": {
+        "nerve": "정중신경(Median nerve)",
+        "level": "정중신경 말단운동전도, C8-T1",
         "domain": "motor",
-        "korean": "정중신경 복합근육활동전위",
-        "english": "Median compound muscle action potential",
-        "abbr": "Median CMAP",
-        "nerve": "정중신경",
-        "roots": "C8-T1",
-        "recording_muscle": "짧은엄지벌림근",
-        "clinical_point": "손목굴증후군, 정중신경병증, C8-T1 병변 감별에 사용합니다.",
+        "region": "arm",
     },
     "자신경 복합근육활동전위 (Ulnar CMAP)": {
+        "nerve": "자신경(Ulnar nerve)",
+        "level": "말단/팔꿈치 구간 운동전도, C8-T1",
         "domain": "motor",
-        "korean": "자신경 복합근육활동전위",
-        "english": "Ulnar compound muscle action potential",
-        "abbr": "Ulnar CMAP",
-        "nerve": "자신경",
-        "roots": "C8-T1",
-        "recording_muscle": "새끼벌림근 또는 첫째등쪽뼈사이근",
-        "clinical_point": "팔꿈치굴증후군, 자신경병증, 하부상완신경총병증 감별에 사용합니다.",
+        "region": "arm",
     },
     "노신경 복합근육활동전위 (Radial CMAP)": {
+        "nerve": "노신경(Radial nerve)",
+        "level": "위팔/아래팔 운동경로, C6-C8",
         "domain": "motor",
-        "korean": "노신경 복합근육활동전위",
-        "english": "Radial compound muscle action potential",
-        "abbr": "Radial CMAP",
-        "nerve": "노신경",
-        "roots": "C6-C8",
-        "recording_muscle": "손목폄근 또는 집게폄근",
-        "clinical_point": "노신경병증, 뒤신경다발 병변, C7 병변 감별에 사용합니다.",
+        "region": "arm",
     },
     "겨드랑신경 복합근육활동전위 (Axillary CMAP)": {
+        "nerve": "겨드랑신경(Axillary nerve)",
+        "level": "팔신경얼기 뒤다발, C5-C6",
         "domain": "motor",
-        "korean": "겨드랑신경 복합근육활동전위",
-        "english": "Axillary compound muscle action potential",
-        "abbr": "Axillary CMAP",
-        "nerve": "겨드랑신경",
-        "roots": "C5-C6",
-        "recording_muscle": "삼각근",
-        "clinical_point": "겨드랑신경 손상, 상부상완신경총병증, C5-C6 병변 감별에 사용합니다.",
+        "region": "arm",
     },
     "근육피부신경 복합근육활동전위 (Musculocutaneous CMAP)": {
+        "nerve": "근육피부신경(Musculocutaneous nerve)",
+        "level": "팔신경얼기 가쪽다발, C5-C6",
         "domain": "motor",
-        "korean": "근육피부신경 복합근육활동전위",
-        "english": "Musculocutaneous compound muscle action potential",
-        "abbr": "Musculocutaneous CMAP",
-        "nerve": "근육피부신경",
-        "roots": "C5-C6",
-        "recording_muscle": "위팔두갈래근",
-        "clinical_point": "근육피부신경병증, C5-C6 신경뿌리병증, 상부상완신경총병증 감별에 사용합니다.",
+        "region": "arm",
+    },
+    "근피신경 복합근육활동전위 (Musculocutaneous CMAP)": {
+        "nerve": "근육피부신경(Musculocutaneous nerve)",
+        "level": "팔신경얼기 가쪽다발, C5-C6",
+        "domain": "motor",
+        "region": "arm",
     },
 
-    # ------------------------------------------------------------------
-    # 팔 침근전도검사 근육
-    # ------------------------------------------------------------------
+    # -----------------------------------------------------------------
+    # Upper limb muscles / needle EMG
+    # -----------------------------------------------------------------
     "짧은엄지벌림근 (Abductor Pollicis Brevis, APB)": {
+        "nerve": "정중신경(Median nerve)",
+        "level": "C8-T1",
         "domain": "muscle",
-        "korean": "짧은엄지벌림근",
-        "english": "Abductor pollicis brevis",
-        "abbr": "APB",
-        "nerve": "정중신경",
-        "roots": "C8-T1",
-        "clinical_point": "손목굴증후군, 정중신경병증, C8-T1 병변 평가에 중요합니다.",
+        "region": "arm",
     },
     "첫째등쪽뼈사이근 (First Dorsal Interosseous, FDI)": {
+        "nerve": "자신경(Ulnar nerve)",
+        "level": "C8-T1",
         "domain": "muscle",
-        "korean": "첫째등쪽뼈사이근",
-        "english": "First dorsal interosseous",
-        "abbr": "FDI",
-        "nerve": "자신경",
-        "roots": "C8-T1",
-        "clinical_point": "자신경병증, 하부상완신경총병증, C8-T1 병변 평가에 사용합니다.",
+        "region": "arm",
     },
     "새끼벌림근 (Abductor Digiti Minimi, ADM)": {
+        "nerve": "자신경(Ulnar nerve)",
+        "level": "C8-T1",
         "domain": "muscle",
-        "korean": "새끼벌림근",
-        "english": "Abductor digiti minimi",
-        "abbr": "ADM",
-        "nerve": "자신경",
-        "roots": "C8-T1",
-        "clinical_point": "자신경병증과 하부상완신경총병증 감별에 사용합니다.",
+        "region": "arm",
     },
     "집게폄근 (Extensor Indicis Proprius, EIP)": {
+        "nerve": "뒤뼈사이신경/노신경(Posterior interosseous/Radial nerve)",
+        "level": "C7-C8",
         "domain": "muscle",
-        "korean": "집게폄근",
-        "english": "Extensor indicis proprius",
-        "abbr": "EIP",
-        "nerve": "뒤뼈사이신경/노신경",
-        "roots": "C7-C8",
-        "clinical_point": "노신경병증, 뒤뼈사이신경병증, C7-C8 신경뿌리병증 감별에 사용합니다.",
+        "region": "arm",
     },
-    "노쪽손목폄근 (Extensor Carpi Radialis)": {
+    "손목폄근 (Extensor Carpi Radialis / Extensor Digitorum)": {
+        "nerve": "노신경(Radial nerve)",
+        "level": "C6-C8",
         "domain": "muscle",
-        "korean": "노쪽손목폄근",
-        "english": "Extensor carpi radialis",
-        "abbr": "ECR",
-        "nerve": "노신경",
-        "roots": "C6-C7",
-        "clinical_point": "C6-C7 신경뿌리병증과 노신경병증 감별에 사용합니다.",
+        "region": "arm",
     },
     "가시아래근 (Infraspinatus)": {
+        "nerve": "어깨위신경(Suprascapular nerve)",
+        "level": "C5-C6",
         "domain": "muscle",
-        "korean": "가시아래근",
-        "english": "Infraspinatus",
-        "abbr": "ISP",
-        "nerve": "어깨위신경",
-        "roots": "C5-C6",
-        "clinical_point": "어깨위신경병증, 상부상완신경총병증, C5-C6 병변 감별에 사용합니다.",
+        "region": "arm",
     },
     "삼각근 (Deltoid)": {
+        "nerve": "겨드랑신경(Axillary nerve)",
+        "level": "C5-C6",
         "domain": "muscle",
-        "korean": "삼각근",
-        "english": "Deltoid",
-        "abbr": "Deltoid",
-        "nerve": "겨드랑신경",
-        "roots": "C5-C6",
-        "clinical_point": "겨드랑신경병증, C5-C6 신경뿌리병증 감별에 중요합니다.",
+        "region": "arm",
     },
     "위팔두갈래근 (Biceps Brachii)": {
+        "nerve": "근육피부신경(Musculocutaneous nerve)",
+        "level": "C5-C6",
         "domain": "muscle",
-        "korean": "위팔두갈래근",
-        "english": "Biceps brachii",
-        "abbr": "Biceps",
-        "nerve": "근육피부신경",
-        "roots": "C5-C6",
-        "clinical_point": "C5-C6 신경뿌리병증과 상부상완신경총병증 감별에 사용합니다.",
+        "region": "arm",
+    },
+    "위팔노근 (Brachioradialis)": {
+        "nerve": "노신경(Radial nerve)",
+        "level": "C5-C6",
+        "domain": "muscle",
+        "region": "arm",
+    },
+    "긴노쪽손목폄근/짧은노쪽손목폄근 (Extensor Carpi Radialis Longus/Brevis)": {
+        "nerve": "노신경(Radial nerve)",
+        "level": "C6-C7",
+        "domain": "muscle",
+        "region": "arm",
+    },
+    "노쪽손목폄근 (Extensor Carpi Radialis)": {
+        "nerve": "노신경(Radial nerve)",
+        "level": "C6-C7",
+        "domain": "muscle",
+        "region": "arm",
+    },
+    "원엎침근 (Pronator Teres)": {
+        "nerve": "정중신경(Median nerve)",
+        "level": "C6-C7",
+        "domain": "muscle",
+        "region": "arm",
+    },
+    "위팔세갈래근 (Triceps Brachii)": {
+        "nerve": "노신경(Radial nerve)",
+        "level": "C6-C8 (C7 우세)",
+        "domain": "muscle",
+        "region": "arm",
     },
     "목 척추주위근 (Cervical Paraspinal)": {
+        "nerve": "척수뒤가지(Posterior primary ramus)",
+        "level": "목 신경뿌리 수준",
         "domain": "muscle",
-        "korean": "목 척추주위근",
-        "english": "Cervical paraspinal muscle",
-        "abbr": "Cervical paraspinal",
-        "nerve": "척수신경 뒤가지",
-        "roots": "C5-T1",
-        "clinical_point": "이 근육의 이상은 신경뿌리병증을 지지하고, 신경얼기병증과 감별하는 데 중요합니다.",
+        "region": "arm",
+    },
+    "눈둘레근 (Orbicularis Oculi)": {
+        "nerve": "얼굴신경(Facial nerve)",
+        "level": "얼굴신경 원위 운동분지",
+        "domain": "muscle",
+        "region": "face",
     },
 
-    # ------------------------------------------------------------------
-    # 다리 감각신경전도검사
-    # ------------------------------------------------------------------
+    # -----------------------------------------------------------------
+    # Lower limb sensory NCS
+    # -----------------------------------------------------------------
     "장딴지신경 감각신경활동전위 (Sural SNAP)": {
+        "nerve": "장딴지신경(Sural nerve)",
+        "level": "S1-S2",
         "domain": "sensory",
-        "korean": "장딴지신경 감각신경활동전위",
-        "english": "Sural sensory nerve action potential",
-        "abbr": "Sural SNAP",
-        "nerve": "장딴지신경",
-        "roots": "S1-S2",
-        "clinical_point": "다발신경병증, 좌골신경병증, 말초 감각신경 손상 평가에 중요합니다.",
+        "region": "leg",
     },
     "얕은종아리신경 감각신경활동전위 (Superficial Peroneal SNAP)": {
+        "nerve": "얕은종아리신경(Superficial peroneal nerve)",
+        "level": "L5-S1",
         "domain": "sensory",
-        "korean": "얕은종아리신경 감각신경활동전위",
-        "english": "Superficial peroneal sensory nerve action potential",
-        "abbr": "Superficial peroneal SNAP",
-        "nerve": "얕은종아리신경",
-        "roots": "L5-S1",
-        "clinical_point": "온종아리신경병증과 L5 신경뿌리병증 감별에 중요합니다.",
+        "region": "leg",
     },
     "두렁신경 감각신경활동전위 (Saphenous SNAP)": {
+        "nerve": "두렁신경(Saphenous nerve)",
+        "level": "L3-L4",
         "domain": "sensory",
-        "korean": "두렁신경 감각신경활동전위",
-        "english": "Saphenous sensory nerve action potential",
-        "abbr": "Saphenous SNAP",
-        "nerve": "두렁신경",
-        "roots": "L3-L4",
-        "clinical_point": "넓적다리신경병증, L3-L4 병변 감별에 사용합니다.",
+        "region": "leg",
+    },
+    "첫째 발가락사이 감각 (First Dorsal Web Space Sensation)": {
+        "nerve": "깊은종아리신경 감각분지(Deep peroneal sensory branch)",
+        "level": "L5",
+        "domain": "sensory",
+        "region": "leg",
     },
 
-    # ------------------------------------------------------------------
-    # 다리 운동신경전도검사
-    # ------------------------------------------------------------------
+    # -----------------------------------------------------------------
+    # Lower limb motor NCS
+    # -----------------------------------------------------------------
     "종아리신경 복합근육활동전위 (Peroneal CMAP)": {
+        "nerve": "온종아리신경-깊은종아리신경 운동경로",
+        "level": "종아리뼈머리/종아리 구간, L4-S1",
         "domain": "motor",
-        "korean": "종아리신경 복합근육활동전위",
-        "english": "Peroneal compound muscle action potential",
-        "abbr": "Peroneal CMAP",
-        "nerve": "온종아리신경/깊은종아리신경",
-        "roots": "L4-L5",
-        "recording_muscle": "짧은발가락폄근 또는 앞정강근",
-        "clinical_point": "발처짐에서 온종아리신경병증과 L5 신경뿌리병증 감별에 핵심입니다.",
+        "region": "leg",
+    },
+    "깊은종아리신경 복합근육활동전위 (Deep Peroneal CMAP)": {
+        "nerve": "깊은종아리신경(Deep peroneal nerve)",
+        "level": "발목/발등, L5-S1",
+        "domain": "motor",
+        "region": "leg",
     },
     "정강신경 복합근육활동전위 (Tibial CMAP)": {
+        "nerve": "정강신경(Tibial nerve)",
+        "level": "오금/발목, L4-S3",
         "domain": "motor",
-        "korean": "정강신경 복합근육활동전위",
-        "english": "Tibial compound muscle action potential",
-        "abbr": "Tibial CMAP",
-        "nerve": "정강신경",
-        "roots": "L5-S2",
-        "recording_muscle": "엄지벌림근",
-        "clinical_point": "좌골신경병증, 정강신경병증, 다발신경병증 평가에 사용합니다.",
+        "region": "leg",
     },
     "넓적다리신경 복합근육활동전위 (Femoral CMAP)": {
+        "nerve": "넓적다리신경(Femoral nerve)",
+        "level": "L2-L4",
         "domain": "motor",
-        "korean": "넓적다리신경 복합근육활동전위",
-        "english": "Femoral compound muscle action potential",
-        "abbr": "Femoral CMAP",
-        "nerve": "넓적다리신경",
-        "roots": "L2-L4",
-        "recording_muscle": "넙다리네갈래근",
-        "clinical_point": "넓적다리신경병증, 허리신경얼기병증, L2-L4 병변 평가에 사용합니다.",
+        "region": "leg",
     },
 
-    # ------------------------------------------------------------------
-    # 다리 침근전도검사 근육
-    # ------------------------------------------------------------------
+    # -----------------------------------------------------------------
+    # Lower limb muscles / needle EMG
+    # -----------------------------------------------------------------
     "앞정강근 (Tibialis Anterior, TA)": {
+        "nerve": "깊은종아리신경(Deep peroneal nerve)",
+        "level": "L4-L5",
         "domain": "muscle",
-        "korean": "앞정강근",
-        "english": "Tibialis anterior",
-        "abbr": "TA",
-        "nerve": "깊은종아리신경",
-        "roots": "L4-L5",
-        "clinical_point": "발처짐 평가에서 L5 신경뿌리병증과 종아리신경병증 감별에 중요합니다.",
+        "region": "leg",
     },
-    "긴엄지폄근 (Extensor Hallucis Longus, EHL)": {
+    "짧은발가락폄근 (Extensor Digitorum Brevis, EDB)": {
+        "nerve": "깊은종아리신경(Deep peroneal nerve)",
+        "level": "L5-S1",
         "domain": "muscle",
-        "korean": "긴엄지폄근",
-        "english": "Extensor hallucis longus",
-        "abbr": "EHL",
-        "nerve": "깊은종아리신경",
-        "roots": "L5",
-        "clinical_point": "L5 신경뿌리병증 평가에 중요한 근육입니다.",
-    },
-    "긴종아리근 (Peroneus Longus)": {
-        "domain": "muscle",
-        "korean": "긴종아리근",
-        "english": "Peroneus longus",
-        "abbr": "PL",
-        "nerve": "얕은종아리신경",
-        "roots": "L5-S1",
-        "clinical_point": "온종아리신경병증, 얕은종아리신경병증, L5-S1 병변 감별에 사용합니다.",
-    },
-    "가쪽넓은근 (Vastus Lateralis)": {
-        "domain": "muscle",
-        "korean": "가쪽넓은근",
-        "english": "Vastus lateralis",
-        "abbr": "VL",
-        "nerve": "넓적다리신경",
-        "roots": "L2-L4",
-        "clinical_point": "넓적다리신경병증, L2-L4 신경뿌리병증 평가에 사용합니다.",
-    },
-    "엉덩허리근 (Iliopsoas)": {
-        "domain": "muscle",
-        "korean": "엉덩허리근",
-        "english": "Iliopsoas",
-        "abbr": "Iliopsoas",
-        "nerve": "허리신경얼기 가지",
-        "roots": "L1-L3",
-        "clinical_point": "허리신경얼기병증과 상위 요추 신경뿌리병증 평가에 사용합니다.",
-    },
-    "중간볼기근 (Gluteus Medius)": {
-        "domain": "muscle",
-        "korean": "중간볼기근",
-        "english": "Gluteus medius",
-        "abbr": "GMED",
-        "nerve": "위볼기신경",
-        "roots": "L5-S1",
-        "clinical_point": "L5 신경뿌리병증과 온종아리신경병증 감별에 매우 중요합니다.",
-    },
-    "가자미근 (Soleus)": {
-        "domain": "muscle",
-        "korean": "가자미근",
-        "english": "Soleus",
-        "abbr": "Soleus",
-        "nerve": "정강신경",
-        "roots": "S1-S2",
-        "clinical_point": "S1 신경뿌리병증, 정강신경병증, 좌골신경병증 평가에 사용합니다.",
+        "region": "leg",
     },
     "짧은발가락벌림근 (Abductor Digiti Minimi pedis)": {
+        "nerve": "가쪽발바닥신경(Lateral plantar nerve)",
+        "level": "S1-S2",
         "domain": "muscle",
-        "korean": "짧은발가락벌림근",
-        "english": "Abductor digiti minimi pedis",
-        "abbr": "ADM pedis",
-        "nerve": "가쪽발바닥신경",
-        "roots": "S1-S2",
-        "clinical_point": "원위부 다발신경병증, 정강신경 원위부 병변 평가에 사용합니다.",
+        "region": "leg",
+    },
+    "긴엄지폄근 (Extensor Hallucis Longus, EHL)": {
+        "nerve": "깊은종아리신경(Deep peroneal nerve)",
+        "level": "L5",
+        "domain": "muscle",
+        "region": "leg",
+    },
+    "긴종아리근 (Peroneus Longus)": {
+        "nerve": "얕은종아리신경(Superficial peroneal nerve)",
+        "level": "L5-S1",
+        "domain": "muscle",
+        "region": "leg",
+    },
+    "장딴지근 (Gastrocnemius)": {
+        "nerve": "정강신경(Tibial nerve)",
+        "level": "S1-S2",
+        "domain": "muscle",
+        "region": "leg",
+    },
+    "가자미근 (Soleus)": {
+        "nerve": "정강신경(Tibial nerve)",
+        "level": "S1-S2",
+        "domain": "muscle",
+        "region": "leg",
+    },
+    "가쪽넓은근 (Vastus Lateralis)": {
+        "nerve": "넓적다리신경(Femoral nerve)",
+        "level": "L2-L4",
+        "domain": "muscle",
+        "region": "leg",
+    },
+    "엉덩허리근 (Iliopsoas)": {
+        "nerve": "허리신경얼기/넓적다리신경 관련 분포",
+        "level": "L2-L4 (주로 L2-L3)",
+        "domain": "muscle",
+        "region": "leg",
+    },
+    "큰볼기근 (Gluteus Maximus)": {
+        "nerve": "아래볼기신경(Inferior gluteal nerve)",
+        "level": "L5-S2",
+        "domain": "muscle",
+        "region": "leg",
+    },
+    "중간볼기근 (Gluteus Medius)": {
+        "nerve": "위볼기신경(Superior gluteal nerve)",
+        "level": "L4-S1",
+        "domain": "muscle",
+        "region": "leg",
+    },
+    "뒤넙다리근 (Biceps Femoris)": {
+        "nerve": "궁둥신경 분포(Sciatic division)",
+        "level": "L5-S2",
+        "domain": "muscle",
+        "region": "leg",
+    },
+    "넙다리뒤근 (Hamstrings)": {
+        "nerve": "궁둥신경(Sciatic nerve)",
+        "level": "L5-S1",
+        "domain": "muscle",
+        "region": "leg",
     },
     "허리 척추주위근 (Lumbar Paraspinal)": {
+        "nerve": "척수뒤가지(Posterior primary ramus)",
+        "level": "허리 신경뿌리 수준",
         "domain": "muscle",
-        "korean": "허리 척추주위근",
-        "english": "Lumbar paraspinal muscle",
-        "abbr": "Lumbar paraspinal",
-        "nerve": "척수신경 뒤가지",
-        "roots": "L2-S1",
-        "clinical_point": "허리 신경뿌리병증과 말초신경병증/신경얼기병증 감별에 매우 중요합니다.",
+        "region": "leg",
+    },
+    "엉덩이 척추주위근 (Gluteal Paraspinal)": {
+        "nerve": "척수뒤가지(Posterior primary ramus)",
+        "level": "엉치 신경뿌리 수준",
+        "domain": "muscle",
+        "region": "leg",
     },
 
-    # ------------------------------------------------------------------
-    # H반사 / 경직 평가
-    # ------------------------------------------------------------------
+    # -----------------------------------------------------------------
+    # Reflex / special studies
+    # -----------------------------------------------------------------
     "H 반사 (좌)": {
+        "nerve": "정강신경-척수 S1 반사고리",
+        "level": "H 반사 경로, 주로 S1",
         "domain": "h_reflex",
-        "korean": "좌측 H 반사",
-        "english": "Left H-reflex",
-        "abbr": "Left H-reflex",
-        "nerve": "정강신경-가자미근 반사경로",
-        "roots": "S1",
-        "clinical_point": "S1 반사경로, 말초 신경전도, 척수 반사 흥분성 평가에 사용합니다.",
+        "region": "leg",
     },
     "H 반사 (우)": {
+        "nerve": "정강신경-척수 S1 반사고리",
+        "level": "H 반사 경로, 주로 S1",
         "domain": "h_reflex",
-        "korean": "우측 H 반사",
-        "english": "Right H-reflex",
-        "abbr": "Right H-reflex",
-        "nerve": "정강신경-가자미근 반사경로",
-        "roots": "S1",
-        "clinical_point": "S1 반사경로, 말초 신경전도, 척수 반사 흥분성 평가에 사용합니다.",
+        "region": "leg",
     },
     "H/M 비율": {
+        "nerve": "척수 반사 흥분성 평가",
+        "level": "H 반사 흥분성 평가",
         "domain": "h_ratio",
-        "korean": "H/M 비율",
-        "english": "H/M ratio",
-        "abbr": "H/M ratio",
-        "nerve": "정강신경-가자미근 반사경로",
-        "roots": "S1",
-        "clinical_point": "경직, 척수 반사 흥분성, 중추신경계 병변 후 변화 평가에 사용합니다.",
+        "region": "leg",
     },
-
-    # ------------------------------------------------------------------
-    # F파 검사
-    # ------------------------------------------------------------------
-    "정강/종아리신경 F파 (F-wave)": {
+    "정중신경 F파 (Median F-wave)": {
+        "nerve": "정중신경 근위부/운동신경뿌리",
+        "level": "근위부 경로, C8-T1",
         "domain": "f_wave",
-        "korean": "정강/종아리신경 F파",
-        "english": "Tibial/Peroneal F-wave",
-        "abbr": "F-wave",
-        "nerve": "정강신경 또는 종아리신경",
-        "roots": "L4-S1",
-        "clinical_point": "근위부 전도 이상, 다발신경뿌리병증, Guillain-Barre spectrum 평가에 사용합니다.",
+        "region": "arm",
+    },
+    "자신경 F파 (Ulnar F-wave)": {
+        "nerve": "자신경 근위부/운동신경뿌리",
+        "level": "근위부 경로, C8-T1",
+        "domain": "f_wave",
+        "region": "arm",
+    },
+    "정강신경 F파 (Tibial F-wave)": {
+        "nerve": "정강신경 근위부/운동신경뿌리",
+        "level": "근위부 경로, L5-S2",
+        "domain": "f_wave",
+        "region": "leg",
+    },
+    "종아리신경 F파 (Peroneal F-wave)": {
+        "nerve": "종아리신경 근위부/운동신경뿌리",
+        "level": "근위부 경로, L4-S1",
+        "domain": "f_wave",
+        "region": "leg",
+    },
+    "정강/종아리신경 F파 (F-wave)": {
+        "nerve": "정강신경/종아리신경 근위부 운동경로",
+        "level": "근위부 경로, 허리-엉치 신경뿌리 수준",
+        "domain": "f_wave",
+        "region": "leg",
     },
 
-    # ------------------------------------------------------------------
-    # 눈깜빡반사검사
-    # ------------------------------------------------------------------
+    # -----------------------------------------------------------------
+    # Blink reflex
+    # -----------------------------------------------------------------
     "우측 자극-우측 R1": {
+        "nerve": "우측 삼차신경 들방향-뇌줄기-우측 얼굴신경 날방향 반사경로",
+        "level": "눈깜빡반사 경로",
         "domain": "blink",
-        "korean": "우측 자극-우측 R1",
-        "english": "Right stimulation - right R1",
-        "abbr": "Rt stim-Rt R1",
-        "nerve": "삼차신경-뇌줄기-얼굴신경 반사경로",
-        "roots": "CN V, CN VII",
-        "clinical_point": "동측 짧은잠복기 반응으로 얼굴신경과 뇌줄기 반사경로 평가에 사용합니다.",
+        "region": "face",
     },
     "우측 자극-우측 R2": {
+        "nerve": "우측 삼차신경 들방향-뇌줄기-우측 얼굴신경 날방향 반사경로",
+        "level": "눈깜빡반사 경로",
         "domain": "blink",
-        "korean": "우측 자극-우측 R2",
-        "english": "Right stimulation - right R2",
-        "abbr": "Rt stim-Rt R2",
-        "nerve": "삼차신경-뇌줄기-얼굴신경 반사경로",
-        "roots": "CN V, CN VII",
-        "clinical_point": "동측 긴잠복기 반응으로 얼굴신경 및 뇌줄기 반사경로 평가에 사용합니다.",
+        "region": "face",
     },
     "우측 자극-좌측 R2": {
+        "nerve": "우측 삼차신경 들방향-뇌줄기-좌측 얼굴신경 날방향 반사경로",
+        "level": "눈깜빡반사 경로",
         "domain": "blink",
-        "korean": "우측 자극-좌측 R2",
-        "english": "Right stimulation - left R2",
-        "abbr": "Rt stim-Lt R2",
-        "nerve": "삼차신경-뇌줄기-얼굴신경 반사경로",
-        "roots": "CN V, CN VII",
-        "clinical_point": "반대측 긴잠복기 반응으로 양측 뇌줄기 반사경로 평가에 사용합니다.",
+        "region": "face",
     },
     "좌측 자극-좌측 R1": {
+        "nerve": "좌측 삼차신경 들방향-뇌줄기-좌측 얼굴신경 날방향 반사경로",
+        "level": "눈깜빡반사 경로",
         "domain": "blink",
-        "korean": "좌측 자극-좌측 R1",
-        "english": "Left stimulation - left R1",
-        "abbr": "Lt stim-Lt R1",
-        "nerve": "삼차신경-뇌줄기-얼굴신경 반사경로",
-        "roots": "CN V, CN VII",
-        "clinical_point": "동측 짧은잠복기 반응으로 얼굴신경과 뇌줄기 반사경로 평가에 사용합니다.",
+        "region": "face",
     },
     "좌측 자극-좌측 R2": {
+        "nerve": "좌측 삼차신경 들방향-뇌줄기-좌측 얼굴신경 날방향 반사경로",
+        "level": "눈깜빡반사 경로",
         "domain": "blink",
-        "korean": "좌측 자극-좌측 R2",
-        "english": "Left stimulation - left R2",
-        "abbr": "Lt stim-Lt R2",
-        "nerve": "삼차신경-뇌줄기-얼굴신경 반사경로",
-        "roots": "CN V, CN VII",
-        "clinical_point": "동측 긴잠복기 반응으로 얼굴신경 및 뇌줄기 반사경로 평가에 사용합니다.",
+        "region": "face",
     },
     "좌측 자극-우측 R2": {
+        "nerve": "좌측 삼차신경 들방향-뇌줄기-우측 얼굴신경 날방향 반사경로",
+        "level": "눈깜빡반사 경로",
         "domain": "blink",
-        "korean": "좌측 자극-우측 R2",
-        "english": "Left stimulation - right R2",
-        "abbr": "Lt stim-Rt R2",
-        "nerve": "삼차신경-뇌줄기-얼굴신경 반사경로",
-        "roots": "CN V, CN VII",
-        "clinical_point": "반대측 긴잠복기 반응으로 양측 뇌줄기 반사경로 평가에 사용합니다.",
+        "region": "face",
     },
 }
 
 
-def get_anatomy_meta(item_name):
-    """
-    검사 항목명으로 해부학 메타데이터를 반환합니다.
-    항목이 없으면 기본 other 값을 반환합니다.
-    """
-    return ANATOMY.get(
-        item_name,
-        {
-            "domain": "other",
-            "korean": str(item_name),
-            "english": "",
-            "abbr": "",
-            "nerve": "",
-            "roots": "",
-            "clinical_point": "",
-        },
-    )
+def get_anatomy(item_name: str) -> dict:
+    """검사항목명을 기준으로 해부학적 메타데이터를 반환합니다."""
+    if item_name is None:
+        return {}
+    return ANATOMY.get(str(item_name).strip(), {})
 
 
-def get_domain(item_name):
-    """
-    검사 항목의 domain만 간단히 반환합니다.
-    """
-    return get_anatomy_meta(item_name).get("domain", "other")
+def get_domain(item_name: str) -> str:
+    """검사항목명의 domain을 반환합니다."""
+    return get_anatomy(item_name).get("domain", "")
+
+
+def get_region(item_name: str) -> str:
+    """검사항목명의 region을 반환합니다."""
+    return get_anatomy(item_name).get("region", "")
