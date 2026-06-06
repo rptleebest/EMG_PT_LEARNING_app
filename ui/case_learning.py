@@ -4,12 +4,24 @@ import html as html_lib
 import re
 import streamlit as st
 from data.cases import CASE_LIBRARY
-from data.constants import ANATOMY
 from data.terms import ncs_amplitude_latency, emg_case_label, special_term_label
-from engine.inference import split_findings_by_domain
 from ui.navigation import render_bottom_navigation
 from helpers import side_to_korean, lesion_side_index
 from formatters import html_escape, clean_html
+
+def _categorize_findings(findings):
+    """외부 사전 의존 없이, 키워드로 검사를 100% 완벽하게 분류하는 엔진"""
+    grouped = {"sensory": {}, "motor": {}, "muscle": {}, "reflex": {}}
+    for k, v in findings.items():
+        if "SNAP" in k or "감각" in k:
+            grouped["sensory"][k] = v
+        elif "CMAP" in k or "운동" in k:
+            grouped["motor"][k] = v
+        elif any(x in k for x in ["반사", "F파", "H/M", "비율", "눈깜빡"]):
+            grouped["reflex"][k] = v
+        else:
+            grouped["muscle"][k] = v  # 근육 이름은 무조건 침근전도로 할당
+    return grouped
 
 def _is_bilateral_side(side):
     return str(side).strip().lower() in {"양측", "양쪽", "both", "bilateral"}
@@ -22,14 +34,13 @@ def _get_value_for_lesion_side(values, side):
 
 def _color_class_for_text(text):
     text = str(text)
-    abnormals = ["반응 소실", "소실", "지연", "감소", "느림", "전도차단", "증가", "비정상적 증가", "Absent", "Delayed", "Reduced", "No Response", "fibrillation", "positive sharp", "Reduced MU recruitment", "Giant"]
-    normals = ["Silent", "Normal", "정상", "보존", "Normal Range", "통증 및 환자 협조 부족으로 검사 제한"]
+    abnormals = ["비정상적", "감소", "지연", "소실", "증가된"]
+    normals = ["정상", "침묵"]
     if any(a in text for a in abnormals): return "text-red"
     if any(n in text for n in normals): return "text-blue"
     return "text-normal"
 
 def _has_abnormality(parsed_data):
-    """딕셔너리인지 문자열인지 판별하여 유연하게 에러 없이 색상을 검사합니다."""
     if isinstance(parsed_data, dict):
         return any(_color_class_for_text(v) == "text-red" for v in parsed_data.values() if v)
     return _color_class_for_text(parsed_data) == "text-red"
@@ -40,60 +51,32 @@ def _count_abnormalities(findings, side, parser_func):
         if _is_bilateral_side(side):
             left = parser_func(values[0] if len(values) > 0 else "")
             right = parser_func(values[1] if len(values) > 1 else "")
-            if _has_abnormality(left) or _has_abnormality(right): 
-                count += 1
+            if _has_abnormality(left) or _has_abnormality(right): count += 1
         else:
             lesion_val = parser_func(_get_value_for_lesion_side(values, side))
-            if _has_abnormality(lesion_val): 
-                count += 1
+            if _has_abnormality(lesion_val): count += 1
     return count
 
 def _inject_css():
     st.markdown(
         """
         <style>
-            /* 텍스트 가독성 최적화: 왼쪽 정렬 및 단어 단위 줄바꿈 유지 */
-            .case-text-block, .result-text, .case-bullet { 
-                text-align: left !important; 
-                word-break: keep-all !important; 
-                line-height: 1.6 !important; 
-            }
-            
-            /* 이학적 검사 파스텔톤 부드러운 헤더 */
+            .case-text-block, .result-text, .case-bullet { text-align: left !important; word-break: keep-all !important; line-height: 1.6 !important; }
             .exam-header-sensory { color: #1e3a8a !important; background-color: #eff6ff !important; font-weight: 800 !important; font-size: 0.95rem !important; padding: 6px 12px !important; border-left: 5px solid #3b82f6 !important; border-radius: 4px !important; margin-top: 14px !important; margin-bottom: 8px !important; }
             .exam-header-motor { color: #14532d !important; background-color: #f0fdf4 !important; font-weight: 800 !important; font-size: 0.95rem !important; padding: 6px 12px !important; border-left: 5px solid #10b981 !important; border-radius: 4px !important; margin-top: 14px !important; margin-bottom: 8px !important; }
             .exam-header-reflex { color: #7f1d1d !important; background-color: #fef2f2 !important; font-weight: 800 !important; font-size: 0.95rem !important; padding: 6px 12px !important; border-left: 5px solid #ef4444 !important; border-radius: 4px !important; margin-top: 14px !important; margin-bottom: 8px !important; }
             .exam-header-default { color: #0f172a !important; background-color: #f8fafc !important; font-weight: 800 !important; font-size: 0.95rem !important; padding: 6px 12px !important; border-left: 5px solid #9ca3af !important; border-radius: 4px !important; margin-top: 14px !important; margin-bottom: 8px !important; }
-            
-            /* 라디오 버튼 100% 폭 맞춤 및 색상 시각적 위계화 */
-            div[role="radiogroup"] > label {
-                width: 100% !important;
-                background-color: #f0fdf4 !important;
-                border: 1px solid #bbf7d0 !important;
-                border-left: 5px solid #10b981 !important;
-                border-radius: 8px !important;
-                padding: 10px 15px !important;
-                margin-bottom: 8px !important;
-                transition: all 0.2s ease;
-                display: flex;
-            }
-            div[role="radiogroup"] > label:first-child {
-                background-color: #e2e8f0 !important;
-                border: 1px solid #cbd5e1 !important;
-                border-left: 5px solid #64748b !important;
-            }
-            
-            /* 반응형 테이블 (파스텔톤) */
+            div[role="radiogroup"] > label { width: 100% !important; background-color: #f0fdf4 !important; border: 1px solid #bbf7d0 !important; border-left: 5px solid #10b981 !important; border-radius: 8px !important; padding: 10px 15px !important; margin-bottom: 8px !important; transition: all 0.2s ease; display: flex; }
+            div[role="radiogroup"] > label:first-child { background-color: #e2e8f0 !important; border: 1px solid #cbd5e1 !important; border-left: 5px solid #64748b !important; }
             .edu-table th { background-color: #f1f5f9 !important; color: #1e293b !important; border: 1px solid #cbd5e1 !important; padding: 10px; text-align: center; }
-            .edu-table td { border: 1px solid #cbd5e1 !important; color: #334155; padding: 10px; text-align: center; vertical-align: middle; }
+            .edu-table td { border: 1px solid #cbd5e1 !important; color: #334155; padding: 10px; text-align: center; vertical-align: middle; word-break: keep-all; }
             .edu-table td.left { font-weight: 800 !important; color: #0f172a !important; background-color: #f8fafc !important; text-align: left; }
             .text-red { color: #b91c1c !important; font-weight: 800; background-color: #fef2f2; border-radius: 4px; padding: 3px 6px; }
             .text-blue { color: #1d4ed8 !important; font-weight: 800; background-color: #eff6ff; border-radius: 4px; padding: 3px 6px; }
-            
             @media screen and (max-width: 700px) {
                 .edu-table thead { display: none; }
-                .edu-table tr { display: block; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 0.8rem; background: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-                .edu-table td { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; border: none; border-bottom: 1px solid #f8fafc; padding: 0.6rem 0.7rem; text-align: right; word-break: keep-all; }
+                .edu-table tr { display: block; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 0.8rem; background: #ffffff; }
+                .edu-table td { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; border: none; border-bottom: 1px solid #f8fafc; padding: 0.6rem 0.7rem; text-align: right; }
                 .edu-table td:last-child { border-bottom: none; }
                 .edu-table td::before { content: attr(data-label); font-weight: 800; color: #475569; text-align: left; font-size: 0.8rem; flex: 0 0 38%; }
                 .edu-table td > span { flex: 1; text-align: right; }
@@ -112,8 +95,7 @@ def _clean_exam_text(text):
         n = html_lib.unescape(cleaned)
         if n == cleaned: break
         cleaned = n
-    cleaned = re.sub(r"<[^>]+>", "", cleaned)
-    return "\n".join([line.strip() for line in cleaned.splitlines() if line.strip()])
+    return re.sub(r"<[^>]+>", "", cleaned).strip()
 
 def _render_physical_exam(patient):
     st.markdown('<div style="font-size: 1.1rem; font-weight: 800; color: #1e293b; margin-top: 20px; border-bottom: 2px solid #cbd5e1; padding-bottom: 5px;">🧪 이학적 검사결과</div>', unsafe_allow_html=True)
@@ -138,7 +120,6 @@ def _render_simple_table(headers, rows):
 def _render_teaching_result(teaching, diff_dx):
     st.markdown('<div style="margin-top: 35px; padding-top: 15px; border-top: 2px dashed #cbd5e1;"><div style="font-size: 1.2rem; font-weight: 900; color: #0f172a; margin-bottom: 15px;">🔍 검사 결과 단계별 통합 해석</div>', unsafe_allow_html=True)
     
-    # 동적 렌더링: 데이터가 있는 검사 항목만 헤더를 생성하여 출력
     sections = [
         ("ncs_reason", "신경전도검사(NCS) 해석", "#3b82f6", "#eff6ff"),
         ("emg_reason", "침근전도검사(Needle EMG) 해석", "#10b981", "#ecfdf5"),
@@ -198,7 +179,7 @@ def render_case_list():
                </div>""", unsafe_allow_html=True)
 
         findings = case.get("findings", {})
-        grouped = split_findings_by_domain(findings, ANATOMY)
+        grouped = _categorize_findings(findings)
         
         if grouped["sensory"]:
             cnt = _count_abnormalities(grouped["sensory"], raw_side, ncs_amplitude_latency)
@@ -218,19 +199,17 @@ def render_case_list():
             rows = [[k, emg_case_label(_get_value_for_lesion_side(v, raw_side)).get("rest"), emg_case_label(_get_value_for_lesion_side(v, raw_side)).get("volition")] for k, v in grouped["muscle"].items()]
             st.markdown(_render_simple_table(["검사 근육", "휴식 시", "자발적 근수축 시"], rows), unsafe_allow_html=True)
 
-        if grouped.get("reflex") or grouped.get("other"):
-            merged_reflex = {**grouped.get("reflex", {}), **grouped.get("other", {})}
-            if merged_reflex:
-                cnt = _count_abnormalities(merged_reflex, raw_side, special_term_label)
-                st.markdown(f'<div style="font-weight: 900; color: #6b21a8; font-size: 1.1rem; margin-top: 25px; margin-bottom: 8px;">⏱️ 특수 및 반사 검사 <span style="color:#ef4444; font-size:0.85em; background:#fef2f2; padding:2px 6px; border-radius:10px; font-weight:800;">🚨 이상 소견: {cnt}개 항목</span></div>', unsafe_allow_html=True)
-                rows = []
-                for k, v in merged_reflex.items():
-                    if _is_bilateral_side(raw_side):
-                        rows.append([k, special_term_label(v[0] if len(v)>0 else ""), special_term_label(v[1] if len(v)>1 else "")])
-                    else:
-                        rows.append([k, special_term_label(_get_value_for_lesion_side(v, raw_side))])
-                headers = ["검사 항목", "좌측 결과", "우측 결과"] if _is_bilateral_side(raw_side) else ["검사 항목", "결과"]
-                st.markdown(_render_simple_table(headers, rows), unsafe_allow_html=True)
+        if grouped["reflex"]:
+            cnt = _count_abnormalities(grouped["reflex"], raw_side, special_term_label)
+            st.markdown(f'<div style="font-weight: 900; color: #6b21a8; font-size: 1.1rem; margin-top: 25px; margin-bottom: 8px;">⏱️ 특수 및 반사 검사 <span style="color:#ef4444; font-size:0.85em; background:#fef2f2; padding:2px 6px; border-radius:10px; font-weight:800;">🚨 이상 소견: {cnt}개 항목</span></div>', unsafe_allow_html=True)
+            rows = []
+            for k, v in grouped["reflex"].items():
+                if _is_bilateral_side(raw_side):
+                    rows.append([k, special_term_label(v[0] if len(v)>0 else ""), special_term_label(v[1] if len(v)>1 else "")])
+                else:
+                    rows.append([k, special_term_label(_get_value_for_lesion_side(v, raw_side))])
+            headers = ["검사 항목", "좌측 결과", "우측 결과"] if _is_bilateral_side(raw_side) else ["검사 항목", "결과"]
+            st.markdown(_render_simple_table(headers, rows), unsafe_allow_html=True)
 
         _render_teaching_result(case.get("teaching_diagnosis", {}), case.get("differential_diagnosis", []))
 
