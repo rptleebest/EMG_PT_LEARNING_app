@@ -7,7 +7,10 @@ from ui.navigation import render_top_navigation
 from ui.router import render_router
 
 
-def apply_mobile_first_style():
+def apply_mobile_first_style() -> None:
+    """
+    앱 전체에 모바일 우선 CSS 스타일을 적용합니다.
+    """
     st.markdown(
         """
         <style>
@@ -343,6 +346,15 @@ def apply_mobile_first_style():
             -webkit-text-fill-color: #ffffff !important;
         }
 
+        table {
+            word-break: keep-all;
+        }
+
+        th,
+        td {
+            vertical-align: middle;
+        }
+
         @media (min-width: 769px) {
             div[data-testid="stButton"] > button,
             div[data-testid="stDownloadButton"] > button {
@@ -450,7 +462,7 @@ def apply_mobile_first_style():
     )
 
 
-def main():
+def main() -> None:
     st.set_page_config(
         page_title="교육용 근전도 판독 보조",
         page_icon="🧠",
