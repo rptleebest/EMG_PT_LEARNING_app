@@ -22,14 +22,17 @@ def _get_value_for_lesion_side(values, side):
 
 def _color_class_for_text(text):
     text = str(text)
-    abnormals = ["반응 소실", "소실", "지연", "감소", "느림", "전도차단", "증가", "Absent", "Delayed", "Reduced", "No Response", "fibrillation", "positive sharp", "Reduced MU recruitment", "Giant"]
+    abnormals = ["반응 소실", "소실", "지연", "감소", "느림", "전도차단", "증가", "비정상적 증가", "Absent", "Delayed", "Reduced", "No Response", "fibrillation", "positive sharp", "Reduced MU recruitment", "Giant"]
     normals = ["Silent", "Normal", "정상", "보존", "Normal Range", "통증 및 환자 협조 부족으로 검사 제한"]
     if any(a in text for a in abnormals): return "text-red"
     if any(n in text for n in normals): return "text-blue"
     return "text-normal"
 
-def _count_abnormality_in_dict(parsed_dict):
-    return any(_color_class_for_text(v) == "text-red" for v in parsed_dict.values() if v)
+def _has_abnormality(parsed_data):
+    """딕셔너리인지 문자열인지 판별하여 유연하게 에러 없이 색상을 검사합니다."""
+    if isinstance(parsed_data, dict):
+        return any(_color_class_for_text(v) == "text-red" for v in parsed_data.values() if v)
+    return _color_class_for_text(parsed_data) == "text-red"
 
 def _count_abnormalities(findings, side, parser_func):
     count = 0
@@ -37,17 +40,19 @@ def _count_abnormalities(findings, side, parser_func):
         if _is_bilateral_side(side):
             left = parser_func(values[0] if len(values) > 0 else "")
             right = parser_func(values[1] if len(values) > 1 else "")
-            if _count_abnormality_in_dict(left) or _count_abnormality_in_dict(right): count += 1
+            if _has_abnormality(left) or _has_abnormality(right): 
+                count += 1
         else:
             lesion_val = parser_func(_get_value_for_lesion_side(values, side))
-            if _count_abnormality_in_dict(lesion_val): count += 1
+            if _has_abnormality(lesion_val): 
+                count += 1
     return count
 
 def _inject_css():
     st.markdown(
         """
         <style>
-            /* 텍스트 가독성 최적화: 양쪽 정렬(justify) 제거, 왼쪽 정렬 및 단어 단위 줄바꿈 유지 */
+            /* 텍스트 가독성 최적화: 왼쪽 정렬 및 단어 단위 줄바꿈 유지 */
             .case-text-block, .result-text, .case-bullet { 
                 text-align: left !important; 
                 word-break: keep-all !important; 
@@ -60,7 +65,7 @@ def _inject_css():
             .exam-header-reflex { color: #7f1d1d !important; background-color: #fef2f2 !important; font-weight: 800 !important; font-size: 0.95rem !important; padding: 6px 12px !important; border-left: 5px solid #ef4444 !important; border-radius: 4px !important; margin-top: 14px !important; margin-bottom: 8px !important; }
             .exam-header-default { color: #0f172a !important; background-color: #f8fafc !important; font-weight: 800 !important; font-size: 0.95rem !important; padding: 6px 12px !important; border-left: 5px solid #9ca3af !important; border-radius: 4px !important; margin-top: 14px !important; margin-bottom: 8px !important; }
             
-            /* 라디오 버튼 균일 너비 및 시각적 위계 (100% 꽉 채움) */
+            /* 라디오 버튼 100% 폭 맞춤 및 색상 시각적 위계화 */
             div[role="radiogroup"] > label {
                 width: 100% !important;
                 background-color: #f0fdf4 !important;
@@ -78,7 +83,7 @@ def _inject_css():
                 border-left: 5px solid #64748b !important;
             }
             
-            /* 반응형 테이블 (파스텔 톤 적용) */
+            /* 반응형 테이블 (파스텔톤) */
             .edu-table th { background-color: #f1f5f9 !important; color: #1e293b !important; border: 1px solid #cbd5e1 !important; padding: 10px; text-align: center; }
             .edu-table td { border: 1px solid #cbd5e1 !important; color: #334155; padding: 10px; text-align: center; vertical-align: middle; }
             .edu-table td.left { font-weight: 800 !important; color: #0f172a !important; background-color: #f8fafc !important; text-align: left; }
@@ -111,7 +116,7 @@ def _clean_exam_text(text):
     return "\n".join([line.strip() for line in cleaned.splitlines() if line.strip()])
 
 def _render_physical_exam(patient):
-    st.markdown('<div style="font-size: 1.1rem; font-weight: 800; color: #1e293b; margin-top: 15px; border-bottom: 2px solid #cbd5e1; padding-bottom: 5px;">🧪 이학적 검사결과</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size: 1.1rem; font-weight: 800; color: #1e293b; margin-top: 20px; border-bottom: 2px solid #cbd5e1; padding-bottom: 5px;">🧪 이학적 검사결과</div>', unsafe_allow_html=True)
     pe = patient.get("physical_exam", {})
     if not pe: return
     html = []
