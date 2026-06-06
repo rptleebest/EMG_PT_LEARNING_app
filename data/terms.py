@@ -1,53 +1,46 @@
 # data/terms.py
 
-import re
+def parse_amp(val):
+    s = str(val).lower()
+    if "normal" in s or "정상" in s: return "정상 범위"
+    if "reduced" in s or "감소" in s: return "진폭 감소"
+    if "absent" in s or "소실" in s: return "반응 소실"
+    return "정상 범위"
 
-def parse_ncs_value(value_str):
-    if not value_str:
-        return "Normal"
-    lower_val = value_str.lower()
-    
-    if "정상" in lower_val or "normal" in lower_val or "보존" in lower_val:
-        return "Normal"
-    if "소실" in lower_val or "absent" in lower_val or "no response" in lower_val or "반응 소실" in lower_val:
-        return "Absent"
-    if "지연" in lower_val or "delayed" in lower_val or "느림" in lower_val:
-        return "Delayed"
-    if "감소" in lower_val or "reduced" in lower_val or "decreased" in lower_val:
-        return "Reduced"
-    return value_str
+def parse_lat(val):
+    s = str(val).lower()
+    if "normal" in s or "정상" in s: return "정상 범위"
+    if "delayed" in s or "지연" in s: return "잠복기 지연"
+    if "absent" in s or "소실" in s: return "반응 소실"
+    return "정상 범위"
 
-def ncs_amplitude_latency(value_str):
-    if isinstance(value_str, tuple):
-        return {
-            "amplitude": parse_ncs_value(value_str[0]),
-            "latency": parse_ncs_value(value_str[1])
-        }
-    val = parse_ncs_value(value_str)
-    return {"amplitude": val, "latency": val}
+def ncs_amplitude_latency(value):
+    """NCS 결과를 진폭(Amplitude)과 잠복기(Latency) 상태로 정밀 파싱합니다."""
+    if isinstance(value, tuple) and len(value) == 2:
+        return {"amplitude": parse_amp(value[0]), "latency": parse_lat(value[1])}
+    return {"amplitude": parse_amp(value), "latency": parse_lat(value)}
+
+def emg_case_label(val):
+    """침근전도 상태를 임상적 용어로 완벽히 매핑합니다."""
+    s = str(val).lower()
+    if "normal" in s or "정상" in s or "emg_normal" in s:
+        return {"rest": "전기적 침묵 (정상 반응)", "volition": "정상 운동단위 동원패턴"}
+    if "active_denervation" in s:
+        return {"rest": "비정상적 자발전위 출현", "volition": "감소된 운동단위 동원패턴"}
+    if "paraspinal_denervation" in s:
+        return {"rest": "비정상적 자발전위 출현", "volition": "통증/협조 부족으로 검사 제한"}
+    if "chronic_reinnervation" in s:
+        return {"rest": "전기적 침묵 (정상 반응)", "volition": "증가된 운동단위 동원패턴 (거대 전위)"}
+    if "active_chronic" in s:
+        return {"rest": "비정상적 자발전위 출현", "volition": "감소된 운동단위 동원패턴"}
+    return {"rest": "-", "volition": "-"}
 
 def special_term_label(val):
-    if not val:
-        return ""
-    if isinstance(val, tuple):
-        return val[0]
-    return str(val)
-
-def emg_case_label(state_str):
-    if not state_str:
-        return {"rest": "Normal", "volition": "Normal"}
-        
-    s = str(state_str).lower()
-    
-    if "normal" in s or "정상" in s or s == "emg_normal":
-        return {"rest": "Silent at rest", "volition": "Normal MU recruitment"}
-    if "active_denervation" in s:
-        return {"rest": "fibrillation potential, positive sharp wave", "volition": "Reduced MU recruitment"}
-    if "paraspinal_denervation" in s:
-        return {"rest": "fibrillation potential, positive sharp wave", "volition": "통증 및 환자 협조 부족으로 검사 제한"}
-    if "chronic_reinnervation" in s:
-        return {"rest": "Silent at rest", "volition": "Giant MUAPs with reduced recruitment"}
-    if "active_chronic" in s:
-        return {"rest": "fibrillation potential", "volition": "Giant MUAPs with reduced recruitment"}
-        
-    return {"rest": "Unknown", "volition": "Unknown"}
+    """특수/반사 검사 용어를 매핑합니다."""
+    if not val: return ""
+    s = str(val[0] if isinstance(val, tuple) else val).lower()
+    if "normal" in s or "정상" in s: return "정상 범위"
+    if "delay" in s or "지연" in s: return "잠복기 지연"
+    if "absent" in s or "소실" in s: return "반응 소실"
+    if "hyper" in s or "increase" in s or "증가" in s: return "비정상적 증가"
+    return str(val[0] if isinstance(val, tuple) else val)
