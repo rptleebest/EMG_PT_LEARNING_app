@@ -1,48 +1,19 @@
 # ui/router.py
 
 import streamlit as st
-
-from ui.home import render_home
 from ui.case_learning import render_case_list, render_case_detail
 from ui.input_learning import render_input_learning
 
-
-VALID_SCREENS = {
-    "home",
-    "case_list",
-    "case_detail",
-    "input_learning",
-}
-
-
-def render_router():
-    """
-    화면 라우터.
-    비프로그램 전문가가 유지보수하기 쉽도록 화면 이름을 단순 문자열로 유지합니다.
-    """
-    screen = st.session_state.get("screen", "home")
-
-    if screen not in VALID_SCREENS:
-        st.session_state["screen"] = "home"
-        render_home()
-        return
-
-    if screen == "home":
-        render_home()
-        return
-
+def route():
+    """세션 상태에 따라 화면을 분기합니다."""
+    screen = st.session_state.get("screen", "main")
+    
     if screen == "case_list":
         render_case_list()
-        return
-
-    if screen == "case_detail":
-        if not st.session_state.get("selected_case"):
-            st.session_state["screen"] = "case_list"
-            render_case_list()
-            return
+    elif screen == "case_detail":
         render_case_detail()
-        return
-
-    if screen == "input_learning":
+    elif screen == "input_learning":
         render_input_learning()
-        return
+    else:
+        # 메인 화면 로직 (생략 가능)
+        pass
