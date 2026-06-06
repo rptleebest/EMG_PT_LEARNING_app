@@ -169,6 +169,7 @@ def render_input_learning():
     _render_tables(report, to_eng)
     st.markdown('</div>', unsafe_allow_html=True)
 
+    # 4. 검사결과 해석 (무조건 한글)
     _render_interpretation(report)
 
     st.markdown('<div style="margin-top:35px;">', unsafe_allow_html=True)
