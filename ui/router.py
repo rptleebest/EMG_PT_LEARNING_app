@@ -15,13 +15,28 @@ VALID_SCREENS = {
 }
 
 
-def render_router():
-    """현재 session_state['screen'] 값에 맞는 화면을 렌더링합니다."""
+def go_home() -> None:
+    """
+    잘못된 화면 상태가 들어왔을 때 안전하게 홈으로 이동합니다.
+    """
+    st.session_state["screen"] = "home"
+    render_home()
+
+
+def render_router() -> None:
+    """
+    현재 session_state['screen'] 값에 맞는 화면을 렌더링합니다.
+
+    화면 구조:
+    - home: 홈 화면
+    - case_list: 사례 학습 목록
+    - case_detail: 사례 상세 학습
+    - input_learning: 가상 검사결과표 해석
+    """
     screen = st.session_state.get("screen", "home")
 
     if screen not in VALID_SCREENS:
-        st.session_state["screen"] = "home"
-        render_home()
+        go_home()
         return
 
     if screen == "home":
@@ -33,13 +48,18 @@ def render_router():
         return
 
     if screen == "case_detail":
-        if not st.session_state.get("selected_case"):
+        selected_case = st.session_state.get("selected_case")
+
+        if not selected_case:
             st.session_state["screen"] = "case_list"
             render_case_list()
             return
+
         render_case_detail()
         return
 
     if screen == "input_learning":
         render_input_learning()
         return
+
+    go_home()
