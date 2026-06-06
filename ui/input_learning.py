@@ -1,7 +1,6 @@
 # ui/input_learning.py
 
 import streamlit as st
-import re
 from ui.navigation import render_bottom_navigation
 from formatters import html_escape, clean_html
 from data.virtual_reports import VIRTUAL_REPORTS, translate_value
@@ -41,7 +40,6 @@ def _render_interpretation(report):
     interp = report["interpretation"]
     st.markdown('<div style="margin-top: 35px; padding-top: 20px; border-top: 2px dashed #cbd5e1;"><div style="font-weight: 700; font-size: 1.15rem; color: #1e293b; margin-bottom: 15px;">🔍 검사 결과 단계별 통합 해석</div>', unsafe_allow_html=True)
     
-    # 감각, 운동, 침근, 반사 4단계 완벽 분리 렌더링
     configs = [
         ("sensory", "1단계: 감각신경전도검사(SNAP) 해석", "#3b82f6", "#eff6ff"),
         ("motor", "2단계: 운동신경전도검사(CMAP) 해석", "#10b981", "#f0fdf4"),
