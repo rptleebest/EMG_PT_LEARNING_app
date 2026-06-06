@@ -8,8 +8,8 @@ from data.virtual_reports import VIRTUAL_REPORTS, translate_value
 
 def _value_class(value):
     text = str(value)
-    abnormal_tokens = ["반응 소실", "소실", "지연", "감소", "느림", "전도차단", "증가", "비정상적 증가", "Absent", "Delayed", "Reduced", "No Response", "fibrillation", "positive sharp", "Reduced MU recruitment", "Giant"]
-    normal_tokens = ["Silent", "Normal", "정상", "보존", "Normal Range", "통증 및 환자 협조 부족으로 검사 제한", "Limited by Pain/Cooperation"]
+    abnormal_tokens = ["반응 소실", "소실", "지연", "감소", "느림", "전도차단", "증가", "비정상적", "Absent", "Delayed", "Reduced", "No Response", "fibrillation", "positive sharp", "Reduced MU recruitment", "Giant"]
+    normal_tokens = ["Silent", "Normal", "정상", "보존", "Normal Range", "통증/협조 부족으로 검사 제한", "Limited by Pain"]
     if any(token in text for token in abnormal_tokens): return "text-red"
     if any(token in text for token in normal_tokens): return "text-blue"
     return "text-normal"
@@ -22,7 +22,7 @@ def _render_mobile_table(headers, rows, table_id, to_eng):
     <style>
         #{safe_table_id} {{ width: 100%; border-collapse: collapse; margin: 0.55rem 0 1rem 0; font-size: 0.84rem; background: #ffffff; }}
         #{safe_table_id} th {{ background-color: #f1f5f9; padding: 10px; border: 1px solid #cbd5e1; text-align: center; color: #1e293b; font-weight: 800; line-height: 1.35; }}
-        #{safe_table_id} td {{ padding: 10px; border: 1px solid #cbd5e1; text-align: center; color: #334155; line-height: 1.45; vertical-align: middle; }}
+        #{safe_table_id} td {{ padding: 10px; border: 1px solid #cbd5e1; text-align: center; color: #334155; line-height: 1.45; vertical-align: middle; word-break: keep-all; }}
         #{safe_table_id} td.left-align {{ text-align: left; font-weight: 800; color: #0f172a; background-color: #f8fafc; }}
         .text-red {{ color: #b91c1c !important; font-weight: 800; background-color: #fef2f2; border-radius: 4px; padding: 3px 6px; }}
         .text-blue {{ color: #1d4ed8 !important; font-weight: 800; background-color: #eff6ff; border-radius: 4px; padding: 3px 6px; }}
@@ -82,7 +82,7 @@ def _render_interpretation(report):
     interp = report["interpretation"]
     st.markdown('<div style="margin-top: 35px; padding-top: 15px; border-top: 2px dashed #cbd5e1;"><div style="font-size: 1.2rem; font-weight: 900; color: #0f172a; margin-bottom: 15px;">🔍 검사 결과 단계별 통합 해석</div>', unsafe_allow_html=True)
 
-    # 동적 렌더링: 데이터가 있는 검사 항목만 헤더를 생성하여 출력
+    # 동적 렌더링
     sections = [
         ("sensory", "신경전도검사(NCS) 감각신경 해석", "#3b82f6", "#eff6ff"), 
         ("motor", "신경전도검사(NCS) 운동신경 해석", "#10b981", "#ecfdf5"),
@@ -148,7 +148,7 @@ def render_input_learning():
     st.markdown(
         clean_html(
             f"""
-            <div style="background-color: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 18px; margin-bottom: 15px; margin-top: 20px;">
+            <div style="background-color: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 18px; margin-bottom: 20px; margin-top: 20px;">
                 <div style="font-size: 1.15rem; font-weight: 900; color: #0f172a; margin-bottom: 12px;">👤 환자 기본 정보</div>
                 <div style="font-size: 0.95rem; color: #334155;">
                     <b>연령/성별:</b> {html_escape(str(meta.get("age", "-")))} / {html_escape(translate_value(meta.get("sex", "-"), to_eng))} &nbsp;|&nbsp; 
@@ -169,7 +169,6 @@ def render_input_learning():
     _render_tables(report, to_eng)
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # 4. 검사결과 해석 (무조건 한글)
     _render_interpretation(report)
 
     st.markdown('<div style="margin-top:35px;">', unsafe_allow_html=True)
