@@ -1,4 +1,4 @@
-# ui/case_learning.py [Part 5/6]
+# ui/case_learning.py
 
 import html as html_lib
 import re
@@ -23,25 +23,10 @@ def _get_value_for_lesion_side(values, side):
 def _color_class_for_text(text):
     text = str(text)
     abnormals = ["반응 소실", "소실", "지연", "감소", "느림", "전도차단", "증가", "Absent", "Delayed", "Reduced", "No Response", "fibrillation", "positive sharp", "Reduced MU recruitment", "Giant"]
-    normals = ["Silent", "Normal", "정상", "보존", "Normal Range", "통증 및 협조 부족으로 검사 제한"]
+    normals = ["Silent", "Normal", "정상", "보존", "Normal Range", "통증 및 환자 협조 부족으로 검사 제한"]
     if any(a in text for a in abnormals): return "text-red"
     if any(n in text for n in normals): return "text-blue"
     return "text-normal"
-
-def _count_abnormality_in_dict(parsed_dict):
-    return any(_color_class_for_text(v) == "text-red" for v in parsed_dict.values() if v)
-
-def _count_abnormalities(findings, side, parser_func):
-    count = 0
-    for item, values in findings.items():
-        if _is_bilateral_side(side):
-            left = parser_func(values[0] if len(values) > 0 else "")
-            right = parser_func(values[1] if len(values) > 1 else "")
-            if _count_abnormality_in_dict(left) or _count_abnormality_in_dict(right): count += 1
-        else:
-            lesion_val = parser_func(_get_value_for_lesion_side(values, side))
-            if _count_abnormality_in_dict(lesion_val): count += 1
-    return count
 
 def _inject_css():
     st.markdown(
@@ -70,7 +55,7 @@ def _inject_css():
             }
             div[role="radiogroup"] > label:first-child {
                 background-color: #f1f5f9 !important;
-                border: 1px solid #e2e8f0 !important;
+                border: 1px solid #cbd5e1 !important;
                 border-left: 5px solid #64748b !important;
             }
             
@@ -107,7 +92,7 @@ def _clean_exam_text(text):
     return "\n".join([line.strip() for line in cleaned.splitlines() if line.strip()])
 
 def _render_physical_exam(patient):
-    st.markdown('<div style="font-size: 1.1rem; font-weight: 800; color: #1e293b; margin-top: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">🧪 이학적 검사결과</div>', unsafe_allow_html=True)
+    st.markdown('<div style="font-size: 1.1rem; font-weight: 800; color: #1e293b; margin-top: 20px; border-bottom: 2px solid #cbd5e1; padding-bottom: 5px;">🧪 이학적 검사결과</div>', unsafe_allow_html=True)
     pe = patient.get("physical_exam", {})
     if not pe: return
     html = []
@@ -118,7 +103,7 @@ def _render_physical_exam(patient):
         for line in items:
             parts = line.split(":", 1)
             if len(parts) == 2: html.append(f'<div class="case-bullet"><span style="font-weight:800; color:#1e293b;">{html_escape(parts[0].strip())}:</span> {html_escape(parts[1].strip())}</div>')
-            else: html.append(f'<div class="case-bullet">- {html_escape(line)}</div>')
+            else: html.append(f'<div class="case-bullet">• {html_escape(line)}</div>')
     st.markdown(f'<div class="case-text-block">{"".join(html)}</div>', unsafe_allow_html=True)
 
 def _render_simple_table(headers, rows):
@@ -127,7 +112,7 @@ def _render_simple_table(headers, rows):
     return clean_html(f'<div style="overflow-x:auto; margin-bottom:1rem;"><table class="edu-table" style="width:100%; border-collapse:collapse;"><thead><tr>{th}</tr></thead><tbody>{tr}</tbody></table></div>')
 
 def _render_teaching_result(teaching, diff_dx):
-    st.markdown('<div style="margin-top: 25px; padding-top: 15px; border-top: 2px dashed #e2e8f0;"><div style="font-size: 1.2rem; font-weight: 800; color: #1e293b; margin-bottom: 15px;">🔍 검사 결과 단계별 통합 해석</div>', unsafe_allow_html=True)
+    st.markdown('<div style="margin-top: 35px; padding-top: 15px; border-top: 2px dashed #cbd5e1;"><div style="font-size: 1.2rem; font-weight: 900; color: #0f172a; margin-bottom: 15px;">🔍 검사 결과 단계별 통합 해석</div>', unsafe_allow_html=True)
     
     for key, label, c1, c2 in [("ncs_reason", "1단계: 신경전도검사(NCS) 해석", "#3b82f6", "#eff6ff"), ("emg_reason", "2단계: 침근전도검사(Needle EMG) 해석", "#10b981", "#ecfdf5")]:
         items = teaching.get(key, [])
@@ -135,11 +120,10 @@ def _render_teaching_result(teaching, diff_dx):
             st.markdown(f'<div style="border-left: 5px solid {c1}; background-color: {c2}; padding: 10px 14px; font-weight: 800; font-size: 1.05rem; color: #0f172a; margin-bottom: 10px; border-radius: 0 6px 6px 0;">{label}</div>', unsafe_allow_html=True)
             for t in items:
                 clean_t = html_escape(t)
-                # 숫자로 시작하는 문구는 불릿 기호 삭제 및 굵게 표시
                 if re.match(r"^\d+[\)\.]", t.strip()):
                     st.markdown(f'<div style="color: #0f172a; font-size: 1.0rem; font-weight: 800; margin-top: 12px; margin-bottom: 4px; padding-left: 5px;">{clean_t}</div>', unsafe_allow_html=True)
                 else:
-                    st.markdown(f'<div style="color: #334155; font-size: 0.95rem; line-height: 1.6; margin-bottom: 8px; padding-left: 15px;">- {clean_t}</div>', unsafe_allow_html=True)
+                    st.markdown(f'<div style="color: #334155; font-size: 0.95rem; line-height: 1.6; margin-bottom: 8px; padding-left: 15px;">• {clean_t}</div>', unsafe_allow_html=True)
             st.markdown("<br/>", unsafe_allow_html=True)
 
     st.markdown('<div style="border-left: 5px solid #dc2626; background-color: #fef2f2; padding: 10px 14px; font-weight: 800; font-size: 1.05rem; color: #7f1d1d; margin-top: 5px; margin-bottom: 12px; border-radius: 0 6px 6px 0;">3단계: 검사결과 추정 질환</div>', unsafe_allow_html=True)
@@ -148,8 +132,8 @@ def _render_teaching_result(teaching, diff_dx):
         if t_clean.startswith("추정 질환:"):
             name = t_clean.replace("추정 질환:", "").strip()
             st.markdown(f'<div style="color: #dc2626; font-size: 1.15rem; font-weight:900; margin-bottom: 10px; padding-left: 5px;">🎯 {html_escape(name)}</div>', unsafe_allow_html=True)
-        elif t_clean.startswith("추정 근거:") or t_clean.startswith("추정한 이유:"):
-            reason = t_clean.replace("추정 근거:", "").replace("추정한 이유:", "").strip()
+        elif t_clean.startswith("추정한 이유:"):
+            reason = t_clean.replace("추정한 이유:", "").strip()
             st.markdown(f'<div style="color: #1e293b; font-size: 0.95rem; line-height: 1.6; margin-bottom: 8px; padding-left: 5px;">💡 <span style="font-weight:800; color:#b45309;">추정한 이유:</span> {html_escape(reason)}</div>', unsafe_allow_html=True)
         else:
             st.markdown(f'<div style="color: #1e293b; font-size: 0.95rem; line-height: 1.6; margin-bottom: 8px; padding-left: 5px;">{html_escape(t_clean)}</div>', unsafe_allow_html=True)
@@ -157,8 +141,8 @@ def _render_teaching_result(teaching, diff_dx):
     if diff_dx:
         st.markdown('<div style="border-left: 5px solid #9333ea; background-color: #faf5ff; padding: 10px 14px; font-weight: 800; font-size: 1.05rem; color: #581c87; margin-top: 20px; margin-bottom: 10px; border-radius: 0 6px 6px 0;">감별진단 가이드</div>', unsafe_allow_html=True)
         for item in diff_dx:
-            name_clean = item.get("name", "").replace("▶", "").strip()
-            st.markdown(f'<div style="color: #7e22ce; font-weight:900; font-size: 1.05rem; padding-left: 5px; margin-top: 5px; margin-bottom: 4px;">⚖️ {html_escape(name_clean)}</div><div style="color: #334155; font-size: 0.95rem; line-height: 1.6; margin-bottom: 10px; padding-left: 20px;">- <span style="font-weight:800; color:#4c1d95;">구분점:</span> {html_escape(item.get("how_to_differentiate"))}</div>', unsafe_allow_html=True)
+            name_clean = item.get("name", "").replace("▶", "").replace("⚖️", "").strip()
+            st.markdown(f'<div style="color: #7e22ce; font-weight:900; font-size: 1.05rem; padding-left: 5px; margin-top: 5px; margin-bottom: 4px;">⚖️ {html_escape(name_clean)}</div><div style="color: #334155; font-size: 0.95rem; line-height: 1.6; margin-bottom: 10px; padding-left: 25px;">• <span style="font-weight:800; color:#4c1d95;">구분점:</span> {html_escape(item.get("how_to_differentiate"))}</div>', unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
 def render_case_list():
@@ -175,10 +159,9 @@ def render_case_list():
         raw_side = pat.get("side", "-")
         st.markdown(f'<div style="background-color: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 18px; margin-bottom: 20px; margin-top: 20px;"><div style="font-size: 1.15rem; font-weight: 900; color: #0f172a; margin-bottom: 12px;">👤 환자 기본 정보</div><div style="font-size: 0.95rem; color: #334155;"><b>연령/성별:</b> {pat.get("age")} / {pat.get("sex")} &nbsp;|&nbsp; <b>병변측:</b> {raw_side}</div><div style="font-size: 0.95rem; color: #1e293b; margin-top:10px; line-height: 1.6;"><b>주요 증상:</b><br/> {"<br/>".join(pat.get("symptoms", []))}</div></div>', unsafe_allow_html=True)
         
-        # 공통 안내 팁
         st.markdown(
             """<div style="background-color: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 12px; margin-bottom: 15px;">
-               <div style="font-size: 0.95rem; color: #b45309; font-weight: 800; line-height: 1.5;">💡 학습 팁: 아래 신경전도검사 및 침근전도검사 표는 주요 병변측(증상 발생 위치)을 중심으로 간략히 작성되었습니다.</div>
+               <div style="font-size: 0.95rem; color: #b45309; font-weight: 800; line-height: 1.5;">💡 학습 팁: 아래 신경전도 및 침근전도 표는 병변측(증상 발생 위치)의 주요 검사 결과를 요약한 것입니다.</div>
                </div>""", unsafe_allow_html=True)
                
         _render_physical_exam(pat)
@@ -220,12 +203,12 @@ def render_case_list():
         _render_teaching_result(case.get("teaching_diagnosis", {}), case.get("differential_diagnosis", []))
 
         st.markdown('<div style="margin-top:35px;">', unsafe_allow_html=True)
-        if st.button("🔄 다른 사례 분석", type="primary", use_container_width=True):
+        if st.button("🔄 처음으로 돌아가기", type="primary", use_container_width=True):
             st.session_state["case_reset_counter"] += 1
             st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
-    else:
-        render_bottom_navigation()
+    
+    render_bottom_navigation()
 
 def render_case_detail():
     st.session_state["screen"] = "case_list"
