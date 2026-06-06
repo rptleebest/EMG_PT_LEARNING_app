@@ -1,120 +1,643 @@
-# ui/input_learning.py
+def get_input_learning_report_language() -> str:
+    """
+    가상 검사결과표 출력 언어를 선택합니다.
 
-import streamlit as st
-from ui.navigation import render_bottom_navigation
-from formatters import html_escape, clean_html
-from data.virtual_reports import VIRTUAL_REPORTS, translate_value
+    기본값:
+    - 한글 신용어 모드
 
-def _value_class(value):
-    text = str(value)
-    if any(a in text for a in ["소실", "지연", "감소", "비정상적"]): return "text-red"
-    if any(n in text for n in ["정상", "침묵", "보존"]): return "text-blue"
-    return "text-normal"
+    선택값:
+    - 실제 검사결과표 영문 모드
+    """
+    if REPORT_LANG_KO in LANGUAGE_OPTIONS:
+        default_index = LANGUAGE_OPTIONS.index(REPORT_LANG_KO)
+    else:
+        default_index = 0
 
-def _render_mobile_table(headers, rows, table_id, to_eng):
-    translated_headers = [translate_value(h, to_eng) for h in headers]
+    selected_language = st.radio(
+        "검사결과표 출력 모드",
+        options=LANGUAGE_OPTIONS,
+        index=default_index,
+        horizontal=True,
+        key="input_learning_report_language_selector",
+        help=(
+            "가상 검사결과표는 기본적으로 한글 신용어 모드로 표시됩니다. "
+            "실제 임상 근전도 검사결과표에 가까운 형태가 필요하면 영문 모드를 선택하세요."
+        ),
+    )
+
+    return normalize_report_language(selected_language)
+
+
+def get_section_title(section_key: str, language: str) -> str:
+    """
+    검사결과표 섹션 제목을 언어 모드에 맞게 반환합니다.
+    """
+    language = normalize_report_language(language)
+
+    section_title_map = {
+        REPORT_LANG_KO: {
+            "sensory": "⚡ 감각신경전도검사",
+            "motor": "⚡ 운동신경전도검사",
+            "emg": "🪡 침근전도검사",
+        },
+        REPORT_LANG_EN: {
+            "sensory": "⚡ Sensory NCS",
+            "motor": "⚡ Motor NCS",
+            "emg": "🪡 Needle EMG",
+        },
+    }
+
+    return section_title_map.get(language, section_title_map[REPORT_LANG_KO]).get(
+        section_key,
+        section_key,
+    )
+
+
+def get_table_headers(section_key: str, language: str) -> list:
+    """
+    검사결과표 헤더를 언어 모드에 맞게 반환합니다.
+    """
+    language = normalize_report_language(language)
+
+    if section_key == "sensory":
+        headers = get_report_headers("sensory", language)
+        if headers:
+            return headers
+
+        if language == REPORT_LANG_EN:
+            return ["Nerve", "Amplitude", "Latency", "Interpretation"]
+
+        return ["검사 신경", "진폭 수치", "잠복기 수치", "판단"]
+
+    if section_key == "motor":
+        headers = get_report_headers("motor", language)
+        if headers:
+            return headers
+
+        if language == REPORT_LANG_EN:
+            return ["Nerve", "Stimulation site", "Amplitude", "Latency", "Interpretation"]
+
+        return ["검사 신경", "자극 위치", "진폭 수치", "잠복기 수치", "판단"]
+
+    if section_key == "emg":
+        headers = get_report_headers("emg", language)
+        if headers:
+            return headers
+
+        if language == REPORT_LANG_EN:
+            return ["Muscle", "Root", "Rest", "Volition", "Interpretation"]
+
+        return ["검사 근육", "해당 분절", "휴식 시 반응", "수의수축 시 반응", "판단"]
+
+    return []
+
+
+def convert_rows_for_language(rows: list, language: str) -> list:
+    """
+    검사결과표 행 데이터를 선택 언어에 맞게 변환합니다.
+
+    주의:
+    - 원본 VIRTUAL_REPORTS 데이터는 수정하지 않습니다.
+    - 출력 직전에만 변환합니다.
+    """
+    language = normalize_report_language(language)
+
+    if not rows:
+        return []
+
+    if language == REPORT_LANG_KO:
+        return rows
+
+    return translate_rows(rows, language)
+
+
+def convert_text_for_language(text: str, language: str) -> str:
+    """
+    단일 텍스트를 선택 언어에 맞게 변환합니다.
+
+    주로 검사표 내부의 짧은 용어 변환에 사용합니다.
+    긴 교육용 해석 문장은 한글 학습 효과를 위해 원문을 유지합니다.
+    """
+    language = normalize_report_language(language)
+
+    if language == REPORT_LANG_KO:
+        return str(text)
+
+    return translate_term(text, language)
+
+
+def is_emg_applicable_case(selected_case_name: str) -> bool:
+    """
+    선택된 가상 결과표에서 침근전도검사 표를 표시할지 판단합니다.
+
+    현재 업로드 데이터 기준:
+    - 눈꺼풀/눈깜빡반사 중심 사례는 침근전도검사 핵심 사례가 아님
+    - 뇌졸중 H-반사 사례도 침근전도검사 핵심 사례가 아님
+    """
+    excluded_keywords = [
+        "눈꺼풀",
+        "눈깜빡",
+        "눈깜박",
+        "뇌졸중",
+        "H-반사",
+        "H-reflex",
+    ]
+
+    for keyword in excluded_keywords:
+        if keyword in selected_case_name:
+            return False
+
+    return True
+
+
+def create_responsive_table(headers, rows, table_id):
+    """
+    모바일 대응형 HTML 표를 생성합니다.
+    """
     css = f"""
     <style>
-        #{table_id} {{ width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 0.9rem; }}
-        #{table_id} th {{ background-color: #f8fafc; padding: 10px; border: 1px solid #e2e8f0; color: #475569; font-weight: 700; text-align: center; }}
-        #{table_id} td {{ padding: 10px; border: 1px solid #e2e8f0; text-align: center; word-break: keep-all; font-weight: 400; color: #334155; }}
-        .text-red {{ color: #c2410c !important; font-weight: 600; background-color: #fff7ed; padding: 2px 6px; border-radius: 4px; }}
-        .text-blue {{ color: #1d4ed8 !important; font-weight: 600; background-color: #eff6ff; padding: 2px 6px; border-radius: 4px; }}
-        @media screen and (max-width: 700px) {{
-            #{table_id} thead {{ display: none; }}
-            #{table_id} tr {{ display: block; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 12px; padding: 8px; background-color: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }}
-            #{table_id} td {{ display: flex; justify-content: space-between; border: none; border-bottom: 1px solid #f8fafc; padding: 8px 10px; text-align: right; align-items: flex-start; gap: 10px; }}
-            #{table_id} td:last-child {{ border-bottom: none; }}
-            #{table_id} td::before {{ content: attr(data-label); font-weight: 700; color: #64748b; flex: 0 0 35%; text-align: left; font-size: 0.85rem; }}
-            #{table_id} td > span {{ flex: 1; text-align: right; }}
+        #{table_id} {{
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+            font-size: 0.86rem;
+        }}
+
+        #{table_id} th {{
+            background-color: #f1f5f9;
+            padding: 10px;
+            border-bottom: 2px solid #cbd5e1;
+            text-align: center;
+            color: #1e293b;
+            font-weight: 700;
+        }}
+
+        #{table_id} td {{
+            padding: 10px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: center;
+            color: #334155;
+            line-height: 1.5;
+            font-weight: 400;
+        }}
+
+        #{table_id} td.left-align {{
+            text-align: left;
+            font-weight: 600;
+            color: #1e3a8a;
+        }}
+
+        @media screen and (max-width: 768px) {{
+            #{table_id} thead {{
+                display: none;
+            }}
+
+            #{table_id} tr {{
+                display: block;
+                border: 1px solid #e2e8f0;
+                border-radius: 8px;
+                margin-bottom: 12px;
+                background: #ffffff;
+                padding: 6px;
+            }}
+
+            #{table_id} td {{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 12px;
+                border-bottom: 1px solid #f1f5f9;
+                padding: 8px 10px;
+                text-align: right;
+            }}
+
+            #{table_id} td:last-child {{
+                border-bottom: none;
+            }}
+
+            #{table_id} td::before {{
+                content: attr(data-label);
+                font-weight: 600;
+                color: #475569;
+                text-align: left;
+                font-size: 0.8rem;
+                flex: 0 0 38%;
+            }}
+
+            #{table_id} td > span {{
+                flex: 1;
+                text-align: right;
+                word-break: keep-all;
+                font-weight: 400;
+            }}
+
+            #{table_id} td.left-align {{
+                justify-content: center;
+                background: #f8fafc;
+                border-radius: 6px 6px 0 0;
+                text-align: center;
+                padding: 10px;
+            }}
+
+            #{table_id} td.left-align::before {{
+                content: none;
+            }}
+
+            #{table_id} td.left-align > span {{
+                text-align: center;
+                font-weight: 600;
+            }}
         }}
     </style>
     """
-    body = ""
+
+    tr_html = ""
+
     for row in rows:
-        cells = "".join([f'<td data-label="{translated_headers[i]}" class="{_value_class(translate_value(c, to_eng))}"><span>{html_escape(translate_value(c, to_eng))}</span></td>' for i, c in enumerate(row)])
-        body += f"<tr>{cells}</tr>"
-    return clean_html(css + f'<table id="{table_id}"><thead><tr>{"".join([f"<th>{h}</th>" for h in translated_headers])}</tr></thead><tbody>{body}</tbody></table>')
+        td_html = ""
 
-def _render_interpretation(report):
-    interp = report["interpretation"]
-    st.markdown('<div style="margin-top: 35px; padding-top: 20px; border-top: 2px dashed #cbd5e1;"><div style="font-weight: 700; font-size: 1.15rem; color: #1e293b; margin-bottom: 15px;">🔍 검사 결과 단계별 통합 해석</div>', unsafe_allow_html=True)
-    
-    configs = [
-        ("sensory", "1단계: 감각신경전도검사(SNAP) 해석", "#3b82f6", "#eff6ff"),
-        ("motor", "2단계: 운동신경전도검사(CMAP) 해석", "#10b981", "#f0fdf4"),
-        ("emg", "3단계: 침근전도검사(Needle EMG) 해석", "#f59e0b", "#fffbeb"),
-        ("reflex", "4단계: 특수 및 반사검사 해석", "#8b5cf6", "#faf5ff")
-    ]
-    
-    for key, label, c1, c2 in configs:
-        items = interp.get(key, [])
-        if items:
-            st.markdown(f'<div style="border-left: 5px solid {c1}; background-color: {c2}; padding: 10px 14px; font-weight: 700; font-size: 1rem; color: #1e293b; margin-bottom: 10px; border-radius: 0 8px 8px 0;">{label}</div>', unsafe_allow_html=True)
-            for t in items:
-                st.markdown(f'<div style="color: #475569; font-size: 0.95rem; line-height: 1.65; margin-bottom: 8px; padding-left: 12px; word-break: keep-all; font-weight: 400;">• {html_escape(t)}</div>', unsafe_allow_html=True)
-            st.markdown("<div style='height:6px;'></div>", unsafe_allow_html=True)
+        for idx, col in enumerate(row):
+            col = str(col)
+            cls = "left-align" if idx == 0 else ""
+            color_style = ""
 
-    st.markdown('<div style="border-left: 5px solid #dc2626; background-color: #fef2f2; padding: 10px 14px; font-weight: 700; font-size: 1rem; color: #991b1b; margin-top: 10px; margin-bottom: 12px; border-radius: 0 8px 8px 0;">최종 검사결과 추정 질환</div>', unsafe_allow_html=True)
-    for t in interp.get("integration", []):
-        if "추정 질환" in t or "추정 진단" in t:
-            st.markdown(f'<div style="color: #dc2626; font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; padding-left: 5px;">🎯 {html_escape(t)}</div>', unsafe_allow_html=True)
-        else:
-            st.markdown(f'<div style="color: #334155; font-size: 0.95rem; line-height: 1.65; margin-bottom: 8px; padding-left: 5px; word-break: keep-all; font-weight: 400;">💡 {html_escape(t)}</div>', unsafe_allow_html=True)
-            
-    if interp.get("differential"):
-        st.markdown('<div style="border-left: 5px solid #6366f1; background-color: #f5f3ff; padding: 10px 14px; font-weight: 700; font-size: 1rem; color: #4338ca; margin-top: 25px; border-radius: 0 8px 8px 0;">⚖️ 감별진단 가이드</div>', unsafe_allow_html=True)
-        for item in interp.get("differential"):
-            item_clean = item.replace("▶", "").strip()
-            if ":" in item_clean:
-                name, desc = item_clean.split(":", 1)
-                st.markdown(f'<div style="color: #4338ca; font-weight: 700; font-size: 0.95rem; margin-top: 10px; padding-left: 5px;">{html_escape(name.strip())}</div><div style="color: #475569; font-size: 0.9rem; line-height: 1.6; margin-bottom: 10px; padding-left: 15px; font-weight: 400;">• {html_escape(desc.strip())}</div>', unsafe_allow_html=True)
+            if idx == len(row) - 1:
+                if "정상" in col and "비정상" not in col:
+                    color_style = "color: #15803d; font-weight: 600;"
+                elif any(
+                    abnormal_word in col
+                    for abnormal_word in [
+                        "비정상",
+                        "침범",
+                        "확진",
+                        "마비",
+                        "소실",
+                        "감소",
+                        "지연",
+                        "전도차단",
+                        "Conduction block",
+                        "Absent",
+                        "Reduced",
+                        "Delayed",
+                        "Abnormal",
+                        "Gilliatt-Sumner",
+                    ]
+                ):
+                    color_style = "color: #991b1b; font-weight: 600;"
+
+            if idx < len(headers):
+                header_label = headers[idx]
             else:
-                st.markdown(f'<div style="color: #475569; font-size: 0.95rem; padding-left: 15px; font-weight: 400;">• {html_escape(item_clean)}</div>', unsafe_allow_html=True)
-                
+                header_label = ""
+
+            formatted_col = col.replace(" / ", "<br/>")
+
+            td_html += (
+                f"<td data-label='{header_label}' class='{cls}' style='{color_style}'>"
+                f"<span>{formatted_col}</span>"
+                f"</td>"
+            )
+
+        tr_html += f"<tr>{td_html}</tr>"
+
+    header_html = "".join([f"<th>{header}</th>" for header in headers])
+
+    return (
+        f"{css}"
+        f"<table id='{table_id}'>"
+        f"<thead><tr>{header_html}</tr></thead>"
+        f"<tbody>{tr_html}</tbody>"
+        f"</table>"
+    )
+
+
+def render_patient_info(selected_case_name: str, data: dict) -> None:
+    """
+    선택된 가상 결과표의 환자 정보를 출력합니다.
+    """
+    info = data.get("info", {})
+
+    age = info.get("age", "")
+    sex = info.get("sex", "")
+    side = info.get("side", "")
+    symptom = info.get("symptom", "")
+
+    st.markdown('<div class="info-card">', unsafe_allow_html=True)
+
+    st.markdown(
+        f'<div class="case-title-mobile">👤 환자 사례: {selected_case_name}</div>',
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(
+        (
+            '<div class="case-subtitle-mobile">'
+            f'<span class="label-strong">연령/성별:</span> '
+            f'<span class="result-value">{age}세 / {sex}</span>'
+            '&nbsp;|&nbsp;'
+            f'<span class="label-strong">병변측:</span> '
+            f'<span class="result-value">{side}</span>'
+            '</div>'
+        ),
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(
+        (
+            '<div class="case-text-block" style="margin-top:10px;">'
+            '<span class="label-strong">주요 임상 증상:</span> '
+            f'<span class="result-value">{symptom}</span>'
+            '</div>'
+        ),
+        unsafe_allow_html=True,
+    )
+
     st.markdown("</div>", unsafe_allow_html=True)
 
-def render_input_learning():
-    st.markdown('<div style="font-size: 1.5rem; font-weight: 700; color: #0f172a; margin-bottom: 1.2rem;">📊 가상 결과표 판독 학습</div>', unsafe_allow_html=True)
-    if "input_reset_counter" not in st.session_state: st.session_state["input_reset_counter"] = 0
-    selected = st.radio("가상 결과표 선택", ["선택 안 함"] + list(VIRTUAL_REPORTS.keys()), key=f"inp_{st.session_state['input_reset_counter']}", label_visibility="collapsed")
-    
-    if selected != "선택 안 함":
-        report = VIRTUAL_REPORTS[selected]
-        
-        st.markdown('<div style="margin-top:15px; margin-bottom: 10px; font-weight: 700; color: #1e293b; font-size: 1.05rem;">🌐 결과표 언어 모드 변경</div>', unsafe_allow_html=True)
-        to_eng = (st.radio("모드", ["🇰🇷 한글 (기초 개념학습용)", "🇺🇸 영문 (임상 실전용)"], horizontal=True, label_visibility="collapsed") == "🇺🇸 영문 (임상 실전용)")
-        
-        meta = report["meta"]
-        st.markdown(f'<div style="background-color: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 18px; margin-top: 15px;"><div style="font-size: 1.05rem; font-weight: 700; color: #1e293b; margin-bottom: 8px;">👤 환자 기본 정보</div><div style="font-weight: 400; color: #475569; font-size: 0.95rem; line-height: 1.6;"><b>연령/성별:</b> {html_escape(str(meta.get("age", "-")))} / {html_escape(translate_value(meta.get("sex", "-"), to_eng))} | <b>병변측:</b> {html_escape(translate_value(meta.get("side", "-"), to_eng))}<br/><br/><b>주요 증상:</b> {html_escape(meta.get("chief", ""))}</div></div>', unsafe_allow_html=True)
 
-        st.markdown('<div style="background-color: #fffbeb; border: 1px solid #fde68a; border-radius: 6px; padding: 12px; margin-top: 20px; color: #b45309; font-size: 0.9rem; font-weight: 600;">💡 학습 팁: 아래 표는 병변측의 주요 검사 결과를 간략히 요약한 것입니다.</div>', unsafe_allow_html=True)
+def render_virtual_report_tables(data: dict, selected_case_name: str, language: str) -> None:
+    """
+    선택된 가상 검사결과표의 NCS/EMG 표를 출력합니다.
+    """
+    language = normalize_report_language(language)
+    info = data.get("info", {})
+    side = info.get("side", "")
 
-        if report.get("sensory_ncs"):
-            st.markdown('<div style="font-weight: 700; color:#1e40af; font-size: 1.05rem; margin-top: 25px; margin-bottom: 8px;">⚡ 감각신경전도검사 (SNAP)</div>', unsafe_allow_html=True)
-            rows = [[r["nerve"], r["side"], r["recording"], r["stimulation"], r["amplitude"], r["latency"], r["velocity"]] for r in report["sensory_ncs"]]
-            st.markdown(_render_mobile_table(["검사 신경", "측", "기록 위치", "자극 위치", "진폭", "잠복기", "전도속도"], rows, "snc", to_eng), unsafe_allow_html=True)
+    ncs_sensory_rows = convert_rows_for_language(data.get("ncs_sensory", []), language)
+    ncs_motor_rows = convert_rows_for_language(data.get("ncs_motor", []), language)
+    emg_rows = convert_rows_for_language(data.get("emg", []), language)
 
-        if report.get("motor_ncs"):
-            st.markdown('<div style="font-weight: 700; color:#166534; font-size: 1.05rem; margin-top: 25px; margin-bottom: 8px;">⚡ 운동신경전도검사 (CMAP)</div>', unsafe_allow_html=True)
-            rows = [[r["nerve"], r["side"], r["recording"], r["stimulation"], r["amplitude"], r["latency"], r["velocity"]] for r in report["motor_ncs"]]
-            st.markdown(_render_mobile_table(["검사 신경", "측", "기록 근육", "자극 위치", "진폭", "잠복기", "전도속도"], rows, "mnc", to_eng), unsafe_allow_html=True)
+    sensory_headers = get_table_headers("sensory", language)
+    motor_headers = get_table_headers("motor", language)
+    emg_headers = get_table_headers("emg", language)
 
-        if report.get("needle_emg"):
-            st.markdown('<div style="font-weight: 700; color:#9a3412; font-size: 1.05rem; margin-top: 25px; margin-bottom: 8px;">🪡 침근전도검사 (Needle EMG)</div>', unsafe_allow_html=True)
-            rows = [[r["muscle"], r["root"], r["nerve"], r["rest"], r["volition"]] for r in report["needle_emg"]]
-            st.markdown(_render_mobile_table(["검사 근육", "분절", "말초신경", "휴식 시 반응", "자발적 근수축 시 반응"], rows, "emg", to_eng), unsafe_allow_html=True)
+    sensory_title = get_section_title("sensory", language)
+    motor_title = get_section_title("motor", language)
+    emg_title = get_section_title("emg", language)
 
-        if report.get("late_response"):
-            st.markdown('<div style="font-weight: 700; color:#6b21a8; font-size: 1.05rem; margin-top: 25px; margin-bottom: 8px;">⏱️ 특수 및 반사 검사</div>', unsafe_allow_html=True)
-            rows = [[r["test"], r["side"], r["latency"], r["amplitude"]] for r in report["late_response"]]
-            st.markdown(_render_mobile_table(["검사 항목", "측", "잠복기", "진폭"], rows, "late", to_eng), unsafe_allow_html=True)
-
-        _render_interpretation(report)
-        
-        st.markdown("<div style='margin-top:40px;'></div>", unsafe_allow_html=True)
-        if st.button("🔄 다른 결과표 학습하기", type="primary", use_container_width=True):
-            st.session_state["input_reset_counter"] += 1
-            st.rerun()
+    if language == REPORT_LANG_EN:
+        report_label = "EMG Report Result Table"
+        side_label = "Involved side"
     else:
-        render_bottom_navigation()
+        report_label = "근전도 결과표"
+        side_label = "병변측"
+
+    st.markdown('<div class="section-card">', unsafe_allow_html=True)
+
+    st.markdown(
+        (
+            f'<div class="case-section-label">📋 {report_label} '
+            f'(NCS & Needle EMG): {side_label} ({side})</div>'
+        ),
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(
+        f'<div class="finding-highlight">{sensory_title}</div>',
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        create_responsive_table(
+            sensory_headers,
+            ncs_sensory_rows,
+            "sensory_tbl",
+        ),
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(
+        f'<div class="finding-highlight">{motor_title}</div>',
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        create_responsive_table(
+            motor_headers,
+            ncs_motor_rows,
+            "motor_tbl",
+        ),
+        unsafe_allow_html=True,
+    )
+
+    if is_emg_applicable_case(selected_case_name):
+        st.markdown(
+            f'<div class="finding-highlight">{emg_title}</div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            create_responsive_table(
+                emg_headers,
+                emg_rows,
+                "emg_tbl",
+            ),
+            unsafe_allow_html=True,
+        )
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
+
+def render_interpretation_result(data: dict, selected_case_name: str) -> None:
+    """
+    선택된 가상 검사결과표의 임상 추론 및 생리학적 해석을 출력합니다.
+
+    설명 영역은 교육 목적이므로 한글 중심으로 유지합니다.
+    """
+    diagnosis = data.get("diagnosis", "")
+    interpretation = data.get("interpretation", [])
+    emg_meaning = data.get("emg_meaning", [])
+    ddx = data.get("ddx", "")
+
+    st.markdown('<div class="result-card">', unsafe_allow_html=True)
+
+    st.markdown(
+        '<div class="result-title">✅ 임상 추론 및 생리학적 해석 결과</div>',
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(
+        (
+            '<div class="case-text-block" '
+            'style="background:#fff1f2!important; border-left-color:#fecdd3!important;">'
+            '<span class="label-strong text-red">최종 교육용 진단:</span> '
+            f'<span class="result-value text-red" style="font-weight:700!important;">{diagnosis}</span>'
+            '</div>'
+        ),
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(
+        '<div class="result-label">🧠 데이터 해석 논리</div>',
+        unsafe_allow_html=True,
+    )
+
+    for item in interpretation:
+        st.markdown(
+            f'<div class="finding-subtext">• {item}</div>',
+            unsafe_allow_html=True,
+        )
+
+    if is_emg_applicable_case(selected_case_name):
+        st.markdown(
+            (
+                '<div class="result-label" '
+                'style="border-left-color:#d97706!important; background:#fffbeb!important;">'
+                '🔬 침근전도 소견 생리학적 의미'
+                '</div>'
+            ),
+            unsafe_allow_html=True,
+        )
+
+        for meaning in emg_meaning:
+            parts = meaning.split(":", 1)
+
+            if len(parts) == 2:
+                st.markdown(
+                    (
+                        '<div class="finding-subtext">'
+                        f'<span class="label-strong text-blue">{parts[0]}:</span>'
+                        f'<span class="result-value">{parts[1]}</span>'
+                        '</div>'
+                    ),
+                    unsafe_allow_html=True,
+                )
+            else:
+                st.markdown(
+                    f'<div class="finding-subtext">• {meaning}</div>',
+                    unsafe_allow_html=True,
+                )
+
+    st.markdown(
+        (
+            '<div class="result-label" '
+            'style="border-left-color:#9333ea!important; background:#fdf4ff!important;">'
+            '🧭 감별 진단 및 추가 검사'
+            '</div>'
+        ),
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(
+        f'<div class="finding-subtext">• {ddx}</div>',
+        unsafe_allow_html=True,
+    )
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
+
+def render_reset_button() -> None:
+    """
+    다른 결과 분석 버튼을 출력합니다.
+    """
+    st.markdown(
+        '<div style="text-align: center; margin-top: 20px; margin-bottom: 20px;">',
+        unsafe_allow_html=True,
+    )
+
+    if st.button(
+        "🔄 다른 결과 분석",
+        type="secondary",
+        key="reset_input_report_btn",
+    ):
+        st.session_state["input_reset_counter"] += 1
+        st.rerun()
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
+
+def render_input_learning():
+    """
+    가상 검사결과표 판독학습 화면을 렌더링합니다.
+
+    이 화면은 근전도 해석 및 보조 진단 앱의 두 번째 축인
+    '가상 검사결과표 해석 모드'에 해당합니다.
+    """
+    st.markdown(
+        '<div class="main-title">가상 결과표 판독학습</div>',
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(
+        (
+            '<div class="subtle">'
+            '임상 수치 데이터 기반의 가상 결과지를 통해 전기생리학적 해석 논리를 훈련합니다.'
+            '</div>'
+        ),
+        unsafe_allow_html=True,
+    )
+
+    if "input_reset_counter" not in st.session_state:
+        st.session_state["input_reset_counter"] = 0
+
+    st.markdown('<div class="section-card">', unsafe_allow_html=True)
+
+    st.markdown(
+        '<div class="case-section-label">🌐 검사결과표 표시 방식 선택</div>',
+        unsafe_allow_html=True,
+    )
+
+    selected_language = get_input_learning_report_language()
+
+    if selected_language == REPORT_LANG_EN:
+        st.caption(
+            "현재 검사결과표는 실제 임상 EMG report에 가까운 영문 모드로 표시됩니다. "
+            "해석 설명은 학습 목적상 한글 중심으로 유지됩니다."
+        )
+    else:
+        st.caption(
+            "현재 검사결과표는 한글 신용어 기본 모드로 표시됩니다."
+        )
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    dynamic_radio_key = f"input_report_selector_{st.session_state['input_reset_counter']}"
+
+    st.markdown('<div class="section-card">', unsafe_allow_html=True)
+
+    st.markdown(
+        '<div class="case-section-label">📋 학습할 가상 결과지 선택 (실시간 판독형)</div>',
+        unsafe_allow_html=True,
+    )
+
+    case_names = ["선택 안 함"] + list(VIRTUAL_REPORTS.keys())
+
+    selected = st.radio(
+        "가상 결과지 리스트",
+        case_names,
+        key=dynamic_radio_key,
+        label_visibility="collapsed",
+    )
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    if selected != "선택 안 함":
+        data = VIRTUAL_REPORTS[selected]
+
+        render_patient_info(
+            selected_case_name=selected,
+            data=data,
+        )
+
+        render_virtual_report_tables(
+            data=data,
+            selected_case_name=selected,
+            language=selected_language,
+        )
+
+        render_interpretation_result(
+            data=data,
+            selected_case_name=selected,
+        )
+
+        render_reset_button()
+
+    render_bottom_navigation()
+
+
+def app():
+    """
+    외부 라우터에서 app() 형태로 호출할 수 있도록 제공하는 진입점입니다.
+    """
+    render_input_learning()
+
+
+if __name__ == "__main__":
+    render_input_learning()
