@@ -1,243 +1,226 @@
 # data/virtual_reports.py
 
-ENG_MAP = {
-    "검사 신경": "Nerve", "측": "Side", "기록 위치": "Recording Site", "자극 위치": "Stimulation Site",
-    "진폭": "Amplitude", "잠복기": "Latency", "전도속도": "Conduction Velocity",
-    "기록 근육": "Recording Muscle", "검사 항목": "Test Parameter", "검사 근육": "Muscle",
-    "분절": "Segment", "말초신경": "Peripheral Nerve", "휴식 시 반응": "Resting Activity", "자발적 근수축 시 반응": "Voluntary MU Recruitment",
-    "오른쪽": "Rt.", "왼쪽": "Lt.", "양측": "Both",
-    "정중신경 SNAP": "Median SNAP", "자신경 SNAP": "Ulnar SNAP", "노신경 SNAP": "Radial SNAP", 
-    "얕은종아리 SNAP": "Superficial Peroneal SNAP", "장딴지신경 SNAP": "Sural SNAP", 
-    "가쪽아래팔피부신경 SNAP": "Lat. Antebrachial Cutaneous SNAP",
-    "정중신경 CMAP": "Median CMAP", "자신경 CMAP": "Ulnar CMAP", "노신경 CMAP": "Radial CMAP", 
-    "종아리 CMAP": "Peroneal CMAP", "종아리신경 CMAP": "Peroneal CMAP", "정강신경 CMAP": "Tibial CMAP", 
-    "겨드랑신경 CMAP": "Axillary CMAP", "근육피부신경 CMAP": "Musculocutaneous CMAP", "얼굴신경 CMAP": "Facial CMAP",
-    "정강신경 F파(Tibial F-wave)": "Tibial F-wave", "H-반사(H-reflex)": "H-reflex", "H/M 비율": "H/M Ratio",
-    "눈깜빡반사 오른쪽 자극-오른쪽 R1": "Blink Reflex Rt Stim - Rt R1", "눈깜빡반사 오른쪽 자극-오른쪽 R2": "Blink Reflex Rt Stim - Rt R2",
-    "눈깜빡반사 오른쪽 자극-왼쪽 R2": "Blink Reflex Rt Stim - Lt R2", "눈깜빡반사 왼쪽 자극-왼쪽 R1": "Blink Reflex Lt Stim - Lt R1",
-    "눈깜빡반사 왼쪽 자극-왼쪽 R2": "Blink Reflex Lt Stim - Lt R2", "눈깜빡반사 왼쪽 자극-오른쪽 R2": "Blink Reflex Lt Stim - Rt R2",
-    "짧은엄지벌림근": "APB", "첫째등쪽뼈사이근": "FDI", "목 척추주위근": "Cervical Paraspinal", "위팔두갈래근": "Biceps",
-    "노쪽손목폄근": "ECR", "어깨세모근": "Deltoid", "앞정강근": "Tibialis Anterior", "긴종아리근": "Peroneus Longus",
-    "가자미근": "Soleus", "허리 척추주위근": "Lumbar Paraspinal", "긴엄지폄근": "EHL", "중간볼기근": "Gluteus Medius",
-    "가쪽넓은근": "Vastus Lateralis", "새끼벌림근": "ADM", "짧은발가락폄근": "EDB", "엄지벌림근": "AH",
-    "눈둘레근": "Orbicularis Oculi", "정중신경": "Median Nerve", "자신경": "Ulnar Nerve", "노신경": "Radial Nerve",
-    "근육피부": "Musculocutaneous Nerve", "겨드랑": "Axillary Nerve", "뒤가지": "Posterior Ramus", 
-    "깊은종아리": "Deep Peroneal Nerve", "얕은종아리": "Superficial Peroneal Nerve", "정강신경": "Tibial Nerve",
-    "위볼기": "Superior Gluteal Nerve", "넓적다리": "Femoral Nerve", "반응 소실": "No Response", "소실": "Absent", 
-    "지연": "Delayed", "감소": "Reduced", "정상 범위": "Normal Range", "보존": "Preserved", 
-    "통증/협조 부족으로 검사 제한": "Limited by Pain/Coop", "전기적 침묵 (정상 반응)": "Silent at rest", 
-    "비정상적 자발전위 출현": "Abnormal spontaneous activity", "정상 운동단위 동원패턴": "Normal MU recruitment", 
-    "감소된 운동단위 동원패턴": "Reduced MU recruitment", "증가된 운동단위 동원패턴": "Giant MUAPs"
+"""
+가상근전도검사표와 실제 근전도 검사표를 함께 출력하기 위한 데이터 및 변환 도구.
+
+핵심 기능:
+- 기본 모드는 한글 신용어 가상근전도검사표
+- 선택 모드는 실제 검사표 영문 출력
+- 표 출력 시 누락 없이 동일한 구조 유지
+- 기존 사례 데이터를 건드리지 않고 출력 문자열만 변환
+"""
+
+from data.report_terms import (
+    REPORT_LANG_KO,
+    REPORT_LANG_EN,
+    LANGUAGE_OPTIONS,
+    normalize_report_language,
+    translate_term,
+    translate_row,
+    translate_rows,
+    get_report_headers,
+)
+
+# ------------------------------------------------------------
+# 공용 표시 문자열
+# ------------------------------------------------------------
+REPORT_TITLE_KO = "가상근전도검사표"
+REPORT_TITLE_EN = "Virtual EMG Report"
+
+REPORT_SUBTITLE_KO = "한글 신용어 기본 모드"
+REPORT_SUBTITLE_EN = "English mode for actual EMG report"
+
+REPORT_MODE_DEFAULT = REPORT_LANG_KO
+REPORT_MODE_ENGLISH = REPORT_LANG_EN
+
+
+# ------------------------------------------------------------
+# 검사표 구조 템플릿
+# ------------------------------------------------------------
+REPORT_SECTIONS = ["sensory", "motor", "emg"]
+
+
+# ------------------------------------------------------------
+# 가상 검사표 샘플 데이터
+# - UI에서 사례별로 불러와 출력할 때 쓰는 표 구조 예시
+# - 실제 값은 data.cases.CASE_LIBRARY를 기반으로 조합될 수 있음
+# ------------------------------------------------------------
+VIRTUAL_REPORT_TEMPLATE = {
+    "sensory": [
+        ["정중신경", "정상 범위", "정상", "정상"],
+        ["자신경", "정상 범위", "정상", "정상"],
+        ["노신경", "정상 범위", "정상", "정상"],
+    ],
+    "motor": [
+        ["정중신경", "손목", "정상", "정상", "정상"],
+        ["자신경", "팔꿈치", "정상", "정상", "정상"],
+        ["노신경", "팔꿈치", "정상", "정상", "정상"],
+        ["정강신경", "발목", "정상", "정상", "정상"],
+        ["종아리신경", "종아리뼈머리", "정상", "정상", "정상"],
+    ],
+    "emg": [
+        ["짧은엄지벌림근", "손목굴", "정상", "정상", "정상"],
+        ["첫째등쪽뼈사이근", "자경부위", "정상", "정상", "정상"],
+        ["앞정강근", "허리 4-5", "정상", "정상", "정상"],
+        ["긴엄지폄근", "허리 5", "정상", "정상", "정상"],
+    ],
 }
 
-def translate_value(value, to_english=False):
-    if value is None: return ""
-    text = str(value).strip()
-    return ENG_MAP.get(text, text) if to_english else text
 
-VIRTUAL_REPORTS = {
-    "오른쪽 손목굴증후군 의심 결과표": {
-        "meta": {"age": 52, "sex": "여성", "side": "오른쪽", "chief": "오른쪽 엄지~중지 저림, 야간 통증으로 잠에서 깸."},
-        "sensory_ncs": [
-            {"nerve": "정중신경 SNAP", "side": "오른쪽", "recording": "검지", "stimulation": "손목", "amplitude": "7 μV", "latency": "4.6 ms", "velocity": "32 m/s"},
-            {"nerve": "정중신경 SNAP", "side": "왼쪽", "recording": "검지", "stimulation": "손목", "amplitude": "24 μV", "latency": "2.8 ms", "velocity": "51 m/s"},
-            {"nerve": "자신경 SNAP", "side": "오른쪽", "recording": "새끼손가락", "stimulation": "손목", "amplitude": "23 μV", "latency": "2.6 ms", "velocity": "54 m/s"}
-        ],
-        "motor_ncs": [
-            {"nerve": "정중신경 CMAP", "side": "오른쪽", "recording": "APB", "stimulation": "손목", "amplitude": "3.0 mV", "latency": "5.8 ms", "velocity": "-"}
-        ],
-        "needle_emg": [
-            {"muscle": "짧은엄지벌림근", "root": "C8-T1", "nerve": "정중신경", "rest": "비정상적 자발전위 출현", "volition": "감소된 운동단위 동원패턴"},
-            {"muscle": "목 척추주위근", "root": "C6-C7", "nerve": "뒤가지", "rest": "전기적 침묵 (정상 반응)", "volition": "통증/협조 부족으로 검사 제한"}
-        ],
-        "interpretation": {
-            "sensory": ["오른쪽 정중신경 감각 진폭이 현저히 감소하고 잠복기가 지연되었습니다. 이는 손목 부위의 감각 축삭 손상을 의미합니다."],
-            "motor": ["운동 원위잠복기가 5.8 ms로 뚜렷하게 지연되어 손목 구간의 국소 전도 지연을 입증합니다."],
-            "emg": ["짧은엄지벌림근에서 비정상 자발전위가 확인되며 척추주위근은 정상입니다."],
-            "integration": ["추정 질환: 오른쪽 손목굴증후군 (Carpal tunnel syndrome)"]
-        }
-    },
-    "왼쪽 C6 신경뿌리병증 의심 결과표": {
-        "meta": {"age": 45, "sex": "남성", "side": "왼쪽", "chief": "뒷목에서 왼쪽 어깨 및 엄지로 뻗치는 방사통."},
-        "sensory_ncs": [
-            {"nerve": "정중신경 SNAP", "side": "왼쪽", "recording": "검지", "stimulation": "손목", "amplitude": "26 μV", "latency": "2.9 ms", "velocity": "52 m/s"},
-            {"nerve": "노신경 SNAP", "side": "왼쪽", "recording": "손등 노쪽", "stimulation": "아래팔", "amplitude": "21 μV", "latency": "2.5 ms", "velocity": "53 m/s"}
-        ],
-        "motor_ncs": [
-            {"nerve": "정중신경 CMAP", "side": "왼쪽", "recording": "APB", "stimulation": "손목", "amplitude": "8.6 mV", "latency": "3.5 ms", "velocity": "-"}
-        ],
-        "needle_emg": [
-            {"muscle": "위팔두갈래근", "root": "C5-C6", "nerve": "근육피부", "rest": "비정상적 자발전위 출현", "volition": "감소된 운동단위 동원패턴"},
-            {"muscle": "목 척추주위근", "root": "C6", "nerve": "뒤가지", "rest": "비정상적 자발전위 출현", "volition": "정상 운동단위 동원패턴"}
-        ],
-        "interpretation": {
-            "sensory": ["하지 및 상지 말초 감각전도가 대칭적으로 완벽하게 보존되어 있습니다. 이는 병변이 DRG 몸쪽임을 시사합니다."],
-            "motor": ["말초 운동신경의 속도 및 잠복기는 정상 범위 내에 있습니다."],
-            "emg": ["목 척추주위근과 C6 지배 근육에서 동시 탈신경 소견이 관찰됩니다."],
-            "integration": ["추정 질환: 왼쪽 C6 목 신경뿌리병증"]
-        }
-    },
-    "오른쪽 온종아리신경병증 의심 결과표": {
-        "meta": {"age": 41, "sex": "남성", "side": "오른쪽", "chief": "석고붕대 제거 직후 발견된 우측 발처짐."},
-        "sensory_ncs": [
-            {"nerve": "얕은종아리 SNAP", "side": "오른쪽", "recording": "발등", "stimulation": "종아리", "amplitude": "4 μV", "latency": "3.6 ms", "velocity": "36 m/s"}
-        ],
-        "motor_ncs": [
-            {"nerve": "종아리 CMAP", "side": "오른쪽", "recording": "EDB", "stimulation": "발목", "amplitude": "4.4 mV", "latency": "4.1 ms", "velocity": "-"},
-            {"nerve": "종아리 CMAP", "side": "오른쪽", "recording": "EDB", "stimulation": "무릎 위", "amplitude": "1.5 mV", "latency": "12.8 ms", "velocity": "25 m/s"}
-        ],
-        "needle_emg": [
-            {"muscle": "앞정강근", "root": "L4-L5", "nerve": "깊은종아리", "rest": "비정상적 자발전위 출현", "volition": "감소된 운동단위 동원패턴"}
-        ],
-        "interpretation": {
-            "sensory": ["우측 얕은종아리신경 SNAP 진폭이 크게 감소하여 먼쪽 말초 축삭 손상을 보여줍니다."],
-            "motor": ["무릎 위/아래 비교 시 진폭이 급감하는 국소 전도차단 소견이 뚜렷합니다."],
-            "emg": ["앞정강근에서 활동성 탈신경 소견이 확인됩니다."],
-            "integration": ["추정 질환: 오른쪽 온종아리신경병증"]
-        }
-    },
-    "왼쪽 L5 신경뿌리병증 의심 결과표": {
-        "meta": {"age": 58, "sex": "여성", "side": "왼쪽", "chief": "무거운 물건을 든 후 발생한 좌측 하지 방사통과 발처짐."},
-        "sensory_ncs": [
-            {"nerve": "얕은종아리 SNAP", "side": "왼쪽", "recording": "발등", "stimulation": "종아리", "amplitude": "13 μV", "latency": "2.9 ms", "velocity": "47 m/s"}
-        ],
-        "motor_ncs": [
-            {"nerve": "종아리 CMAP", "side": "왼쪽", "recording": "EDB", "stimulation": "발목", "amplitude": "3.9 mV", "latency": "4.5 ms", "velocity": "-"}
-        ],
-        "needle_emg": [
-            {"muscle": "중간볼기근", "root": "L5", "nerve": "위볼기", "rest": "비정상적 자발전위 출현", "volition": "감소된 운동단위 동원패턴"},
-            {"muscle": "허리 척추주위근", "root": "L5", "nerve": "뒤가지", "rest": "비정상적 자발전위 출현", "volition": "통증/협조 부족으로 검사 제한"}
-        ],
-        "interpretation": {
-            "sensory": ["하지 감각전도가 보존되어 병변이 신경뿌리 수준임을 지지합니다."],
-            "motor": ["말초 운동신경의 국소적 압박 징후는 관찰되지 않습니다."],
-            "emg": ["L5 지배 근육과 허리 척추주위근에서 동시에 비정상 자발전위가 출현합니다."],
-            "integration": ["추정 질환: 왼쪽 L5 허리 신경뿌리병증"]
-        }
-    },
-    "오른쪽 노신경병증 의심 결과표": {
-        "meta": {"age": 31, "sex": "남성", "side": "오른쪽", "chief": "음주 후 팔을 걸치고 잠든 뒤 발생한 손목처짐."},
-        "sensory_ncs": [
-            {"nerve": "노신경 SNAP", "side": "오른쪽", "recording": "손등", "stimulation": "아래팔", "amplitude": "4 μV", "latency": "3.5 ms", "velocity": "42 m/s"}
-        ],
-        "motor_ncs": [
-            {"nerve": "노신경 CMAP", "side": "오른쪽", "recording": "ECR", "stimulation": "아래팔", "amplitude": "4.5 mV", "latency": "2.8 ms", "velocity": "-"},
-            {"nerve": "노신경 CMAP", "side": "오른쪽", "recording": "ECR", "stimulation": "위팔", "amplitude": "1.2 mV", "latency": "6.8 ms", "velocity": "38 m/s"}
-        ],
-        "needle_emg": [
-            {"muscle": "노쪽손목폄근", "root": "C6-C7", "nerve": "노신경", "rest": "비정상적 자발전위 출현", "volition": "감소된 운동단위 동원패턴"}
-        ],
-        "interpretation": {
-            "sensory": ["표재노신경 SNAP 진폭 감소는 병변이 먼쪽 말초 축삭 손상임을 시사합니다."],
-            "motor": ["나선고랑 부위 자극 시 진폭이 급감하는 명확한 전도차단이 관찰됩니다."],
-            "emg": ["노쪽손목폄근의 활동성 탈신경 소견이 확인됩니다."],
-            "integration": ["추정 질환: 위팔뼈 나선고랑 노신경병증"]
-        }
-    },
-    "왼쪽 팔꿈치굴증후군 의심 결과표": {
-        "meta": {"age": 39, "sex": "여성", "side": "왼쪽", "chief": "장시간 요리사로 일하며 발생한 4, 5지 저림과 내재근 약화."},
-        "sensory_ncs": [
-            {"nerve": "자신경 SNAP", "side": "왼쪽", "recording": "새끼손가락", "stimulation": "손목", "amplitude": "5 μV", "latency": "3.6 ms", "velocity": "37 m/s"}
-        ],
-        "motor_ncs": [
-            {"nerve": "자신경 CMAP", "side": "왼쪽", "recording": "ADM", "stimulation": "손목", "amplitude": "7.1 mV", "latency": "2.6 ms", "velocity": "-"},
-            {"nerve": "자신경 CMAP", "side": "왼쪽", "recording": "ADM", "stimulation": "팔꿈치 위", "amplitude": "3.5 mV", "latency": "8.8 ms", "velocity": "34 m/s"}
-        ],
-        "needle_emg": [
-            {"muscle": "새끼벌림근", "root": "C8-T1", "nerve": "자신경", "rest": "비정상적 자발전위 출현", "volition": "감소된 운동단위 동원패턴"}
-        ],
-        "interpretation": {
-            "sensory": ["자신경 감각신경 진폭이 감소하고 잠복기가 지연되었습니다."],
-            "motor": ["팔꿈치 위 자극 시 CMAP 진폭이 절반으로 급감하는 명확한 국소 전도차단이 관찰됩니다."],
-            "emg": ["자신경 지배 손 내재근에서 휴식 시 비정상 자발전위가 도출되어 운동 축삭 변성을 지시합니다."],
-            "integration": ["추정 질환: 왼쪽 팔꿈치굴증후군 (Cubital tunnel syndrome)"]
-        }
-    },
-    "축삭성 다발신경병증 의심 결과표": {
-        "meta": {"age": 61, "sex": "여성", "side": "양측", "chief": "항암화학치료 후 발생한 양측 발끝/손끝 저림(장갑-양말형)."},
-        "sensory_ncs": [
-            {"nerve": "장딴지신경 SNAP", "side": "양측", "recording": "발목", "stimulation": "종아리", "amplitude": "반응 소실", "latency": "반응 소실", "velocity": "반응 소실"}
-        ],
-        "motor_ncs": [
-            {"nerve": "정강신경 CMAP", "side": "양측", "recording": "AH", "stimulation": "발목", "amplitude": "1.2 mV", "latency": "5.7 ms", "velocity": "-"}
-        ],
-        "needle_emg": [
-            {"muscle": "앞정강근", "root": "L4-L5", "nerve": "깊은종아리", "rest": "비정상적 자발전위 출현", "volition": "감소된 운동단위 동원패턴"}
-        ],
-        "interpretation": {
-            "sensory": ["다리 먼쪽(장딴지신경) 감각반응이 완전히 소실되어 길이의존성 패턴을 보입니다."],
-            "motor": ["하지 운동신경의 CMAP 진폭 역시 대칭적으로 크게 낮아 만성 축삭 파괴를 지지합니다."],
-            "emg": ["다리 먼쪽 근육(앞정강근)에서만 탈신경 전위가 확인되며 몸쪽 근육은 정상입니다."],
-            "integration": ["추정 질환: 항암제 유발성 축삭성 다발신경병증 (CIPN)"]
-        }
-    },
-    "급성 말이집탈락성 다발신경뿌리병증 의심 결과표": {
-        "meta": {"age": 41, "sex": "여성", "side": "양측", "chief": "장염 2주 후 상행성 대칭성 근력 저하 및 무반사 발생."},
-        "sensory_ncs": [
-            {"nerve": "정중신경 SNAP", "side": "양측", "recording": "검지", "stimulation": "손목", "amplitude": "18 μV", "latency": "3.8 ms", "velocity": "39 m/s"}
-        ],
-        "motor_ncs": [
-            {"nerve": "종아리신경 CMAP", "side": "양측", "recording": "EDB", "stimulation": "발목", "amplitude": "2.4 mV", "latency": "18.9 ms", "velocity": "28 m/s"}
-        ],
-        "late_response": [
-            {"test": "정강신경 F파(Tibial F-wave)", "side": "양측", "latency": "반응 소실", "amplitude": "-"}
-        ],
-        "interpretation": {
-            "sensory": ["장딴지신경(Sural SNAP)이 상대적으로 잘 보존되는 Sural Sparing 양상이 관찰되어 AIDP를 시사합니다."],
-            "motor": ["다수 운동신경에서 잠복기가 크게 연장되고 전도속도가 심각하게 저하되었습니다."],
-            "reflex": ["F파의 완전 소실은 말초뿐만 아니라 몸쪽 척수 신경뿌리까지 병변이 침범했음을 증명합니다."],
-            "integration": ["추정 질환: 급성 염증성 말이집탈락성 다발신경뿌리병증 (AIDP)"]
-        }
-    },
-    "상부 위팔신경얼기병증 의심 결과표": {
-        "meta": {"age": 28, "sex": "남성", "side": "왼쪽", "chief": "무거운 배낭을 멘 후 어깨 짓눌림. 좌측 어깨 벌림 및 팔꿉 굽힘 약화."},
-        "sensory_ncs": [
-            {"nerve": "가쪽아래팔피부신경 SNAP", "side": "왼쪽", "recording": "아래팔", "stimulation": "팔꿈치", "amplitude": "4 μV", "latency": "3.3 ms", "velocity": "35 m/s"}
-        ],
-        "motor_ncs": [
-            {"nerve": "겨드랑신경 CMAP", "side": "왼쪽", "recording": "Deltoid", "stimulation": "Erb's", "amplitude": "1.8 mV", "latency": "5.1 ms", "velocity": "-"}
-        ],
-        "needle_emg": [
-            {"muscle": "어깨세모근", "root": "C5-C6", "nerve": "겨드랑", "rest": "비정상적 자발전위 출현", "volition": "감소된 운동단위 동원패턴"}
-        ],
-        "interpretation": {
-            "sensory": ["가쪽아래팔피부신경 감각 진폭이 비정상으로 저하되어, 병변이 신경얼기 수준에 있음을 증명합니다."],
-            "motor": ["겨드랑신경 반응 진폭이 소실되어 상부 줄기(Upper trunk) 손상이 확인됩니다."],
-            "emg": ["어깨 근육에서 활동성 탈신경 전위가 도출되나 목 척추주위근은 정상으로 유지되어 신경뿌리 병변을 배제합니다."],
-            "integration": ["추정 질환: 왼쪽 상부 위팔신경얼기병증"]
-        }
-    },
-    "눈꺼풀 떨림과 눈 주위 불편감 의심 결과표": {
-        "meta": {"age": 62, "sex": "여성", "side": "오른쪽", "chief": "우측 눈꺼풀 떨림 및 우측 이마 감각 둔화."},
-        "late_response": [
-            {"test": "눈깜빡반사 오른쪽 자극-오른쪽 R1", "side": "오른쪽", "latency": "지연", "amplitude": "감소"},
-            {"test": "눈깜빡반사 오른쪽 자극-오른쪽 R2", "side": "오른쪽", "latency": "소실", "amplitude": "소실"},
-            {"test": "눈깜빡반사 오른쪽 자극-왼쪽 R2", "side": "왼쪽", "latency": "소실", "amplitude": "소실"},
-            {"test": "눈깜빡반사 왼쪽 자극-왼쪽 R1", "side": "왼쪽", "latency": "정상 범위", "amplitude": "정상 범위"},
-            {"test": "눈깜빡반사 왼쪽 자극-오른쪽 R2", "side": "오른쪽", "latency": "정상 범위", "amplitude": "정상 범위"}
-        ],
-        "interpretation": {
-            "reflex": [
-                "오른쪽 이마 자극 시 연관된 3가지 반사 반응(Rt R1, Rt R2, Lt R2)이 모두 지연/소실되었습니다.",
-                "반면 왼쪽 자극 시에는 동측 반응뿐 아니라 건너편 오른쪽 반응도 정상입니다.",
-                "이는 안면신경(날신경)은 정상이지만, 자극을 감지하는 우측 삼차신경(들신경) 경로가 손상되었음을 확증합니다."
-            ],
-            "integration": ["추정 질환: 우측 삼차신경 들신경 전도 장애"]
-        }
-    },
-    "뇌졸중 후 경직 정량평가 결과표": {
-        "meta": {"age": 68, "sex": "남성", "side": "왼쪽", "chief": "좌측 편마비 및 발목 장딴지 근육 강직. 치료 전후 효과 정량평가."},
-        "late_response": [
-            {"test": "가자미근 H-반사 진폭 (치료 전)", "side": "왼쪽", "latency": "-", "amplitude": "비정상적 증가"},
-            {"test": "가자미근 H/M 비율 (치료 전)", "side": "왼쪽", "latency": "-", "amplitude": "0.65 (65%)"},
-            {"test": "가자미근 H/M 비율 (치료 후)", "side": "왼쪽", "latency": "-", "amplitude": "0.45 (45%)"}
-        ],
-        "interpretation": {
-            "reflex": [
-                "물리치료 전 H/M 비율이 65%로 폭발적으로 항진된 것은 중추신경계의 억제 상실로 인한 척수 반사회로 과흥분을 입증합니다.",
-                "치료 후 H/M 비율이 45%로 감소하여 경직이 정량적으로 완화되었음을 확인합니다."
-            ],
-            "integration": ["추정 진단: 위운동신경세포 증후군에 의한 좌측 하지 경직 정량평가"]
-        }
+# ------------------------------------------------------------
+# 한글/영문 제목 및 섹션 헤더
+# ------------------------------------------------------------
+def get_report_title(language: str) -> str:
+    language = normalize_report_language(language)
+    if language == REPORT_LANG_EN:
+        return REPORT_TITLE_EN
+    return REPORT_TITLE_KO
+
+
+def get_report_subtitle(language: str) -> str:
+    language = normalize_report_language(language)
+    if language == REPORT_LANG_EN:
+        return REPORT_SUBTITLE_EN
+    return REPORT_SUBTITLE_KO
+
+
+def get_report_section_name(section: str, language: str) -> str:
+    language = normalize_report_language(language)
+    mapping = {
+        REPORT_LANG_KO: {
+            "sensory": "감각신경전도검사",
+            "motor": "운동신경전도검사",
+            "emg": "침근전도검사",
+        },
+        REPORT_LANG_EN: {
+            "sensory": "Sensory NCS",
+            "motor": "Motor NCS",
+            "emg": "Needle EMG",
+        },
     }
-}
+    return mapping.get(language, mapping[REPORT_LANG_KO]).get(section, section)
+
+
+# ------------------------------------------------------------
+# 표 데이터 변환
+# ------------------------------------------------------------
+def convert_report_template(language: str) -> dict:
+    """
+    VIRTUAL_REPORT_TEMPLATE를 선택 언어로 변환합니다.
+
+    반환값 구조:
+    {
+        "sensory": [[...], [...]],
+        "motor": [[...], [...]],
+        "emg": [[...], [...]]
+    }
+    """
+    language = normalize_report_language(language)
+
+    converted = {}
+    for section in REPORT_SECTIONS:
+        rows = VIRTUAL_REPORT_TEMPLATE.get(section, [])
+        converted[section] = translate_rows(rows, language)
+    return converted
+
+
+def get_report_table(section: str, language: str) -> list:
+    """섹션별 표를 선택 언어로 반환합니다."""
+    language = normalize_report_language(language)
+    rows = VIRTUAL_REPORT_TEMPLATE.get(section, [])
+    return translate_rows(rows, language)
+
+
+def get_report_table_with_headers(section: str, language: str) -> dict:
+    """
+    섹션별 헤더와 행을 함께 반환합니다.
+
+    반환형:
+    {
+        "headers": [...],
+        "rows": [...]
+    }
+    """
+    language = normalize_report_language(language)
+    return {
+        "headers": get_report_headers(section, language),
+        "rows": get_report_table(section, language),
+    }
+
+
+def get_full_virtual_report(language: str) -> dict:
+    """
+    전체 가상근전도검사표를 선택 언어로 반환합니다.
+    """
+    language = normalize_report_language(language)
+    return {
+        "title": get_report_title(language),
+        "subtitle": get_report_subtitle(language),
+        "sections": {
+            section: get_report_table_with_headers(section, language)
+            for section in REPORT_SECTIONS
+        },
+    }
+
+
+# ------------------------------------------------------------
+# 실제 판독 예시용 문자열 생성
+# ------------------------------------------------------------
+def render_rows_as_text(rows: list) -> str:
+    """
+    표 행을 사람이 읽을 수 있는 텍스트로 이어붙입니다.
+    UI에서 별도 표 렌더링이 없을 때 보조용으로 사용합니다.
+    """
+    lines = []
+    for row in rows:
+        lines.append(" | ".join([str(item) for item in row]))
+    return "\n".join(lines)
+
+
+def render_section_as_text(section: str, language: str) -> str:
+    """
+    섹션 1개를 텍스트 블록으로 반환합니다.
+    """
+    language = normalize_report_language(language)
+    section_name = get_report_section_name(section, language)
+    headers = get_report_headers(section, language)
+    rows = get_report_table(section, language)
+
+    text = [f"[{section_name}]"]
+    if headers:
+        text.append(" | ".join(headers))
+    if rows:
+        text.append(render_rows_as_text(rows))
+    return "\n".join(text)
+
+
+def render_full_report_as_text(language: str) -> str:
+    """
+    전체 가상근전도검사표를 텍스트로 렌더링합니다.
+    """
+    language = normalize_report_language(language)
+
+    blocks = [
+        get_report_title(language),
+        get_report_subtitle(language),
+    ]
+
+    for section in REPORT_SECTIONS:
+        blocks.append(render_section_as_text(section, language))
+
+    return "\n\n".join(blocks)
+
+
+# ------------------------------------------------------------
+# 유틸리티
+# ------------------------------------------------------------
+def is_report_korean(language: str) -> bool:
+    return normalize_report_language(language) == REPORT_LANG_KO
+
+
+def is_report_english(language: str) -> bool:
+    return normalize_report_language(language) == REPORT_LANG_EN
+
+
+def get_available_languages() -> list:
+    return list(LANGUAGE_OPTIONS)
