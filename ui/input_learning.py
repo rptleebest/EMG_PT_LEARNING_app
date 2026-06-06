@@ -1,3 +1,19 @@
+# ui/input_learning.py
+
+import html
+import streamlit as st
+from ui.navigation import render_bottom_navigation
+
+from data.report_terms import (
+    REPORT_LANG_KO,
+    REPORT_LANG_EN,
+    LANGUAGE_OPTIONS,
+    normalize_report_language,
+    translate_term,
+    translate_rows,
+    get_report_headers,
+)
+
 def get_input_learning_report_language() -> str:
     """
     가상 검사결과표 출력 언어를 선택합니다.
