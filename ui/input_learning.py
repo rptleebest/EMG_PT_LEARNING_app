@@ -1,4 +1,4 @@
-# ui/input_learning.py [Part 6/6]
+# ui/input_learning.py
 
 import streamlit as st
 from ui.navigation import render_bottom_navigation
@@ -8,7 +8,7 @@ from data.virtual_reports import VIRTUAL_REPORTS, translate_value
 def _value_class(value):
     text = str(value)
     abnormal_tokens = ["반응 소실", "소실", "지연", "감소", "느림", "전도차단", "증가", "Absent", "Delayed", "Reduced", "No Response", "fibrillation", "positive sharp", "Reduced MU recruitment", "Giant"]
-    normal_tokens = ["Silent", "Normal", "정상", "보존", "Normal Range", "통증 및 협조 부족으로 검사 제한", "Limited by Pain"]
+    normal_tokens = ["Silent", "Normal", "정상", "보존", "Normal Range", "통증 및 환자 협조 부족으로 검사 제한", "Limited by Pain/Cooperation"]
     if any(token in text for token in abnormal_tokens): return "text-red"
     if any(token in text for token in normal_tokens): return "text-blue"
     return "text-normal"
@@ -31,7 +31,7 @@ def _render_mobile_table(headers, rows, table_id, to_eng):
         
         @media screen and (max-width: 700px) {{
             #{safe_table_id} thead {{ display: none; }}
-            #{safe_table_id} tr {{ display: block; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 0.8rem; background: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }}
+            #{safe_table_id} tr {{ display: block; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 0.8rem; background: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }}
             #{safe_table_id} td {{ display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; border: none; border-bottom: 1px solid #f8fafc; padding: 0.6rem 0.7rem; text-align: right; }}
             #{safe_table_id} td:last-child {{ border-bottom: none; }}
             #{safe_table_id} td::before {{ content: attr(data-label); font-weight: 800; color: #475569; text-align: left; font-size: 0.8rem; flex: 0 0 38%; }}
@@ -79,7 +79,7 @@ def _render_tables(report, to_eng):
 
 def _render_interpretation(report):
     interp = report["interpretation"]
-    st.markdown('<div style="margin-top: 25px; padding-top: 15px; border-top: 2px dashed #cbd5e1;"><div style="font-size: 1.2rem; font-weight: 900; color: #0f172a; margin-bottom: 15px;">🔍 검사 결과 단계별 통합 해석</div>', unsafe_allow_html=True)
+    st.markdown('<div style="margin-top: 35px; padding-top: 15px; border-top: 2px dashed #cbd5e1;"><div style="font-size: 1.2rem; font-weight: 900; color: #0f172a; margin-bottom: 15px;">🔍 검사 결과 단계별 통합 해석</div>', unsafe_allow_html=True)
 
     sections = [
         ("sensory", "1단계: 감각신경전도검사 해석", "#3b82f6", "#eff6ff"), 
@@ -90,8 +90,12 @@ def _render_interpretation(report):
         items = interp.get(key, [])
         if not items: continue
         st.markdown(f'<div style="border-left: 5px solid {b_color}; background-color: {bg_color}; padding: 10px 14px; font-weight: 800; font-size: 1.05rem; color: #0f172a; margin-bottom: 10px; border-radius: 0 6px 6px 0;">{html_escape(title)}</div>', unsafe_allow_html=True)
-        for item in items: 
-            st.markdown(f'<div style="color: #334155; font-size: 0.95rem; line-height: 1.6; margin-bottom: 8px; padding-left: 15px;">- {html_escape(item)}</div>', unsafe_allow_html=True)
+        for item in items:
+            clean_item = html_escape(item)
+            if re.match(r"^\d+[\)\.]", item.strip()):
+                st.markdown(f'<div style="color: #0f172a; font-size: 1.0rem; font-weight: 800; margin-top: 12px; margin-bottom: 4px; padding-left: 5px;">{clean_item}</div>', unsafe_allow_html=True)
+            else:
+                st.markdown(f'<div style="color: #334155; font-size: 0.95rem; line-height: 1.6; margin-bottom: 8px; padding-left: 15px;">• {clean_item}</div>', unsafe_allow_html=True)
         st.markdown("<br/>", unsafe_allow_html=True)
 
     st.markdown('<div style="border-left: 5px solid #dc2626; background-color: #fef2f2; padding: 10px 14px; font-weight: 800; font-size: 1.05rem; color: #7f1d1d; margin-bottom: 12px; border-radius: 0 6px 6px 0;">4단계: 검사결과 추정 질환</div>', unsafe_allow_html=True)
@@ -113,9 +117,9 @@ def _render_interpretation(report):
             item_clean = item.replace("▶", "").strip()
             if ":" in item_clean:
                 name, desc = item_clean.split(":", 1)
-                st.markdown(f'<div style="color: #7e22ce; font-weight:900; font-size: 1.05rem; padding-left: 5px; margin-top: 5px; margin-bottom: 4px;">⚖️ {html_escape(name.strip())}</div><div style="color: #334155; font-size: 0.95rem; line-height: 1.6; margin-bottom: 10px; padding-left: 20px;">- <span style="font-weight:800; color:#4c1d95;">구분점:</span> {html_escape(desc.strip())}</div>', unsafe_allow_html=True)
+                st.markdown(f'<div style="color: #7e22ce; font-weight:900; font-size: 1.05rem; padding-left: 5px; margin-top: 5px; margin-bottom: 4px;">⚖️ {html_escape(name.strip())}</div><div style="color: #334155; font-size: 0.95rem; line-height: 1.6; margin-bottom: 10px; padding-left: 20px;">• <span style="font-weight:800; color:#4c1d95;">구분점:</span> {html_escape(desc.strip())}</div>', unsafe_allow_html=True)
             else:
-                st.markdown(f'<div style="color: #334155; font-size: 0.95rem; padding-left: 15px;">- {html_escape(item_clean)}</div>', unsafe_allow_html=True)
+                st.markdown(f'<div style="color: #334155; font-size: 0.95rem; padding-left: 15px;">• {html_escape(item_clean)}</div>', unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
 def render_input_learning():
@@ -127,11 +131,11 @@ def render_input_learning():
     selected = st.radio("학습할 가상 결과표 선택", ["선택 안 함"] + list(VIRTUAL_REPORTS.keys()), key=f"sel_{st.session_state['input_reset_counter']}", label_visibility="collapsed")
 
     if selected == "선택 안 함":
-        st.info("결과표를 선택하고 하단의 영문 전환 토글을 활용해 실전 임상 판독을 연습하세요.")
+        st.info("결과표를 선택하고 하단의 영문 변환 모드를 활용해 실전 임상 판독을 연습하세요.")
         render_bottom_navigation()
         return
 
-    st.markdown('<div style="margin-top:20px; margin-bottom: 10px; font-weight: 800; color: #1e293b; font-size: 1.05rem;">🌐 결과표 언어 모드 선택</div>', unsafe_allow_html=True)
+    st.markdown('<div style="margin-top:20px; margin-bottom: 10px; font-weight: 800; color: #1e293b; font-size: 1.05rem;">🌐 결과표 언어 모드 변경</div>', unsafe_allow_html=True)
     to_eng = (st.radio("모드", ["🇰🇷 한글 (기초 개념학습용)", "🇺🇸 영문 (임상 실전용)"], horizontal=True, label_visibility="collapsed") == "🇺🇸 영문 (임상 실전용)")
 
     report = VIRTUAL_REPORTS[selected]
@@ -154,19 +158,19 @@ def render_input_learning():
 
     st.markdown(
         """<div style="background-color: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 12px; margin-bottom: 15px;">
-           <div style="font-size: 0.95rem; color: #b45309; font-weight: 800; line-height: 1.5;">💡 팁: 아래 검사 결과는 주요 병변측(증상 발생 위치)을 중심으로 정리되었습니다.</div>
+           <div style="font-size: 0.95rem; color: #b45309; font-weight: 800; line-height: 1.5;">💡 학습 팁: 아래 표는 병변측(증상 발생 위치)의 주요 검사 결과를 간략히 요약한 것입니다.</div>
            </div>""", unsafe_allow_html=True)
 
     st.markdown('<div style="margin-top: 25px; padding-top: 15px; border-top: 2px dashed #cbd5e1;">', unsafe_allow_html=True)
     _render_tables(report, to_eng)
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # 4. 검사결과 해석 (무조건 한글, to_eng 안 넘김)
     _render_interpretation(report)
 
     st.markdown('<div style="margin-top:35px;">', unsafe_allow_html=True)
-    if st.button("🔄 다른 결과표 분석", type="primary", use_container_width=True):
+    if st.button("🔄 처음으로 돌아가기", type="primary", use_container_width=True):
         st.session_state["input_reset_counter"] += 1
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
+    
     render_bottom_navigation()
