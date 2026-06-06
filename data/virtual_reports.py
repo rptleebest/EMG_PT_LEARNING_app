@@ -1,6 +1,39 @@
-# data/virtual_reports.py (Part 1: 결과표 1~5)
+# data/virtual_reports.py
 
-from data.terms import translate_value
+ENG_MAP = {
+    "검사 신경": "Nerve", "측": "Side", "기록 위치": "Recording Site", "자극 위치": "Stimulation Site",
+    "진폭": "Amplitude", "잠복기": "Latency", "전도속도": "Conduction Velocity",
+    "기록 근육": "Recording Muscle", "검사 항목": "Test Parameter", "검사 근육": "Muscle",
+    "분절": "Segment", "말초신경": "Peripheral Nerve", "휴식 시 반응": "Resting Activity", "자발적 근수축 시 반응": "Voluntary MU Recruitment",
+    "오른쪽": "Rt.", "왼쪽": "Lt.", "양측": "Both",
+    "정중신경 SNAP": "Median SNAP", "자신경 SNAP": "Ulnar SNAP", "노신경 SNAP": "Radial SNAP", 
+    "얕은종아리 SNAP": "Superficial Peroneal SNAP", "장딴지신경 SNAP": "Sural SNAP", 
+    "가쪽아래팔피부신경 SNAP": "Lat. Antebrachial Cutaneous SNAP",
+    "정중신경 CMAP": "Median CMAP", "자신경 CMAP": "Ulnar CMAP", "노신경 CMAP": "Radial CMAP", 
+    "종아리 CMAP": "Peroneal CMAP", "종아리신경 CMAP": "Peroneal CMAP", "정강신경 CMAP": "Tibial CMAP", 
+    "겨드랑신경 CMAP": "Axillary CMAP", "근육피부신경 CMAP": "Musculocutaneous CMAP", "얼굴신경 CMAP": "Facial CMAP",
+    "정강신경 F파(Tibial F-wave)": "Tibial F-wave", "H-반사(H-reflex)": "H-reflex", "H/M 비율": "H/M Ratio",
+    "눈깜빡반사 오른쪽 자극-오른쪽 R1": "Blink Reflex Rt Stim - Rt R1", "눈깜빡반사 오른쪽 자극-오른쪽 R2": "Blink Reflex Rt Stim - Rt R2",
+    "눈깜빡반사 오른쪽 자극-왼쪽 R2": "Blink Reflex Rt Stim - Lt R2", "눈깜빡반사 왼쪽 자극-왼쪽 R1": "Blink Reflex Lt Stim - Lt R1",
+    "눈깜빡반사 왼쪽 자극-왼쪽 R2": "Blink Reflex Lt Stim - Lt R2", "눈깜빡반사 왼쪽 자극-오른쪽 R2": "Blink Reflex Lt Stim - Rt R2",
+    "짧은엄지벌림근": "APB", "첫째등쪽뼈사이근": "FDI", "목 척추주위근": "Cervical Paraspinal", "위팔두갈래근": "Biceps",
+    "노쪽손목폄근": "ECR", "어깨세모근": "Deltoid", "앞정강근": "Tibialis Anterior", "긴종아리근": "Peroneus Longus",
+    "가자미근": "Soleus", "허리 척추주위근": "Lumbar Paraspinal", "긴엄지폄근": "EHL", "중간볼기근": "Gluteus Medius",
+    "가쪽넓은근": "Vastus Lateralis", "새끼벌림근": "ADM", "짧은발가락폄근": "EDB", "엄지벌림근": "AH",
+    "눈둘레근": "Orbicularis Oculi", "정중신경": "Median Nerve", "자신경": "Ulnar Nerve", "노신경": "Radial Nerve",
+    "근육피부": "Musculocutaneous Nerve", "겨드랑": "Axillary Nerve", "뒤가지": "Posterior Ramus", 
+    "깊은종아리": "Deep Peroneal Nerve", "얕은종아리": "Superficial Peroneal Nerve", "정강신경": "Tibial Nerve",
+    "위볼기": "Superior Gluteal Nerve", "넓적다리": "Femoral Nerve", "반응 소실": "No Response", "소실": "Absent", 
+    "지연": "Delayed", "감소": "Reduced", "정상 범위": "Normal Range", "보존": "Preserved", 
+    "통증/협조 부족으로 검사 제한": "Limited by Pain/Coop", "전기적 침묵 (정상 반응)": "Silent at rest", 
+    "비정상적 자발전위 출현": "Abnormal spontaneous activity", "정상 운동단위 동원패턴": "Normal MU recruitment", 
+    "감소된 운동단위 동원패턴": "Reduced MU recruitment", "증가된 운동단위 동원패턴": "Giant MUAPs"
+}
+
+def translate_value(value, to_english=False):
+    if value is None: return ""
+    text = str(value).strip()
+    return ENG_MAP.get(text, text) if to_english else text
 
 VIRTUAL_REPORTS = {
     "오른쪽 손목굴증후군 의심 결과표": {
@@ -66,14 +99,14 @@ VIRTUAL_REPORTS = {
     "왼쪽 L5 신경뿌리병증 의심 결과표": {
         "meta": {"age": 58, "sex": "여성", "side": "왼쪽", "chief": "무거운 물건을 든 후 발생한 좌측 하지 방사통과 발처짐."},
         "sensory_ncs": [
-            {"nerve": "얕은종아리 SNAP", "side": "왼쪽", "recording": "발등", "amplitude": "13 μV", "latency": "2.9 ms", "velocity": "47 m/s"}
+            {"nerve": "얕은종아리 SNAP", "side": "왼쪽", "recording": "발등", "stimulation": "종아리", "amplitude": "13 μV", "latency": "2.9 ms", "velocity": "47 m/s"}
         ],
         "motor_ncs": [
-            {"nerve": "종아리 CMAP", "side": "왼쪽", "recording": "EDB", "amplitude": "3.9 mV", "latency": "4.5 ms", "velocity": "-"}
+            {"nerve": "종아리 CMAP", "side": "왼쪽", "recording": "EDB", "stimulation": "발목", "amplitude": "3.9 mV", "latency": "4.5 ms", "velocity": "-"}
         ],
         "needle_emg": [
             {"muscle": "중간볼기근", "root": "L5", "nerve": "위볼기", "rest": "비정상적 자발전위 출현", "volition": "감소된 운동단위 동원패턴"},
-            {"muscle": "허리 척추주위근", "root": "L5", "rest": "비정상적 자발전위 출현", "volition": "통증/협조 부족으로 검사 제한"}
+            {"muscle": "허리 척추주위근", "root": "L5", "nerve": "뒤가지", "rest": "비정상적 자발전위 출현", "volition": "통증/협조 부족으로 검사 제한"}
         ],
         "interpretation": {
             "sensory": ["하지 감각전도가 보존되어 병변이 신경뿌리 수준임을 지지합니다."],
@@ -85,14 +118,14 @@ VIRTUAL_REPORTS = {
     "오른쪽 노신경병증 의심 결과표": {
         "meta": {"age": 31, "sex": "남성", "side": "오른쪽", "chief": "음주 후 팔을 걸치고 잠든 뒤 발생한 손목처짐."},
         "sensory_ncs": [
-            {"nerve": "노신경 SNAP", "side": "오른쪽", "recording": "손등", "amplitude": "4 μV", "latency": "3.5 ms", "velocity": "42 m/s"}
+            {"nerve": "노신경 SNAP", "side": "오른쪽", "recording": "손등", "stimulation": "아래팔", "amplitude": "4 μV", "latency": "3.5 ms", "velocity": "42 m/s"}
         ],
         "motor_ncs": [
             {"nerve": "노신경 CMAP", "side": "오른쪽", "recording": "ECR", "stimulation": "아래팔", "amplitude": "4.5 mV", "latency": "2.8 ms", "velocity": "-"},
             {"nerve": "노신경 CMAP", "side": "오른쪽", "recording": "ECR", "stimulation": "위팔", "amplitude": "1.2 mV", "latency": "6.8 ms", "velocity": "38 m/s"}
         ],
         "needle_emg": [
-            {"muscle": "노쪽손목폄근", "root": "C6-C7", "rest": "비정상적 자발전위 출현", "volition": "감소된 운동단위 동원패턴"}
+            {"muscle": "노쪽손목폄근", "root": "C6-C7", "nerve": "노신경", "rest": "비정상적 자발전위 출현", "volition": "감소된 운동단위 동원패턴"}
         ],
         "interpretation": {
             "sensory": ["표재노신경 SNAP 진폭 감소는 병변이 먼쪽 말초 축삭 손상임을 시사합니다."],
@@ -100,15 +133,11 @@ VIRTUAL_REPORTS = {
             "emg": ["노쪽손목폄근의 활동성 탈신경 소견이 확인됩니다."],
             "integration": ["추정 질환: 위팔뼈 나선고랑 노신경병증"]
         }
-    }
-}
-# data/virtual_reports.py (Part 2: 결과표 6~11 완결)
-
+    },
     "왼쪽 팔꿈치굴증후군 의심 결과표": {
         "meta": {"age": 39, "sex": "여성", "side": "왼쪽", "chief": "장시간 요리사로 일하며 발생한 4, 5지 저림과 내재근 약화."},
         "sensory_ncs": [
-            {"nerve": "자신경 SNAP", "side": "왼쪽", "recording": "새끼손가락", "amplitude": "5 μV", "latency": "3.6 ms", "velocity": "37 m/s"},
-            {"nerve": "정중신경 SNAP", "side": "왼쪽", "recording": "검지", "amplitude": "23 μV", "latency": "2.8 ms", "velocity": "51 m/s"}
+            {"nerve": "자신경 SNAP", "side": "왼쪽", "recording": "새끼손가락", "stimulation": "손목", "amplitude": "5 μV", "latency": "3.6 ms", "velocity": "37 m/s"}
         ],
         "motor_ncs": [
             {"nerve": "자신경 CMAP", "side": "왼쪽", "recording": "ADM", "stimulation": "손목", "amplitude": "7.1 mV", "latency": "2.6 ms", "velocity": "-"},
@@ -118,7 +147,7 @@ VIRTUAL_REPORTS = {
             {"muscle": "새끼벌림근", "root": "C8-T1", "nerve": "자신경", "rest": "비정상적 자발전위 출현", "volition": "감소된 운동단위 동원패턴"}
         ],
         "interpretation": {
-            "sensory": ["자신경 감각신경 진폭이 감소하고 잠복기가 지연되었습니다. 반면 정중신경은 완전히 정상입니다."],
+            "sensory": ["자신경 감각신경 진폭이 감소하고 잠복기가 지연되었습니다."],
             "motor": ["팔꿈치 위 자극 시 CMAP 진폭이 절반으로 급감하는 명확한 국소 전도차단이 관찰됩니다."],
             "emg": ["자신경 지배 손 내재근에서 휴식 시 비정상 자발전위가 도출되어 운동 축삭 변성을 지시합니다."],
             "integration": ["추정 질환: 왼쪽 팔꿈치굴증후군 (Cubital tunnel syndrome)"]
@@ -127,18 +156,16 @@ VIRTUAL_REPORTS = {
     "축삭성 다발신경병증 의심 결과표": {
         "meta": {"age": 61, "sex": "여성", "side": "양측", "chief": "항암화학치료 후 발생한 양측 발끝/손끝 저림(장갑-양말형)."},
         "sensory_ncs": [
-            {"nerve": "장딴지신경 SNAP", "side": "양측", "recording": "발목", "amplitude": "반응 소실", "latency": "반응 소실", "velocity": "반응 소실"},
-            {"nerve": "정중신경 SNAP", "side": "양측", "recording": "검지", "amplitude": "12 μV", "latency": "3.3 ms", "velocity": "46 m/s"}
+            {"nerve": "장딴지신경 SNAP", "side": "양측", "recording": "발목", "stimulation": "종아리", "amplitude": "반응 소실", "latency": "반응 소실", "velocity": "반응 소실"}
         ],
         "motor_ncs": [
-            {"nerve": "정강신경 CMAP", "side": "양측", "recording": "AH", "amplitude": "1.2 mV", "latency": "5.7 ms", "velocity": "-"}
+            {"nerve": "정강신경 CMAP", "side": "양측", "recording": "AH", "stimulation": "발목", "amplitude": "1.2 mV", "latency": "5.7 ms", "velocity": "-"}
         ],
         "needle_emg": [
-            {"muscle": "앞정강근", "root": "L4-L5", "nerve": "깊은종아리", "rest": "비정상적 자발전위 출현", "volition": "감소된 운동단위 동원패턴"},
-            {"muscle": "가쪽넓은근", "root": "L2-L4", "nerve": "넓적다리", "rest": "전기적 침묵 (정상 반응)", "volition": "정상 운동단위 동원패턴"}
+            {"muscle": "앞정강근", "root": "L4-L5", "nerve": "깊은종아리", "rest": "비정상적 자발전위 출현", "volition": "감소된 운동단위 동원패턴"}
         ],
         "interpretation": {
-            "sensory": ["다리 먼쪽(장딴지신경) 감각반응이 완전히 소실되었으며, 상지는 저하되긴 했으나 보존되어 길이의존성(Dying-back) 패턴을 보입니다."],
+            "sensory": ["다리 먼쪽(장딴지신경) 감각반응이 완전히 소실되어 길이의존성 패턴을 보입니다."],
             "motor": ["하지 운동신경의 CMAP 진폭 역시 대칭적으로 크게 낮아 만성 축삭 파괴를 지지합니다."],
             "emg": ["다리 먼쪽 근육(앞정강근)에서만 탈신경 전위가 확인되며 몸쪽 근육은 정상입니다."],
             "integration": ["추정 질환: 항암제 유발성 축삭성 다발신경병증 (CIPN)"]
@@ -147,18 +174,17 @@ VIRTUAL_REPORTS = {
     "급성 말이집탈락성 다발신경뿌리병증 의심 결과표": {
         "meta": {"age": 41, "sex": "여성", "side": "양측", "chief": "장염 2주 후 상행성 대칭성 근력 저하 및 무반사 발생."},
         "sensory_ncs": [
-            {"nerve": "정중신경 SNAP", "side": "양측", "amplitude": "18 μV", "latency": "3.8 ms", "velocity": "39 m/s"},
-            {"nerve": "장딴지신경 SNAP", "side": "양측", "amplitude": "14 μV", "latency": "3.2 ms", "velocity": "45 m/s"}
+            {"nerve": "정중신경 SNAP", "side": "양측", "recording": "검지", "stimulation": "손목", "amplitude": "18 μV", "latency": "3.8 ms", "velocity": "39 m/s"}
         ],
         "motor_ncs": [
-            {"nerve": "종아리신경 CMAP", "side": "양측", "amplitude": "2.4 mV", "latency": "18.9 ms", "velocity": "28 m/s"}
+            {"nerve": "종아리신경 CMAP", "side": "양측", "recording": "EDB", "stimulation": "발목", "amplitude": "2.4 mV", "latency": "18.9 ms", "velocity": "28 m/s"}
         ],
         "late_response": [
             {"test": "정강신경 F파(Tibial F-wave)", "side": "양측", "latency": "반응 소실", "amplitude": "-"}
         ],
         "interpretation": {
             "sensory": ["장딴지신경(Sural SNAP)이 상대적으로 잘 보존되는 Sural Sparing 양상이 관찰되어 AIDP를 시사합니다."],
-            "motor": ["다수 운동신경에서 잠복기가 크게 연장되고 전도속도가 심각하게 저하되어 다발성 말이집탈락성 마비를 입증합니다."],
+            "motor": ["다수 운동신경에서 잠복기가 크게 연장되고 전도속도가 심각하게 저하되었습니다."],
             "reflex": ["F파의 완전 소실은 말초뿐만 아니라 몸쪽 척수 신경뿌리까지 병변이 침범했음을 증명합니다."],
             "integration": ["추정 질환: 급성 염증성 말이집탈락성 다발신경뿌리병증 (AIDP)"]
         }
@@ -166,14 +192,13 @@ VIRTUAL_REPORTS = {
     "상부 위팔신경얼기병증 의심 결과표": {
         "meta": {"age": 28, "sex": "남성", "side": "왼쪽", "chief": "무거운 배낭을 멘 후 어깨 짓눌림. 좌측 어깨 벌림 및 팔꿉 굽힘 약화."},
         "sensory_ncs": [
-            {"nerve": "가쪽아래팔피부신경 SNAP", "side": "왼쪽", "amplitude": "4 μV", "latency": "3.3 ms", "velocity": "35 m/s"}
+            {"nerve": "가쪽아래팔피부신경 SNAP", "side": "왼쪽", "recording": "아래팔", "stimulation": "팔꿈치", "amplitude": "4 μV", "latency": "3.3 ms", "velocity": "35 m/s"}
         ],
         "motor_ncs": [
-            {"nerve": "겨드랑신경 CMAP", "side": "왼쪽", "recording": "Deltoid", "amplitude": "1.8 mV", "latency": "5.1 ms", "velocity": "-"}
+            {"nerve": "겨드랑신경 CMAP", "side": "왼쪽", "recording": "Deltoid", "stimulation": "Erb's", "amplitude": "1.8 mV", "latency": "5.1 ms", "velocity": "-"}
         ],
         "needle_emg": [
-            {"muscle": "어깨세모근", "root": "C5-C6", "nerve": "겨드랑", "rest": "비정상적 자발전위 출현", "volition": "감소된 운동단위 동원패턴"},
-            {"muscle": "목 척추주위근", "root": "C5-C6", "nerve": "뒤가지", "rest": "전기적 침묵 (정상 반응)", "volition": "통증/협조 부족으로 검사 제한"}
+            {"muscle": "어깨세모근", "root": "C5-C6", "nerve": "겨드랑", "rest": "비정상적 자발전위 출현", "volition": "감소된 운동단위 동원패턴"}
         ],
         "interpretation": {
             "sensory": ["가쪽아래팔피부신경 감각 진폭이 비정상으로 저하되어, 병변이 신경얼기 수준에 있음을 증명합니다."],
