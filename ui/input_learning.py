@@ -17,7 +17,7 @@ def _render_mobile_table(headers, rows, table_id, to_eng):
     css = f"""
     <style>
         #{table_id} {{ width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: 0.85rem; }}
-        #{table_id} th {{ background-color: #f1f5f9; padding: 10px; border: 1px solid #cbd5e1; color: #475569; font-weight: 700; }}
+        #{table_id} th {{ background-color: #f1f5f9; padding: 10px; border: 1px solid #cbd5e1; font-weight: 700; color: #475569; }}
         #{table_id} td {{ padding: 10px; border: 1px solid #e2e8f0; text-align: center; word-break: keep-all; font-weight: 400; color: #444; }}
         .text-red {{ color: #c2410c !important; font-weight: 600; background-color: #fff7ed; padding: 2px 4px; border-radius: 4px; }}
         .text-blue {{ color: #1d4ed8 !important; font-weight: 600; background-color: #eff6ff; padding: 2px 4px; border-radius: 4px; }}
@@ -85,11 +85,6 @@ def render_input_learning():
             st.markdown('<div style="font-weight: 700; color:#9a3412; margin-top: 25px; margin-bottom: 8px;">🪡 침근전도검사 (Needle EMG)</div>', unsafe_allow_html=True)
             rows = [[r["muscle"], r["root"], r["nerve"], r["rest"], r["volition"]] for r in report["needle_emg"]]
             st.markdown(_render_mobile_table(["검사 근육", "분절", "말초신경", "휴식 시 반응", "자발적 근수축 시 반응"], rows, "emg", to_eng), unsafe_allow_html=True)
-
-        if report.get("late_response"):
-            st.markdown('<div style="font-weight: 700; color:#6b21a8; margin-top: 25px; margin-bottom: 8px;">⏱️ 특수 및 반사 검사</div>', unsafe_allow_html=True)
-            rows = [[r["test"], r["side"], r["latency"], r["amplitude"]] for r in report["late_response"]]
-            st.markdown(_render_mobile_table(["검사 항목", "측", "잠복기", "진폭"], rows, "late", to_eng), unsafe_allow_html=True)
 
         _render_interpretation(report)
         if st.button("🔄 처음으로 돌아가기", type="primary", use_container_width=True):
