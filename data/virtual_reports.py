@@ -16,7 +16,7 @@ REPORT_TITLE_EN = "Virtual EMG Report (Bilateral Comparison)"
 VIRTUAL_REPORTS = {
     "왼쪽 목 통증 및 엄지/검지 저림 (C6 신경뿌리병증)": {
         "info": {"age": 45, "sex": "남성", "symptom": "왼쪽 뒷목 통증, 왼쪽 어깨와 엄지/검지로 뻗치는 저림, 팔꿉 굽힘 시 힘 빠짐", "side": "왼쪽"},
-        "diagnosis": "왼쪽 C6 목 신경뿌리병증",
+        "diagnosis": "왼쪽 C6 목 신경뿌리병증 (C6 Radiculopathy)",
         "ncs_sensory": [
             ["정중신경", "오른쪽", "25 μV", "2.8 ms", "정상 범위"],
             ["정중신경", "왼쪽", "24 μV", "2.8 ms", "정상 범위"],
@@ -37,17 +37,17 @@ VIRTUAL_REPORTS = {
             ["위팔세갈래근", "C7-C8", "왼쪽", "Silent", "Normal recruitment", "정상 범위"],
         ],
         "teaching_diagnosis": {
-            "summary": "왼쪽 C6 목 신경뿌리병증",
+            "summary": "왼쪽 C6 목 신경뿌리병증 (C6 Radiculopathy)",
             "ncs_reason": [
                 "정중신경과 자신경의 감각(SNAP)과 운동(CMAP) 전도가 좌오른쪽 모두 대칭적인 정상 범위입니다.",
-                "감각신경 진폭이 정상 범위로 보존된 것은 병변이 감각세포체(DRG)보다 중추측인 척수 신경뿌리(Root)에 있음을 명확히 지시합니다."
+                "감각신경 진폭이 정상 범위로 보존된 것은 병변이 감각세포체(dorsal root ganglion, DRG)보다 중추측인 척수 신경뿌리(Root)에 있음을 명확히 지시합니다."
             ],
             "emg_reason": [
                 "위팔두갈래근(근육피부신경 지배)과 원엎침근(정중신경 지배) 등 서로 다른 말초신경 지배를 받는 근육에서 활동성 탈신경 전위가 발견되어 단일 말초신경 병변이 아님을 확인합니다.",
-                "C6 척추주위근의 활동성 탈신경 소견은 병변이 척수 신경뿌리에 위치함을 확진하는 가장 강력한 증거입니다."
+                "C6 척추주위근의 활동성 탈신경 소견은 병변이 척수 신경뿌리에 위치함을 확진하는 가장 뚜렷한 증거입니다."
             ],
             "integration": [
-                "NCS 상 정상적인 감각전도 보존 소견과, EMG 상 C6 신경절 지배 다수 말초 근육 및 척추주위근의 침범 소견을 종합하여 C6 목 신경뿌리병증으로 진단합니다."
+                "신경전도검사 상 정상적인 감각전도 보존 소견과,  근전도 상 C6 신경절 지배 다수 말초 근육 및 척추주위근의 침범 소견을 종합하여 C6 목 신경뿌리병증으로 진단합니다."
             ]
         },
         "differential_diagnosis": [
@@ -60,7 +60,7 @@ VIRTUAL_REPORTS = {
 
     "오른쪽 1~3번째 손가락 저림 (손목굴증후군)": {
         "info": {"age": 52, "sex": "여성", "symptom": "오른손 엄지~중지 저림, 야간에 통증이 심해 털면 완화됨", "side": "오른쪽"},
-        "diagnosis": "오른쪽 손목굴증후군",
+        "diagnosis": "오른쪽 손목굴증후군 (Carpal tunnel syndrome)",
         "ncs_sensory": [
             ["정중신경", "왼쪽", "26 μV", "2.7 ms", "정상 범위"],
             ["정중신경", "오른쪽", "11 μV", "4.8 ms", "비정상 (진폭 감소 / 잠복기 지연)"],
@@ -95,7 +95,7 @@ VIRTUAL_REPORTS = {
         "differential_diagnosis": [
             {
                 "name": "원엎침근증후군 (Pronator Teres Syndrome)",
-                "how_to_differentiate": "원엎침근증후군이라면 손목 부위의 감각/운동 잠복기 지연이 두드러지지 않으며, EMG에서 손목 상부 근육인 원엎침근에 비정상 탈신경 소견이 나타나야 합니다."
+                "how_to_differentiate": "원엎침근증후군이라면 손목 부위의 감각/운동 잠복기 지연이 두드러지지 않으며,  근전도에서 손목 상부 근육인 원엎침근에 비정상 탈신경 소견이 나타나야 합니다."
             }
         ]
     },
@@ -143,7 +143,7 @@ VIRTUAL_REPORTS = {
 
     "오른쪽 4~5번째 손가락 저림 (팔꿈치굴증후군)": {
         "info": {"age": 42, "sex": "남성", "symptom": "오른손 4~5번째 손가락 저림, 젓가락질이 불편하고 손아귀 힘이 약해짐", "side": "오른쪽"},
-        "diagnosis": "오른쪽 팔꿈치굴증후군",
+        "diagnosis": "오른쪽 팔꿈치굴증후군 (Elbow Tunnel Syndrome)",
         "ncs_sensory": [
             ["자신경", "왼쪽", "22 μV", "2.5 ms", "정상 범위"],
             ["자신경", "오른쪽", "9 μV", "3.4 ms", "비정상 (진폭 감소 / 잠복기 지연)"],
@@ -160,13 +160,13 @@ VIRTUAL_REPORTS = {
             ["목 척추주위근", "C8-T1", "오른쪽", "Silent", "Normal recruitment", "정상 범위"],
         ],
         "teaching_diagnosis": {
-            "summary": "오른쪽 팔꿈치굴증후군",
+            "summary": "오른쪽 팔꿈치굴증후군 (Elbow Tunnel Syndrome)",
             "ncs_reason": [
                 "오른쪽 자신경의 감각전도 지연 및 진폭 감소가 확인됩니다.",
                 "팔꿈치 위/아래를 자극했을 때 운동 진폭이 50% 이상 급감하는 '국소 전도차단(Conduction Block)' 현상이 관찰되어 팔꿈치 부위 압박을 확진합니다."
             ],
             "emg_reason": [
-                "자신경 지배를 받는 손 내재근에서 활동성 탈신경 전위가 확인되어 압박성 축삭 손상이 동반되었음을 알 수 있습니다.",
+                "자신경 지배를 받는 손 자체기원근육(intrinsic)에서 활동성 탈신경 전위가 확인되어 압박성 축삭 손상이 동반되었음을 알 수 있습니다.",
                 "동일한 C8-T1 분절 지배를 받지만 정중신경 지배인 짧은엄지벌림근과 척추주위근이 완전한 정상 범위인 것은 척수 신경뿌리병증을 배제시킵니다."
             ],
             "integration": [
@@ -183,7 +183,7 @@ VIRTUAL_REPORTS = {
 
     "오른쪽 손목처짐 및 손등 감각 저하 (노신경 마비)": {
         "info": {"age": 34, "sex": "남성", "symptom": "음주 후 의자에서 잔 뒤 발생한 오른쪽 손목처짐 및 손등 저림", "side": "오른쪽"},
-        "diagnosis": "오른쪽 노신경 마비",
+        "diagnosis": "오른쪽 노신경 마비(Radial nerve palsy)",
         "ncs_sensory": [
             ["노신경", "왼쪽", "20 μV", "2.1 ms", "정상 범위"],
             ["노신경", "오른쪽", "8 μV", "3.2 ms", "비정상 (진폭 감소 / 잠복기 지연)"],
@@ -199,7 +199,7 @@ VIRTUAL_REPORTS = {
             ["위팔세갈래근", "C7-C8", "오른쪽", "Silent", "Normal recruitment", "정상 범위 (보존됨)"],
         ],
         "teaching_diagnosis": {
-            "summary": "오른쪽 노신경 마비",
+            "summary": "오른쪽 노신경 마비(Radial nerve palsy)",
             "ncs_reason": [
                 "표재노신경 감각전도 진폭 감소와 함께, 나선고랑 상/하부 자극에서 운동 진폭이 급감하는 전도차단 수치가 기록되어 물리적 압박 위치를 지시합니다."
             ],
@@ -221,7 +221,7 @@ VIRTUAL_REPORTS = {
 
     "오른쪽 엉치 방사통 및 종아리 약화 (S1 신경뿌리병증)": {
         "info": {"age": 50, "sex": "남성", "symptom": "오른쪽 엉치에서 발바닥으로 당기는 통증, 까치발 걷기가 힘듦", "side": "오른쪽"},
-        "diagnosis": "오른쪽 S1 신경뿌리병증",
+        "diagnosis": "오른쪽 S1 신경뿌리병증(S1 radiculopathy)",
         "ncs_sensory": [
             ["장딴지신경", "오른쪽", "16 μV", "3.0 ms", "정상 범위"],
             ["장딴지신경", "왼쪽", "17 μV", "2.9 ms", "정상 범위"],
@@ -238,7 +238,7 @@ VIRTUAL_REPORTS = {
             ["허리 척추주위근", "S1", "오른쪽", "Fibrillation/PSW", "통증으로 평가 불가", "비정상 (활동성 탈신경)"],
         ],
         "teaching_diagnosis": {
-            "summary": "오른쪽 S1 허리/엉치 신경뿌리병증",
+            "summary": "오른쪽 S1 허리/엉치 신경뿌리병증(S1 radiculopathy)",
             "ncs_reason": [
                 "종아리 뒤쪽 감각 이상이 뚜렷함에도 가장 먼 쪽의 장딴지신경 감각 전도가 양측 모두 정상 범위로 보존되는 전형적인 척수 신경뿌리 병변 양상입니다."
             ],
@@ -260,7 +260,7 @@ VIRTUAL_REPORTS = {
 
     "왼쪽 발처짐 및 종아리 가쪽 무딤 (온종아리신경 마비)": {
         "info": {"age": 28, "sex": "여성", "symptom": "장기간 동안 압박 압박스타킹을 장시간 착용 후 발생한 왼쪽 발처짐 및 감각 무딤", "side": "왼쪽"},
-        "diagnosis": "왼쪽 온종아리신경 마비",
+        "diagnosis": "왼쪽 온종아리신경 마비(Common peroneal nerve palsy)",
         "ncs_sensory": [
             ["얕은종아리신경", "오른쪽", "16 μV", "2.8 ms", "정상 범위"],
             ["얕은종아리신경", "왼쪽", "6 μV", "4.1 ms", "비정상 (진폭 감소 / 잠복기 지연)"],
@@ -268,7 +268,7 @@ VIRTUAL_REPORTS = {
         ],
         "ncs_motor": [
             ["종아리신경", "발목", "왼쪽", "5.1 mV", "4.0 ms", "정상 범위"],
-            ["종아리신경", "종아리뼈머리", "왼쪽", "1.2 mV", "8.5 ms", "비정상 (진폭 급감 / 국소 전도차단)"],
+            ["종아리신경", "종아리뼈머리", "왼쪽", "1.2 mV", "8.5 ms", "비정상 (진폭 급감 / 잠복기 지연)"],
         ],
         "emg": [
             ["앞정강근", "L4-L5", "왼쪽", "Silent", "No recruitment", "비정상 (동원 불가)"],
@@ -277,7 +277,7 @@ VIRTUAL_REPORTS = {
             ["허리 척추주위근", "L5", "왼쪽", "Silent", "Normal recruitment", "정상 범위"],
         ],
         "teaching_diagnosis": {
-            "summary": "왼쪽 온종아리신경 압박 마비",
+            "summary": "왼쪽 온종아리신경 압박 마비(Common peroneal nerve palsy)",
             "ncs_reason": [
                 "얕은종아리신경 감각전도가 저하되었고, 종아리뼈머리 자극에서 운동 진폭이 급감하는 국소 전도차단 수치가 확인되어 병변의 물리적 압박 위치가 특정됩니다."
             ],
@@ -431,18 +431,16 @@ def get_available_languages() -> list:
 def is_report_korean(language: str) -> bool:
     return normalize_report_language(language) == REPORT_LANG_KO
 
-# 영어 모드용 수동 단어 교체 함수
+# 영어 모드 100% 매핑 보강 (한글 잔재 및 기호 통일)
 def custom_english_translate(text: str) -> str:
     raw = str(text)
     mapping = {
-        "정상 범위": "Within normal limits",
+        "정상 범위": "WNL (Within Normal Limits)",
         "비정상 (활동성 탈신경)": "Abnormal (Active denervation)",
         "통증으로 평가 불가": "Incomplete due to pain",
-        "진폭 감소 / 잠복기 지연": "Reduced amplitude / Delayed latency",
-        "진폭 급감 / 국소 전도차단": "Amplitude drop / Conduction block",
+        "비정상 (진폭 감소 / 잠복기 지연)": "Abnormal (Reduced amp & Delayed lat)",
+        "비정상 (진폭 급감 / 국소 전도차단 의심)": "Abnormal (Conduction block)",
         "비정상 (진폭 감소)": "Abnormal (Reduced amp)",
-        "비정상 (진폭 감소 / 잠복기 지연)": "Abnormal (Reduced amp/Delayed)",
-        "비정상 (진폭 급감 / 국소 전도차단)": "Abnormal (Conduction block)",
         "비정상 (반응 소실)": "Abnormal (Absent)",
         "비정상 (동원 불가)": "Abnormal (No recruitment)",
         "비정상 (동원 감소)": "Abnormal (Reduced recruitment)",
@@ -469,8 +467,6 @@ def custom_english_translate(text: str) -> str:
         "안쪽장딴지근": "Medial gastrocnemius",
         "가자미근": "Soleus",
         "큰볼기근": "Gluteus maximus",
-        "중간볼기근": "Gluteus medius",
-        "볼기근": "Gluteus",
         "넙다리두갈래근 짧은갈래": "Biceps femoris short head",
         "긴노쪽손목폄근": "Extensor carpi radialis longus",
         "손가락폄근": "Extensor digitorum communis",
