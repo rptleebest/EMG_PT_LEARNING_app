@@ -16,33 +16,21 @@ def _clear_learning_state() -> None:
 
 
 def _go_home() -> None:
-    """
-    홈 화면으로 이동합니다.
-    """
+    """홈 화면으로 이동합니다."""
     st.session_state["screen"] = "home"
     _clear_learning_state()
     st.rerun()
 
 
 def _go_back() -> None:
-    """
-    현재 화면에 따라 이전 화면으로 이동합니다.
-
-    이동 규칙:
-    - 사례 상세 화면 → 사례 목록
-    - 사례 목록 → 홈
-    - 가상 검사결과표 해석 → 홈
-    - 그 외 → 홈
-    """
+    """현재 화면에 따라 이전 화면으로 이동합니다."""
     current = st.session_state.get("screen", "home")
 
     if current == "case_detail":
         st.session_state["screen"] = "case_list"
-
     elif current in {"case_list", "input_learning"}:
         st.session_state["screen"] = "home"
         _clear_learning_state()
-
     else:
         st.session_state["screen"] = "home"
         _clear_learning_state()
@@ -52,75 +40,29 @@ def _go_back() -> None:
 
 def render_top_navigation() -> None:
     """
-    상단 네비게이션을 출력합니다.
-    홈 화면에서는 표시하지 않습니다.
+    요청에 따라 상단 네비게이션 버튼은 출력하지 않습니다.
     """
-    if st.session_state.get("screen", "home") == "home":
-        return
-
-    st.markdown(
-        '<div class="top-bottom-nav-space"></div>',
-        unsafe_allow_html=True,
-    )
-
-    col1, col2, col3 = st.columns([1, 1, 4])
-
-    with col1:
-        if st.button(
-            "🏠 처음",
-            type="secondary",
-            use_container_width=True,
-            key="nav_home_top",
-        ):
-            _go_home()
-
-    with col2:
-        if st.button(
-            "⬅️ 이전",
-            type="secondary",
-            use_container_width=True,
-            key="nav_back_top",
-        ):
-            _go_back()
-
-    with col3:
-        st.markdown("")
+    pass
 
 
 def render_bottom_navigation() -> None:
     """
-    하단 네비게이션을 출력합니다.
-    홈 화면에서는 표시하지 않습니다.
+    하단 네비게이션을 출력합니다. 버튼을 중앙으로 정렬합니다.
     """
     if st.session_state.get("screen", "home") == "home":
         return
 
-    st.markdown(
-        '<div style="height: 24px;"></div>',
-        unsafe_allow_html=True,
-    )
+    st.markdown('<div style="height: 32px;"></div>', unsafe_allow_html=True)
 
-    col1, col2 = st.columns([1, 1])
+    # [여백, 버튼1, 버튼2, 여백] 비율로 중앙 정렬
+    spacer1, col1, col2, spacer2 = st.columns([1, 1.2, 1.2, 1])
 
     with col1:
-        if st.button(
-            "🏠 처음",
-            type="primary",
-            use_container_width=True,
-            key="nav_home_bottom",
-        ):
+        if st.button("🏠 처음", type="primary", use_container_width=True, key="nav_home_bottom"):
             _go_home()
 
     with col2:
-        if st.button(
-            "⬅️ 이전",
-            type="primary",
-            use_container_width=True,
-            key="nav_back_bottom",
-        ):
+        if st.button("⬅️ 이전", type="primary", use_container_width=True, key="nav_back_bottom"):
             _go_back()
 
-    st.markdown(
-        "<div style='height: 16px;'></div>",
-        unsafe_allow_html=True,
-    )
+    st.markdown("<div style='height: 24px;'></div>", unsafe_allow_html=True)
