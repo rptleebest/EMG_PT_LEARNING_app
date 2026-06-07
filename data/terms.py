@@ -350,6 +350,12 @@ special_term = globals().get(
     ),
 )
 
+# -------------------------------------------------------------------
+# ui.case_learning.py 호환용 alias
+# -------------------------------------------------------------------
+
+special_term_label = special_term
+
 def get_ncs_description(code_or_text: str) -> str:
     """
     NCS 코드 또는 텍스트에 대한 설명을 반환합니다.
