@@ -254,6 +254,101 @@ TERM_EXPLANATIONS = TermLookup(
     }
 )
 
+# -------------------------------------------------------------------
+# ImportError 방지용 최종 호환 블록
+# ui.case_learning.py / data.cases.py 호환
+# -------------------------------------------------------------------
+
+# NCS 기본 코드
+NCS_NORMAL = globals().get("NCS_NORMAL", "ncs_normal")
+NCS_DELAYED = globals().get("NCS_DELAYED", "ncs_delayed")
+NCS_REDUCED = globals().get("NCS_REDUCED", "ncs_reduced")
+NCS_ABSENT = globals().get("NCS_ABSENT", "ncs_absent")
+NCS_CONDUCTION_BLOCK = globals().get("NCS_CONDUCTION_BLOCK", "ncs_conduction_block")
+
+# EMG 기본 코드
+EMG_NORMAL = globals().get("EMG_NORMAL", "emg_normal")
+EMG_ACTIVE_DENERVATION = globals().get("EMG_ACTIVE_DENERVATION", "emg_active_denervation")
+EMG_PARASPINAL_DENERVATION = globals().get("EMG_PARASPINAL_DENERVATION", "emg_paraspinal_denervation")
+EMG_CHRONIC_REINNERVATION = globals().get("EMG_CHRONIC_REINNERVATION", "emg_chronic_reinnervation")
+EMG_ACTIVE_CHRONIC = globals().get("EMG_ACTIVE_CHRONIC", "emg_active_chronic")
+EMG_FASCICULATION = globals().get("EMG_FASCICULATION", "emg_fasciculation")
+EMG_NO_RESPONSE = globals().get("EMG_NO_RESPONSE", "emg_no_response")
+
+# 특수검사 코드
+FWAVE_DELAYED_ABSENT = globals().get("FWAVE_DELAYED_ABSENT", "fwave_delayed_absent")
+H_REFLEX_HYPERACTIVE = globals().get("H_REFLEX_HYPERACTIVE", "h_reflex_hyperactive")
+H_M_RATIO_INCREASED = globals().get("H_M_RATIO_INCREASED", "h_m_ratio_increased")
+BLINK_DELAYED = globals().get("BLINK_DELAYED", "blink_delayed")
+BLINK_DELAYED_ABSENT = globals().get("BLINK_DELAYED_ABSENT", "blink_delayed_absent")
+
+
+class TermLookup(dict):
+    """
+    dict처럼도 쓰고 함수처럼도 쓸 수 있는 호환용 사전.
+    """
+    def __call__(self, key=None, default=""):
+        if key is None:
+            return self
+        return self.get(key, default if default != "" else str(key))
+
+
+# ui.case_learning.py에서 import하는 이름 1
+ncs_amplitude_latency = globals().get(
+    "ncs_amplitude_latency",
+    TermLookup(
+        {
+            NCS_NORMAL: "정상 범위: 진폭과 잠복기가 정상 범위입니다.",
+            NCS_DELAYED: "잠복기 지연: 말이집탈락 또는 압박성 전도 지연 가능성을 시사합니다.",
+            NCS_REDUCED: "진폭 감소: 축삭 손상 또는 전도차단 가능성을 시사합니다.",
+            NCS_ABSENT: "반응 소실: 심한 축삭 손상 또는 전도 실패 가능성을 시사합니다.",
+            NCS_CONDUCTION_BLOCK: "전도차단: 국소 압박 또는 말이집탈락성 병변 가능성을 시사합니다.",
+            FWAVE_DELAYED_ABSENT: "F파 지연 또는 소실: 근위부 전도 이상 가능성을 시사합니다.",
+            H_REFLEX_HYPERACTIVE: "H-반사 항진: 척수반사 흥분성 증가를 시사합니다.",
+            H_M_RATIO_INCREASED: "H/M 비율 증가: 경직 또는 반사 흥분성 증가 평가에 참고됩니다.",
+            BLINK_DELAYED: "눈깜빡반사 지연: 반사경로 전도 지연 가능성을 시사합니다.",
+            BLINK_DELAYED_ABSENT: "눈깜빡반사 지연 또는 소실: 반사경로 이상 가능성을 시사합니다.",
+        }
+    ),
+)
+
+# ui.case_learning.py에서 import하는 이름 2
+emg_case_label = globals().get(
+    "emg_case_label",
+    TermLookup(
+        {
+            EMG_NORMAL: "정상 침근전도 소견",
+            EMG_ACTIVE_DENERVATION: "활동성 탈신경 소견",
+            EMG_PARASPINAL_DENERVATION: "척추주위근 탈신경 소견",
+            EMG_CHRONIC_REINNERVATION: "만성 재신경지배 소견",
+            EMG_ACTIVE_CHRONIC: "활동성 탈신경과 만성 재신경지배가 함께 관찰되는 소견",
+            EMG_FASCICULATION: "섬유다발수축전위 소견",
+            EMG_NO_RESPONSE: "운동단위 동원 불가",
+        }
+    ),
+)
+
+# ui.case_learning.py에서 import하는 이름 3
+special_term = globals().get(
+    "special_term",
+    TermLookup(
+        {
+            "SNAP": "감각신경활동전위입니다. 감각신경의 축삭 기능을 평가합니다.",
+            "CMAP": "복합근육활동전위입니다. 운동신경과 근육 반응을 평가합니다.",
+            "MUAP": "운동단위활동전위입니다. 침근전도에서 운동단위의 형태와 동원 양상을 평가합니다.",
+            "Giant MUAP": "거대 운동단위활동전위입니다. 만성 재신경지배를 시사할 수 있습니다.",
+            "Reduced MU recruitment": "수의수축 시 동원 가능한 운동단위 수가 감소한 상태입니다.",
+            "Normal MU recruitment": "수의수축 시 운동단위 동원이 정상적으로 이루어지는 상태입니다.",
+            "Silent at rest": "휴식 시 비정상 자발전위가 관찰되지 않는 상태입니다.",
+            "fibrillation potential": "탈신경된 근섬유에서 나타날 수 있는 비정상 자발전위입니다.",
+            "positive sharp wave": "탈신경 또는 근섬유막 불안정성과 관련된 비정상 자발전위입니다.",
+            "Conduction block": "국소 부위에서 신경 자극 전달이 차단되는 소견입니다.",
+            "F-wave": "말초신경의 근위부 전도 이상 평가에 도움이 되는 후기 반응입니다.",
+            "H-reflex": "S1 반사경로와 척수반사 흥분성 평가에 활용되는 검사입니다.",
+            "Blink reflex": "삼차신경, 뇌줄기, 얼굴신경을 포함하는 반사경로 평가입니다.",
+        }
+    ),
+)
 
 def get_ncs_description(code_or_text: str) -> str:
     """
