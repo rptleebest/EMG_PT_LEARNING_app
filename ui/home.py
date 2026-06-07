@@ -9,7 +9,7 @@ def render_home() -> None:
     불필요한 박스를 없애고, 텍스트와 구분선을 활용하여 깔끔하게 구성했습니다.
     """
     st.markdown(
-        '<div class="main-title" style="color:#1e3a8a; font-size:1.6rem; text-align:center;">임상 근전도 판독 가이드</div>', 
+        '<div class="main-title" style="color:#1e3a8a; font-size:1.6rem; text-align:center;">근전도 판독 보조 및 학습 앱</div>', 
         unsafe_allow_html=True
     )
     
