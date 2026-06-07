@@ -31,6 +31,7 @@ def apply_mobile_first_style() -> None:
             padding-bottom: 3rem;
         }
 
+        /* 텍스트 양쪽 정렬 및 가독성 최적화 */
         p, span, div { 
             line-height: 1.65; 
             word-break: keep-all; 
@@ -39,7 +40,7 @@ def apply_mobile_first_style() -> None:
 
         .main-title {
             font-size: 1.5rem;
-            font-weight: 800; /* 눈 피로 감소를 위해 900->800 변경 */
+            font-weight: 800;
             color: var(--title-color);
             margin-bottom: 0.4rem;
         }
@@ -52,20 +53,36 @@ def apply_mobile_first_style() -> None:
 
         .section-label {
             font-size: 1.15rem;
-            font-weight: 700; /* 800->700 변경 */
+            font-weight: 800;
             color: var(--title-color);
-            margin-top: 1rem;
+            margin-top: 1.5rem;
             margin-bottom: 12px;
             padding-bottom: 6px;
             border-bottom: 2px solid var(--line-light);
         }
 
         .sub-title { 
-            font-weight: 700; 
+            font-weight: 800; 
             color: var(--label-main); 
             margin-top: 16px; 
             margin-bottom: 8px; 
             font-size: 1.05rem;
+        }
+
+        /* 이학적 검사 전용 부드러운 동일 너비 박스 */
+        .exam-box {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+            width: 100%;
+        }
+        .exam-title {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
         }
@@ -78,17 +95,15 @@ def apply_mobile_first_style() -> None:
             border-bottom: 1px dashed #f1f5f9;
         }
         .info-label {
-            font-weight: 700;
+            font-weight: 800;
             color: var(--label-main);
             width: 100px; 
             flex-shrink: 0;
-            font-size: 0.95rem;
         }
         .info-value {
             font-weight: 400;
             color: var(--text-main);
             flex-grow: 1;
-            font-size: 0.95rem;
         }
 
         .left-border-box {
@@ -97,13 +112,6 @@ def apply_mobile_first_style() -> None:
             margin-top: 4px;
             margin-bottom: 12px;
             color: #475569;
-        }
-        
-        .left-border-box.success {
-            border-left-color: #22c55e;
-            background: #f0fdf4;
-            padding: 12px;
-            border-radius: 0 8px 8px 0;
         }
 
         .ddx-box {
@@ -119,24 +127,24 @@ def apply_mobile_first_style() -> None:
             max-width: 100% !important;
             width: 100% !important;
             border-radius: 8px !important;
-            font-weight: 700 !important;
+            font-weight: 800 !important;
             min-height: 48px !important;
         }
 
+        /* 토글 디자인 */
         [data-testid="stExpander"] {
             border: 1px solid #bae6fd !important;
             border-radius: 8px !important;
             background: #f8fafc !important;
         }
         [data-testid="stExpander"] p {
-            font-weight: 700 !important;
+            font-weight: 800 !important;
             color: #1e40af !important;
         }
 
         @media (max-width: 768px) {
             .main .block-container { padding-top: 1rem; padding-left: 0.8rem; padding-right: 0.8rem; }
             .info-label { width: 85px; font-size: 0.9rem; }
-            .info-value { font-size: 0.9rem; }
         }
         </style>
         """,
