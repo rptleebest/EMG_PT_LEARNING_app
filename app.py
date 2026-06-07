@@ -6,20 +6,16 @@ from ui.navigation import render_top_navigation
 from ui.router import render_router
 
 def apply_mobile_first_style() -> None:
-    """
-    모바일/PC 환경 모두에서 최적의 가독성을 제공하는 CSS 스타일입니다.
-    양쪽 정렬, 폰트 두께 대비, 사례 선택 박스 색상 구분 등이 포함됩니다.
-    """
     st.markdown(
         """
         <style>
         :root {
             --bg: #f8fafc;
-            --card: #ffffff;
-            --text-main: #334155; 
+            --card-bg: #ffffff;
+            --text-main: #334155; /* 눈이 편한 짙은 회색 */
             --title-color: #0f172a;
-            --label-main: #1e3a8a; /* 눈이 피로하지 않은 깊은 남색 */
-            --line: #e2e8f0;
+            --label-main: #1e3a8a; /* 차분한 남색 */
+            --line-light: #e2e8f0;
         }
 
         html, body, .stApp, [data-testid="stAppViewContainer"], .main {
@@ -31,91 +27,100 @@ def apply_mobile_first_style() -> None:
 
         .main .block-container {
             max-width: 900px;
-            padding-top: 2rem;
+            padding-top: 1.5rem;
             padding-bottom: 3rem;
         }
 
-        /* 본문 텍스트 양쪽 정렬 및 줄간격 최적화 */
         p, span, div { 
-            line-height: 1.65; 
+            line-height: 1.6; 
             word-break: keep-all; 
-            text-align: justify; 
         }
 
+        /* 1) 메인 타이틀 */
         .main-title {
             font-size: 1.5rem;
             font-weight: 900;
             color: var(--title-color);
-            margin-bottom: 0.6rem;
-            text-align: left;
+            margin-bottom: 0.4rem;
         }
         
-        .subtle { 
+        .sub-desc { 
             color: #64748b; 
             font-size: 0.95rem; 
             margin-bottom: 1.5rem; 
-            text-align: justify;
         }
 
-        .section-card {
-            background: var(--card);
-            padding: 1.2rem;
-            margin-bottom: 1.2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
-        }
-
-        /* 소제목 영역 */
+        /* 2) 섹션 소제목 (아이콘 포함) */
         .section-label {
-            font-size: 1.05rem;
+            font-size: 1.15rem;
             font-weight: 800;
             color: var(--title-color);
+            margin-top: 1rem;
             margin-bottom: 12px;
             padding-bottom: 6px;
-            border-bottom: 2px solid var(--line);
+            border-bottom: 2px solid var(--line-light);
         }
 
-        /* 설명 앞 라벨 텍스트 (조금 더 굵고 깊은 색상) */
-        .inline-label { 
+        /* 3) 표/항목 소제목 */
+        .sub-title { 
             font-weight: 800; 
             color: var(--label-main); 
-            margin-right: 6px; 
-        }
-        
-        .inline-content { 
-            font-weight: 400; 
-            color: var(--text-main); 
-        }
-        
-        .item-title { 
-            font-weight: 800; 
-            color: var(--title-color); 
             margin-top: 16px; 
-            margin-bottom: 6px; 
+            margin-bottom: 8px; 
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
         }
 
-        /* 감별진단 전용 디자인 */
-        .ddx-box {
-            background: #faf5ff;
-            border-left: 4px solid #9333ea;
+        /* 4) 라벨-내용 분리형 정렬 (가장 중요한 가독성 개선) */
+        .info-row {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 8px;
+            padding-bottom: 4px;
+            border-bottom: 1px dashed #f1f5f9;
+        }
+        .info-label {
+            font-weight: 800;
+            color: var(--label-main);
+            width: 100px; /* 라벨 너비 고정으로 줄맞춤 */
+            flex-shrink: 0;
+            font-size: 0.95rem;
+        }
+        .info-value {
+            font-weight: 400;
+            color: var(--text-main);
+            flex-grow: 1;
+            font-size: 0.95rem;
+        }
+
+        /* 5) 부드러운 왼쪽 선 (설명/증상 나열용) */
+        .left-border-box {
+            border-left: 4px solid #cbd5e1;
+            padding-left: 12px;
+            margin-top: 4px;
+            margin-bottom: 12px;
+            color: #475569;
+        }
+        
+        .left-border-box.success {
+            border-left-color: #22c55e;
+            background: #f0fdf4;
             padding: 12px;
-            margin-top: 12px;
-            border-radius: 6px;
-        }
-        
-        .ddx-title { 
-            font-size: 1.05rem; 
-            font-weight: 800; 
-            color: #7e22ce; 
-            margin-bottom: 6px; 
+            border-radius: 0 8px 8px 0;
         }
 
-        /* 하단 이동 버튼 너비 및 디자인 */
-        div[data-testid="stButton"] { 
-            display: flex; 
-            justify-content: center; 
+        /* 6) 감별진단 박스 (눈에 띄되 부드럽게) */
+        .ddx-box {
+            background: #fbf5ff;
+            border-left: 4px solid #9333ea;
+            padding: 14px;
+            margin-top: 12px;
+            border-radius: 4px;
         }
-        
+
+        /* 7) 버튼 최적화 */
+        div[data-testid="stButton"] { display: flex; justify-content: center; }
         div[data-testid="stButton"] > button {
             max-width: 100% !important;
             width: 100% !important;
@@ -123,37 +128,22 @@ def apply_mobile_first_style() -> None:
             font-weight: 800 !important;
             min-height: 48px !important;
         }
-        
-        /* 라디오 버튼 (사례 선택) 박스 너비 통일 및 색상 제어 */
-        div[role="radiogroup"] {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            width: 100%;
+
+        /* 토글(Expander) 디자인 변경 (표 아래에 부드럽게 붙도록) */
+        [data-testid="stExpander"] {
+            border: 1px solid #bae6fd !important;
+            border-radius: 8px !important;
+            background: #f8fafc !important;
         }
-        
-        div[role="radiogroup"] > label {
-            width: 100%;
-            padding: 14px 12px;
-            border: 1px solid var(--line);
-            border-radius: 8px;
-            cursor: pointer;
-            background: #f8fafc; /* 기본 옅은 파스텔(회파랑) 배경 */
-        }
-        
-        /* 첫 번째 항목('선택 안 함') 배경색 변경 */
-        div[role="radiogroup"] > label:first-child {
-            background: #f1f5f9; /* 뚜렷한 회색 배경 */
-            border: 1px dashed #cbd5e1;
+        [data-testid="stExpander"] p {
+            font-weight: 700 !important;
+            color: #1e40af !important;
         }
 
         @media (max-width: 768px) {
-            .main .block-container { 
-                padding-top: 1rem; 
-                padding-left: 0.8rem; 
-                padding-right: 0.8rem; 
-            }
-            .main-title { font-size: 1.3rem; }
+            .main .block-container { padding-top: 1rem; padding-left: 0.8rem; padding-right: 0.8rem; }
+            .info-label { width: 85px; font-size: 0.9rem; }
+            .info-value { font-size: 0.9rem; }
         }
         </style>
         """,
@@ -161,7 +151,7 @@ def apply_mobile_first_style() -> None:
     )
 
 def main() -> None:
-    st.set_page_config(page_title="근전도 판독 가이드", page_icon="🧠", layout="wide")
+    st.set_page_config(page_title="근전도 판독 가이드", page_icon="⚡", layout="wide")
     init_app_state()
     apply_mobile_first_style()
     render_top_navigation()
