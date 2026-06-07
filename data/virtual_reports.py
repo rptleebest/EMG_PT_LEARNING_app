@@ -469,6 +469,8 @@ def custom_english_translate(text: str) -> str:
         "안쪽장딴지근": "Medial gastrocnemius",
         "가자미근": "Soleus",
         "큰볼기근": "Gluteus maximus",
+        "중간볼기근": "Gluteus medius",
+        "볼기근": "Gluteus",
         "넙다리두갈래근 짧은갈래": "Biceps femoris short head",
         "긴노쪽손목폄근": "Extensor carpi radialis longus",
         "손가락폄근": "Extensor digitorum communis",
