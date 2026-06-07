@@ -12,9 +12,9 @@ def apply_mobile_first_style() -> None:
         :root {
             --bg: #f8fafc;
             --card-bg: #ffffff;
-            --text-main: #334155; /* 눈이 편한 짙은 회색 */
+            --text-main: #334155; 
             --title-color: #0f172a;
-            --label-main: #1e3a8a; /* 차분한 남색 */
+            --label-main: #1e3a8a; 
             --line-light: #e2e8f0;
         }
 
@@ -32,14 +32,14 @@ def apply_mobile_first_style() -> None:
         }
 
         p, span, div { 
-            line-height: 1.6; 
+            line-height: 1.65; 
             word-break: keep-all; 
+            text-align: justify; 
         }
 
-        /* 1) 메인 타이틀 */
         .main-title {
             font-size: 1.5rem;
-            font-weight: 900;
+            font-weight: 800; /* 눈 피로 감소를 위해 900->800 변경 */
             color: var(--title-color);
             margin-bottom: 0.4rem;
         }
@@ -50,10 +50,9 @@ def apply_mobile_first_style() -> None:
             margin-bottom: 1.5rem; 
         }
 
-        /* 2) 섹션 소제목 (아이콘 포함) */
         .section-label {
             font-size: 1.15rem;
-            font-weight: 800;
+            font-weight: 700; /* 800->700 변경 */
             color: var(--title-color);
             margin-top: 1rem;
             margin-bottom: 12px;
@@ -61,9 +60,8 @@ def apply_mobile_first_style() -> None:
             border-bottom: 2px solid var(--line-light);
         }
 
-        /* 3) 표/항목 소제목 */
         .sub-title { 
-            font-weight: 800; 
+            font-weight: 700; 
             color: var(--label-main); 
             margin-top: 16px; 
             margin-bottom: 8px; 
@@ -72,7 +70,6 @@ def apply_mobile_first_style() -> None:
             align-items: center;
         }
 
-        /* 4) 라벨-내용 분리형 정렬 (가장 중요한 가독성 개선) */
         .info-row {
             display: flex;
             align-items: baseline;
@@ -81,9 +78,9 @@ def apply_mobile_first_style() -> None:
             border-bottom: 1px dashed #f1f5f9;
         }
         .info-label {
-            font-weight: 800;
+            font-weight: 700;
             color: var(--label-main);
-            width: 100px; /* 라벨 너비 고정으로 줄맞춤 */
+            width: 100px; 
             flex-shrink: 0;
             font-size: 0.95rem;
         }
@@ -94,7 +91,6 @@ def apply_mobile_first_style() -> None:
             font-size: 0.95rem;
         }
 
-        /* 5) 부드러운 왼쪽 선 (설명/증상 나열용) */
         .left-border-box {
             border-left: 4px solid #cbd5e1;
             padding-left: 12px;
@@ -110,7 +106,6 @@ def apply_mobile_first_style() -> None:
             border-radius: 0 8px 8px 0;
         }
 
-        /* 6) 감별진단 박스 (눈에 띄되 부드럽게) */
         .ddx-box {
             background: #fbf5ff;
             border-left: 4px solid #9333ea;
@@ -119,17 +114,15 @@ def apply_mobile_first_style() -> None:
             border-radius: 4px;
         }
 
-        /* 7) 버튼 최적화 */
         div[data-testid="stButton"] { display: flex; justify-content: center; }
         div[data-testid="stButton"] > button {
             max-width: 100% !important;
             width: 100% !important;
             border-radius: 8px !important;
-            font-weight: 800 !important;
+            font-weight: 700 !important;
             min-height: 48px !important;
         }
 
-        /* 토글(Expander) 디자인 변경 (표 아래에 부드럽게 붙도록) */
         [data-testid="stExpander"] {
             border: 1px solid #bae6fd !important;
             border-radius: 8px !important;
