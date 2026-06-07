@@ -351,10 +351,17 @@ special_term = globals().get(
 )
 
 # -------------------------------------------------------------------
-# ui.case_learning.py 호환용 alias
+# 호환용 alias
 # -------------------------------------------------------------------
 
 special_term_label = special_term
+special_terms = special_term
+special_terms_label = special_term
+
+ncs_result_label = ncs_amplitude_latency
+ncs_case_label = ncs_amplitude_latency
+
+emg_result_label = emg_case_label
 
 def get_ncs_description(code_or_text: str) -> str:
     """
