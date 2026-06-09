@@ -79,20 +79,21 @@ def render_virtual_report_inline(case_name: str):
 
     teaching = data.get("teaching_diagnosis", {})
 
+        # [감각신경 표 출력]
     if data.get("ncs_sensory"):
         st.markdown(f'<div class="section-label" style="margin-top:32px;">⚡ {get_report_section_name("sensory", lang)}</div>', unsafe_allow_html=True)
         st.markdown(create_responsive_table(sen_hdrs, _tr(data.get("ncs_sensory", []))), unsafe_allow_html=True)
-        if "ncs_reason" in teaching:
-            with st.expander("🔍 감각신경전도검사 결과 해석"):
-                st.markdown(f'<div style="color:#334155; margin-bottom:8px;">• {teaching["ncs_reason"][0]}</div>', unsafe_allow_html=True)
 
+    # [운동신경 표 출력]
     if data.get("ncs_motor"):
         st.markdown(f'<div class="section-label" style="margin-top:32px;">⚡ {get_report_section_name("motor", lang)}</div>', unsafe_allow_html=True)
         st.markdown(create_responsive_table(mot_hdrs, _tr(data.get("ncs_motor", []))), unsafe_allow_html=True)
-        if "ncs_reason" in teaching and len(teaching["ncs_reason"]) > 1:
-            with st.expander("🔍 운동신경전도검사 결과 해석"):
-                for r in teaching["ncs_reason"][1:]:
-                    st.markdown(f'<div style="color:#334155; margin-bottom:8px;">• {r}</div>', unsafe_allow_html=True)
+
+    # [감각/운동 통합 해석 출력]
+    if (data.get("ncs_sensory") or data.get("ncs_motor")) and "ncs_reason" in teaching:
+        with st.expander("🔍 신경전도검사 결과 해석"):
+            for idx, r in enumerate(teaching["ncs_reason"]):
+                st.markdown(f'<div style="color:#334155; margin-bottom:8px;"><span style="color:#1e3a8a; font-weight:700; margin-right:4px;">{idx+1}.</span>{r}</div>', unsafe_allow_html=True)
 
     if data.get("emg"):
         st.markdown(f'<div class="section-label" style="margin-top:32px;">🪡 {get_report_section_name("emg", lang)}</div>', unsafe_allow_html=True)
