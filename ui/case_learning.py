@@ -18,13 +18,13 @@ def _safe_format_code(code: str) -> str:
 def _get_result_color_style(value: str) -> str:
     text = str(value)
     abnormal_words = ["비정상", "감소", "지연", "소실", "탈신경", "재신경지배", "차단"]
-    if any(w in text for w in abnormal_words): return "color: #991b1b; font-weight: 800;"
-    if "정상" in text: return "color: #15803d; font-weight: 800;"
+    if any(w in text for w in abnormal_words): return "color: #991b1b; font-weight: 700;"
+    if "정상" in text: return "color: #15803d; font-weight: 700;"
     return ""
 
 def _create_responsive_table(headers: list, rows: list) -> str:
     if not rows: return ""
-    css = """<style>table { width: 100%; border-collapse: collapse; margin-bottom: 8px; font-size: 0.9rem; } th { background-color: #f8fafc; padding: 10px; border-bottom: 2px solid #cbd5e1; text-align: left; color: #1e293b; font-weight: 800; } td { padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: left; color: #334155; } td.fst-col { font-weight: 800; color: #1e3a8a; } @media screen and (max-width: 768px) { thead { display: none; } tr { display: block; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 12px; background: #ffffff; padding: 8px; } td { display: flex; justify-content: space-between; align-items: center; gap: 12px; border-bottom: 1px dashed #e2e8f0; padding: 10px 8px; text-align: right; } td:last-child { border-bottom: none; } td::before { content: attr(data-label); font-weight: 800; color: #475569; text-align: left; font-size: 0.85rem; flex: 0 0 35%; } td > span { flex: 1; text-align: right; word-break: keep-all; font-weight: 400; } td.fst-col { justify-content: center; background: #f1f5f9; border-radius: 6px 6px 0 0; text-align: center; padding: 12px; } td.fst-col::before { content: none; } td.fst-col > span { text-align: center; font-weight: 800; color: #1e3a8a; } }</style>"""
+    css = """<style>table { width: 100%; border-collapse: collapse; margin-bottom: 8px; font-size: 0.9rem; } th { background-color: #f8fafc; padding: 10px; border-bottom: 2px solid #cbd5e1; text-align: left; color: #1e293b; font-weight: 700; } td { padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: left; color: #334155; } td.fst-col { font-weight: 700; color: #1e3a8a; } @media screen and (max-width: 768px) { thead { display: none; } tr { display: block; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 12px; background: #ffffff; padding: 8px; } td { display: flex; justify-content: space-between; align-items: center; gap: 12px; border-bottom: 1px dashed #e2e8f0; padding: 10px 8px; text-align: right; } td:last-child { border-bottom: none; } td::before { content: attr(data-label); font-weight: 700; color: #475569; text-align: left; font-size: 0.85rem; flex: 0 0 35%; } td > span { flex: 1; text-align: right; word-break: keep-all; font-weight: 400; } td.fst-col { justify-content: center; background: #f1f5f9; border-radius: 6px 6px 0 0; text-align: center; padding: 12px; } td.fst-col::before { content: none; } td.fst-col > span { text-align: center; font-weight: 700; color: #1e3a8a; } }</style>"""
     header_html = "".join([f"<th>{html.escape(h)}</th>" for h in headers])
     tr_html = ""
     for row in rows:
@@ -72,15 +72,14 @@ def render_case_detail_inline(case_name: str):
         st.markdown(f'<div style="margin-bottom:4px;">• {sym}</div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # 2. 이학적 검사 (각 박스로 뚜렷하게 분리)
+    # 2. 이학적 검사
     phys_exam = patient.get("physical_exam", {})
     if phys_exam:
-        st.markdown('<div class="section-label">🩺 이학적 검사 (신경학적 진찰)</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-label" style="margin-top:24px;">🩺 이학적 검사 (신경학적 진찰)</div>', unsafe_allow_html=True)
         for cat, items in phys_exam.items():
             icon = "🖐" if "감각" in cat else "💪" if "근력" in cat else "🔨"
             st.markdown(f'<div class="exam-box"><div class="exam-title">{icon} {cat}</div>', unsafe_allow_html=True)
             for item in items:
-                # 괄호 포함 시 들여쓰기 및 회색 처리
                 if "(" in item and ")" in item:
                     parts = item.split("(", 1)
                     main_text = parts[0].strip()
@@ -91,7 +90,7 @@ def render_case_detail_inline(case_name: str):
                     st.markdown(f'<div style="margin-bottom:4px; color:#334155;">• {item}</div>', unsafe_allow_html=True)
             st.markdown('</div>', unsafe_allow_html=True)
 
-    # 3. 전기진단 표 및 개별 토글
+    # 3. 전기진단 표 분류
     sensory_rows, motor_rows, emg_rows, blink_rows = [], [], [], []
     for test_name, result_tuple in findings.items():
         if not isinstance(result_tuple, tuple): continue
@@ -101,43 +100,54 @@ def render_case_detail_inline(case_name: str):
         elif "cmap" in test_name.lower() or "운동" in test_name: motor_rows.append(row)
         else: emg_rows.append(row)
 
+    # ==========================================
+    # ⚡ 신경전도검사 (감각 + 운동 출력 후 통합 토글)
+    # ==========================================
     if sensory_rows:
-        st.markdown('<div class="section-label">⚡ 감각신경전도검사 (Sensory NCS)</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-label" style="margin-top:32px;">⚡ 감각신경전도검사 (Sensory NCS)</div>', unsafe_allow_html=True)
         st.markdown(_create_responsive_table(["검사 신경", "진폭", "잠복기"], sensory_rows), unsafe_allow_html=True)
-        if "ncs_reason" in teaching:
-            with st.expander("🔍 감각신경전도검사 결과 해석"):
-                st.markdown(f'<div style="color:#334155; margin-bottom:8px;">• {teaching["ncs_reason"][0]}</div>', unsafe_allow_html=True)
 
     if motor_rows:
-        st.markdown('<div class="section-label">⚡ 운동신경전도검사 (Motor NCS)</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-label" style="margin-top:32px;">⚡ 운동신경전도검사 (Motor NCS)</div>', unsafe_allow_html=True)
         st.markdown(_create_responsive_table(["검사 신경", "진폭", "잠복기"], motor_rows), unsafe_allow_html=True)
-        if "ncs_reason" in teaching and len(teaching["ncs_reason"]) > 1:
-            with st.expander("🔍 운동신경전도검사 결과 해석"):
-                for r in teaching["ncs_reason"][1:]:
-                    st.markdown(f'<div style="color:#334155; margin-bottom:8px;">• {r}</div>', unsafe_allow_html=True)
 
+    # 감각/운동 표 렌더링 직후 통합된 신경전도검사 해석 출력
+    if (sensory_rows or motor_rows) and "ncs_reason" in teaching:
+        with st.expander("🔍 신경전도검사 결과 해석"):
+            for idx, r in enumerate(teaching["ncs_reason"]):
+                st.markdown(f'<div style="color:#334155; margin-bottom:8px;"><span style="color:#1e3a8a; font-weight:700; margin-right:4px;">{idx+1}.</span>{r}</div>', unsafe_allow_html=True)
+
+    # ==========================================
+    # ⚡ 특수 검사
+    # ==========================================
     if blink_rows:
-        st.markdown('<div class="section-label">⚡ 특수 및 후기반응 검사 (Special & Late Responses)</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-label" style="margin-top:32px;">⚡ 특수 및 후기반응 검사 (Special & Late Responses)</div>', unsafe_allow_html=True)
         st.markdown(_create_responsive_table(["검사 신경", "진폭", "잠복기"], blink_rows), unsafe_allow_html=True)
-        if "emg_reason" in teaching:
+        if "emg_reason" in teaching: # 벨마비 사례의 경우 emg_reason에 눈깜박반사 해석도 포함됨
             with st.expander("🔍 특수 검사 소견 해석"):
-                for r in teaching["emg_reason"]: 
-                    st.markdown(f'<div style="color:#334155; margin-bottom:8px;">• {r}</div>', unsafe_allow_html=True)
+                for idx, r in enumerate(teaching["emg_reason"]): 
+                    st.markdown(f'<div style="color:#334155; margin-bottom:8px;"><span style="color:#1e3a8a; font-weight:700; margin-right:4px;">{idx+1}.</span>{r}</div>', unsafe_allow_html=True)
 
+    # ==========================================
+    # 🪡 침근전도검사 (단독)
+    # ==========================================
     if emg_rows:
-        st.markdown('<div class="section-label">🪡 침근전도검사 (Needle EMG)</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-label" style="margin-top:32px;">🪡 침근전도검사 (Needle EMG)</div>', unsafe_allow_html=True)
         st.markdown(_create_responsive_table(["검사 근육", "휴식 시", "수의수축 시"], emg_rows), unsafe_allow_html=True)
         if "emg_reason" in teaching:
             with st.expander("🔍 침근전도검사 결과 해석"):
                 st.markdown("""
                 <div style="background:#f1f5f9; padding:12px; margin-bottom:12px; border-radius:4px; border-left:4px solid #cbd5e1;">
-                    <div style="font-size:0.95rem; margin-bottom:6px;"><span style="color:#1e3a8a; font-weight:800;">1) 활동성 탈신경 (Active Denervation):</span> 현재 신경 손상이 활발히 진행 중인 상태 (자발전위 관찰)</div>
-                    <div style="font-size:0.95rem; margin-bottom:6px;"><span style="color:#1e3a8a; font-weight:800;">2) 만성 재신경지배 (Chronic Reinnervation):</span> 신경 손상 후 회복을 시도하는 만성기 (거대운동단위 관찰)</div>
-                    <div style="font-size:0.95rem;"><span style="color:#1e3a8a; font-weight:800;">3) 수의수축 시 동원 감소 (Reduced Recruitment):</span> 신경 손상으로 인해 부분 탈신경으로 근력 저하 또는 완전 탈신경으로 마비된 상태</div>
+                    <div style="font-size:0.95rem; margin-bottom:6px;"><span style="color:#1e3a8a; font-weight:700;">1) 활동성 탈신경 (Active Denervation):</span> 현재 신경 손상이 활발히 진행 중인 상태 (자발전위 관찰)</div>
+                    <div style="font-size:0.95rem; margin-bottom:6px;"><span style="color:#1e3a8a; font-weight:700;">2) 만성 재신경지배 (Chronic Reinnervation):</span> 신경 손상 후 회복을 시도하는 만성기 (거대운동단위 관찰)</div>
+                    <div style="font-size:0.95rem;"><span style="color:#1e3a8a; font-weight:700;">3) 수의수축 시 동원 감소 (Reduced Recruitment):</span> 신경 손상으로 인해 부분 탈신경으로 근력 저하 또는 완전 탈신경으로 마비된 상태</div>
                 </div>
                 """, unsafe_allow_html=True)
-                for r in teaching["emg_reason"]: 
-                    st.markdown(f'<div style="color:#334155; margin-bottom:8px;">• {r}</div>', unsafe_allow_html=True)
+                # 눈깜박반사(blink)가 없는 일반 근전도 사례의 경우에만 이어서 해석 출력
+                if not blink_rows:
+                    for idx, r in enumerate(teaching["emg_reason"]): 
+                        st.markdown(f'<div style="color:#334155; margin-bottom:8px;"><span style="color:#1e3a8a; font-weight:700; margin-right:4px;">{idx+1}.</span>{r}</div>', unsafe_allow_html=True)
+
 
     # 4. 통합 임상 추론 및 감별진단
     st.markdown('<hr style="border-top: 2px dashed #cbd5e1; margin: 2.5rem 0 1.5rem 0;">', unsafe_allow_html=True)
@@ -152,7 +162,7 @@ def render_case_detail_inline(case_name: str):
             
     st.markdown(
         f'<div style="background:#fdf2f8; border:1px solid #fbcfe8; padding:16px; border-radius:8px; margin-top:16px;">'
-        f'<span style="font-size:1.15rem; color:#9d174d; font-weight:800;">임상적 추정진단 (Rule out, R/O) : {teaching.get("summary")}</span>'
+        f'<span style="font-size:1.15rem; color:#9d174d; font-weight:700;">임상적 추정진단 (Rule out, R/O) : {teaching.get("summary")}</span>'
         f'</div>', 
         unsafe_allow_html=True
     )
@@ -162,7 +172,7 @@ def render_case_detail_inline(case_name: str):
         for ddx in data["differential_diagnosis"]:
             st.markdown(f"""
             <div class="ddx-box">
-                <div style="font-size:1.05rem; font-weight:800; color:#4f46e5; margin-bottom:8px;">{ddx.get('name')}</div>
+                <div style="font-size:1.05rem; font-weight:700; color:#4f46e5; margin-bottom:8px;">{ddx.get('name')}</div>
                 <div style="color:#475569; line-height:1.6;">
                     <span style="font-weight:700; color:#334155;">[감별 포인트]</span> 증상이 유사하여 혼동될 수 있으나, 본 환자의 검사결과와 비교할 때 {ddx.get('how_to_differentiate')}
                 </div>
