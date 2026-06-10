@@ -69,7 +69,7 @@ def apply_mobile_first_style() -> None:
             font-size: 1.05rem;
         }
 
-        /* 이학적 검사 전용 부드러운 동일 너비 박스 */
+        /* 이학적 검사 전용 박스 */
         .exam-box {
             background: #f1f5f9;
             border: 1px solid #cbd5e1;
