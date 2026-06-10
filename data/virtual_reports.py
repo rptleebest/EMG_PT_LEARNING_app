@@ -456,11 +456,14 @@ def get_report_section_name(section: str, language: str) -> str:
 # 영문 모드 100% 매핑 보강
 # data/virtual_reports.py 파일의 가장 하단 부분 교체
 
+# data/virtual_reports.py 파일 하단의 함수 교체
+
 def custom_english_translate(text: str) -> str:
     raw = str(text)
     
-    # 1. 판독 결과 및 공통 용어 매핑
-    common_mapping = {
+    # 모든 한글-영문 매핑을 하나의 딕셔너리로 통합
+    mapping = {
+        # 1. 판독 결과
         "정상 범위": "WNL",
         "비정상 (활동성 탈신경)": "Abnormal (Active denervation)",
         "통증으로 평가 불가": "Incomplete due to pain",
@@ -470,101 +473,90 @@ def custom_english_translate(text: str) -> str:
         "비정상 (반응 소실)": "Abnormal (Absent)",
         "비정상 (동원 감소)": "Abnormal (Reduced recruitment)",
         "비정상 (동원 불가)": "Abnormal (No recruitment)",
+        
+        # 2. 측정측
         "오른쪽": "Rt",
         "왼쪽": "Lt",
         "양측": "Bilateral",
-        "무반응": "Absent",
-        "측정불가": "N/A"
-    }
-    for k, v in common_mapping.items():
-        if k in raw:
-            raw = raw.replace(k, v)
-
-    # 2. 자극 위치(Stim Site) 매핑
-    site_mapping = {
-        "손목": "Wrist",
+        
+        # 3. 자극 위치 (단어가 쪼개지는 원인부)
         "팔꿈치 아래": "Below elbow",
         "팔꿈치 위": "Above elbow",
-        "팔꿈치": "Elbow",
         "나선고랑 위": "Above spiral groove",
+        "종아리뼈머리": "Fibular head",
+        "서혜부": "Groin",
+        "손목": "Wrist",
+        "팔꿈치": "Elbow",
         "아래팔": "Forearm",
         "위팔": "Arm",
         "발목": "Ankle",
-        "종아리뼈머리": "Fibular head",
-        "서혜부": "Groin"
-    }
-    for k, v in site_mapping.items():
-        # 단독 일치나 포함 일치
-        if k in raw:
-            raw = raw.replace(k, v)
-
-    # 3. 신경 이름 매핑 (세분화된 신경 분지까지 모두 포함)
-    nerve_mapping = {
-        "정중신경 1지": "Median (Digit1)",
-        "정중신경 2지": "Median (Digit2)",
-        "정중신경 3지": "Median (Digit3)",
-        "정중신경": "Median",
-        "자신경 5지": "Ulnar (Digit5)",
+        
+        # 4. 신경 이름
+        "정중신경 1지": "Median (D1)",
+        "정중신경 2지": "Median (D2)",
+        "정중신경 3지": "Median (D3)",
+        "자신경 5지": "Ulnar (D5)",
         "등쪽자신경": "Dorsal Ulnar Cutaneous",
-        "자신경": "Ulnar",
-        "노신경": "Radial",
-        "근육피부신경": "Musculocutaneous",
         "가쪽아래팔피부신경": "Lat. Antebrachial Cutaneous",
         "안쪽아래팔피부신경": "Med. Antebrachial Cutaneous",
         "얕은종아리신경": "Superficial Peroneal",
+        "얼굴신경 코근": "Facial (Nasalis)",
+        "얼굴신경 눈둘레근": "Facial (Orbicularis Oculi)",
+        "근육피부신경": "Musculocutaneous",
+        "정중신경": "Median",
+        "자신경": "Ulnar",
+        "노신경": "Radial",
         "종아리신경": "Peroneal",
         "장딴지신경": "Sural",
         "정강신경": "Tibial",
         "두렁신경": "Saphenous",
         "넙다리신경": "Femoral",
         "삼차신경": "Trigeminal",
-        "얼굴신경 코근": "Facial (Nasalis)",
-        "얼굴신경 눈둘레근": "Facial (Orbicularis Oculi)",
-        "얼굴신경": "Facial"
-    }
-    # 길이가 긴 신경 이름부터 매핑하여 부분 일치 오류 방지
-    for k in sorted(nerve_mapping.keys(), key=len, reverse=True):
-        if k in raw:
-            raw = raw.replace(k, nerve_mapping[k])
-
-    # 4. 침근전도 근육 이름 매핑 (상/하지 모든 근육 포함)
-    muscle_mapping = {
+        "얼굴신경": "Facial",
+        
+        # 5. 침근전도 근육 이름 (단어가 쪼개지는 원인부)
+        "깊은손가락굽힘근 4-5지": "FDP (D4-5)",
+        "넙다리두갈래근 짧은갈래": "Biceps Femoris (Short)",
         "목 척추주위근": "Cervical Paraspinal",
         "허리 척추주위근": "Lumbar Paraspinal",
-        "어깨세모근": "Deltoid",
+        "긴노쪽손목폄근": "ECRL",
+        "넙다리근막긴장근": "TFL",
+        "넙다리네갈래근": "Quadriceps Femoris",
         "위팔두갈래근": "Biceps brachii",
         "위팔세갈래근": "Triceps brachii",
-        "위팔요골근": "Brachioradialis",
-        "원엎침근": "Pronator Teres",
         "노쪽손목굽힘근": "FCR",
-        "긴노쪽손목폄근": "ECRL",
-        "손가락폄근": "EDC",
-        "고유집게폄근": "EIP",
         "자쪽손목굽힘근": "FCU",
-        "깊은손가락굽힘근 4-5지": "FDP (Digit4-5)",
-        "깊은손가락굽힘근": "FDP",
         "첫째등쪽뼈사이근": "FDI",
         "짧은엄지벌림근": "APB",
+        "짧은발가락폄근": "EDB",
+        "안쪽장딴지근": "Med. Gastrocnemius",
+        "어깨세모근": "Deltoid",
+        "위팔요골근": "Brachioradialis",
+        "원엎침근": "Pronator Teres",
+        "손가락폄근": "EDC",
+        "고유집게폄근": "EIP",
+        "깊은손가락굽힘근": "FDP",
         "새끼벌림근": "ADM",
         "엉덩허리근": "Iliopsoas",
         "가쪽넓은근": "Vastus Lateralis",
-        "넙다리네갈래근": "Quadriceps Femoris",
-        "넙다리두갈래근 짧은갈래": "Biceps Femoris (Short)",
         "앞정강근": "Tibialis Anterior",
         "긴종아리근": "Peroneus Longus",
-        "안쪽장딴지근": "Med. Gastrocnemius",
         "가자미근": "Soleus",
         "큰볼기근": "Gluteus Maximus",
-        "넙다리근막긴장근": "TFL",
-        "짧은발가락폄근": "EDB",
         "눈둘레근": "Orbicularis Oculi",
         "입둘레근": "Orbicularis Oris",
         "이마근": "Frontalis",
-        "깨물근": "Masseter"
+        "깨물근": "Masseter",
+        
+        # 6. 기타 예외 처리
+        "무반응": "Absent",
+        "측정불가": "N/A"
     }
-    # 길이가 긴 근육 이름부터 매핑하여 부분 일치 오류 방지
-    for k in sorted(muscle_mapping.keys(), key=len, reverse=True):
+    
+    # [핵심 로직] 딕셔너리의 키(단어)를 '글자 수가 긴 순서대로 정렬'하여 먼저 치환합니다.
+    # 이렇게 하면 '위팔세갈래근'이 번역되기 전에 '위팔'이 번역되어 에러가 생기는 현상이 원천 차단됩니다.
+    for k in sorted(mapping.keys(), key=len, reverse=True):
         if k in raw:
-            raw = raw.replace(k, muscle_mapping[k])
-
+            raw = raw.replace(k, mapping[k])
+            
     return raw
