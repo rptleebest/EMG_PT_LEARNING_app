@@ -464,7 +464,7 @@ def custom_english_translate(text: str) -> str:
     # 모든 한글-영문 매핑을 하나의 딕셔너리로 통합
     mapping = {
         # 1. 판독 결과
-        "정상 범위": "WNL",
+        "정상 범위": "Within Normal Limits",
         "비정상 (활동성 탈신경)": "Abnormal (Active denervation)",
         "통증으로 평가 불가": "Incomplete due to pain",
         "비정상 (진폭 감소 / 잠복기 지연)": "Abnormal (Reduced amp & Delayed lat)",
@@ -515,28 +515,28 @@ def custom_english_translate(text: str) -> str:
         "얼굴신경": "Facial",
         
         # 5. 침근전도 근육 이름 (단어가 쪼개지는 원인부)
-        "깊은손가락굽힘근 4-다섯째 가지": "FDP (digit4-5)",
-        "넙다리두갈래근 짧은갈래": "Biceps Femoris (Short)",
+        "깊은손가락굽힘근 4-다섯째 가지": "Flexor Digitorum Profundus (digit 4-5)",
+        "넙다리두갈래근 짧은갈래": "Biceps Femoris (Short Head)",
         "목 척추주위근": "Cervical Paraspinal",
         "허리 척추주위근": "Lumbar Paraspinal",
-        "긴노쪽손목폄근": "ECRL",
-        "넙다리근막긴장근": "TFL",
+        "긴노쪽손목폄근": "Extensor Carpi Radialis Longus",
+        "넙다리근막긴장근": "Tensor Fasciae Latae",
         "넙다리네갈래근": "Quadriceps Femoris",
-        "위팔두갈래근": "Biceps brachii",
-        "위팔세갈래근": "Triceps brachii",
-        "노쪽손목굽힘근": "FCR",
-        "자쪽손목굽힘근": "FCU",
-        "첫째등쪽뼈사이근": "FDI",
-        "짧은엄지벌림근": "APB",
-        "짧은발가락폄근": "EDB",
-        "안쪽장딴지근": "Med. Gastrocnemius",
+        "위팔두갈래근": "Biceps Brachii",
+        "위팔세갈래근": "Triceps Brachii",
+        "노쪽손목굽힘근": "Flexor Carpi Radialis",
+        "자쪽손목굽힘근": "Flexor Carpi Ulnaris",
+        "첫째등쪽뼈사이근": "First Dorsal Interosseous",
+        "짧은엄지벌림근": "Abductor Pollicis Brevis",
+        "짧은발가락폄근": "Extensor Digitorum Brevis",
+        "안쪽장딴지근": "Medial Gastrocnemius",
         "어깨세모근": "Deltoid",
         "위팔요골근": "Brachioradialis",
         "원엎침근": "Pronator Teres",
-        "손가락폄근": "EDC",
-        "고유집게폄근": "EIP",
-        "깊은손가락굽힘근": "FDP",
-        "새끼벌림근": "ADM",
+        "손가락폄근": "Extensor Digitorum Communis",
+        "고유집게폄근": "Extensor Indicis Proprius",
+        "깊은손가락굽힘근": "Flexor Digitorum Profundus",
+        "새끼벌림근": "Abductor Digiti Minimi",
         "엉덩허리근": "Iliopsoas",
         "가쪽넓은근": "Vastus Lateralis",
         "앞정강근": "Tibialis Anterior",
@@ -550,7 +550,7 @@ def custom_english_translate(text: str) -> str:
         
         # 6. 기타 예외 처리
         "무반응": "Absent",
-        "측정불가": "N/A"
+        "측정불가": "Not Available (N/A)"
     }
     
     # [핵심 로직] 딕셔너리의 키(단어)를 '글자 수가 긴 순서대로 정렬'하여 먼저 치환합니다.
