@@ -20,19 +20,21 @@ def get_result_color_style(value: str) -> str:
 
 def create_responsive_table(headers: list, rows: list) -> str:
     if not rows: return ""
-    # PC는 모두 가운데 정렬, 모바일은 좌측 정렬 + 항목 들여쓰기 적용
+    
     css = """<style>
     table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 0.95rem; }
-    /* PC 환경: 모든 헤더와 셀을 가운데 정렬 */
+    
+    /* PC 환경: 첫 번째 열(헤더 및 데이터)은 좌측 정렬, 나머지는 가운데 정렬 */
     th { background-color: #f8fafc; padding: 12px 10px; border-bottom: 2px solid #cbd5e1; text-align: center !important; color: #1e293b; font-weight: 800; }
+    th:first-child { text-align: left !important; padding-left: 16px; }
     td { padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: center !important; color: #334155; }
-    td.fst-col { font-weight: 800; color: #1e3a8a; text-align: center !important; }
+    td.fst-col { font-weight: 800; color: #1e3a8a; text-align: left !important; padding-left: 16px; }
     
     /* 모바일 환경: 좌측 정렬 및 들여쓰기 적용 */
     @media screen and (max-width: 768px) {
         thead { display: none; }
         tr { display: block; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 16px; background: #ffffff; overflow: hidden; }
-        /* 일반 항목 셀: 왼쪽 여백(padding-left)을 주어 들여쓰기 효과 */
+        /* 일반 항목 셀: 왼쪽 여백(padding-left: 24px)을 주어 들여쓰기 효과 */
         td { display: flex; align-items: flex-start; gap: 12px; border-bottom: 1px dashed #e2e8f0; padding: 10px 12px 10px 24px; text-align: left !important; }
         td:last-child { border-bottom: none; }
         /* 라벨과 값을 좌측 정렬 */
