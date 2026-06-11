@@ -1,6 +1,7 @@
 # ui/case_learning.py
 
 import html
+import re
 import streamlit as st
 from data.cases import CASE_LIBRARY
 from ui.navigation import render_bottom_navigation
@@ -21,6 +22,14 @@ def _get_result_color_style(value: str) -> str:
     if any(w in text for w in abnormal_words): return "color: #991b1b; font-weight: 800;"
     if "정상" in text: return "color: #15803d; font-weight: 800;"
     return ""
+
+def _format_reason_text(text: str) -> str:
+    text = str(text).strip()
+    # "1)", "2)" 와 같이 번호로 시작하거나 ":" 로 끝나는 문장을 소제목으로 간주하여 강조 및 불릿 제거
+    if re.match(r"^(\d+\))", text) or text.endswith(":"):
+        return f'<div style="color:#1e40af; font-weight:700; margin-top:14px; margin-bottom:6px;">{html.escape(text)}</div>'
+    # 일반 설명 문장은 불릿 추가 및 들여쓰기 적용
+    return f'<div style="color:#334155; margin-bottom:8px; line-height:1.6; padding-left:14px; text-indent:-14px;">• {html.escape(text)}</div>'
 
 def _create_responsive_table(headers: list, rows: list) -> str:
     if not rows: return ""
@@ -135,7 +144,7 @@ def render_case_detail_inline(case_name: str):
     if (sensory_rows or motor_rows) and "ncs_reason" in teaching:
         with st.expander("🔍 신경전도검사 결과 해석"):
             for r in teaching["ncs_reason"]:
-                st.markdown(f'<div style="color:#334155; margin-bottom:8px;">• {r}</div>', unsafe_allow_html=True)
+                st.markdown(_format_reason_text(r), unsafe_allow_html=True)
 
     if blink_rows:
         st.markdown('<div class="section-label" style="margin-top:32px;">⚡ 특수 및 후기반응 검사 (Special & Late Responses)</div>', unsafe_allow_html=True)
@@ -143,7 +152,7 @@ def render_case_detail_inline(case_name: str):
         if "emg_reason" in teaching: 
             with st.expander("🔍 특수 검사 소견 해석"):
                 for r in teaching["emg_reason"]: 
-                    st.markdown(f'<div style="color:#334155; margin-bottom:8px;">• {r}</div>', unsafe_allow_html=True)
+                    st.markdown(_format_reason_text(r), unsafe_allow_html=True)
 
     if emg_rows:
         st.markdown('<div class="section-label" style="margin-top:32px;">🪡 침근전도검사 (Needle EMG)</div>', unsafe_allow_html=True)
@@ -159,7 +168,7 @@ def render_case_detail_inline(case_name: str):
                 """, unsafe_allow_html=True)
                 if not blink_rows:
                     for r in teaching["emg_reason"]: 
-                        st.markdown(f'<div style="color:#334155; margin-bottom:8px;">• {r}</div>', unsafe_allow_html=True)
+                        st.markdown(_format_reason_text(r), unsafe_allow_html=True)
 
     st.markdown('<hr style="border-top: 2px dashed #cbd5e1; margin: 2.5rem 0 1.5rem 0;">', unsafe_allow_html=True)
     st.markdown('<div class="section-label">✅ 임상적 통합 해석 및 감별진단</div>', unsafe_allow_html=True)
