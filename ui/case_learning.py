@@ -24,8 +24,27 @@ def _get_result_color_style(value: str) -> str:
 
 def _create_responsive_table(headers: list, rows: list) -> str:
     if not rows: return ""
-    # th 요소의 text-align을 center로 수정하여 제목을 중앙 정렬합니다.
-    css = """<style>table { width: 100%; border-collapse: collapse; margin-bottom: 8px; font-size: 0.9rem; } th { background-color: #f8fafc; padding: 10px; border-bottom: 2px solid #cbd5e1; text-align: center; color: #1e293b; font-weight: 800; } td { padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: left; color: #334155; } td.fst-col { font-weight: 800; color: #1e3a8a; } @media screen and (max-width: 768px) { thead { display: none; } tr { display: block; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 12px; background: #ffffff; padding: 8px; } td { display: flex; justify-content: space-between; align-items: center; gap: 12px; border-bottom: 1px dashed #e2e8f0; padding: 10px 8px; text-align: right; } td:last-child { border-bottom: none; } td::before { content: attr(data-label); font-weight: 800; color: #475569; text-align: left; font-size: 0.85rem; flex: 0 0 35%; } td > span { flex: 1; text-align: right; word-break: keep-all; font-weight: 400; } td.fst-col { justify-content: center; background: #f1f5f9; border-radius: 6px 6px 0 0; text-align: center; padding: 12px; } td.fst-col::before { content: none; } td.fst-col > span { text-align: center; font-weight: 800; color: #1e3a8a; } }</style>"""
+    # PC 중앙정렬 및 모바일 들여쓰기+좌측정렬 CSS 완벽 반영
+    css = """<style>
+    table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 0.95rem; }
+    th { background-color: #f8fafc; padding: 12px 10px; border-bottom: 2px solid #cbd5e1; text-align: center; color: #1e293b; font-weight: 800; }
+    td { padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: center; color: #334155; }
+    td.fst-col { font-weight: 800; color: #1e3a8a; text-align: left; }
+    
+    @media screen and (max-width: 768px) {
+        thead { display: none; }
+        tr { display: block; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 16px; background: #ffffff; overflow: hidden; }
+        td { display: flex; align-items: flex-start; gap: 12px; border-bottom: 1px dashed #e2e8f0; padding: 10px 12px 10px 24px; text-align: left; }
+        td:last-child { border-bottom: none; }
+        td::before { content: attr(data-label); font-weight: 800; color: #64748b; text-align: left; font-size: 0.85rem; flex: 0 0 35%; margin-top: 2px; }
+        td > span { flex: 1; text-align: left; word-break: keep-all; font-weight: 400; color: #334155; }
+        
+        td.fst-col { display: flex; flex-direction: row; justify-content: flex-start; background: #f1f5f9; text-align: left; padding: 12px 16px; border-bottom: 2px solid #cbd5e1; }
+        td.fst-col::before { content: attr(data-label) ": "; color: #1e3a8a; font-weight: 800; flex: unset; margin-right: 8px; font-size: 0.95rem; margin-top: 0; }
+        td.fst-col > span { text-align: left; font-weight: 800; color: #1e3a8a; font-size: 0.95rem; }
+    }
+    </style>"""
+    
     header_html = "".join([f"<th>{html.escape(h)}</th>" for h in headers])
     tr_html = ""
     for row in rows:
@@ -108,16 +127,16 @@ def render_case_detail_inline(case_name: str):
 
     if (sensory_rows or motor_rows) and "ncs_reason" in teaching:
         with st.expander("🔍 신경전도검사 결과 해석"):
-            for idx, r in enumerate(teaching["ncs_reason"]):
-                st.markdown(f'<div style="color:#334155; margin-bottom:8px;"><span style="color:#1e3a8a; font-weight:800; margin-right:4px;">{idx+1}.</span>{r}</div>', unsafe_allow_html=True)
+            for r in teaching["ncs_reason"]:
+                st.markdown(f'<div style="color:#334155; margin-bottom:8px;">• {r}</div>', unsafe_allow_html=True)
 
     if blink_rows:
         st.markdown('<div class="section-label" style="margin-top:32px;">⚡ 특수 및 후기반응 검사 (Special & Late Responses)</div>', unsafe_allow_html=True)
         st.markdown(_create_responsive_table(["검사 신경", "진폭", "잠복기"], blink_rows), unsafe_allow_html=True)
         if "emg_reason" in teaching: 
             with st.expander("🔍 특수 검사 소견 해석"):
-                for idx, r in enumerate(teaching["emg_reason"]): 
-                    st.markdown(f'<div style="color:#334155; margin-bottom:8px;"><span style="color:#1e3a8a; font-weight:800; margin-right:4px;">{idx+1}.</span>{r}</div>', unsafe_allow_html=True)
+                for r in teaching["emg_reason"]: 
+                    st.markdown(f'<div style="color:#334155; margin-bottom:8px;">• {r}</div>', unsafe_allow_html=True)
 
     if emg_rows:
         st.markdown('<div class="section-label" style="margin-top:32px;">🪡 침근전도검사 (Needle EMG)</div>', unsafe_allow_html=True)
@@ -132,14 +151,13 @@ def render_case_detail_inline(case_name: str):
                 </div>
                 """, unsafe_allow_html=True)
                 if not blink_rows:
-                    for idx, r in enumerate(teaching["emg_reason"]): 
-                        st.markdown(f'<div style="color:#334155; margin-bottom:8px;"><span style="color:#1e3a8a; font-weight:800; margin-right:4px;">{idx+1}.</span>{r}</div>', unsafe_allow_html=True)
+                    for r in teaching["emg_reason"]: 
+                        st.markdown(f'<div style="color:#334155; margin-bottom:8px;">• {r}</div>', unsafe_allow_html=True)
 
     st.markdown('<hr style="border-top: 2px dashed #cbd5e1; margin: 2.5rem 0 1.5rem 0;">', unsafe_allow_html=True)
-    st.markdown('<div class="section-label">✅ 임상적 통합 해석 및 감별진단</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-label">✅ 임상적 통합 해석 및 추정 진단</div>', unsafe_allow_html=True)
     
     if "integration" in teaching:
-        st.markdown('<div class="sub-title">🔹 검사 결과 통합 결론</div>', unsafe_allow_html=True)
         st.markdown('<div class="left-border-box" style="border-left-color:#3b82f6;">', unsafe_allow_html=True)
         for r in teaching["integration"]: 
             st.markdown(f'<div style="margin-bottom:8px;">• {r}</div>', unsafe_allow_html=True)
@@ -147,7 +165,8 @@ def render_case_detail_inline(case_name: str):
             
     st.markdown(
         f'<div style="background:#fdf2f8; border:1px solid #fbcfe8; padding:12px 16px; border-radius:8px; margin-top:16px;">'
-        f'<span style="font-size:1.05rem; color:#9d174d; font-weight:800;">임상적 추정진단 (R/O) : {teaching.get("summary")}</span>'
+        f'<span style="font-size:1.05rem; color:#9d174d; font-weight:700;">임상적 추정진단 (R/O) : </span>'
+        f'<span style="font-size:1.05rem; color:#9d174d; font-weight:800;">{teaching.get("summary")}</span>'
         f'</div>', 
         unsafe_allow_html=True
     )
