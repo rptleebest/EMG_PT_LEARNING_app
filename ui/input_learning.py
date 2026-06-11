@@ -20,24 +20,29 @@ def get_result_color_style(value: str) -> str:
 
 def create_responsive_table(headers: list, rows: list) -> str:
     if not rows: return ""
-    # PC 중앙정렬 및 모바일 들여쓰기+좌측정렬 CSS 완벽 반영
+    # PC는 모두 가운데 정렬, 모바일은 좌측 정렬 + 항목 들여쓰기 적용
     css = """<style>
     table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 0.95rem; }
-    th { background-color: #f8fafc; padding: 12px 10px; border-bottom: 2px solid #cbd5e1; text-align: center; color: #1e293b; font-weight: 800; }
-    td { padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: center; color: #334155; }
-    td.fst-col { font-weight: 800; color: #1e3a8a; text-align: left; }
+    /* PC 환경: 모든 헤더와 셀을 가운데 정렬 */
+    th { background-color: #f8fafc; padding: 12px 10px; border-bottom: 2px solid #cbd5e1; text-align: center !important; color: #1e293b; font-weight: 800; }
+    td { padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: center !important; color: #334155; }
+    td.fst-col { font-weight: 800; color: #1e3a8a; text-align: center !important; }
     
+    /* 모바일 환경: 좌측 정렬 및 들여쓰기 적용 */
     @media screen and (max-width: 768px) {
         thead { display: none; }
         tr { display: block; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 16px; background: #ffffff; overflow: hidden; }
-        td { display: flex; align-items: flex-start; gap: 12px; border-bottom: 1px dashed #e2e8f0; padding: 10px 12px 10px 24px; text-align: left; }
+        /* 일반 항목 셀: 왼쪽 여백(padding-left)을 주어 들여쓰기 효과 */
+        td { display: flex; align-items: flex-start; gap: 12px; border-bottom: 1px dashed #e2e8f0; padding: 10px 12px 10px 24px; text-align: left !important; }
         td:last-child { border-bottom: none; }
-        td::before { content: attr(data-label); font-weight: 800; color: #64748b; text-align: left; font-size: 0.85rem; flex: 0 0 38%; margin-top: 2px; }
-        td > span { flex: 1; text-align: left; word-break: keep-all; font-weight: 400; color: #334155; }
+        /* 라벨과 값을 좌측 정렬 */
+        td::before { content: attr(data-label); font-weight: 800; color: #64748b; text-align: left !important; font-size: 0.85rem; flex: 0 0 38%; margin-top: 2px; }
+        td > span { flex: 1; text-align: left !important; word-break: keep-all; font-weight: 400; color: #334155; }
         
-        td.fst-col { display: flex; flex-direction: row; justify-content: flex-start; background: #f1f5f9; text-align: left; padding: 12px 16px; border-bottom: 2px solid #cbd5e1; }
-        td.fst-col::before { content: attr(data-label) ": "; color: #1e3a8a; font-weight: 800; flex: unset; margin-right: 8px; font-size: 0.95rem; margin-top: 0; }
-        td.fst-col > span { text-align: left; font-weight: 800; color: #1e3a8a; font-size: 0.95rem; }
+        /* 첫 번째 열(제목 역할): 들여쓰기 없이 좌측 상단에 굵게 배치 */
+        td.fst-col { display: flex; flex-direction: row; justify-content: flex-start; background: #f1f5f9; text-align: left !important; padding: 12px 16px; border-bottom: 2px solid #cbd5e1; }
+        td.fst-col::before { content: attr(data-label) ": "; color: #1e3a8a; font-weight: 800; flex: unset; margin-right: 8px; font-size: 0.95rem; margin-top: 0; text-align: left !important;}
+        td.fst-col > span { text-align: left !important; font-weight: 800; color: #1e3a8a; font-size: 0.95rem; }
     }
     </style>"""
     
