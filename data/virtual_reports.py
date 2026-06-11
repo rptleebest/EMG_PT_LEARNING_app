@@ -33,7 +33,7 @@ VIRTUAL_REPORTS = {
             ["목 척추주위근", "C7", "왼쪽", "Silent", "Normal recruitment", "정상 범위"],
             ["어깨세모근", "C5-C6", "왼쪽", "Silent", "Normal recruitment", "정상 범위"],
             ["위팔두갈래근", "C5-C6", "왼쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["위팔요골근", "C5-C6", "왼쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
+            ["위팔노근", "C5-C6", "왼쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
             ["원엎침근", "C6-C7", "왼쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
             ["노쪽손목굽힘근", "C6-C7", "왼쪽", "Silent", "Normal recruitment", "정상 범위"],
             ["위팔세갈래근", "C7-C8", "왼쪽", "Silent", "Normal recruitment", "정상 범위"],
@@ -47,7 +47,7 @@ VIRTUAL_REPORTS = {
                 "감각신경 진폭이 보존된 것은 병변이 감각세포체(DRG)보다 근위부인 신경뿌리에 있음을 명확히 지시합니다."
             ],
             "emg_reason": [
-                "C6 분절의 지배를 공유하는 위팔두갈래근, 위팔요골근, 원엎침근에서만 활동성 탈신경 소견이 관찰되며, C7이나 C8 지배 근육은 정상입니다.",
+                "C6 분절의 지배를 공유하는 위팔두갈래근, 위팔노근, 원엎침근에서만 활동성 탈신경 소견이 관찰되며, C7이나 C8 지배 근육은 정상입니다.",
                 "C6 목 척추주위근의 비정상 소견은 병변이 말초가 아닌 척수 신경뿌리에 위치함을 확진하는 지표입니다."
             ],
             "integration": [
@@ -113,7 +113,7 @@ VIRTUAL_REPORTS = {
             ["종아리신경", "발목", "왼쪽", "4.5 mV", "4.5 ms", "정상 범위"],
             ["종아리신경", "발목", "오른쪽", "4.8 mV", "4.2 ms", "정상 범위"],
             ["정강신경", "발목", "왼쪽", "5.5 mV", "5.0 ms", "정상 범위"],
-            ["넙다리신경", "서혜부", "왼쪽", "6.2 mV", "4.1 ms", "정상 범위"],
+            ["넓적다리신경", "고샅부위", "왼쪽", "6.2 mV", "4.1 ms", "정상 범위"],
         ],
         "emg": [
             ["허리 척추주위근", "L4", "왼쪽", "Silent", "Normal recruitment", "정상 범위"],
@@ -123,7 +123,7 @@ VIRTUAL_REPORTS = {
             ["가쪽넓은근", "L3-L4", "왼쪽", "Silent", "Normal recruitment", "정상 범위"],
             ["앞정강근", "L4-L5", "왼쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
             ["긴종아리근", "L5-S1", "왼쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["넙다리근막긴장근", "L4-L5", "왼쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
+            ["넓적다리근막긴장근", "L4-L5", "왼쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
             ["안쪽장딴지근", "S1-S2", "왼쪽", "Silent", "Normal recruitment", "정상 범위"],
             ["큰볼기근", "S1-S2", "왼쪽", "Silent", "Normal recruitment", "정상 범위"],
         ],
@@ -134,7 +134,7 @@ VIRTUAL_REPORTS = {
                 "이는 병변이 감각세포체 몸쪽인 척수 신경뿌리에 위치하여 말초 감각신경 퇴행이 없음을 증명합니다."
             ],
             "emg_reason": [
-                "앞정강근, 긴종아리근, 넙다리근막긴장근(TFL) 등 서로 다른 신경 지배를 받으나 L5 분절을 공유하는 근육들에서 일치된 탈신경 소견이 보입니다.",
+                "앞정강근, 긴종아리근, 넓적다리근막긴장근(TFL) 등 서로 다른 신경 지배를 받으나 L5 분절을 공유하는 근육들에서 일치된 탈신경 소견이 보입니다.",
                 "L4, S1은 정상이지만 L5 허리 척추주위근에서만 탈신경 자발전위가 확인되어 분절을 확진합니다."
             ],
             "integration": [
@@ -199,7 +199,7 @@ VIRTUAL_REPORTS = {
         "emg": [
             ["목 척추주위근", "C7-C8", "오른쪽", "Silent", "Normal recruitment", "정상 범위"],
             ["위팔세갈래근", "C7-C8", "오른쪽", "Silent", "Normal recruitment", "정상 범위"],
-            ["위팔요골근", "C5-C6", "오른쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
+            ["위팔노근", "C5-C6", "오른쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
             ["긴노쪽손목폄근", "C6-C7", "오른쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
             ["손가락폄근", "C7-C8", "오른쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
             ["고유집게폄근", "C7-C8", "오른쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
@@ -212,7 +212,7 @@ VIRTUAL_REPORTS = {
                 "표재노신경 감각전도 저하와 함께, 나선고랑 상/하부 자극에서 운동 진폭이 급감하는 국소 전도차단 수치가 기록되어 물리적 압박 위치를 지시합니다."
             ],
             "emg_reason": [
-                "나선고랑 하부에서 신경 지배를 받는 위팔요골근 및 폄근들은 일제히 탈신경 소견을 보입니다.",
+                "나선고랑 하부에서 신경 지배를 받는 위팔노근 및 폄근들은 일제히 탈신경 소견을 보입니다.",
                 "나선고랑 상부에서 먼저 분지되는 위팔세갈래근이 정상 범위인 것은 신경 병변이 겨드랑이나 목이 아님을 해부학적으로 증명합니다."
             ],
             "integration": [
@@ -243,7 +243,7 @@ VIRTUAL_REPORTS = {
             ["안쪽장딴지근", "S1-S2", "오른쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
             ["가자미근", "S1-S2", "오른쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
             ["큰볼기근", "S1-S2", "오른쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["넙다리근막긴장근", "L4-L5", "오른쪽", "Silent", "Normal recruitment", "정상 범위"],
+            ["넓적다리근막긴장근", "L4-L5", "오른쪽", "Silent", "Normal recruitment", "정상 범위"],
         ],
         "teaching_diagnosis": {
             "summary": "오른쪽 S1 허리 신경뿌리병증 (Lumbosacral Radiculopathy)",
@@ -281,12 +281,12 @@ VIRTUAL_REPORTS = {
         ],
         "emg": [
             ["허리 척추주위근", "L5", "왼쪽", "Silent", "Normal recruitment", "정상 범위"],
-            ["넙다리두갈래근 짧은갈래", "L5-S1", "왼쪽", "Silent", "Normal recruitment", "정상 범위"],
+            ["넓적다리두갈래근 짧은갈래", "L5-S1", "왼쪽", "Silent", "Normal recruitment", "정상 범위"],
             ["앞정강근", "L4-L5", "왼쪽", "Silent", "Reduced recruitment", "비정상 (동원 감소)"],
             ["긴종아리근", "L5-S1", "왼쪽", "Silent", "Reduced recruitment", "비정상 (동원 감소)"],
             ["짧은발가락폄근", "L5-S1", "왼쪽", "Silent", "Reduced recruitment", "비정상 (동원 감소)"],
             ["안쪽장딴지근", "S1-S2", "왼쪽", "Silent", "Normal recruitment", "정상 범위"],
-            ["넙다리근막긴장근", "L4-L5", "왼쪽", "Silent", "Normal recruitment", "정상 범위"],
+            ["넓적다리근막긴장근", "L4-L5", "왼쪽", "Silent", "Normal recruitment", "정상 범위"],
         ],
         "teaching_diagnosis": {
             "summary": "왼쪽 온종아리신경 마비 (Common Peroneal Neuropathy)",
@@ -295,7 +295,7 @@ VIRTUAL_REPORTS = {
             ],
             "emg_reason": [
                 "압박 부위 하부의 근육(앞정강근, 긴종아리근)은 수의수축 동원이 감소합니다.",
-                "가장 중요한 감별 포인트로, 무릎 상부에서 먼저 분지되는 넙다리두갈래근(짧은갈래)과 L5 허리 척추주위근이 완전한 정상 범위입니다."
+                "가장 중요한 감별 포인트로, 무릎 상부에서 먼저 분지되는 넓적다리두갈래근(짧은갈래)과 L5 허리 척추주위근이 완전한 정상 범위입니다."
             ],
             "integration": [
                 "무릎 부위 국소 전도차단 지표와, 무릎 하부 근육들의 선택적 마비 및 근위부 보존 소견을 통합하여 온종아리신경 압박 마비로 확진합니다."
@@ -484,7 +484,7 @@ def custom_english_translate(text: str) -> str:
         "팔꿈치 위": "Above elbow",
         "나선고랑 위": "Above spiral groove",
         "종아리뼈머리": "Fibular head",
-        "서혜부": "Groin",
+        "고샅부위": "Groin",
         "손목": "Wrist",
         "팔꿈치": "Elbow",
         "아래팔": "Forearm",
@@ -510,18 +510,18 @@ def custom_english_translate(text: str) -> str:
         "장딴지신경": "Sural",
         "정강신경": "Tibial",
         "두렁신경": "Saphenous",
-        "넙다리신경": "Femoral",
+        "넓적다리신경": "Femoral",
         "삼차신경": "Trigeminal",
         "얼굴신경": "Facial",
         
         # 5. 침근전도 근육 이름 (단어가 쪼개지는 원인부)
         "깊은손가락굽힘근 4-다섯째 가지": "Flexor Digitorum Profundus (digit 4-5)",
-        "넙다리두갈래근 짧은갈래": "Biceps Femoris (Short Head)",
+        "넓적다리두갈래근 짧은갈래": "Biceps Femoris (Short Head)",
         "목 척추주위근": "Cervical Paraspinal",
         "허리 척추주위근": "Lumbar Paraspinal",
         "긴노쪽손목폄근": "Extensor Carpi Radialis Longus",
-        "넙다리근막긴장근": "Tensor Fasciae Latae",
-        "넙다리네갈래근": "Quadriceps Femoris",
+        "넓적다리근막긴장근": "Tensor Fasciae Latae",
+        "넓적다리네갈래근": "Quadriceps Femoris",
         "위팔두갈래근": "Biceps Brachii",
         "위팔세갈래근": "Triceps Brachii",
         "노쪽손목굽힘근": "Flexor Carpi Radialis",
@@ -531,7 +531,7 @@ def custom_english_translate(text: str) -> str:
         "짧은발가락폄근": "Extensor Digitorum Brevis",
         "안쪽장딴지근": "Medial Gastrocnemius",
         "어깨세모근": "Deltoid",
-        "위팔요골근": "Brachioradialis",
+        "위팔노근": "Brachioradialis",
         "원엎침근": "Pronator Teres",
         "손가락폄근": "Extensor Digitorum Communis",
         "고유집게폄근": "Extensor Indicis Proprius",
