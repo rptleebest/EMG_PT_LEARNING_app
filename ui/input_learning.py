@@ -105,8 +105,10 @@ def render_virtual_report_inline(case_name: str):
     lang = normalize_report_language(selected_language)
     is_eng = lang == REPORT_LANG_EN
 
+    # NCV 및 특수검사 열 동적 추가 반영
     sen_hdrs = ["Nerve", "Side", "Amplitude", "Latency", "Interpretation"] if is_eng else ["검사 신경", "측정측", "진폭", "잠복기", "판독"]
-    mot_hdrs = ["Nerve", "Stim Site", "Side", "Amplitude", "Latency", "Interpretation"] if is_eng else ["검사 신경", "자극 위치", "측정측", "진폭", "잠복기", "판독"]
+    mot_hdrs = ["Nerve", "Stim Site", "Side", "Amplitude", "Latency", "NCV", "Interpretation"] if is_eng else ["검사 신경", "자극 위치", "측정측", "진폭", "잠복기", "전도속도", "판독"]
+    spec_hdrs = ["Test", "Condition", "Result", "Interpretation"] if is_eng else ["특수검사 항목", "조건/측정측", "결과", "판독"]
     emg_hdrs = ["Muscle", "Segment", "Side", "Rest", "Volition", "Interpretation"] if is_eng else ["검사 근육", "분절", "측정측", "휴식 시", "수의수축", "판독"]
 
     def _tr(mat): 
@@ -122,7 +124,12 @@ def render_virtual_report_inline(case_name: str):
         st.markdown(f'<div class="section-label" style="margin-top:32px;">⚡ {get_report_section_name("motor", lang)}</div>', unsafe_allow_html=True)
         st.markdown(create_responsive_table(mot_hdrs, _tr(data.get("ncs_motor", []))), unsafe_allow_html=True)
 
-    if (data.get("ncs_sensory") or data.get("ncs_motor")) and "ncs_reason" in teaching:
+    if data.get("special"):
+        spec_title = "Special & Late Responses" if is_eng else "특수 및 후기반응 검사"
+        st.markdown(f'<div class="section-label" style="margin-top:32px;">⚡ {spec_title}</div>', unsafe_allow_html=True)
+        st.markdown(create_responsive_table(spec_hdrs, _tr(data.get("special", []))), unsafe_allow_html=True)
+
+    if (data.get("ncs_sensory") or data.get("ncs_motor") or data.get("special")) and "ncs_reason" in teaching:
         with st.expander("🔍 신경전도검사 결과 해석"):
             for r in teaching["ncs_reason"]:
                 st.markdown(_format_reason_text(r), unsafe_allow_html=True)
