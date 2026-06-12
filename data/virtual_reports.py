@@ -314,7 +314,7 @@ VIRTUAL_REPORTS = {
         "teaching_diagnosis": {
             "summary": "왼쪽 온종아리신경 마비 (Common Peroneal Neuropathy)",
             "ncs_reason": [
-                "얕은종아리신경 감각전도가 저하되었으며, 종아리뼈머리(Fibular head) 상하부 자극 시 운동 전도속도가 급감(22m/s)하는 국소 전도차단이 확인되어 무릎 외측 압박을 특정합니다."
+                "얕은종아리신경 감각전도가 저하되었으며, 종아리뼈머리(Fibular head) 상하부 자극 시 운동 전도속도가 급감(22m/s)하는 국소 전도차단(conduction block)이 확인되어 무릎 가쪽 압박을 특정합니다."
             ],
             "emg_reason": [
                 "압박 부위 하부의 근육(앞정강근, 긴종아리근)은 수의수축 동원이 감소합니다.",
