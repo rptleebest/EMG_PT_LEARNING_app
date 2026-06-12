@@ -13,7 +13,7 @@ def get_input_learning_report_language() -> str:
 
 def get_result_color_style(value: str) -> str:
     text = str(value)
-    abnormal_words = ["비정상", "감소", "지연", "소실", "탈신경", "측정불가", "차단", "항진", "초과", "증가", "Abnormal", "Reduced", "Absent", "Delayed", "Incomplete", "Active", "drop", "block"]
+    abnormal_words = ["비정상", "감소", "지연", "소실", "탈신경", "측정불가", "차단", "항진", "초과", "증가", "저하", "Abnormal", "Reduced", "Absent", "Delayed", "Incomplete", "Active", "drop", "block", "Slowed"]
     normal_words = ["정상", "Normal", "Silent", "WNL", "침묵", "동원"]
     if any(w in text for w in abnormal_words): return "color: #991b1b; font-weight: 800;"
     if any(w in text for w in normal_words): return "color: #15803d; font-weight: 800;"
@@ -70,7 +70,7 @@ def create_responsive_table(headers: list, rows: list) -> str:
     css = """<style>
     table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 0.95rem; }
     
-    /* PC 환경: 헤더와 셀의 기본은 가운데 정렬, 첫번째/마지막(판독) 열은 좌측 정렬 */
+    /* PC 환경: 첫번째(신경/근육) 및 마지막(판독) 열은 좌측 정렬 */
     th { background-color: #f8fafc; padding: 12px 10px; border-bottom: 2px solid #cbd5e1; text-align: center !important; color: #1e293b; font-weight: 800; }
     th:first-child { text-align: left !important; padding-left: 16px; }
     th:last-child { text-align: left !important; padding-left: 16px; }
@@ -78,7 +78,6 @@ def create_responsive_table(headers: list, rows: list) -> str:
     td.fst-col { font-weight: 800; color: #1e3a8a; text-align: left !important; padding-left: 16px; }
     td:last-child { text-align: left !important; padding-left: 16px; line-height: 1.4; }
     
-    /* 모바일 환경: 좌측 정렬 및 들여쓰기 적용 */
     @media screen and (max-width: 768px) {
         thead { display: none; }
         tr { display: block; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 16px; background: #ffffff; overflow: hidden; }
@@ -140,8 +139,9 @@ def render_virtual_report_inline(case_name: str):
     lang = normalize_report_language(selected_language)
     is_eng = lang == REPORT_LANG_EN
 
+    # NCV 데이터 출력을 위해 7열 헤더로 교체 완료
     sen_hdrs = ["Nerve", "Side", "Amplitude", "Latency", "Interpretation"] if is_eng else ["검사 신경", "측정측", "진폭", "잠복기", "판독"]
-    mot_hdrs = ["Nerve", "Stim Site", "Side", "Amplitude", "Latency", "Interpretation"] if is_eng else ["검사 신경", "자극 위치", "측정측", "진폭", "잠복기", "판독"]
+    mot_hdrs = ["Nerve", "Stim Site", "Side", "Amplitude", "Latency", "NCV", "Interpretation"] if is_eng else ["검사 신경", "자극 위치", "측정측", "진폭", "잠복기", "전도속도(NCV)", "판독"]
     emg_hdrs = ["Muscle", "Segment", "Side", "Rest", "Volition", "Interpretation"] if is_eng else ["검사 근육", "분절", "측정측", "휴식 시", "수의수축", "판독"]
     spec_hdrs = ["Test", "Condition", "Result", "Interpretation"] if is_eng else ["검사 항목", "조건/측정측", "결과", "상세 수치 및 판독"]
 
@@ -163,6 +163,15 @@ def render_virtual_report_inline(case_name: str):
 
     if (data.get("ncs_sensory") or data.get("ncs_motor")) and "ncs_reason" in teaching:
         with st.expander("🔍 신경전도검사 결과 해석"):
+            # 물리치료사 및 학생 교육을 위한 NCV 기준 툴팁 추가
+            st.markdown("""
+            <div style="background:#f1f5f9; padding:12px; margin-bottom:12px; border-radius:4px; border-left:4px solid #cbd5e1;">
+                <div style="font-size:0.95rem; font-weight:800; color:#1e3a8a; margin-bottom:6px;">💡 [참고] 신경전도속도(NCV) 임상 정상 기준치</div>
+                <div style="font-size:0.9rem; margin-bottom:4px; color:#334155;">• <b>상지(팔) 신경:</b> 일반적으로 <b>50 m/s 이상</b> 정상</div>
+                <div style="font-size:0.9rem; margin-bottom:4px; color:#334155;">• <b>하지(다리) 신경:</b> 일반적으로 <b>40 m/s 이상</b> 정상</div>
+                <div style="font-size:0.85rem; color:#64748b; margin-top:4px;">* 속도가 기준치 미만으로 저하된 경우, 말이집(Myelin) 손상성 지연이나 국소 포착(Entrapment)을 의심할 수 있습니다.</div>
+            </div>
+            """, unsafe_allow_html=True)
             for r in teaching["ncs_reason"]:
                 st.markdown(_format_reason_text(r), unsafe_allow_html=True)
 
