@@ -159,7 +159,7 @@ def render_case_detail_inline(case_name: str):
         # 특수 검사에 맞게 테이블 헤더명을 자연스럽게 변경
         st.markdown(_create_responsive_table(["검사 항목", "결과", "상세 수치 및 판독"], blink_rows), unsafe_allow_html=True)
         
-        # 침근전도가 아예 없는 경우(뇌졸중, 안면마비 등) emg_reason의 텍스트를 특수검사 해석란으로 표출
+        # 침근전도가 아예 없는 경우(뇌졸중, 얼굴마비 등) emg_reason의 텍스트를 특수검사 해석란으로 표출
         if "emg_reason" in teaching and not emg_rows: 
             with st.expander("🔍 특수 검사 소견 해석"):
                 for r in teaching["emg_reason"]: 
