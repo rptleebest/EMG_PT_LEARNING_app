@@ -6,9 +6,12 @@ import streamlit as st
 from data.cases import CASE_LIBRARY
 from ui.navigation import render_bottom_navigation
 
+# --- 표(Table) 내부에 들어갈 영문 용어들을 완벽하게 한글로 변환 ---
 def _safe_format_code(code: str) -> str:
-    # 모든 내부 코드를 소문자로 변환하여 매핑 확인
-    code_str = str(code).lower()
+    raw = str(code)
+    code_str = raw.lower().strip()
+    
+    # 1. 내부 상수 매핑
     mapping = {
         "ncs_normal": "정상 범위", 
         "ncs_delayed": "잠복기 지연", 
@@ -20,8 +23,6 @@ def _safe_format_code(code: str) -> str:
         "emg_paraspinal_denervation": "활동성 탈신경", 
         "emg_chronic_reinnervation": "만성 재신경지배", 
         "emg_active_chronic": "활동성 및 만성 변화", 
-        
-        # --- 여기서부터 누락되었던 특수 검사/후기 반응 코드들 추가 ---
         "blink_delayed": "잠복기 지연", 
         "blink_absent": "반응 소실",
         "blink_delayed_absent": "지연 및 소실",
@@ -29,7 +30,24 @@ def _safe_format_code(code: str) -> str:
         "h_reflex_hyperactive": "진폭 과항진",
         "h_m_ratio_increased": "비율 증가"
     }
-    return mapping.get(code_str, str(code))
+    if code_str in mapping:
+        return mapping[code_str]
+        
+    # 2. 영문 텍스트 한글화 (표에서만 출력되도록 처리)
+    replace_map = {
+        "Silent": "전기적 침묵",
+        "Normal recruitment": "정상 동원",
+        "Reduced recruitment": "동원 감소",
+        "No recruitment": "동원 불가",
+        "Fibrillation/PSW": "섬유자발전위/양성예파",
+        "Absent": "반응 소실",
+        "Incomplete due to pain": "통증으로 평가 불가"
+    }
+    for eng, kor in replace_map.items():
+        if eng in raw:
+            raw = raw.replace(eng, kor)
+            
+    return raw
 
 def _get_result_color_style(value: str) -> str:
     text = str(value)
@@ -167,6 +185,7 @@ def render_case_detail_inline(case_name: str):
     if emg_rows:
         st.markdown('<div class="section-label" style="margin-top:32px;">🪡 침근전도검사 (Needle EMG)</div>', unsafe_allow_html=True)
         st.markdown(_create_responsive_table(["검사 근육", "휴식 시", "수의수축 시"], emg_rows), unsafe_allow_html=True)
+        
         if "emg_reason" in teaching:
             with st.expander("🔍 침근전도검사 결과 해석"):
                 st.markdown("""
@@ -180,7 +199,12 @@ def render_case_detail_inline(case_name: str):
                     st.markdown(_format_reason_text(r), unsafe_allow_html=True)
 
     st.markdown('<hr style="border-top: 2px dashed #cbd5e1; margin: 2.5rem 0 1.5rem 0;">', unsafe_allow_html=True)
-    st.markdown('<div class="section-label">✅ 임상적 통합 해석 및 감별진단</div>', unsafe_allow_html=True)
+    
+    # --- 뇌졸중 경직 평가 사례인지 확인하여 UI 문구 동적 변경 ---
+    is_stroke_case = "뇌졸중" in case_name
+
+    section_title = "✅ 임상적 통합 해석" if is_stroke_case else "✅ 임상적 통합 해석 및 감별진단"
+    st.markdown(f'<div class="section-label">{section_title}</div>', unsafe_allow_html=True)
     
     if "integration" in teaching:
         st.markdown('<div class="sub-title">🔹 검사 결과 통합 결론</div>', unsafe_allow_html=True)
@@ -189,9 +213,10 @@ def render_case_detail_inline(case_name: str):
             st.markdown(f'<div style="margin-bottom:8px;">• {r}</div>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
             
+    box_label = "경직(spasticity) 평가 : " if is_stroke_case else "임상적 추정진단 (R/O) : "
     st.markdown(
         f'<div style="background:#fdf2f8; border:1px solid #fbcfe8; padding:12px 16px; border-radius:8px; margin-top:16px;">'
-        f'<span style="font-size:1.05rem; color:#9d174d; font-weight:700;">임상적 추정진단 (R/O) : </span>'
+        f'<span style="font-size:1.05rem; color:#9d174d; font-weight:700;">{box_label}</span>'
         f'<span style="font-size:1.05rem; color:#9d174d; font-weight:800;">{teaching.get("summary")}</span>'
         f'</div>', 
         unsafe_allow_html=True
