@@ -25,12 +25,10 @@ def _format_reason_text(text: str) -> str:
         return f'<div style="color:#1e40af; font-weight:700; margin-top:14px; margin-bottom:6px;">{html.escape(text)}</div>'
     return f'<div style="color:#334155; margin-bottom:8px; line-height:1.6; padding-left:14px; text-indent:-14px;">• {html.escape(text)}</div>'
 
-# --- 한글 모드일 때 표(Table) 내부의 영문 용어를 완벽하게 한글로 변환 ---
 def custom_korean_translate(text: str) -> str:
     raw = str(text)
     code_str = raw.lower().strip()
     
-    # 1. 내부 코드 매핑
     code_mapping = {
         "ncs_normal": "정상 범위", 
         "ncs_delayed": "잠복기 지연", 
@@ -52,7 +50,6 @@ def custom_korean_translate(text: str) -> str:
     if code_str in code_mapping:
         return code_mapping[code_str]
 
-    # 2. 영문 결과값 한글화 (표에서만 출력되도록 처리)
     replace_map = {
         "Silent": "전기적 침묵",
         "Normal recruitment": "정상 동원",
@@ -72,17 +69,23 @@ def create_responsive_table(headers: list, rows: list) -> str:
     if not rows: return ""
     css = """<style>
     table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 0.95rem; }
+    
+    /* PC 환경: 헤더와 셀의 기본은 가운데 정렬, 첫번째/마지막(판독) 열은 좌측 정렬 */
     th { background-color: #f8fafc; padding: 12px 10px; border-bottom: 2px solid #cbd5e1; text-align: center !important; color: #1e293b; font-weight: 800; }
     th:first-child { text-align: left !important; padding-left: 16px; }
+    th:last-child { text-align: left !important; padding-left: 16px; }
     td { padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: center !important; color: #334155; }
     td.fst-col { font-weight: 800; color: #1e3a8a; text-align: left !important; padding-left: 16px; }
+    td:last-child { text-align: left !important; padding-left: 16px; line-height: 1.4; }
+    
+    /* 모바일 환경: 좌측 정렬 및 들여쓰기 적용 */
     @media screen and (max-width: 768px) {
         thead { display: none; }
         tr { display: block; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 16px; background: #ffffff; overflow: hidden; }
         td { display: flex; align-items: flex-start; gap: 12px; border-bottom: 1px dashed #e2e8f0; padding: 10px 12px 10px 24px; text-align: left !important; }
         td:last-child { border-bottom: none; }
         td::before { content: attr(data-label); font-weight: 800; color: #64748b; text-align: left !important; font-size: 0.85rem; flex: 0 0 38%; margin-top: 2px; }
-        td > span { flex: 1; text-align: left !important; word-break: keep-all; font-weight: 400; color: #334155; }
+        td > span { flex: 1; text-align: left !important; word-break: keep-all; font-weight: 400; color: #334155; line-height: 1.4; }
         td.fst-col { display: flex; flex-direction: row; justify-content: flex-start; background: #f1f5f9; text-align: left !important; padding: 12px 16px; border-bottom: 2px solid #cbd5e1; }
         td.fst-col::before { content: attr(data-label) ": "; color: #1e3a8a; font-weight: 800; flex: unset; margin-right: 8px; font-size: 0.95rem; margin-top: 0; text-align: left !important;}
         td.fst-col > span { text-align: left !important; font-weight: 800; color: #1e3a8a; font-size: 0.95rem; }
@@ -142,7 +145,6 @@ def render_virtual_report_inline(case_name: str):
     emg_hdrs = ["Muscle", "Segment", "Side", "Rest", "Volition", "Interpretation"] if is_eng else ["검사 근육", "분절", "측정측", "휴식 시", "수의수축", "판독"]
     spec_hdrs = ["Test", "Condition", "Result", "Interpretation"] if is_eng else ["검사 항목", "조건/측정측", "결과", "상세 수치 및 판독"]
 
-    # 영문/한글 모드에 따라 알맞은 번역 필터 적용
     def _tr(mat): 
         if is_eng:
             return [[custom_english_translate(str(c)) for c in row] for row in mat]
@@ -182,8 +184,9 @@ def render_virtual_report_inline(case_name: str):
                 <div style="background:#f1f5f9; padding:12px; margin-bottom:12px; border-radius:4px; border-left:4px solid #cbd5e1;">
                     <div style="font-size:0.95rem; margin-bottom:6px;"><span style="color:#1e3a8a; font-weight:800;">• 활동성 탈신경 (Active Denervation):</span> 현재 신경 손상이 활발히 진행 중인 상태 (자발전위 관찰)</div>
                     <div style="font-size:0.95rem; margin-bottom:6px;"><span style="color:#1e3a8a; font-weight:800;">• 만성 재신경지배 (Chronic Reinnervation):</span> 신경 손상 후 회복을 시도하는 만성기 (거대운동단위 관찰)</div>
-                    <div style="font-size:0.95rem;"><span style="color:#1e3a8a; font-weight:800;">• 휴식 시 정상적인 반응 (Rest):</span> 전기적 침묵(Silent)</div>     
                     <div style="font-size:0.95rem;"><span style="color:#1e3a8a; font-weight:800;">• 수의수축 시 동원 감소 또는 소실 (Reduced Recruitment or Absent):</span> 신경 손상으로 인해 부분 탈신경으로 근력 저하 또는 완전 탈신경으로 완전 마비된 상태</div>
+                    <div style="font-size:0.95rem;"><span style="color:#1e3a8a; font-weight:800;">• 휴식 시 관찰되는 비정상적인 자발전위 (Rest):</span> 섬유자발전위(fibrillation), 양성예파(positive sharp wave, PSW)</div>
+                    <div style="font-size:0.95rem;"><span style="color:#1e3a8a; font-weight:800;">• 휴식 시 정상적인 반응 (Rest):</span> 전기적 침묵(Silent)</div>                    
                 </div>
                 """, unsafe_allow_html=True)
                 for r in teaching["emg_reason"]: 
@@ -191,7 +194,6 @@ def render_virtual_report_inline(case_name: str):
 
     st.markdown('<hr style="border-top: 2px dashed #cbd5e1; margin: 2.5rem 0 1.5rem 0;">', unsafe_allow_html=True)
     
-    # --- 뇌졸중 경직 평가 사례인지 확인하여 UI 문구 동적 변경 ---
     is_stroke_case = "뇌졸중" in case_name
 
     section_title = "✅ 임상적 통합 해석" if is_stroke_case else "✅ 임상적 통합 해석 및 감별진단"
