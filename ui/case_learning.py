@@ -7,55 +7,58 @@ from data.cases import CASE_LIBRARY
 from ui.navigation import render_bottom_navigation
 
 def _safe_format_code(code: str) -> str:
+    # 모든 내부 코드를 소문자로 변환하여 매핑 확인
+    code_str = str(code).lower()
     mapping = {
-        "ncs_normal": "정상 범위", "ncs_delayed": "잠복기 지연", "ncs_reduced": "진폭 감소", 
-        "ncs_absent": "반응 소실", "ncs_conduction_block": "진폭 급감 (국소 전도차단 의심)",
-        "emg_normal": "정상 범위", "emg_active_denervation": "활동성 탈신경", 
-        "emg_paraspinal_denervation": "활동성 탈신경", "emg_chronic_reinnervation": "만성 재신경지배", 
-        "emg_active_chronic": "활동성+만성", "blink_delayed": "잠복기 지연", "blink_absent": "반응 소실",
-        "fw_delayed": "F파 지연/소실", "h_reflex_hyper": "H-반사 항진", "h_m_ratio_inc": "H/M 비율 증가"
+        "ncs_normal": "정상 범위", 
+        "ncs_delayed": "잠복기 지연", 
+        "ncs_reduced": "진폭 감소", 
+        "ncs_absent": "반응 소실", 
+        "ncs_conduction_block": "진폭 급감 (국소 전도차단 의심)",
+        "emg_normal": "정상 범위", 
+        "emg_active_denervation": "활동성 탈신경", 
+        "emg_paraspinal_denervation": "활동성 탈신경", 
+        "emg_chronic_reinnervation": "만성 재신경지배", 
+        "emg_active_chronic": "활동성 및 만성 변화", 
+        
+        # --- 여기서부터 누락되었던 특수 검사/후기 반응 코드들 추가 ---
+        "blink_delayed": "잠복기 지연", 
+        "blink_absent": "반응 소실",
+        "blink_delayed_absent": "지연 및 소실",
+        "fwave_delayed_absent": "지연 및 소실",
+        "h_reflex_hyperactive": "진폭 과항진",
+        "h_m_ratio_increased": "비율 증가"
     }
-    return mapping.get(str(code), str(code))
+    return mapping.get(code_str, str(code))
 
 def _get_result_color_style(value: str) -> str:
     text = str(value)
-    abnormal_words = ["비정상", "감소", "지연", "소실", "탈신경", "재신경지배", "차단", "항진", "초과"]
+    abnormal_words = ["비정상", "감소", "지연", "소실", "탈신경", "재신경지배", "차단", "항진", "초과", "증가"]
     if any(w in text for w in abnormal_words): return "color: #991b1b; font-weight: 800;"
     if "정상" in text: return "color: #15803d; font-weight: 800;"
     return ""
 
 def _format_reason_text(text: str) -> str:
     text = str(text).strip()
-    # "1)", "2)" 와 같이 번호로 시작하거나 ":" 로 끝나는 문장을 소제목으로 간주하여 강조 및 불릿 제거
     if re.match(r"^(\d+\))", text) or text.endswith(":"):
         return f'<div style="color:#1e40af; font-weight:700; margin-top:14px; margin-bottom:6px;">{html.escape(text)}</div>'
-    # 일반 설명 문장은 불릿 추가 및 들여쓰기 적용
     return f'<div style="color:#334155; margin-bottom:8px; line-height:1.6; padding-left:14px; text-indent:-14px;">• {html.escape(text)}</div>'
 
 def _create_responsive_table(headers: list, rows: list) -> str:
     if not rows: return ""
-    
     css = """<style>
     table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 0.95rem; }
-    
-    /* PC 환경: 첫 번째 열(헤더 및 데이터)은 좌측 정렬, 나머지는 가운데 정렬 */
     th { background-color: #f8fafc; padding: 12px 10px; border-bottom: 2px solid #cbd5e1; text-align: center !important; color: #1e293b; font-weight: 800; }
     th:first-child { text-align: left !important; padding-left: 16px; }
     td { padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: center !important; color: #334155; }
     td.fst-col { font-weight: 800; color: #1e3a8a; text-align: left !important; padding-left: 16px; }
-    
-    /* 모바일 환경: 좌측 정렬 및 들여쓰기 적용 */
     @media screen and (max-width: 768px) {
         thead { display: none; }
         tr { display: block; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 16px; background: #ffffff; overflow: hidden; }
-        /* 일반 항목 셀: 왼쪽 여백(padding-left: 24px)을 주어 들여쓰기 효과 */
         td { display: flex; align-items: flex-start; gap: 12px; border-bottom: 1px dashed #e2e8f0; padding: 10px 12px 10px 24px; text-align: left !important; }
         td:last-child { border-bottom: none; }
-        /* 라벨과 값을 좌측 정렬 */
         td::before { content: attr(data-label); font-weight: 800; color: #64748b; text-align: left !important; font-size: 0.85rem; flex: 0 0 38%; margin-top: 2px; }
         td > span { flex: 1; text-align: left !important; word-break: keep-all; font-weight: 400; color: #334155; }
-        
-        /* 첫 번째 열(제목 역할): 들여쓰기 없이 좌측 상단에 굵게 배치 */
         td.fst-col { display: flex; flex-direction: row; justify-content: flex-start; background: #f1f5f9; text-align: left !important; padding: 12px 16px; border-bottom: 2px solid #cbd5e1; }
         td.fst-col::before { content: attr(data-label) ": "; color: #1e3a8a; font-weight: 800; flex: unset; margin-right: 8px; font-size: 0.95rem; margin-top: 0; text-align: left !important;}
         td.fst-col > span { text-align: left !important; font-weight: 800; color: #1e3a8a; font-size: 0.95rem; }
@@ -130,7 +133,6 @@ def render_case_detail_inline(case_name: str):
         if not isinstance(result_tuple, tuple): continue
         row = [test_name] + list(result_tuple)
         
-        # [핵심 수정 부분] 특수검사 키워드를 대폭 추가하여 필터링 로직 강화
         test_name_upper = test_name.upper()
         if any(kw in test_name_upper for kw in ["눈깜박", "BLINK", "R1", "R2", "H-반사", "H/M", "F파", "F-WAVE"]): 
             blink_rows.append(row)
@@ -139,7 +141,7 @@ def render_case_detail_inline(case_name: str):
         elif "CMAP" in test_name_upper or "운동" in test_name: 
             motor_rows.append(row)
         else: 
-            emg_rows.append(row) # 위 조건에 안 걸리면 모두 침근전도 표로 이동됨
+            emg_rows.append(row)
 
     if sensory_rows:
         st.markdown('<div class="section-label" style="margin-top:32px;">⚡ 감각신경전도검사 (Sensory NCS)</div>', unsafe_allow_html=True)
@@ -156,10 +158,7 @@ def render_case_detail_inline(case_name: str):
 
     if blink_rows:
         st.markdown('<div class="section-label" style="margin-top:32px;">⚡ 특수 및 후기반응 검사 (Special & Late Responses)</div>', unsafe_allow_html=True)
-        # 특수 검사에 맞게 테이블 헤더명을 자연스럽게 변경
         st.markdown(_create_responsive_table(["검사 항목", "결과", "상세 수치 및 판독"], blink_rows), unsafe_allow_html=True)
-        
-        # 침근전도가 아예 없는 경우(뇌졸중, 얼굴마비 등) emg_reason의 텍스트를 특수검사 해석란으로 표출
         if "emg_reason" in teaching and not emg_rows: 
             with st.expander("🔍 특수 검사 소견 해석"):
                 for r in teaching["emg_reason"]: 
@@ -168,7 +167,6 @@ def render_case_detail_inline(case_name: str):
     if emg_rows:
         st.markdown('<div class="section-label" style="margin-top:32px;">🪡 침근전도검사 (Needle EMG)</div>', unsafe_allow_html=True)
         st.markdown(_create_responsive_table(["검사 근육", "휴식 시", "수의수축 시"], emg_rows), unsafe_allow_html=True)
-        
         if "emg_reason" in teaching:
             with st.expander("🔍 침근전도검사 결과 해석"):
                 st.markdown("""
@@ -178,7 +176,6 @@ def render_case_detail_inline(case_name: str):
                     <div style="font-size:0.95rem;"><span style="color:#1e3a8a; font-weight:800;">• 수의수축 시 동원 감소 또는 소실 (Reduced Recruitment or Absent):</span> 신경 손상으로 인해 부분 탈신경으로 근력 저하 또는 완전 탈신경으로 완전 마비된 상태</div>
                 </div>
                 """, unsafe_allow_html=True)
-                # 침근전도가 존재할 때만 일반적인 emg_reason 텍스트 출력
                 for r in teaching["emg_reason"]: 
                     st.markdown(_format_reason_text(r), unsafe_allow_html=True)
 
