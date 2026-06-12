@@ -586,12 +586,12 @@ CASE_LIBRARY = {
             },
         },
         "findings": {
-            "우측 자극-우측 R1 (동측 단일시냅스)": (BLINK_DELAYED, "14.8 ms (정상범위 < 13.0 ms)"),
-            "우측 자극-우측 R2 (동측 다시냅스)": (BLINK_DELAYED_ABSENT, "48.5 ms (정상범위 < 40.0 ms)"),
-            "우측 자극-좌측 R2 (대측 다시냅스)": (BLINK_DELAYED_ABSENT, "49.1 ms (정상범위 < 41.0 ms)"),
-            "좌측 자극-좌측 R1 (동측 단일시냅스)": (NCS_NORMAL, "10.4 ms (정상범위 < 13.0 ms)"),
-            "좌측 자극-좌측 R2 (동측 다시냅스)": (NCS_NORMAL, "32.1 ms (정상범위 < 40.0 ms)"),
-            "좌측 자극-우측 R2 (대측 다시냅스)": (NCS_NORMAL, "31.8 ms (정상범위 < 41.0 ms)"),
+            "우측 자극-우측 R1 (동측 단일시냅스)": ("잠복기 지연", "14.8 ms", BLINK_DELAYED),
+            "우측 자극-우측 R2 (동측 다시냅스)": ("반응 소실", "측정불가", BLINK_DELAYED_ABSENT),
+            "우측 자극-좌측 R2 (대측 다시냅스)": ("반응 소실", "측정불가", BLINK_DELAYED_ABSENT),
+            "좌측 자극-좌측 R1 (동측 단일시냅스)": ("정상 유발", "10.4 ms", NCS_NORMAL),
+            "좌측 자극-좌측 R2 (동측 다시냅스)": ("정상 유발", "32.1 ms", NCS_NORMAL),
+            "좌측 자극-우측 R2 (대측 다시냅스)": ("정상 유발", "31.8 ms", NCS_NORMAL),
         },
         "teaching_diagnosis": {
             "summary": "우측 삼차신경(Trigeminal nerve)의 눈신경(V1) 가지 들신경 경로(Afferent limb) 손상입니다.",
