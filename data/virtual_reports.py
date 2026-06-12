@@ -362,10 +362,11 @@ VIRTUAL_REPORTS = {
             ["삼차신경", "오른쪽", "22 μV", "1.9 ms", "정상 범위"],
         ],
         "ncs_motor": [
-            ["얼굴신경 코근", "왼쪽", "0.8 mV", "4.5 ms", "비정상 (진폭 감소 / 잠복기 지연)"],
-            ["얼굴신경 코근", "오른쪽", "3.5 mV", "2.8 ms", "정상 범위"],
-            ["얼굴신경 눈둘레근", "왼쪽", "0.6 mV", "4.2 ms", "비정상 (진폭 감소)"],
-            ["얼굴신경 눈둘레근", "오른쪽", "3.0 mV", "2.6 ms", "정상 범위"],
+            # 핵심 수정: '귀앞' 자극 위치를 정확하게 추가하여 컬럼 밀림 현상 방지
+            ["얼굴신경 코근", "귀앞", "왼쪽", "0.8 mV", "4.5 ms", "비정상 (진폭 감소 / 잠복기 지연)"],
+            ["얼굴신경 코근", "귀앞", "오른쪽", "3.5 mV", "2.8 ms", "정상 범위"],
+            ["얼굴신경 눈둘레근", "귀앞", "왼쪽", "0.6 mV", "4.2 ms", "비정상 (진폭 감소)"],
+            ["얼굴신경 눈둘레근", "귀앞", "오른쪽", "3.0 mV", "2.6 ms", "정상 범위"],
         ],
         "emg": [
             ["눈둘레근", "얼굴신경", "왼쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
@@ -453,17 +454,10 @@ def get_report_section_name(section: str, language: str) -> str:
     }
     return mapping[section]["en" if lang == REPORT_LANG_EN else "ko"]
 
-# 영문 모드 100% 매핑 보강
-# data/virtual_reports.py 파일의 가장 하단 부분 교체
-
-# data/virtual_reports.py 파일 하단의 함수 교체
-
 def custom_english_translate(text: str) -> str:
     raw = str(text)
     
-    # 모든 한글-영문 매핑을 하나의 딕셔너리로 통합
     mapping = {
-        # 1. 판독 결과
         "정상 범위": "Within Normal Limits",
         "비정상 (활동성 탈신경)": "Abnormal (Active denervation)",
         "통증으로 평가 불가": "Incomplete due to pain",
@@ -473,13 +467,9 @@ def custom_english_translate(text: str) -> str:
         "비정상 (반응 소실)": "Abnormal (Absent)",
         "비정상 (동원 감소)": "Abnormal (Reduced recruitment)",
         "비정상 (동원 불가)": "Abnormal (No recruitment)",
-        
-        # 2. 측정측
         "오른쪽": "Rt",
         "왼쪽": "Lt",
         "양측": "Bilateral",
-        
-        # 3. 자극 위치 (단어가 쪼개지는 원인부)
         "팔꿈치 아래": "Below elbow",
         "팔꿈치 위": "Above elbow",
         "나선고랑 위": "Above spiral groove",
@@ -490,8 +480,7 @@ def custom_english_translate(text: str) -> str:
         "아래팔": "Forearm",
         "위팔": "Arm",
         "발목": "Ankle",
-        
-        # 4. 신경 이름
+        "귀앞": "Preauricular",
         "정중신경 첫째 가지": "Median (digit1)",
         "정중신경 둘째 가지": "Median (digit2)",
         "정중신경 셋째 가지": "Median (digit3)",
@@ -513,8 +502,6 @@ def custom_english_translate(text: str) -> str:
         "넓적다리신경": "Femoral",
         "삼차신경": "Trigeminal",
         "얼굴신경": "Facial",
-        
-        # 5. 침근전도 근육 이름 (단어가 쪼개지는 원인부)
         "깊은손가락굽힘근 4-다섯째 가지": "Flexor Digitorum Profundus (digit 4-5)",
         "넓적다리두갈래근 짧은갈래": "Biceps Femoris (Short Head)",
         "목 척추주위근": "Cervical Paraspinal",
@@ -547,14 +534,10 @@ def custom_english_translate(text: str) -> str:
         "입둘레근": "Orbicularis Oris",
         "이마근": "Frontalis",
         "깨물근": "Masseter",
-        
-        # 6. 기타 예외 처리
         "무반응": "Absent",
         "측정불가": "Not Available (N/A)"
     }
     
-    # [핵심 로직] 딕셔너리의 키(단어)를 '글자 수가 긴 순서대로 정렬'하여 먼저 치환합니다.
-    # 이렇게 하면 '위팔세갈래근'이 번역되기 전에 '위팔'이 번역되어 에러가 생기는 현상이 원천 차단됩니다.
     for k in sorted(mapping.keys(), key=len, reverse=True):
         if k in raw:
             raw = raw.replace(k, mapping[k])
