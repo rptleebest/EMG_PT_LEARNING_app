@@ -13,7 +13,7 @@ def get_input_learning_report_language() -> str:
 
 def get_result_color_style(value: str) -> str:
     text = str(value)
-    abnormal_words = ["비정상", "감소", "지연", "소실", "탈신경", "측정불가", "차단", "Abnormal", "Reduced", "Absent", "Delayed", "Incomplete", "Active", "drop", "block"]
+    abnormal_words = ["비정상", "감소", "지연", "소실", "탈신경", "측정불가", "차단", "항진", "초과", "증가", "Abnormal", "Reduced", "Absent", "Delayed", "Incomplete", "Active", "drop", "block"]
     normal_words = ["정상", "Normal", "Silent", "WNL"]
     if any(w in text for w in abnormal_words): return "color: #991b1b; font-weight: 800;"
     if any(w in text for w in normal_words): return "color: #15803d; font-weight: 800;"
@@ -21,36 +21,49 @@ def get_result_color_style(value: str) -> str:
 
 def _format_reason_text(text: str) -> str:
     text = str(text).strip()
-    # "1)", "2)" 와 같이 번호로 시작하거나 ":" 로 끝나는 문장을 소제목으로 간주하여 강조 및 불릿 제거
     if re.match(r"^(\d+\))", text) or text.endswith(":"):
         return f'<div style="color:#1e40af; font-weight:700; margin-top:14px; margin-bottom:6px;">{html.escape(text)}</div>'
-    # 일반 설명 문장은 불릿 추가 및 들여쓰기 적용
     return f'<div style="color:#334155; margin-bottom:8px; line-height:1.6; padding-left:14px; text-indent:-14px;">• {html.escape(text)}</div>'
+
+# --- 한글 모드일 때 내부 상수를 깔끔한 한글로 강제 변환 ---
+def custom_korean_translate(text: str) -> str:
+    code_str = str(text).lower()
+    mapping = {
+        "ncs_normal": "정상 범위", 
+        "ncs_delayed": "잠복기 지연", 
+        "ncs_reduced": "진폭 감소", 
+        "ncs_absent": "반응 소실", 
+        "ncs_conduction_block": "진폭 급감",
+        "emg_normal": "정상 범위", 
+        "emg_active_denervation": "활동성 탈신경", 
+        "emg_paraspinal_denervation": "활동성 탈신경", 
+        "emg_chronic_reinnervation": "만성 재신경지배", 
+        "emg_active_chronic": "활동성+만성", 
+        "blink_delayed": "잠복기 지연", 
+        "blink_absent": "반응 소실",
+        "blink_delayed_absent": "지연 및 소실",
+        "fwave_delayed_absent": "지연 및 소실",
+        "h_reflex_hyperactive": "진폭 과항진",
+        "h_m_ratio_increased": "비율 증가"
+    }
+    # 매핑에 없으면 원래 텍스트 반환
+    return mapping.get(code_str, str(text))
 
 def create_responsive_table(headers: list, rows: list) -> str:
     if not rows: return ""
-    
     css = """<style>
     table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 0.95rem; }
-    
-    /* PC 환경: 첫 번째 열(헤더 및 데이터)은 좌측 정렬, 나머지는 가운데 정렬 */
     th { background-color: #f8fafc; padding: 12px 10px; border-bottom: 2px solid #cbd5e1; text-align: center !important; color: #1e293b; font-weight: 800; }
     th:first-child { text-align: left !important; padding-left: 16px; }
     td { padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: center !important; color: #334155; }
     td.fst-col { font-weight: 800; color: #1e3a8a; text-align: left !important; padding-left: 16px; }
-    
-    /* 모바일 환경: 좌측 정렬 및 들여쓰기 적용 */
     @media screen and (max-width: 768px) {
         thead { display: none; }
         tr { display: block; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 16px; background: #ffffff; overflow: hidden; }
-        /* 일반 항목 셀: 왼쪽 여백(padding-left: 24px)을 주어 들여쓰기 효과 */
         td { display: flex; align-items: flex-start; gap: 12px; border-bottom: 1px dashed #e2e8f0; padding: 10px 12px 10px 24px; text-align: left !important; }
         td:last-child { border-bottom: none; }
-        /* 라벨과 값을 좌측 정렬 */
         td::before { content: attr(data-label); font-weight: 800; color: #64748b; text-align: left !important; font-size: 0.85rem; flex: 0 0 38%; margin-top: 2px; }
         td > span { flex: 1; text-align: left !important; word-break: keep-all; font-weight: 400; color: #334155; }
-        
-        /* 첫 번째 열(제목 역할): 들여쓰기 없이 좌측 상단에 굵게 배치 */
         td.fst-col { display: flex; flex-direction: row; justify-content: flex-start; background: #f1f5f9; text-align: left !important; padding: 12px 16px; border-bottom: 2px solid #cbd5e1; }
         td.fst-col::before { content: attr(data-label) ": "; color: #1e3a8a; font-weight: 800; flex: unset; margin-right: 8px; font-size: 0.95rem; margin-top: 0; text-align: left !important;}
         td.fst-col > span { text-align: left !important; font-weight: 800; color: #1e3a8a; font-size: 0.95rem; }
@@ -108,9 +121,14 @@ def render_virtual_report_inline(case_name: str):
     sen_hdrs = ["Nerve", "Side", "Amplitude", "Latency", "Interpretation"] if is_eng else ["검사 신경", "측정측", "진폭", "잠복기", "판독"]
     mot_hdrs = ["Nerve", "Stim Site", "Side", "Amplitude", "Latency", "Interpretation"] if is_eng else ["검사 신경", "자극 위치", "측정측", "진폭", "잠복기", "판독"]
     emg_hdrs = ["Muscle", "Segment", "Side", "Rest", "Volition", "Interpretation"] if is_eng else ["검사 근육", "분절", "측정측", "휴식 시", "수의수축", "판독"]
+    spec_hdrs = ["Test", "Condition", "Result", "Interpretation"] if is_eng else ["검사 항목", "조건/측정측", "결과", "상세 수치 및 판독"]
 
+    # 영문/한글 모드에 따라 알맞은 번역 필터 적용
     def _tr(mat): 
-        return [[custom_english_translate(str(c)) for c in row] for row in mat] if is_eng else mat
+        if is_eng:
+            return [[custom_english_translate(str(c)) for c in row] for row in mat]
+        else:
+            return [[custom_korean_translate(str(c)) for c in row] for row in mat]
 
     teaching = data.get("teaching_diagnosis", {})
 
@@ -127,6 +145,16 @@ def render_virtual_report_inline(case_name: str):
             for r in teaching["ncs_reason"]:
                 st.markdown(_format_reason_text(r), unsafe_allow_html=True)
 
+    if data.get("special"):
+        spec_title = "Special & Late Responses" if is_eng else "특수 및 후기반응 검사"
+        st.markdown(f'<div class="section-label" style="margin-top:32px;">⚡ {spec_title}</div>', unsafe_allow_html=True)
+        st.markdown(create_responsive_table(spec_hdrs, _tr(data.get("special", []))), unsafe_allow_html=True)
+        # 침근전도가 없을 경우 특수검사 아래에 emg_reason 출력
+        if "emg_reason" in teaching and not data.get("emg"):
+            with st.expander("🔍 특수 검사 소견 해석"):
+                for r in teaching["emg_reason"]: 
+                    st.markdown(_format_reason_text(r), unsafe_allow_html=True)
+
     if data.get("emg"):
         st.markdown(f'<div class="section-label" style="margin-top:32px;">🪡 {get_report_section_name("emg", lang)}</div>', unsafe_allow_html=True)
         st.markdown(create_responsive_table(emg_hdrs, _tr(data.get("emg", []))), unsafe_allow_html=True)
@@ -137,8 +165,6 @@ def render_virtual_report_inline(case_name: str):
                     <div style="font-size:0.95rem; margin-bottom:6px;"><span style="color:#1e3a8a; font-weight:800;">• 활동성 탈신경 (Active Denervation):</span> 현재 신경 손상이 활발히 진행 중인 상태 (자발전위 관찰)</div>
                     <div style="font-size:0.95rem; margin-bottom:6px;"><span style="color:#1e3a8a; font-weight:800;">• 만성 재신경지배 (Chronic Reinnervation):</span> 신경 손상 후 회복을 시도하는 만성기 (거대운동단위 관찰)</div>
                     <div style="font-size:0.95rem;"><span style="color:#1e3a8a; font-weight:800;">• 수의수축 시 동원 감소 또는 소실 (Reduced Recruitment or Absent):</span> 신경 손상으로 인해 부분 탈신경으로 근력 저하 또는 완전 탈신경으로 완전 마비된 상태</div>
-                    <div style="font-size:0.95rem;"><span style="color:#1e3a8a; font-weight:800;">• 휴식 시 관찰되는 비정상적인 자발전위 (Rest):</span> 섬유자발전위(fibrillation), 양성예파(positive sharp wave, PSW)</div>
-                    <div style="font-size:0.95rem;"><span style="color:#1e3a8a; font-weight:800;">• 휴식 시 정상적인 반응 (Rest):</span> 전기적 침묵(Silent)</div>                    
                 </div>
                 """, unsafe_allow_html=True)
                 for r in teaching["emg_reason"]: 
