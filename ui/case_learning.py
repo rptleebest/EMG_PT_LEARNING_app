@@ -19,7 +19,7 @@ def _safe_format_code(code: str) -> str:
 
 def _get_result_color_style(value: str) -> str:
     text = str(value)
-    abnormal_words = ["비정상", "감소", "지연", "소실", "탈신경", "재신경지배", "차단", "항진", "급감"]
+    abnormal_words = ["비정상", "감소", "지연", "소실", "탈신경", "재신경지배", "차단", "항진", "초과"]
     if any(w in text for w in abnormal_words): return "color: #991b1b; font-weight: 800;"
     if "정상" in text: return "color: #15803d; font-weight: 800;"
     return ""
@@ -125,37 +125,50 @@ def render_case_detail_inline(case_name: str):
                     st.markdown(f'<div style="margin-bottom:4px; color:#334155;">• {item}</div>', unsafe_allow_html=True)
             st.markdown('</div>', unsafe_allow_html=True)
 
-    # --- 여기서부터 데이터 출력부 ---
-    # 과거의 findings.items() 순회 방식 대신, 새로운 배열 기반 데이터 키를 직접 읽어와 테이블을 생성합니다.
-    
-    if findings.get("ncs_sensory"):
+    sensory_rows, motor_rows, emg_rows, blink_rows = [], [], [], []
+    for test_name, result_tuple in findings.items():
+        if not isinstance(result_tuple, tuple): continue
+        row = [test_name] + list(result_tuple)
+        
+        # [핵심 수정 부분] 특수검사 키워드를 대폭 추가하여 필터링 로직 강화
+        test_name_upper = test_name.upper()
+        if any(kw in test_name_upper for kw in ["눈깜박", "BLINK", "R1", "R2", "H-반사", "H/M", "F파", "F-WAVE"]): 
+            blink_rows.append(row)
+        elif "SNAP" in test_name_upper or "감각" in test_name: 
+            sensory_rows.append(row)
+        elif "CMAP" in test_name_upper or "운동" in test_name: 
+            motor_rows.append(row)
+        else: 
+            emg_rows.append(row) # 위 조건에 안 걸리면 모두 침근전도 표로 이동됨
+
+    if sensory_rows:
         st.markdown('<div class="section-label" style="margin-top:32px;">⚡ 감각신경전도검사 (Sensory NCS)</div>', unsafe_allow_html=True)
-        # 헤더에 '측정측' 추가 적용
-        st.markdown(_create_responsive_table(["검사 신경", "측정측", "진폭", "잠복기"], findings["ncs_sensory"]), unsafe_allow_html=True)
+        st.markdown(_create_responsive_table(["검사 신경", "결과", "상세/잠복기"], sensory_rows), unsafe_allow_html=True)
 
-    if findings.get("ncs_motor"):
+    if motor_rows:
         st.markdown('<div class="section-label" style="margin-top:32px;">⚡ 운동신경전도검사 (Motor NCS)</div>', unsafe_allow_html=True)
-        # 헤더에 '자극 위치', '측정측' 추가 적용
-        st.markdown(_create_responsive_table(["검사 신경", "자극 위치", "측정측", "진폭", "잠복기"], findings["ncs_motor"]), unsafe_allow_html=True)
+        st.markdown(_create_responsive_table(["검사 신경", "결과", "상세/잠복기"], motor_rows), unsafe_allow_html=True)
 
-    if (findings.get("ncs_sensory") or findings.get("ncs_motor")) and "ncs_reason" in teaching:
+    if (sensory_rows or motor_rows) and "ncs_reason" in teaching:
         with st.expander("🔍 신경전도검사 결과 해석"):
             for r in teaching["ncs_reason"]:
                 st.markdown(_format_reason_text(r), unsafe_allow_html=True)
 
-    if findings.get("special"):
+    if blink_rows:
         st.markdown('<div class="section-label" style="margin-top:32px;">⚡ 특수 및 후기반응 검사 (Special & Late Responses)</div>', unsafe_allow_html=True)
-        st.markdown(_create_responsive_table(["검사 항목", "조건/측정측", "결과", "판독"], findings["special"]), unsafe_allow_html=True)
-        # 특수 검사(예: 눈깜빡반사, H-반사) 케이스의 경우 해당 해석을 출력합니다.
-        if "emg_reason" in teaching and not findings.get("emg"): 
+        # 특수 검사에 맞게 테이블 헤더명을 자연스럽게 변경
+        st.markdown(_create_responsive_table(["검사 항목", "결과", "상세 수치 및 판독"], blink_rows), unsafe_allow_html=True)
+        
+        # 침근전도가 아예 없는 경우(뇌졸중, 안면마비 등) emg_reason의 텍스트를 특수검사 해석란으로 표출
+        if "emg_reason" in teaching and not emg_rows: 
             with st.expander("🔍 특수 검사 소견 해석"):
                 for r in teaching["emg_reason"]: 
                     st.markdown(_format_reason_text(r), unsafe_allow_html=True)
 
-    if findings.get("emg"):
+    if emg_rows:
         st.markdown('<div class="section-label" style="margin-top:32px;">🪡 침근전도검사 (Needle EMG)</div>', unsafe_allow_html=True)
-        # 헤더에 '신경분절', '측정측' 추가 적용
-        st.markdown(_create_responsive_table(["검사 근육", "신경분절", "측정측", "휴식 시", "수의수축 시"], findings["emg"]), unsafe_allow_html=True)
+        st.markdown(_create_responsive_table(["검사 근육", "휴식 시", "수의수축 시"], emg_rows), unsafe_allow_html=True)
+        
         if "emg_reason" in teaching:
             with st.expander("🔍 침근전도검사 결과 해석"):
                 st.markdown("""
@@ -165,6 +178,7 @@ def render_case_detail_inline(case_name: str):
                     <div style="font-size:0.95rem;"><span style="color:#1e3a8a; font-weight:800;">• 수의수축 시 동원 감소 또는 소실 (Reduced Recruitment or Absent):</span> 신경 손상으로 인해 부분 탈신경으로 근력 저하 또는 완전 탈신경으로 완전 마비된 상태</div>
                 </div>
                 """, unsafe_allow_html=True)
+                # 침근전도가 존재할 때만 일반적인 emg_reason 텍스트 출력
                 for r in teaching["emg_reason"]: 
                     st.markdown(_format_reason_text(r), unsafe_allow_html=True)
 
