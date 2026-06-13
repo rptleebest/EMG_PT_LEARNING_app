@@ -4,7 +4,7 @@ import html
 import re
 import streamlit as st
 from ui.navigation import render_bottom_navigation
-from data.report_terms import REPORT_LANG_KO, REPORT_LANG_EN, LANGUAGE_OPTIONS, normalize_report_language
+from data.report_terms import REPORT_LANG_KO, REPORT_LANG_EN, LANGUAGE_OPTIONS, normalize_report_language, translate_term
 from data.virtual_reports import VIRTUAL_REPORTS, get_report_section_name, custom_english_translate
 
 def get_input_learning_report_language() -> str:
@@ -264,15 +264,26 @@ def render_virtual_report_inline(case_name: str):
         f'</div>', unsafe_allow_html=True
     )
 
+    # --- [핵심 수정] 가상 검사결과표에서도 감별진단 상세 데이터(왜 고려하는지, 임상 꿀팁 등) 100% 표출 로직 ---
     if "differential_diagnosis" in data:
         st.markdown('<div class="sub-title" style="margin-top:24px;">🧭 유사 질환과의 감별진단</div>', unsafe_allow_html=True)
         for ddx in data["differential_diagnosis"]:
+            name = ddx.get('name', '')
+            why = ddx.get('why_consider', '')
+            how = ddx.get('how_to_differentiate', '')
+            tip = ddx.get('practical_tip', '')
+            
+            ddx_html = f"<div style='font-size:1.05rem; font-weight:800; color:#4f46e5; margin-bottom:12px;'>{name}</div>"
+            if why:
+                ddx_html += f"<div style='color:#475569; line-height:1.6; margin-bottom:8px;'><span style='font-weight:700; color:#334155;'>🤔 고려 이유: </span>{why}</div>"
+            if how:
+                ddx_html += f"<div style='color:#475569; line-height:1.6; margin-bottom:8px;'><span style='font-weight:700; color:#334155;'>🔎 감별 포인트: </span>{how}</div>"
+            if tip:
+                ddx_html += f"<div style='color:#ea580c; line-height:1.6; margin-top:12px; font-weight:600; background:#fff7ed; padding:8px 12px; border-radius:6px; border-left:3px solid #ea580c;'>💡 임상 꿀팁: {tip}</div>"
+            
             st.markdown(f"""
-            <div class="ddx-box">
-                <div style="font-size:1.05rem; font-weight:800; color:#4f46e5; margin-bottom:8px;">{ddx.get('name')}</div>
-                <div style="color:#475569; line-height:1.6;">
-                    {ddx.get('how_to_differentiate')}
-                </div>
+            <div class="ddx-box" style="background:#f8fafc; border:1px solid #e2e8f0; padding:16px; border-radius:8px; margin-bottom:16px; border-left: 4px solid #4f46e5; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                {ddx_html}
             </div>
             """, unsafe_allow_html=True)
 
