@@ -64,57 +64,23 @@ def _format_reason_text(text: str) -> str:
 def _create_responsive_table(headers: list, rows: list) -> str:
     if not rows: return ""
     css = """<style>
-    /* PC 환경 기본 스타일 */
     .res-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 0.95rem; }
     .res-table th { background-color: #f8fafc; padding: 12px 10px; border-bottom: 2px solid #cbd5e1; text-align: center !important; color: #1e293b; font-weight: 800; }
     .res-table th:first-child { text-align: left !important; padding-left: 16px; }
     .res-table th:last-child { text-align: left !important; padding-left: 16px; }
-    .res-table td { padding: 12px 10px; border-bottom: 1px solid #e2e8f0; text-align: center !important; color: #334155; vertical-align: middle; }
+    .res-table td { padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: center !important; color: #334155; }
     .res-table td.fst-col { font-weight: 800; color: #1e3a8a; text-align: left !important; padding-left: 16px; }
     .res-table td:last-child { text-align: left !important; padding-left: 16px; line-height: 1.4; }
-    
-    /* 모바일 환경: 독립된 카드 UI로 완벽 분리 */
     @media screen and (max-width: 768px) {
-        .res-table, .res-table thead, .res-table tbody, .res-table th, .res-table td, .res-table tr { display: block; }
         .res-table thead { display: none; }
-        
-        .res-table tr { 
-            margin-bottom: 1rem; 
-            border: 1px solid #cbd5e1; 
-            border-radius: 10px; 
-            background: #ffffff; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            overflow: hidden;
-        }
-        
-        .res-table td { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 10px 16px; 
-            border-bottom: 1px dashed #e2e8f0; 
-            text-align: right !important; 
-        }
-        .res-table td:last-child { border-bottom: none; background-color: #f8fafc; align-items: flex-start;}
-        
-        .res-table td::before { 
-            content: attr(data-label); 
-            font-weight: 700; 
-            color: #64748b; 
-            text-align: left !important; 
-            flex: 0 0 40%;
-            font-size: 0.9rem;
-        }
-        .res-table td > span { flex: 1; word-break: keep-all; font-weight: 500; }
-        
-        .res-table td.fst-col { 
-            background: #eff6ff; 
-            padding: 12px 16px; 
-            border-bottom: 2px solid #bfdbfe; 
-            justify-content: flex-start;
-        }
+        .res-table tr { display: block; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 16px; background: #ffffff; overflow: hidden; }
+        .res-table td { display: flex; align-items: flex-start; gap: 12px; border-bottom: 1px dashed #e2e8f0; padding: 10px 12px 10px 24px; text-align: left !important; }
+        .res-table td:last-child { border-bottom: none; }
+        .res-table td::before { content: attr(data-label); font-weight: 800; color: #64748b; text-align: left !important; font-size: 0.85rem; flex: 0 0 38%; margin-top: 2px; }
+        .res-table td > span { flex: 1; text-align: left !important; word-break: keep-all; font-weight: 400; color: #334155; line-height: 1.4; }
+        .res-table td.fst-col { display: flex; flex-direction: row; justify-content: flex-start; background: #f1f5f9; text-align: left !important; padding: 12px 16px; border-bottom: 2px solid #cbd5e1; }
         .res-table td.fst-col::before { display: none; }
-        .res-table td.fst-col > span { text-align: left !important; font-weight: 800; color: #1d4ed8; font-size: 1.05rem; }
+        .res-table td.fst-col > span { text-align: left !important; font-weight: 800; color: #1e3a8a; font-size: 0.95rem; }
         .res-table td.fst-col > span::before { content: "🔹 "; }
     }
     </style>"""
@@ -201,8 +167,17 @@ def render_case_detail_inline(case_name: str):
         else: 
             emg_rows.append(row)
 
+    # --- [핵심 추가] 병변측 안내 문구 표출 ---
+    if sensory_rows or motor_rows or emg_rows:
+        st.markdown("""
+        <div style="background-color: #f0fdf4; border-left: 4px solid #16a34a; padding: 12px 16px; margin-top: 32px; border-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+            <span style="font-weight: 800; color: #16a34a; font-size: 1.05rem;">💡 검사 결과 표기 안내</span><br>
+            <span style="color: #15803d; font-size: 0.95rem; line-height: 1.6;">아래 제시된 신경전도 및 침근전도 검사 수치는 환자의 주요 증상을 반영하는 <b>병변 호소측(Affected side)</b>의 대표 검사 결과입니다.</span>
+        </div>
+        """, unsafe_allow_html=True)
+
     if sensory_rows:
-        st.markdown('<div class="section-label" style="margin-top:32px;">⚡ 감각신경전도검사 (Sensory NCS)</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-label" style="margin-top:24px;">⚡ 감각신경전도검사 (Sensory NCS)</div>', unsafe_allow_html=True)
         st.markdown(_create_responsive_table(["검사 신경", "진폭", "잠복기", "판독"], sensory_rows), unsafe_allow_html=True)
 
     if motor_rows:
