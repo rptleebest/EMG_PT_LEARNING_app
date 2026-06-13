@@ -34,9 +34,16 @@ def _safe_format_code(code: str) -> str:
 
 def _get_result_color_style(value: str) -> str:
     text = str(value)
+    
+    # '측정측' 칼럼 데이터("정상측", "병변측")는 단순 라벨이므로 색상 강조(초록/빨강) 제외
+    if any(x in text for x in ["정상측", "병변측", "Normal (", "Affected ("]):
+        return ""
+
     abnormal_words = ["비정상", "감소", "지연", "소실", "탈신경", "재신경지배", "차단", "항진", "초과", "증가", "저하", "급감"]
+    normal_words = ["정상", "Normal", "Silent", "WNL", "침묵", "동원"]
+    
     if any(w in text for w in abnormal_words): return "color: #991b1b; font-weight: 800;"
-    if "정상" in text: return "color: #15803d; font-weight: 800;"
+    if any(w in text for w in normal_words): return "color: #15803d; font-weight: 800;"
     return ""
 
 def _format_reason_text(text: str) -> str:
@@ -48,6 +55,7 @@ def _format_reason_text(text: str) -> str:
 def _create_responsive_table(headers: list, rows: list) -> str:
     if not rows: return ""
     css = """<style>
+    /* PC 환경 기본 스타일 (깔끔한 Row-by-Row) */
     .sl-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 0.95rem; }
     .sl-table th { background-color: #f8fafc; padding: 12px 10px; border-bottom: 2px solid #cbd5e1; text-align: center !important; color: #1e293b; font-weight: 800; white-space: nowrap; }
     .sl-table th:first-child { text-align: left !important; padding-left: 16px; }
@@ -56,6 +64,7 @@ def _create_responsive_table(headers: list, rows: list) -> str:
     .sl-table td.fst-col { font-weight: 800; color: #1e3a8a; text-align: left !important; padding-left: 16px; }
     .sl-table td:last-child { text-align: left !important; padding-left: 16px; line-height: 1.4; font-weight: 600;}
     
+    /* 모바일 환경: 독립된 카드 UI로 완벽 분리 및 판독 결과 강조 */
     @media screen and (max-width: 768px) {
         .sl-table, .sl-table thead, .sl-table tbody, .sl-table th, .sl-table td, .sl-table tr { display: block; }
         .sl-table thead { display: none; }
@@ -71,6 +80,7 @@ def _create_responsive_table(headers: list, rows: list) -> str:
         }
         .sl-table td > span { flex: 1; text-align: left !important; word-break: keep-all; font-weight: 500; color: #334155; line-height: 1.4; }
         
+        /* 카드 제목 (검사 신경 이름) */
         .sl-table td.fst-col { 
             background: #eff6ff; padding: 14px 16px; border-bottom: 2px solid #bfdbfe; justify-content: flex-start; 
         }
@@ -78,6 +88,7 @@ def _create_responsive_table(headers: list, rows: list) -> str:
         .sl-table td.fst-col > span { text-align: left !important; font-weight: 800; color: #1d4ed8; font-size: 1.05rem; }
         .sl-table td.fst-col > span::before { content: "🔹 "; }
         
+        /* 판독 결과 (맨 아래 넓게 배치) */
         .sl-table td:last-child { 
             flex-direction: column; align-items: flex-start; background-color: #f8fafc; border-bottom: none; padding-top: 14px; padding-bottom: 14px;
         }
@@ -140,7 +151,6 @@ def render_case_detail_inline(case_name: str):
     if phys_exam:
         st.markdown('<div class="section-label" style="margin-top:24px;">🩺 이학적 검사 (신경학적 진찰)</div>', unsafe_allow_html=True)
         
-        # 반응형 이학적 검사(MMT) CSS 주입
         st.markdown('''
         <style>
         .pe-item { margin-bottom: 6px; color: #334155; line-height: 1.5; font-weight: 500;}
@@ -162,7 +172,6 @@ def render_case_detail_inline(case_name: str):
             icon = "🖐" if "감각" in cat else "💪" if "근력" in cat else "🔨"
             st.markdown(f'<div class="exam-box"><div class="exam-title">{icon} {cat}</div>', unsafe_allow_html=True)
             for item in items:
-                # | 구분자를 통해 MMT 근력과 지배 신경을 분리하여 반응형 렌더링
                 if " | " in item:
                     main_part, nerve_part = item.split(" | ", 1)
                     st.markdown(f'''
