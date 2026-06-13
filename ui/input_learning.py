@@ -19,12 +19,14 @@ def get_result_color_style(value: str, is_normal_side: bool = False) -> str:
     if any(x in text for x in ["정상측", "병변측", "Normal (", "Affected ("]): 
         return ""
 
-    abnormal_words = ["비정상", "감소", "지연", "소실", "탈신경", "측정불가", "차단", "항진", "초과", "증가", "저하", "급감", "Abnormal", "Reduced", "Absent", "Delayed", "Incomplete", "Active", "drop", "block", "Slowed", "Hyper"]
-    normal_words = ["정상", "Normal", "Silent", "WNL", "침묵", "동원"]
+    abnormal_words = [
+        "비정상", "감소", "지연", "소실", "탈신경", "측정불가", "차단", "항진", "초과", "증가", "저하", "급감", 
+        "Abnormal", "Reduced", "Absent", "Delayed", "Incomplete", "Active", "drop", "block", "Slowed", "Hyper",
+        "Fibrillation", "PSW", "섬유자발전위", "양성예파", "거대운동단위", "Giant"
+    ]
     
-    # 눈이 편안하도록 채도/명도를 낮춘 벽돌색 톤(#b91c1c)과 굵기(700) 적용
     if any(w in text for w in abnormal_words): return "color: #b91c1c; font-weight: 700;"
-    if any(w in text for w in normal_words): return "color: #15803d; font-weight: 700;"
+    
     return ""
 
 def _format_reason_text(text: str) -> str:
@@ -39,7 +41,7 @@ def custom_korean_translate(text: str) -> str:
     
     code_mapping = {
         "ncs_normal": "정상 범위", "ncs_delayed": "잠복기 지연", "ncs_reduced": "진폭 감소", 
-        "ncs_absent": "반 소실", "ncs_conduction_block": "진폭 급감",
+        "ncs_absent": "반응 소실", "ncs_conduction_block": "진폭 급감",
         "emg_normal": "정상 범위", "emg_active_denervation": "활동성 탈신경", 
         "emg_paraspinal_denervation": "활동성 탈신경", "emg_chronic_reinnervation": "만성 재신경지배", 
         "emg_active_chronic": "활동성+만성", "blink_delayed": "잠복기 지연", 
@@ -171,8 +173,6 @@ def render_virtual_report_inline(case_name: str):
 
     sen_hdrs = ["Nerve", "Side", "Amplitude", "Latency", "Interpretation"] if is_eng else ["검사 신경", "측정측", "진폭", "잠복기", "판독"]
     mot_hdrs = ["Nerve", "Stim Site", "Side", "Amplitude", "Latency", "NCV", "Interpretation"] if is_eng else ["검사 신경", "자극 위치", "측정측", "진폭", "잠복기", "전도속도(NCV)", "판독"]
-    
-    # EMG 헤더에서 "측정측" 삭제
     emg_hdrs = ["Muscle", "Segment", "Rest", "Volition", "Interpretation"] if is_eng else ["검사 근육", "분절", "휴식 시", "수의수축 시", "판독"]
     spec_hdrs = ["Test", "Condition", "Result", "Interpretation"] if is_eng else ["검사 항목", "조건/측정측", "결과", "상세 수치 및 판독"]
 
