@@ -24,8 +24,11 @@ def get_result_color_style(value: str, is_normal_side: bool = False) -> str:
         "Abnormal", "Reduced", "Absent", "Delayed", "Incomplete", "Active", "drop", "block", "Slowed", "Hyper",
         "Fibrillation", "PSW", "섬유자발전위", "양성예파", "거대운동단위", "Giant"
     ]
+    normal_words = ["정상", "Normal", "Silent", "WNL", "침묵", "동원"]
     
-    if any(w in text for w in abnormal_words): return "color: #b91c1c; font-weight: 700;"
+    # 굵기를 주변 텍스트와 동일하게(500) 맞추어 표의 가독성과 정렬을 유지함
+    if any(w in text for w in abnormal_words): return "color: #b91c1c; font-weight: 500;"
+    if any(w in text for w in normal_words): return "color: #15803d; font-weight: 500;"
     
     return ""
 
