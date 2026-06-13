@@ -6,29 +6,29 @@ import streamlit as st
 from data.cases import CASE_LIBRARY
 from ui.navigation import render_bottom_navigation
 
+# --- 표(Table) 내부에 들어갈 영문 용어들을 완벽하게 한글로 변환 ---
 def _safe_format_code(code: str) -> str:
     raw = str(code)
     code_str = raw.lower().strip()
     
     mapping = {
         "ncs_normal": "정상 범위", 
-        "ncs_delayed": "비정상 (잠복기 지연)", 
-        "ncs_reduced": "비정상 (진폭 감소)", 
-        "ncs_absent": "비정상 (반응 소실)", 
-        "ncs_conduction_block": "비정상 (진폭 급감)",
+        "ncs_delayed": "잠복기 지연", 
+        "ncs_reduced": "진폭 감소", 
+        "ncs_absent": "반응 소실", 
+        "ncs_conduction_block": "진폭 급감 (국소 전도차단 의심)",
         "emg_normal": "정상 범위", 
-        "emg_active_denervation": "비정상 (활동성 탈신경)", 
-        "emg_paraspinal_denervation": "비정상 (활동성 탈신경)", 
-        "emg_chronic_reinnervation": "비정상 (만성 재신경지배)", 
-        "emg_active_chronic": "비정상 (활동성+만성)", 
-        "blink_delayed": "비정상 (잠복기 지연)", 
-        "blink_absent": "비정상 (반응 소실)",
-        "blink_delayed_absent": "비정상 (지연 및 소실)",
-        "fwave_delayed_absent": "비정상 (반응 소실)",
-        "h_reflex_hyperactive": "비정상 (과항진)",
-        "h_m_ratio_increased": "비정상 (비율 증가)"
+        "emg_active_denervation": "활동성 탈신경", 
+        "emg_paraspinal_denervation": "활동성 탈신경", 
+        "emg_chronic_reinnervation": "만성 재신경지배", 
+        "emg_active_chronic": "활동성 및 만성 변화", 
+        "blink_delayed": "잠복기 지연", 
+        "blink_absent": "반응 소실",
+        "blink_delayed_absent": "지연 및 소실",
+        "fwave_delayed_absent": "지연 및 소실",
+        "h_reflex_hyperactive": "진폭 과항진",
+        "h_m_ratio_increased": "비율 증가"
     }
-    
     if code_str in mapping:
         return mapping[code_str]
         
@@ -198,8 +198,6 @@ def render_case_detail_inline(case_name: str):
                     <div style="font-size:0.95rem; margin-bottom:6px;"><span style="color:#1e3a8a; font-weight:800;">• 활동성 탈신경 (Active Denervation):</span> 현재 신경 손상이 활발히 진행 중인 상태 (자발전위 관찰)</div>
                     <div style="font-size:0.95rem; margin-bottom:6px;"><span style="color:#1e3a8a; font-weight:800;">• 만성 재신경지배 (Chronic Reinnervation):</span> 신경 손상 후 회복을 시도하는 만성기 (거대운동단위 관찰)</div>
                     <div style="font-size:0.95rem;"><span style="color:#1e3a8a; font-weight:800;">• 수의수축 시 동원 감소 또는 소실 (Reduced Recruitment or Absent):</span> 신경 손상으로 인해 부분 탈신경으로 근력 저하 또는 완전 탈신경으로 완전 마비된 상태</div>
-                    <div style="font-size:0.95rem;"><span style="color:#1e3a8a; font-weight:800;">• 휴식 시 관찰되는 비정상적인 자발전위 (Rest):</span> 섬유자발전위(fibrillation), 양성예파(positive sharp wave, PSW)</div>
-                    <div style="font-size:0.95rem;"><span style="color:#1e3a8a; font-weight:800;">• 휴식 시 정상적인 반응 (Rest):</span> 전기적 침묵(Silent)</div>                    
                 </div>
                 """, unsafe_allow_html=True)
                 for r in teaching["emg_reason"]: 
@@ -228,15 +226,26 @@ def render_case_detail_inline(case_name: str):
         unsafe_allow_html=True
     )
 
+    # --- [핵심 수정] 누락되어 보였던 감별진단 상세 데이터(왜 고려하는지, 임상 꿀팁 등) 100% 표출 로직 ---
     if "differential_diagnosis" in data:
         st.markdown('<div class="sub-title" style="margin-top:24px;">🧭 유사 질환과의 감별진단</div>', unsafe_allow_html=True)
         for ddx in data["differential_diagnosis"]:
+            name = ddx.get('name', '')
+            why = ddx.get('why_consider', '')
+            how = ddx.get('how_to_differentiate', '')
+            tip = ddx.get('practical_tip', '')
+            
+            ddx_html = f"<div style='font-size:1.05rem; font-weight:800; color:#4f46e5; margin-bottom:12px;'>{name}</div>"
+            if why:
+                ddx_html += f"<div style='color:#475569; line-height:1.6; margin-bottom:8px;'><span style='font-weight:700; color:#334155;'>🤔 고려 이유: </span>{why}</div>"
+            if how:
+                ddx_html += f"<div style='color:#475569; line-height:1.6; margin-bottom:8px;'><span style='font-weight:700; color:#334155;'>🔎 감별 포인트: </span>{how}</div>"
+            if tip:
+                ddx_html += f"<div style='color:#ea580c; line-height:1.6; margin-top:12px; font-weight:600; background:#fff7ed; padding:8px 12px; border-radius:6px; border-left:3px solid #ea580c;'>💡 임상 꿀팁: {tip}</div>"
+            
             st.markdown(f"""
-            <div class="ddx-box">
-                <div style="font-size:1.05rem; font-weight:800; color:#4f46e5; margin-bottom:8px;">{ddx.get('name')}</div>
-                <div style="color:#475569; line-height:1.6;">
-                    {ddx.get('how_to_differentiate')}
-                </div>
+            <div class="ddx-box" style="background:#f8fafc; border:1px solid #e2e8f0; padding:16px; border-radius:8px; margin-bottom:16px; border-left: 4px solid #4f46e5; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                {ddx_html}
             </div>
             """, unsafe_allow_html=True)
 
