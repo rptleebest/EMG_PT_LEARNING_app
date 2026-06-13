@@ -1,0 +1,15 @@
+name: Keep Streamlit App Awake
+
+on:
+  schedule:
+    # 매일 자정(UTC 기준)에 자동 실행
+    - cron: "0 0 * * *" 
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Streamlit App
+        # 아래 주소를 선생님의 실제 앱 URL로 변경하세요.
+        run: curl -s https://emg-learning.streamlit.app > /dev/null
