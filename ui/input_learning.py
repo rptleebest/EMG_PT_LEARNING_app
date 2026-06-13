@@ -4,7 +4,7 @@ import html
 import re
 import streamlit as st
 from ui.navigation import render_bottom_navigation
-from data.report_terms import REPORT_LANG_KO, REPORT_LANG_EN, LANGUAGE_OPTIONS, normalize_report_language, translate_term
+from data.report_terms import REPORT_LANG_KO, REPORT_LANG_EN, LANGUAGE_OPTIONS, normalize_report_language
 from data.virtual_reports import VIRTUAL_REPORTS, get_report_section_name, custom_english_translate
 
 def get_input_learning_report_language() -> str:
@@ -13,8 +13,9 @@ def get_input_learning_report_language() -> str:
 
 def get_result_color_style(value: str) -> str:
     text = str(value)
-    abnormal_words = ["비정상", "감소", "지연", "소실", "탈신경", "측정불가", "차단", "항진", "초과", "증가", "저하", "Abnormal", "Reduced", "Absent", "Delayed", "Incomplete", "Active", "drop", "block", "Slowed"]
+    abnormal_words = ["비정상", "감소", "지연", "소실", "탈신경", "측정불가", "차단", "항진", "초과", "증가", "저하", "급감", "Abnormal", "Reduced", "Absent", "Delayed", "Incomplete", "Active", "drop", "block", "Slowed", "Hyper"]
     normal_words = ["정상", "Normal", "Silent", "WNL", "침묵", "동원"]
+    
     if any(w in text for w in abnormal_words): return "color: #991b1b; font-weight: 800;"
     if any(w in text for w in normal_words): return "color: #15803d; font-weight: 800;"
     return ""
@@ -57,7 +58,8 @@ def custom_korean_translate(text: str) -> str:
         "No recruitment": "동원 불가",
         "Fibrillation/PSW": "섬유자발전위/양성예파",
         "Absent": "반응 소실",
-        "Incomplete due to pain": "통증으로 평가 불가"
+        "Incomplete due to pain": "통증으로 평가 불가",
+        "Giant MUAPs": "거대운동단위"
     }
     for eng, kor in replace_map.items():
         if eng in raw:
@@ -65,19 +67,56 @@ def custom_korean_translate(text: str) -> str:
             
     return raw
 
+def pivot_table_left_right(headers: list, rows: list, is_eng: bool) -> tuple:
+    side_keywords = ["측정측", "Side"]
+    side_idx = -1
+    for i, h in enumerate(headers):
+        if h in side_keywords:
+            side_idx = i
+            break
+    
+    if side_idx == -1: return headers, rows
+    
+    base_headers = headers[:side_idx]
+    val_headers = headers[side_idx+1:]
+    
+    rt_prefix = "(Rt) " if is_eng else "(우) "
+    lt_prefix = "(Lt) " if is_eng else "(좌) "
+    
+    new_headers = base_headers + [f"{rt_prefix}{h}" for h in val_headers] + [f"{lt_prefix}{h}" for h in val_headers]
+    
+    grouped = {}
+    for row in rows:
+        if len(row) != len(headers): continue
+        base_key = tuple(row[:side_idx])
+        side_val = str(row[side_idx]).strip()
+        vals = row[side_idx+1:]
+        
+        if base_key not in grouped:
+            grouped[base_key] = {"Rt": ["-"]*len(val_headers), "Lt": ["-"]*len(val_headers)}
+        
+        if side_val in ["오른쪽", "Rt", "우측"]:
+            grouped[base_key]["Rt"] = vals
+        elif side_val in ["왼쪽", "Lt", "좌측"]:
+            grouped[base_key]["Lt"] = vals
+        elif side_val in ["양측", "Bilateral"]:
+            grouped[base_key]["Rt"] = vals
+            grouped[base_key]["Lt"] = vals
+            
+    new_rows = []
+    for base_key, sides in grouped.items():
+        new_rows.append(list(base_key) + sides["Rt"] + sides["Lt"])
+        
+    return new_headers, new_rows
+
 def create_responsive_table(headers: list, rows: list) -> str:
     if not rows: return ""
     css = """<style>
-    table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 0.95rem; }
-    
-    /* PC 환경: 첫번째(신경/근육) 및 마지막(판독) 열은 좌측 정렬 */
-    th { background-color: #f8fafc; padding: 12px 10px; border-bottom: 2px solid #cbd5e1; text-align: center !important; color: #1e293b; font-weight: 800; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 0.92rem; }
+    th { background-color: #f8fafc; padding: 10px 8px; border-bottom: 2px solid #cbd5e1; text-align: center !important; color: #1e293b; font-weight: 800; white-space: nowrap; }
     th:first-child { text-align: left !important; padding-left: 16px; }
-    th:last-child { text-align: left !important; padding-left: 16px; }
-    td { padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: center !important; color: #334155; }
+    td { padding: 10px 8px; border-bottom: 1px solid #e2e8f0; text-align: center !important; color: #334155; }
     td.fst-col { font-weight: 800; color: #1e3a8a; text-align: left !important; padding-left: 16px; }
-    td:last-child { text-align: left !important; padding-left: 16px; line-height: 1.4; }
-    
     @media screen and (max-width: 768px) {
         thead { display: none; }
         tr { display: block; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 16px; background: #ffffff; overflow: hidden; }
@@ -97,7 +136,7 @@ def create_responsive_table(headers: list, rows: list) -> str:
         td_html = ""
         for idx, col in enumerate(row):
             cls = "fst-col" if idx == 0 else ""
-            color_style = get_result_color_style(str(col)) if idx == len(row)-1 else ""
+            color_style = get_result_color_style(str(col)) if idx > 0 else ""
             h_lbl = html.escape(headers[idx]) if idx < len(headers) else ""
             td_html += f"<td data-label='{h_lbl}' class='{cls}' style='{color_style}'><span>{html.escape(str(col))}</span></td>"
         tr_html += f"<tr>{td_html}</tr>"
@@ -139,7 +178,6 @@ def render_virtual_report_inline(case_name: str):
     lang = normalize_report_language(selected_language)
     is_eng = lang == REPORT_LANG_EN
 
-    # NCV 데이터 출력을 위해 7열 헤더로 교체 완료
     sen_hdrs = ["Nerve", "Side", "Amplitude", "Latency", "Interpretation"] if is_eng else ["검사 신경", "측정측", "진폭", "잠복기", "판독"]
     mot_hdrs = ["Nerve", "Stim Site", "Side", "Amplitude", "Latency", "NCV", "Interpretation"] if is_eng else ["검사 신경", "자극 위치", "측정측", "진폭", "잠복기", "전도속도(NCV)", "판독"]
     emg_hdrs = ["Muscle", "Segment", "Side", "Rest", "Volition", "Interpretation"] if is_eng else ["검사 근육", "분절", "측정측", "휴식 시", "수의수축", "판독"]
@@ -155,15 +193,16 @@ def render_virtual_report_inline(case_name: str):
 
     if data.get("ncs_sensory"):
         st.markdown(f'<div class="section-label" style="margin-top:32px;">⚡ {get_report_section_name("sensory", lang)}</div>', unsafe_allow_html=True)
-        st.markdown(create_responsive_table(sen_hdrs, _tr(data.get("ncs_sensory", []))), unsafe_allow_html=True)
+        p_headers, p_rows = pivot_table_left_right(sen_hdrs, _tr(data.get("ncs_sensory", [])), is_eng)
+        st.markdown(create_responsive_table(p_headers, p_rows), unsafe_allow_html=True)
 
     if data.get("ncs_motor"):
         st.markdown(f'<div class="section-label" style="margin-top:32px;">⚡ {get_report_section_name("motor", lang)}</div>', unsafe_allow_html=True)
-        st.markdown(create_responsive_table(mot_hdrs, _tr(data.get("ncs_motor", []))), unsafe_allow_html=True)
+        p_headers, p_rows = pivot_table_left_right(mot_hdrs, _tr(data.get("ncs_motor", [])), is_eng)
+        st.markdown(create_responsive_table(p_headers, p_rows), unsafe_allow_html=True)
 
     if (data.get("ncs_sensory") or data.get("ncs_motor")) and "ncs_reason" in teaching:
         with st.expander("🔍 신경전도검사 결과 해석"):
-            # 물리치료사 및 학생 교육을 위한 NCV 기준 툴팁 추가
             st.markdown("""
             <div style="background:#f1f5f9; padding:12px; margin-bottom:12px; border-radius:4px; border-left:4px solid #cbd5e1;">
                 <div style="font-size:0.95rem; font-weight:800; color:#1e3a8a; margin-bottom:6px;">💡 [참고] 신경전도속도(NCV) 임상 정상 기준치</div>
@@ -178,7 +217,8 @@ def render_virtual_report_inline(case_name: str):
     if data.get("special"):
         spec_title = "Special & Late Responses" if is_eng else "특수 및 후기반응 검사"
         st.markdown(f'<div class="section-label" style="margin-top:32px;">⚡ {spec_title}</div>', unsafe_allow_html=True)
-        st.markdown(create_responsive_table(spec_hdrs, _tr(data.get("special", []))), unsafe_allow_html=True)
+        p_headers, p_rows = pivot_table_left_right(spec_hdrs, _tr(data.get("special", [])), is_eng)
+        st.markdown(create_responsive_table(p_headers, p_rows), unsafe_allow_html=True)
         if "emg_reason" in teaching and not data.get("emg"):
             with st.expander("🔍 특수 검사 소견 해석"):
                 for r in teaching["emg_reason"]: 
@@ -186,7 +226,8 @@ def render_virtual_report_inline(case_name: str):
 
     if data.get("emg"):
         st.markdown(f'<div class="section-label" style="margin-top:32px;">🪡 {get_report_section_name("emg", lang)}</div>', unsafe_allow_html=True)
-        st.markdown(create_responsive_table(emg_hdrs, _tr(data.get("emg", []))), unsafe_allow_html=True)
+        p_headers, p_rows = pivot_table_left_right(emg_hdrs, _tr(data.get("emg", [])), is_eng)
+        st.markdown(create_responsive_table(p_headers, p_rows), unsafe_allow_html=True)
         if "emg_reason" in teaching:
             with st.expander("🔍 침근전도검사 결과 해석"):
                 st.markdown("""
