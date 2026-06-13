@@ -7,7 +7,7 @@ REPORT_TITLE_EN = "Virtual EMG Report (Bilateral Comparison)"
 
 VIRTUAL_REPORTS = {
     "왼쪽 목 통증 및 엄지/검지 저림 (C6 신경뿌리병증)": {
-        "info": {"age": 45, "sex": "남성", "symptom": "Lt 뒷목 통증, Lt 어깨와 엄지/검지로 뻗치는 저림, 팔꿉 굽힘 시 힘 빠짐", "side": "Lt"},
+        "info": {"age": 45, "sex": "남성", "symptom": "왼쪽 뒷목 통증~어깨와 엄지/검지로 뻗치는 저림, 팔꿉 굽힘 시 힘 빠짐", "side": "Lt"},
         "ncs_sensory": [
             ["정중신경", "정상측(Rt)", "25 μV", "2.8 ms", "정상 범위"],
             ["정중신경", "병변측(Lt)", "24 μV", "2.8 ms", "정상 범위"],
@@ -92,7 +92,7 @@ VIRTUAL_REPORTS = {
             ["첫째등쪽뼈사이근 (Rt)", "C8-T1", "Silent", "Normal recruitment", "정상 범위"],
         ],
         "teaching_diagnosis": {
-            "summary": "Rt 손목굴증후군 (Carpal Tunnel Syndrome)",
+            "summary": "오른쪽 손목굴증후군 (Carpal Tunnel Syndrome)",
             "ncs_reason": [
                 "오른쪽 정중신경 감각 및 운동 신경에서만 잠복기가 뚜렷하게 지연되어 손목굴 부위 압박을 지시합니다.",
                 "자신경 및 노신경 등 인접 신경은 정상 범위를 유지하고 있습니다."
@@ -116,7 +116,7 @@ VIRTUAL_REPORTS = {
     },
 
     "왼쪽 허리/엉치 통증 및 발처짐 (L5 신경뿌리병증)": {
-        "info": {"age": 58, "sex": "여성", "symptom": "Lt 허리통증, 발등 저림, 발목 들어올리기 힘듦 (발끝 끌림)", "side": "Lt"},
+        "info": {"age": 58, "sex": "여성", "symptom": "왼쪽 허리통증, 발등 저림, 발목 들어올리기 힘듦 (발끝 끌림)", "side": "Lt"},
         "ncs_sensory": [
             ["얕은종아리신경", "정상측(Rt)", "15 μV", "2.8 ms", "정상 범위"],
             ["얕은종아리신경", "병변측(Lt)", "14 μV", "2.9 ms", "정상 범위"],
@@ -147,7 +147,7 @@ VIRTUAL_REPORTS = {
             ["큰볼기근 (Lt)", "S1-S2", "Silent", "Normal recruitment", "정상 범위"],
         ],
         "teaching_diagnosis": {
-            "summary": "Lt L5 허리 신경뿌리병증 (Lumbar Radiculopathy)",
+            "summary": "왼쪽 L5 허리 신경뿌리병증 (L5 Radiculopathy)",
             "ncs_reason": [
                 "발처짐과 발등 감각 이상이 있음에도 얕은종아리신경 및 두렁신경 감각 진폭이 정상 범위입니다.",
                 "이는 병변이 감각세포체 몸쪽인 척수 신경뿌리에 위치하여 말초 감각신경 퇴행이 없음을 증명합니다."
@@ -171,7 +171,7 @@ VIRTUAL_REPORTS = {
     },
 
     "오른쪽 4~5번째 손가락 저림 (팔꿈치굴증후군)": {
-        "info": {"age": 42, "sex": "남성", "symptom": "Rt 새끼손가락 저림, 젓가락질 불편 및 손아귀 힘(악력) 약화", "side": "Rt"},
+        "info": {"age": 42, "sex": "남성", "symptom": "오른쪽 새끼손가락 저림, 젓가락질 불편 및 손아귀 힘(악력) 약화", "side": "Rt"},
         "ncs_sensory": [
             ["자신경", "정상측(Lt)", "22 μV", "2.5 ms", "정상 범위"],
             ["자신경", "병변측(Rt)", "9 μV", "3.4 ms", "비정상 (진폭 감소 / 잠복기 지연)"],
@@ -240,7 +240,7 @@ VIRTUAL_REPORTS = {
             ["노쪽손목굽힘근 (Rt)", "C6-C7", "Silent", "Normal recruitment", "정상 범위"],
         ],
         "teaching_diagnosis": {
-            "summary": "Rt 노신경 마비 (Radial Nerve Palsy at Spiral Groove)",
+            "summary": "오른쪽 노신경 마비 (Radial Nerve Palsy at Spiral Groove)",
             "ncs_reason": [
                 "노신경 감각전도 저하와 함께, 나선고랑 위/아래 부위 자극에서 운동 전도속도가 21 m/s로 저하되며 진폭이 급감하는 국소 전도차단 수치가 기록되어 물리적 압박 위치를 지시합니다."
             ],
@@ -333,7 +333,7 @@ VIRTUAL_REPORTS = {
             ["넓적다리근막긴장근 (Lt)", "L4-L5", "Silent", "Normal recruitment", "정상 범위"],
         ],
         "teaching_diagnosis": {
-            "summary": "Lt 온종아리신경 마비 (Common Peroneal Neuropathy)",
+            "summary": "왼쪽 온종아리신경 마비 (Common Peroneal Neuropathy)",
             "ncs_reason": [
                 "얕은종아리신경 감각전도가 저하되었으며, 종아리뼈머리(Fibular head) 위아래 부위 자극 시 운동 전도속도가 급감(22m/s)하는 국소 전도차단이 확인되어 무릎 가쪽 압박을 특정합니다."
             ],
@@ -486,7 +486,7 @@ VIRTUAL_REPORTS = {
                 "팔 말단(정중신경, 자신경) 감각 진폭도 감소하여 전신적인 침범을 확인합니다."
             ],
             "emg_reason": [
-                "다리 가장 먼쪽(distal) 근육(앞정강근, 장딴지근)에서는 탈신경이 보이나, 몸쪽(proximal)(가쪽넓은근, 팔 근육)는 정상인 'Dying-back' 양상입니다."
+                "다리 가장 먼쪽(distal) 근육(앞정강근, 장딴지근)에서는 탈신경이 보이나, 몸쪽(proximal)(가쪽넓은근, 팔 근육)는 정상인 '역행성 사멸(Dying-back)' 양상입니다."
             ],
             "integration": [
                 "양측 신경 전도의 대칭적 소실과 먼쪽(distal) 우세 근전도검사 이상을 통해 당뇨성 증상 등과 부합하는 전신성 다발신경병증으로 진단합니다."
