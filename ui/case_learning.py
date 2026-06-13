@@ -6,38 +6,37 @@ import streamlit as st
 from data.cases import CASE_LIBRARY
 from ui.navigation import render_bottom_navigation
 
-# --- 표(Table) 내부에 들어갈 영문 용어들을 완벽하게 한글로 변환 ---
 def _safe_format_code(code: str) -> str:
     raw = str(code)
     code_str = raw.lower().strip()
     
-    # 1. 내부 상수 매핑
     mapping = {
         "ncs_normal": "정상 범위", 
-        "ncs_delayed": "잠복기 지연", 
-        "ncs_reduced": "진폭 감소", 
-        "ncs_absent": "반응 소실", 
-        "ncs_conduction_block": "진폭 급감 (국소 전도차단 의심)",
+        "ncs_delayed": "비정상 (잠복기 지연)", 
+        "ncs_reduced": "비정상 (진폭 감소)", 
+        "ncs_absent": "비정상 (반응 소실)", 
+        "ncs_conduction_block": "비정상 (진폭 급감)",
         "emg_normal": "정상 범위", 
-        "emg_active_denervation": "활동성 탈신경", 
-        "emg_paraspinal_denervation": "활동성 탈신경", 
-        "emg_chronic_reinnervation": "만성 재신경지배", 
-        "emg_active_chronic": "활동성 및 만성 변화", 
-        "blink_delayed": "잠복기 지연", 
-        "blink_absent": "반응 소실",
-        "blink_delayed_absent": "지연 및 소실",
-        "fwave_delayed_absent": "지연 및 소실",
-        "h_reflex_hyperactive": "진폭 과항진",
-        "h_m_ratio_increased": "비율 증가"
+        "emg_active_denervation": "비정상 (활동성 탈신경)", 
+        "emg_paraspinal_denervation": "비정상 (활동성 탈신경)", 
+        "emg_chronic_reinnervation": "비정상 (만성 재신경지배)", 
+        "emg_active_chronic": "비정상 (활동성+만성)", 
+        "blink_delayed": "비정상 (잠복기 지연)", 
+        "blink_absent": "비정상 (반응 소실)",
+        "blink_delayed_absent": "비정상 (지연 및 소실)",
+        "fwave_delayed_absent": "비정상 (반응 소실)",
+        "h_reflex_hyperactive": "비정상 (과항진)",
+        "h_m_ratio_increased": "비정상 (비율 증가)"
     }
+    
     if code_str in mapping:
         return mapping[code_str]
         
-    # 2. 영문 텍스트 한글화 (표에서만 출력되도록 처리)
     replace_map = {
         "Silent": "전기적 침묵",
         "Normal recruitment": "정상 동원",
         "Reduced recruitment": "동원 감소",
+        "Giant MUAPs": "거대운동단위",
         "No recruitment": "동원 불가",
         "Fibrillation/PSW": "섬유자발전위/양성예파",
         "Absent": "반응 소실",
@@ -51,7 +50,7 @@ def _safe_format_code(code: str) -> str:
 
 def _get_result_color_style(value: str) -> str:
     text = str(value)
-    abnormal_words = ["비정상", "감소", "지연", "소실", "탈신경", "재신경지배", "차단", "항진", "초과", "증가"]
+    abnormal_words = ["비정상", "감소", "지연", "소실", "탈신경", "재신경지배", "차단", "항진", "초과", "증가", "저하", "급감"]
     if any(w in text for w in abnormal_words): return "color: #991b1b; font-weight: 800;"
     if "정상" in text: return "color: #15803d; font-weight: 800;"
     return ""
@@ -68,15 +67,17 @@ def _create_responsive_table(headers: list, rows: list) -> str:
     table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 0.95rem; }
     th { background-color: #f8fafc; padding: 12px 10px; border-bottom: 2px solid #cbd5e1; text-align: center !important; color: #1e293b; font-weight: 800; }
     th:first-child { text-align: left !important; padding-left: 16px; }
+    th:last-child { text-align: left !important; padding-left: 16px; }
     td { padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: center !important; color: #334155; }
     td.fst-col { font-weight: 800; color: #1e3a8a; text-align: left !important; padding-left: 16px; }
+    td:last-child { text-align: left !important; padding-left: 16px; line-height: 1.4; }
     @media screen and (max-width: 768px) {
         thead { display: none; }
         tr { display: block; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 16px; background: #ffffff; overflow: hidden; }
         td { display: flex; align-items: flex-start; gap: 12px; border-bottom: 1px dashed #e2e8f0; padding: 10px 12px 10px 24px; text-align: left !important; }
         td:last-child { border-bottom: none; }
         td::before { content: attr(data-label); font-weight: 800; color: #64748b; text-align: left !important; font-size: 0.85rem; flex: 0 0 38%; margin-top: 2px; }
-        td > span { flex: 1; text-align: left !important; word-break: keep-all; font-weight: 400; color: #334155; }
+        td > span { flex: 1; text-align: left !important; word-break: keep-all; font-weight: 400; color: #334155; line-height: 1.4; }
         td.fst-col { display: flex; flex-direction: row; justify-content: flex-start; background: #f1f5f9; text-align: left !important; padding: 12px 16px; border-bottom: 2px solid #cbd5e1; }
         td.fst-col::before { content: attr(data-label) ": "; color: #1e3a8a; font-weight: 800; flex: unset; margin-right: 8px; font-size: 0.95rem; margin-top: 0; text-align: left !important;}
         td.fst-col > span { text-align: left !important; font-weight: 800; color: #1e3a8a; font-size: 0.95rem; }
@@ -149,8 +150,12 @@ def render_case_detail_inline(case_name: str):
     sensory_rows, motor_rows, emg_rows, blink_rows = [], [], [], []
     for test_name, result_tuple in findings.items():
         if not isinstance(result_tuple, tuple): continue
-        row = [test_name] + list(result_tuple)
         
+        if len(result_tuple) == 2:
+            row = [test_name, result_tuple[0], result_tuple[1], ""]
+        else:
+            row = [test_name] + list(result_tuple)
+            
         test_name_upper = test_name.upper()
         if any(kw in test_name_upper for kw in ["눈깜박", "BLINK", "R1", "R2", "H-반사", "H/M", "F파", "F-WAVE"]): 
             blink_rows.append(row)
@@ -163,11 +168,11 @@ def render_case_detail_inline(case_name: str):
 
     if sensory_rows:
         st.markdown('<div class="section-label" style="margin-top:32px;">⚡ 감각신경전도검사 (Sensory NCS)</div>', unsafe_allow_html=True)
-        st.markdown(_create_responsive_table(["검사 신경", "결과", "상세/잠복기"], sensory_rows), unsafe_allow_html=True)
+        st.markdown(_create_responsive_table(["검사 신경", "진폭", "잠복기", "판독"], sensory_rows), unsafe_allow_html=True)
 
     if motor_rows:
         st.markdown('<div class="section-label" style="margin-top:32px;">⚡ 운동신경전도검사 (Motor NCS)</div>', unsafe_allow_html=True)
-        st.markdown(_create_responsive_table(["검사 신경", "결과", "상세/잠복기"], motor_rows), unsafe_allow_html=True)
+        st.markdown(_create_responsive_table(["검사 신경", "진폭", "잠복기", "판독"], motor_rows), unsafe_allow_html=True)
 
     if (sensory_rows or motor_rows) and "ncs_reason" in teaching:
         with st.expander("🔍 신경전도검사 결과 해석"):
@@ -176,7 +181,7 @@ def render_case_detail_inline(case_name: str):
 
     if blink_rows:
         st.markdown('<div class="section-label" style="margin-top:32px;">⚡ 특수 및 후기반응 검사 (Special & Late Responses)</div>', unsafe_allow_html=True)
-        st.markdown(_create_responsive_table(["검사 항목", "결과", "상세 수치 및 판독"], blink_rows), unsafe_allow_html=True)
+        st.markdown(_create_responsive_table(["검사 항목", "결과", "상세 수치", "판독"], blink_rows), unsafe_allow_html=True)
         if "emg_reason" in teaching and not emg_rows: 
             with st.expander("🔍 특수 검사 소견 해석"):
                 for r in teaching["emg_reason"]: 
@@ -184,7 +189,7 @@ def render_case_detail_inline(case_name: str):
 
     if emg_rows:
         st.markdown('<div class="section-label" style="margin-top:32px;">🪡 침근전도검사 (Needle EMG)</div>', unsafe_allow_html=True)
-        st.markdown(_create_responsive_table(["검사 근육", "휴식 시", "수의수축 시"], emg_rows), unsafe_allow_html=True)
+        st.markdown(_create_responsive_table(["검사 근육", "휴식 시", "수의수축 시", "판독"], emg_rows), unsafe_allow_html=True)
         
         if "emg_reason" in teaching:
             with st.expander("🔍 침근전도검사 결과 해석"):
@@ -193,6 +198,8 @@ def render_case_detail_inline(case_name: str):
                     <div style="font-size:0.95rem; margin-bottom:6px;"><span style="color:#1e3a8a; font-weight:800;">• 활동성 탈신경 (Active Denervation):</span> 현재 신경 손상이 활발히 진행 중인 상태 (자발전위 관찰)</div>
                     <div style="font-size:0.95rem; margin-bottom:6px;"><span style="color:#1e3a8a; font-weight:800;">• 만성 재신경지배 (Chronic Reinnervation):</span> 신경 손상 후 회복을 시도하는 만성기 (거대운동단위 관찰)</div>
                     <div style="font-size:0.95rem;"><span style="color:#1e3a8a; font-weight:800;">• 수의수축 시 동원 감소 또는 소실 (Reduced Recruitment or Absent):</span> 신경 손상으로 인해 부분 탈신경으로 근력 저하 또는 완전 탈신경으로 완전 마비된 상태</div>
+                    <div style="font-size:0.95rem;"><span style="color:#1e3a8a; font-weight:800;">• 휴식 시 관찰되는 비정상적인 자발전위 (Rest):</span> 섬유자발전위(fibrillation), 양성예파(positive sharp wave, PSW)</div>
+                    <div style="font-size:0.95rem;"><span style="color:#1e3a8a; font-weight:800;">• 휴식 시 정상적인 반응 (Rest):</span> 전기적 침묵(Silent)</div>                    
                 </div>
                 """, unsafe_allow_html=True)
                 for r in teaching["emg_reason"]: 
@@ -200,7 +207,6 @@ def render_case_detail_inline(case_name: str):
 
     st.markdown('<hr style="border-top: 2px dashed #cbd5e1; margin: 2.5rem 0 1.5rem 0;">', unsafe_allow_html=True)
     
-    # --- 뇌졸중 경직 평가 사례인지 확인하여 UI 문구 동적 변경 ---
     is_stroke_case = "뇌졸중" in case_name
 
     section_title = "✅ 임상적 통합 해석" if is_stroke_case else "✅ 임상적 통합 해석 및 감별진단"
