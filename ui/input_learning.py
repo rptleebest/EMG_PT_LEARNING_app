@@ -22,8 +22,9 @@ def get_result_color_style(value: str, is_normal_side: bool = False) -> str:
     abnormal_words = ["비정상", "감소", "지연", "소실", "탈신경", "측정불가", "차단", "항진", "초과", "증가", "저하", "급감", "Abnormal", "Reduced", "Absent", "Delayed", "Incomplete", "Active", "drop", "block", "Slowed", "Hyper"]
     normal_words = ["정상", "Normal", "Silent", "WNL", "침묵", "동원"]
     
-    if any(w in text for w in abnormal_words): return "color: #dc2626; font-weight: 800;"
-    if any(w in text for w in normal_words): return "color: #15803d; font-weight: 800;"
+    # 눈이 편안하도록 채도/명도를 낮춘 벽돌색 톤(#b91c1c)과 굵기(700) 적용
+    if any(w in text for w in abnormal_words): return "color: #b91c1c; font-weight: 700;"
+    if any(w in text for w in normal_words): return "color: #15803d; font-weight: 700;"
     return ""
 
 def _format_reason_text(text: str) -> str:
@@ -38,7 +39,7 @@ def custom_korean_translate(text: str) -> str:
     
     code_mapping = {
         "ncs_normal": "정상 범위", "ncs_delayed": "잠복기 지연", "ncs_reduced": "진폭 감소", 
-        "ncs_absent": "반응 소실", "ncs_conduction_block": "진폭 급감",
+        "ncs_absent": "반 소실", "ncs_conduction_block": "진폭 급감",
         "emg_normal": "정상 범위", "emg_active_denervation": "활동성 탈신경", 
         "emg_paraspinal_denervation": "활동성 탈신경", "emg_chronic_reinnervation": "만성 재신경지배", 
         "emg_active_chronic": "활동성+만성", "blink_delayed": "잠복기 지연", 
