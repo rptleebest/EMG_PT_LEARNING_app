@@ -24,12 +24,12 @@ def get_result_color_style(value: str, is_normal_side: bool = False) -> str:
         "Abnormal", "Reduced", "Absent", "Delayed", "Incomplete", "Active", "drop", "block", "Slowed", "Hyper",
         "Fibrillation", "PSW", "섬유자발전위", "양성예파", "거대운동단위", "Giant"
     ]
-    normal_words = ["정상", "Normal", "Silent", "WNL", "침묵", "동원"]
     
-    # 굵기를 주변 텍스트와 동일하게(500) 맞추어 표의 가독성과 정렬을 유지함
-    if any(w in text for w in abnormal_words): return "color: #b91c1c; font-weight: 500;"
-    if any(w in text for w in normal_words): return "color: #15803d; font-weight: 500;"
+    # 비정상 수치/용어는 붉은색으로 표기하되 글자 두께는 일반 두께 유지
+    if any(w in text for w in abnormal_words): 
+        return "color: #b91c1c;"
     
+    # 정상 소견(녹색) 강조 제거 -> 아무 속성도 반환하지 않아 기본 검은색/회색 텍스트로 표시
     return ""
 
 def _format_reason_text(text: str) -> str:
@@ -101,27 +101,35 @@ def custom_english_translate(text: str) -> str:
 def create_responsive_table(headers: list, rows: list) -> str:
     if not rows: return ""
     css = """<style>
+    /* PC 환경 기본 스타일 */
     .clinical-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 0.95rem; }
     .clinical-table th { background-color: #f8fafc; padding: 12px 10px; border-bottom: 2px solid #cbd5e1; text-align: center !important; color: #1e293b; font-weight: 800; white-space: nowrap; }
     .clinical-table th:first-child, .clinical-table th:last-child { text-align: left !important; padding-left: 16px; }
-    .clinical-table td { padding: 10px 12px; border-bottom: 1px solid #e2e8f0; text-align: center !important; color: #334155; vertical-align: middle; }
+    
+    /* 일반 데이터 셀: 두께 일반(400) 고정 */
+    .clinical-table td { padding: 10px 12px; border-bottom: 1px solid #e2e8f0; text-align: center !important; color: #334155; vertical-align: middle; font-weight: 400; }
     .clinical-table td.fst-col { font-weight: 800; color: #1e3a8a; text-align: left !important; padding-left: 16px; }
-    .clinical-table td:last-child { text-align: left !important; padding-left: 16px; font-weight: 600; line-height: 1.4;}
+    /* 마지막 판독 결과만 볼드 처리 */
+    .clinical-table td:last-child { text-align: left !important; padding-left: 16px; font-weight: 700; line-height: 1.4;}
 
+    /* 모바일 환경 */
     @media screen and (max-width: 768px) {
         .clinical-table, .clinical-table thead, .clinical-table tbody, .clinical-table th, .clinical-table td, .clinical-table tr { display: block; }
         .clinical-table thead { display: none; }
         .clinical-table tr { margin-bottom: 16px; border: 1px solid #cbd5e1; border-radius: 10px; background: #ffffff; box-shadow: 0 4px 6px rgba(0,0,0,0.05); overflow: hidden; }
         .clinical-table td { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px dashed #e2e8f0; text-align: right !important; }
         .clinical-table td::before { content: attr(data-label); font-weight: 700; color: #64748b; font-size: 0.85rem; text-align: left !important; flex: 0 0 40%; }
-        .clinical-table td > span { flex: 1; word-break: keep-all; font-weight: 500; }
+        
+        /* 모바일 데이터 스팬 두께 일반(400) 고정 */
+        .clinical-table td > span { flex: 1; word-break: keep-all; font-weight: 400; color: #334155;}
+        
         .clinical-table td:first-child { background: #eff6ff; padding: 14px 16px; border-bottom: 2px solid #bfdbfe; justify-content: flex-start; }
         .clinical-table td:first-child::before { display: none; }
         .clinical-table td:first-child > span { text-align: left !important; font-weight: 800; color: #1d4ed8; font-size: 1.05rem; }
         .clinical-table td:first-child > span::before { content: "🔹 "; }
         .clinical-table td:last-child { flex-direction: column; align-items: flex-start; background-color: #f8fafc; border-bottom: none; padding-top: 14px; padding-bottom: 14px; }
         .clinical-table td:last-child::before { margin-bottom: 6px; color: #1e3a8a; font-size: 0.95rem; content: "📝 " attr(data-label); width: 100%; }
-        .clinical-table td:last-child > span { text-align: left !important; width: 100%; font-size: 0.95rem; }
+        .clinical-table td:last-child > span { text-align: left !important; width: 100%; font-size: 0.95rem; font-weight: 700;}
     }
     </style>"""
     
