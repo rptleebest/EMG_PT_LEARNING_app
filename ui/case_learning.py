@@ -48,7 +48,6 @@ def _format_reason_text(text: str) -> str:
 def _create_responsive_table(headers: list, rows: list) -> str:
     if not rows: return ""
     css = """<style>
-    /* PC 환경 기본 스타일 (깔끔한 Row-by-Row) */
     .sl-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 0.95rem; }
     .sl-table th { background-color: #f8fafc; padding: 12px 10px; border-bottom: 2px solid #cbd5e1; text-align: center !important; color: #1e293b; font-weight: 800; white-space: nowrap; }
     .sl-table th:first-child { text-align: left !important; padding-left: 16px; }
@@ -57,7 +56,6 @@ def _create_responsive_table(headers: list, rows: list) -> str:
     .sl-table td.fst-col { font-weight: 800; color: #1e3a8a; text-align: left !important; padding-left: 16px; }
     .sl-table td:last-child { text-align: left !important; padding-left: 16px; line-height: 1.4; font-weight: 600;}
     
-    /* 모바일 환경: 독립된 카드 UI로 완벽 분리 및 판독 결과 강조 */
     @media screen and (max-width: 768px) {
         .sl-table, .sl-table thead, .sl-table tbody, .sl-table th, .sl-table td, .sl-table tr { display: block; }
         .sl-table thead { display: none; }
@@ -73,7 +71,6 @@ def _create_responsive_table(headers: list, rows: list) -> str:
         }
         .sl-table td > span { flex: 1; text-align: left !important; word-break: keep-all; font-weight: 500; color: #334155; line-height: 1.4; }
         
-        /* 카드 제목 (검사 신경 이름) */
         .sl-table td.fst-col { 
             background: #eff6ff; padding: 14px 16px; border-bottom: 2px solid #bfdbfe; justify-content: flex-start; 
         }
@@ -81,7 +78,6 @@ def _create_responsive_table(headers: list, rows: list) -> str:
         .sl-table td.fst-col > span { text-align: left !important; font-weight: 800; color: #1d4ed8; font-size: 1.05rem; }
         .sl-table td.fst-col > span::before { content: "🔹 "; }
         
-        /* 판독 결과 (맨 아래 넓게 배치) */
         .sl-table td:last-child { 
             flex-direction: column; align-items: flex-start; background-color: #f8fafc; border-bottom: none; padding-top: 14px; padding-bottom: 14px;
         }
@@ -143,18 +139,40 @@ def render_case_detail_inline(case_name: str):
     phys_exam = patient.get("physical_exam", {})
     if phys_exam:
         st.markdown('<div class="section-label" style="margin-top:24px;">🩺 이학적 검사 (신경학적 진찰)</div>', unsafe_allow_html=True)
+        
+        # 반응형 이학적 검사(MMT) CSS 주입
+        st.markdown('''
+        <style>
+        .pe-item { margin-bottom: 6px; color: #334155; line-height: 1.5; font-weight: 500;}
+        .pe-main { font-weight: 700; color: #1e293b; }
+        .pe-nerve { color: #64748b; font-weight: 500; }
+        .pc-dash { display: inline; }
+        .mob-arrow { display: none; }
+        
+        @media screen and (max-width: 768px) {
+            .pe-item.mmt { display: flex; flex-direction: column; margin-bottom: 10px; }
+            .pc-dash { display: none; }
+            .mob-arrow { display: inline; margin-left: 14px; }
+            .pe-nerve { font-size: 0.9rem; margin-top: 2px; }
+        }
+        </style>
+        ''', unsafe_allow_html=True)
+        
         for cat, items in phys_exam.items():
             icon = "🖐" if "감각" in cat else "💪" if "근력" in cat else "🔨"
             st.markdown(f'<div class="exam-box"><div class="exam-title">{icon} {cat}</div>', unsafe_allow_html=True)
             for item in items:
-                if "(" in item and ")" in item:
-                    parts = item.split("(", 1)
-                    main_text = parts[0].strip()
-                    sub_text = "(" + parts[1].strip()
-                    st.markdown(f'<div style="margin-bottom:2px; font-weight:700; color:#334155;">• {main_text}</div>', unsafe_allow_html=True)
-                    st.markdown(f'<div style="margin-left:14px; margin-bottom:8px; font-size:0.9rem; color:#64748b;">{sub_text}</div>', unsafe_allow_html=True)
+                # | 구분자를 통해 MMT 근력과 지배 신경을 분리하여 반응형 렌더링
+                if " | " in item:
+                    main_part, nerve_part = item.split(" | ", 1)
+                    st.markdown(f'''
+                    <div class="pe-item mmt">
+                        <span class="pe-main">• {main_part}</span>
+                        <span class="pe-nerve"><span class="pc-dash"> - 지배 신경: </span><span class="mob-arrow">↳ 지배 신경: </span>{nerve_part}</span>
+                    </div>
+                    ''', unsafe_allow_html=True)
                 else:
-                    st.markdown(f'<div style="margin-bottom:4px; color:#334155;">• {item}</div>', unsafe_allow_html=True)
+                    st.markdown(f'<div class="pe-item">• {item}</div>', unsafe_allow_html=True)
             st.markdown('</div>', unsafe_allow_html=True)
 
     sensory_rows, motor_rows, emg_rows, blink_rows = [], [], [], []
