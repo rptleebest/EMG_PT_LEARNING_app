@@ -11,41 +11,25 @@ def _safe_format_code(code: str) -> str:
     code_str = raw.lower().strip()
     
     mapping = {
-        "ncs_normal": "정상 범위", 
-        "ncs_delayed": "비정상 (잠복기 지연)", 
-        "ncs_reduced": "비정상 (진폭 감소)", 
-        "ncs_absent": "비정상 (반응 소실)", 
-        "ncs_conduction_block": "비정상 (진폭 급감)",
-        "emg_normal": "정상 범위", 
-        "emg_active_denervation": "비정상 (활동성 탈신경)", 
-        "emg_paraspinal_denervation": "비정상 (활동성 탈신경)", 
-        "emg_chronic_reinnervation": "비정상 (만성 재신경지배)", 
-        "emg_active_chronic": "비정상 (활동성+만성)", 
-        "blink_delayed": "비정상 (잠복기 지연)", 
-        "blink_absent": "비정상 (반응 소실)",
-        "blink_delayed_absent": "비정상 (지연 및 소실)",
-        "fwave_delayed_absent": "비정상 (반응 소실)",
-        "h_reflex_hyperactive": "비정상 (과항진)",
+        "ncs_normal": "정상 범위", "ncs_delayed": "비정상 (잠복기 지연)", "ncs_reduced": "비정상 (진폭 감소)", 
+        "ncs_absent": "비정상 (반응 소실)", "ncs_conduction_block": "비정상 (진폭 급감)",
+        "emg_normal": "정상 범위", "emg_active_denervation": "비정상 (활동성 탈신경)", 
+        "emg_paraspinal_denervation": "비정상 (활동성 탈신경)", "emg_chronic_reinnervation": "비정상 (만성 재신경지배)", 
+        "emg_active_chronic": "비정상 (활동성+만성)", "blink_delayed": "비정상 (잠복기 지연)", 
+        "blink_absent": "비정상 (반응 소실)", "blink_delayed_absent": "비정상 (지연 및 소실)",
+        "fwave_delayed_absent": "비정상 (반응 소실)", "h_reflex_hyperactive": "비정상 (과항진)",
         "h_m_ratio_increased": "비정상 (비율 증가)"
     }
     
-    if code_str in mapping:
-        return mapping[code_str]
+    if code_str in mapping: return mapping[code_str]
         
     replace_map = {
-        "Silent": "전기적 침묵",
-        "Normal recruitment": "정상 동원",
-        "Reduced recruitment": "동원 감소",
-        "Giant MUAPs": "거대운동단위",
-        "No recruitment": "동원 불가",
-        "Fibrillation/PSW": "섬유자발전위/양성예파",
-        "Absent": "반응 소실",
-        "Incomplete due to pain": "통증으로 평가 불가"
+        "Silent": "전기적 침묵", "Normal recruitment": "정상 동원", "Reduced recruitment": "동원 감소",
+        "Giant MUAPs": "거대운동단위", "No recruitment": "동원 불가", "Fibrillation/PSW": "섬유자발전위/양성예파",
+        "Absent": "반응 소실", "Incomplete due to pain": "통증으로 평가 불가"
     }
     for eng, kor in replace_map.items():
-        if eng in raw:
-            raw = raw.replace(eng, kor)
-            
+        if eng in raw: raw = raw.replace(eng, kor)
     return raw
 
 def _get_result_color_style(value: str) -> str:
@@ -64,26 +48,49 @@ def _format_reason_text(text: str) -> str:
 def _create_responsive_table(headers: list, rows: list) -> str:
     if not rows: return ""
     css = """<style>
+    /* PC 환경 기본 스타일 (깔끔한 Row-by-Row) */
     .sl-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 0.95rem; }
     .sl-table th { background-color: #f8fafc; padding: 12px 10px; border-bottom: 2px solid #cbd5e1; text-align: center !important; color: #1e293b; font-weight: 800; white-space: nowrap; }
     .sl-table th:first-child { text-align: left !important; padding-left: 16px; }
     .sl-table th:last-child { text-align: left !important; padding-left: 16px; }
-    .sl-table td { padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: center !important; color: #334155; vertical-align: middle; }
+    .sl-table td { padding: 10px 12px; border-bottom: 1px solid #e2e8f0; text-align: center !important; color: #334155; vertical-align: middle; }
     .sl-table td.fst-col { font-weight: 800; color: #1e3a8a; text-align: left !important; padding-left: 16px; }
-    .sl-table td:last-child { text-align: left !important; padding-left: 16px; line-height: 1.4; }
+    .sl-table td:last-child { text-align: left !important; padding-left: 16px; line-height: 1.4; font-weight: 600;}
     
+    /* 모바일 환경: 독립된 카드 UI로 완벽 분리 및 판독 결과 강조 */
     @media screen and (max-width: 768px) {
+        .sl-table, .sl-table thead, .sl-table tbody, .sl-table th, .sl-table td, .sl-table tr { display: block; }
         .sl-table thead { display: none; }
-        .sl-table tr { display: block; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 16px; background: #ffffff; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .sl-table td { display: flex; align-items: flex-start; gap: 12px; border-bottom: 1px dashed #e2e8f0; padding: 12px 16px 12px 24px; text-align: left !important; }
-        .sl-table td:last-child { border-bottom: none; background-color: #f8fafc; }
-        .sl-table td::before { content: attr(data-label); font-weight: 800; color: #64748b; text-align: left !important; font-size: 0.85rem; flex: 0 0 38%; margin-top: 2px; }
+        
+        .sl-table tr { 
+            margin-bottom: 16px; border: 1px solid #cbd5e1; border-radius: 10px; background: #ffffff; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+        }
+        .sl-table td { 
+            display: flex; justify-content: space-between; align-items: center; gap: 12px; border-bottom: 1px dashed #e2e8f0; padding: 12px 16px; text-align: right !important; 
+        }
+        .sl-table td::before { 
+            content: attr(data-label); font-weight: 700; color: #64748b; text-align: left !important; font-size: 0.85rem; flex: 0 0 40%; margin-top: 2px; 
+        }
         .sl-table td > span { flex: 1; text-align: left !important; word-break: keep-all; font-weight: 500; color: #334155; line-height: 1.4; }
         
-        .sl-table td.fst-col { display: flex; flex-direction: row; justify-content: flex-start; background: #eff6ff; padding: 12px 16px; border-bottom: 2px solid #bfdbfe; }
+        /* 카드 제목 (검사 신경 이름) */
+        .sl-table td.fst-col { 
+            background: #eff6ff; padding: 14px 16px; border-bottom: 2px solid #bfdbfe; justify-content: flex-start; 
+        }
         .sl-table td.fst-col::before { display: none; }
         .sl-table td.fst-col > span { text-align: left !important; font-weight: 800; color: #1d4ed8; font-size: 1.05rem; }
         .sl-table td.fst-col > span::before { content: "🔹 "; }
+        
+        /* 판독 결과 (맨 아래 넓게 배치) */
+        .sl-table td:last-child { 
+            flex-direction: column; align-items: flex-start; background-color: #f8fafc; border-bottom: none; padding-top: 14px; padding-bottom: 14px;
+        }
+        .sl-table td:last-child::before { 
+            margin-bottom: 6px; color: #1e3a8a; font-size: 0.95rem; content: "📝 " attr(data-label); width: 100%;
+        }
+        .sl-table td:last-child > span { 
+            text-align: left !important; width: 100%; font-size: 0.95rem; 
+        }
     }
     </style>"""
     
@@ -169,7 +176,6 @@ def render_case_detail_inline(case_name: str):
         else: 
             emg_rows.append(row)
 
-    # --- [핵심 추가] 병변측 데이터 안내 박스 ---
     if sensory_rows or motor_rows or emg_rows:
         st.markdown("""
         <div style="background-color: #f0fdf4; border-left: 4px solid #16a34a; padding: 12px 16px; margin-top: 32px; border-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
