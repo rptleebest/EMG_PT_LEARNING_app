@@ -32,17 +32,20 @@ def _safe_format_code(code: str) -> str:
         if eng in raw: raw = raw.replace(eng, kor)
     return raw
 
-def _get_result_color_style(value: str) -> str:
+def _get_result_color_style(value: str, is_normal_side: bool = False) -> str:
+    # 해당 줄(Row) 전체가 '정상측' 데이터인 경우 색상 강조를 완전히 배제합니다.
+    if is_normal_side:
+        return ""
+
     text = str(value)
-    
-    # '측정측' 칼럼 데이터("정상측", "병변측")는 단순 라벨이므로 색상 강조(초록/빨강) 제외
     if any(x in text for x in ["정상측", "병변측", "Normal (", "Affected ("]):
         return ""
 
     abnormal_words = ["비정상", "감소", "지연", "소실", "탈신경", "재신경지배", "차단", "항진", "초과", "증가", "저하", "급감"]
     normal_words = ["정상", "Normal", "Silent", "WNL", "침묵", "동원"]
     
-    if any(w in text for w in abnormal_words): return "color: #991b1b; font-weight: 800;"
+    # 눈이 덜 아프면서 시인성이 좋은 붉은색(#dc2626)으로 수정
+    if any(w in text for w in abnormal_words): return "color: #dc2626; font-weight: 800;"
     if any(w in text for w in normal_words): return "color: #15803d; font-weight: 800;"
     return ""
 
@@ -104,11 +107,14 @@ def _create_responsive_table(headers: list, rows: list) -> str:
     header_html = "".join([f"<th>{html.escape(h)}</th>" for h in headers])
     tr_html = ""
     for row in rows:
+        # 해당 줄(Row)에 '정상측' 또는 영문 번역본 'Normal (' 이 포함되어 있는지 확인
+        is_normal_side = any("정상측" in str(c) or "Normal (" in str(c) for c in row)
+        
         td_html = ""
         for idx, col in enumerate(row):
             val = _safe_format_code(col)
             cls = "fst-col" if idx == 0 else ""
-            color_style = _get_result_color_style(val) if idx > 0 else ""
+            color_style = _get_result_color_style(val, is_normal_side) if idx > 0 else ""
             header_label = html.escape(headers[idx]) if idx < len(headers) else ""
             td_html += f"<td data-label='{header_label}' class='{cls}' style='{color_style}'><span>{html.escape(val)}</span></td>"
         tr_html += f"<tr>{td_html}</tr>"
