@@ -11,17 +11,21 @@ def get_input_learning_report_language() -> str:
     selected = st.radio("언어 모드", options=LANGUAGE_OPTIONS, index=0, horizontal=True, label_visibility="collapsed", key="v_lang")
     return normalize_report_language(selected)
 
-def get_result_color_style(value: str) -> str:
+def get_result_color_style(value: str, is_normal_side: bool = False) -> str:
+    # 해당 줄(Row) 전체가 '정상측' 데이터인 경우 색상 강조를 완전히 배제합니다.
+    if is_normal_side:
+        return ""
+        
     text = str(value)
-    
-    # '측정측' 칼럼 데이터("정상측", "병변측")는 단순 라벨이므로 색상 강조(초록/빨강) 제외
-    if any(x in text for x in ["정상측", "병변측", "Normal (", "Affected ("]):
+    # 측정측 칼럼 자체의 텍스트("병변측" 등)도 색상에서 제외
+    if any(x in text for x in ["정상측", "병변측", "Normal (", "Affected ("]): 
         return ""
 
     abnormal_words = ["비정상", "감소", "지연", "소실", "탈신경", "측정불가", "차단", "항진", "초과", "증가", "저하", "급감", "Abnormal", "Reduced", "Absent", "Delayed", "Incomplete", "Active", "drop", "block", "Slowed", "Hyper"]
     normal_words = ["정상", "Normal", "Silent", "WNL", "침묵", "동원"]
     
-    if any(w in text for w in abnormal_words): return "color: #991b1b; font-weight: 800;"
+    # 눈이 덜 아프면서 시인성이 좋은 붉은색(#dc2626)으로 수정
+    if any(w in text for w in abnormal_words): return "color: #dc2626; font-weight: 800;"
     if any(w in text for w in normal_words): return "color: #15803d; font-weight: 800;"
     return ""
 
@@ -141,10 +145,13 @@ def create_responsive_table(headers: list, rows: list) -> str:
     header_html = "".join([f"<th>{html.escape(h)}</th>" for h in headers])
     tr_html = ""
     for row in rows:
+        # 해당 줄(Row)에 '정상측' 또는 영문 번역본 'Normal (' 이 포함되어 있는지 확인
+        is_normal_side = any("정상측" in str(c) or "Normal (" in str(c) for c in row)
+        
         td_html = ""
         for idx, col in enumerate(row):
             cls = "fst-col" if idx == 0 else ""
-            color_style = get_result_color_style(str(col)) if idx > 0 else ""
+            color_style = get_result_color_style(str(col), is_normal_side) if idx > 0 else ""
             h_lbl = html.escape(headers[idx]) if idx < len(headers) else ""
             td_html += f"<td data-label='{h_lbl}' class='{cls}' style='{color_style}'><span>{html.escape(str(col))}</span></td>"
         tr_html += f"<tr>{td_html}</tr>"
