@@ -5,94 +5,60 @@
 
 구성:
 - 총 11개 대표 사례 전체 수록
-- 신용어 중심 한글 표기 유지
-- 필요한 경우 영어 용어를 괄호 안에 병기
+- NCS 감각신경 가지(Branch)별 중복 데이터 제거 및 대표 신경으로 간소화
+- 실제 임상 수치(진폭, 잠복기 등)가 포함된 3단 데이터 구조 적용
 - NCS/EMG 내부 판독 코드는 data.terms의 표준 상수를 사용
-- 사례 학습 화면에서 바로 사용 가능한 CASE_LIBRARY 제공
 """
 
 from data.terms import (
-    EMG_NORMAL,
-    EMG_ACTIVE_DENERVATION,
-    EMG_PARASPINAL_DENERVATION,
-    EMG_CHRONIC_REINNERVATION,
-    EMG_ACTIVE_CHRONIC,
-    NCS_NORMAL,
-    NCS_DELAYED,
-    NCS_REDUCED,
-    NCS_ABSENT,
-    FWAVE_DELAYED_ABSENT,
-    H_REFLEX_HYPERACTIVE,
-    H_M_RATIO_INCREASED,
-    BLINK_DELAYED,
+    EMG_NORMAL, EMG_ACTIVE_DENERVATION, EMG_PARASPINAL_DENERVATION,
+    EMG_CHRONIC_REINNERVATION, EMG_ACTIVE_CHRONIC, NCS_NORMAL,
+    NCS_DELAYED, NCS_REDUCED, NCS_ABSENT, FWAVE_DELAYED_ABSENT,
+    H_REFLEX_HYPERACTIVE, H_M_RATIO_INCREASED, BLINK_DELAYED,
     BLINK_DELAYED_ABSENT,
 )
-
 
 CASE_LIBRARY = {
     "목-팔 통증 증상과 팔 근력 약화": {
         "category": "목 신경뿌리병증(Cervical radiculopathy)",
         "difficulty": "초중급",
         "patient": {
-            "age": 57,
-            "sex": "남성",
-            "side": "오른쪽",
-            "symptoms": [
-                "뒷목(Cervical)에서 오른쪽 어깨와 아래팔 노쪽(Radial side), 엄지손가락 쪽으로 뻗치는 통증과 저림이 지속됨",
-                "최근 팔꿉관절 굽힘(Flexion) 및 손목관절 폄(Extension) 동작 시 힘이 빠지는 현상 발생",
-            ],
+            "age": 57, "sex": "남성", "side": "오른쪽",
+            "symptoms": ["뒷목(Cervical)에서 오른쪽 어깨와 아래팔 노쪽, 엄지손가락 쪽으로 뻗치는 통증과 저림이 지속됨", "최근 팔꿉관절 굽힘 및 손목관절 폄 동작 시 힘이 빠지는 현상 발생"],
             "physical_exam": {
-                "감각 검사": [
-                    "아래팔 노쪽 및 엄지/검지 쪽 감각 저하. C6 피부분절(Dermatome) 분포와 일치함",
-                ],
-                "맨손근력검사(MMT)": [
-                    "팔꿉관절 굽힘근: Fair (3/5) - 근육피부신경(Musculocutaneous nerve, C5-C6)",
-                    "손목관절 폄근: Fair (3/5) - 노신경(Radial nerve, C6-C7)",
-                    "팔꿉관절 폄근: Normal (5/5) - 노신경(Radial nerve, C7-C8)",
-                ],
-                "반사 검사": [
-                    "위팔노근 반사(Brachioradialis reflex, C6): 감소(DRT 1+)",
-                    "위팔두갈래근 반사(Biceps reflex, C5): 정상(DRT 2+) 또는 경미한 감소",
-                    "위팔세갈래근 반사(Triceps reflex, C7): 정상(DRT 2+)",
-                ],
+                "감각 검사": ["아래팔 노쪽 및 엄지/검지 쪽 감각 저하. C6 피부분절 분포와 일치함"],
+                "맨손근력검사(MMT)": ["팔꿉관절 굽힘근: Fair (3/5) - 근육피부신경(C5-C6)", "손목관절 폄근: Fair (3/5) - 노신경(C6-C7)", "팔꿉관절 폄근: Normal (5/5) - 노신경(C7-C8)"],
+                "반사 검사": ["위팔노근 반사(C6): 감소(DRT 1+)", "위팔두갈래근 반사(C5): 정상(DRT 2+)"],
             },
         },
         "findings": {
-            "노신경 표재감각신경활동전위 (Superficial Radial SNAP)": (NCS_NORMAL, NCS_NORMAL),
-            "가쪽아래팔피부신경 감각신경활동전위 (Lateral Antebrachial Cutaneous SNAP)": (NCS_NORMAL, NCS_NORMAL),
-            "근육피부신경 복합근육활동전위 (Musculocutaneous CMAP)": (NCS_NORMAL, NCS_NORMAL),
-            "노신경 복합근육활동전위 (Radial CMAP)": (NCS_NORMAL, NCS_NORMAL),
-            "목 척추주위근 (Cervical Paraspinal)": (EMG_NORMAL, EMG_PARASPINAL_DENERVATION),
-            "위팔두갈래근 (Biceps Brachii)": (EMG_NORMAL, EMG_ACTIVE_DENERVATION),
-            "노쪽손목폄근 (Extensor Carpi Radialis)": (EMG_NORMAL, EMG_ACTIVE_DENERVATION),
+            "노신경 감각 (Radial SNAP)": ("20 μV", "2.1 ms", NCS_NORMAL),
+            "가쪽아래팔피부신경 감각 (Lat. Antebrachial SNAP)": ("19 μV", "2.2 ms", NCS_NORMAL),
+            "근육피부신경 운동 (Musculocutaneous CMAP)": ("5.8 mV", "2.1 ms", NCS_NORMAL),
+            "노신경 운동 (Radial CMAP)": ("6.5 mV", "2.5 ms", NCS_NORMAL),
+            "목 척추주위근 (Cervical Paraspinal)": ("Fibrillation/PSW", "통증으로 평가 불가", EMG_PARASPINAL_DENERVATION),
+            "위팔두갈래근 (Biceps Brachii)": ("Fibrillation/PSW", "Reduced recruitment", EMG_ACTIVE_DENERVATION),
+            "노쪽손목폄근 (Extensor Carpi Radialis)": ("Fibrillation/PSW", "Reduced recruitment", EMG_ACTIVE_DENERVATION),
         },
         "teaching_diagnosis": {
             "summary": "C6 중심의 목 신경뿌리병증(Cervical radiculopathy) 패턴입니다.",
             "ncs_reason": [
-                "감각신경활동전위(SNAP)가 정상 범위로 완전히 보존됩니다. 목 신경뿌리병증(Cervical radiculopathy)은 뒤뿌리신경절(Dorsal root ganglion, DRG)보다 몸쪽(Proximal)에 병변이 위치하므로, 축삭 손상(Axonal loss)이 먼쪽(Distal) 감각신경선까지 진행되지 않아 말초 감각신경전도검사(Sensory NCS) 결과는 정상 범위로 도출되는 생리학적 특성을 지닙니다.",
-                "운동신경전도검사(Motor NCS)의 복합근육활동전위(CMAP)가 정상 범위이므로 말초 신경얼기(Plexus) 혹은 단일 신경병증 가능성은 낮습니다.",
+                "감각신경활동전위(SNAP)가 정상 범위로 완전히 보존됩니다. 목 신경뿌리병증은 뒤뿌리신경절(DRG)보다 몸쪽에 병변이 위치하므로, 말초 감각신경전도는 정상 범위로 도출됩니다.",
+                "운동신경전도검사(Motor NCS)가 정상 범위이므로 말초 신경얼기 혹은 단일 신경병증 가능성은 낮습니다."
             ],
             "emg_reason": [
-                "1) 휴식 시 자발활동 전기생리 판독:",
-                "목 척추주위근육(Paraspinal muscle), 위팔두갈래근, 노쪽손목폄근에서 휴식 시 섬유자발전위(Fibrillation potential) 및 양성예파(Positive sharp wave)의 비정상 자발활동전위가 관찰됩니다. 이는 C6 운동신경 축삭 손상(Axonal loss)으로 지배력을 유실한 먼쪽(Distal) 근섬유막 전체에 과흥분성 전기적 불안정성이 초래되었음을 뜻하는 활동성 탈신경(Active denervation) 지표입니다.",
-                "2) 수의수축 시 운동단위 동원 분석:",
-                "최대 수의수축 시 위팔두갈래근과 노쪽손목폄근에서 감소된 운동단위동원(Reduced MU recruitment) 양상이 도출되어 동원 가능한 건강한 운동단위(Motor Unit, MU) 수 자체가 크게 탈락했음을 증명합니다. 목 척추주위근육(Paraspinal muscle)은 날카로운 통증으로 인해 수의수축 평가가 어렵습니다.",
-                "목 신경뿌리병증(Cervical radiculopathy)의 생리학적 감별 포인트:",
-                "1) 감각 소실 영역이 C5 피부분절(위팔 가쪽)이 아닌 C6 피부분절(아래팔 노쪽 및 엄지손가락)에 명확히 일치합니다.",
-                "2) 맨손근력검사(MMT) 상 C5 지배 어깨세모근의 마비가 없고, C6 및 C7의 중첩 지배를 받는 노쪽손목폄근의 근력이 3/5(Fair)로 동반 저하되어 있습니다.",
-                "3) 반사 검사 상 C5 위주의 위팔두갈래근 반사는 보존되었으나, C6 전형인 위팔노근 반사는 유의미하게 저하되어 최종적으로 C6 목 신경뿌리병증(Cervical radiculopathy)으로 해석하는 것이 전기생리학적으로 부합합니다.",
+                "목 척추주위근, 위팔두갈래근, 노쪽손목폄근에서 활동성 탈신경(Active denervation)을 의미하는 자발전위가 관찰됩니다.",
+                "가장 근위부인 C6 척추주위근의 이상 소견은 병변이 척수 신경뿌리임을 확진하는 핵심 지표입니다."
             ],
-            "integration": [
-                "C6 피부분절 감각 저하, 위팔노근 반사 감소, 손목관절 폄 근력의 저하, 그리고 목 척추주위근육(Paraspinal muscle) 및 먼쪽(Distal) 지배 근육의 동시 탈신경 자발활동 출현을 종합하여 C6 목 신경뿌리병증(Cervical radiculopathy)으로 정의합니다.",
-            ],
+            "integration": ["C6 피부분절 감각 저하, 위팔노근 반사 감소, 그리고 C6 지배 하위 말초근육과 척추주위근의 동시 탈신경을 종합하여 C6 신경뿌리병증으로 판단합니다."],
         },
         "differential_diagnosis": [
             {
-                "name": "노신경병증(Radial neuropathy)",
-                "why_consider": "손목관절 폄 근력 약화와 노쪽 감각 이상이 동반되어 목 신경뿌리병증(Cervical radiculopathy)과 혼동될 수 있습니다.",
-                "how_to_differentiate": "말초 노신경병증(Radial neuropathy)이라면 표재노신경 감각신경활동전위(SNAP) 진폭 감소(정상측 대비 50% 이하)가 수반되며, 목 척추주위근육(Paraspinal muscle) 침근전도검사(Needle EMG)는 정상 상태를 유지해야 합니다. 본 사례는 감각전도의 완전 보존과 목 척추주위근육(Paraspinal muscle)의 이상 활동이 공존하여 목 신경뿌리병증(Cervical radiculopathy)으로 정의됩니다.",
-                "practical_tip": "손목관절 폄 마비 환자 평가 시, 표재노신경 감각신경활동전위(SNAP)의 보존 여부와 목 척추주위근육(Paraspinal muscle)의 이상 방전 감별이 임상 판단의 핵심선입니다.",
-            },
+                "name": "노신경병증(Radial neuropathy)", 
+                "why_consider": "손목 폄 약화와 노쪽 감각 이상이 동반되어 혼동하기 쉽습니다.",
+                "how_to_differentiate": "노신경병증이라면 노신경 감각전도 진폭 감소가 수반되며, 목 척추주위근 침근전도는 정상이 유지되어야 합니다.",
+                "practical_tip": "손목관절 폄 마비 환자 평가 시, 표재노신경 감각전도의 보존 여부와 목 척추주위근의 이상 방전 감별이 임상 판단의 핵심입니다."
+            }
         ],
     },
 
@@ -100,54 +66,37 @@ CASE_LIBRARY = {
         "category": "말초 포착신경병증",
         "difficulty": "초중급",
         "patient": {
-            "age": 46,
-            "sex": "여성",
-            "side": "오른쪽",
-            "symptoms": [
-                "오른손 1, 2, 3번째 손가락 중심의 저림이 야간에 특히 심함",
-                "최근 엄지손가락 벌림(Abduction) 동작 시 힘이 빠지는 현상 발생",
-            ],
+            "age": 46, "sex": "여성", "side": "오른쪽",
+            "symptoms": ["오른손 1~3번째 손가락 중심의 저림이 야간에 심함", "최근 엄지손가락 벌림 동작 시 힘 빠짐 발생"],
             "physical_exam": {
-                "감각 검사": [
-                    "엄지, 검지, 중지 및 반지손가락 노쪽 절반의 손바닥쪽 감각 둔화. 정중신경(Median nerve) 분포와 일치함",
-                ],
-                "맨손근력검사(MMT)": [
-                    "엄지손가락 벌림근: Good (4/5) - 정중신경(Median nerve, C8-T1)",
-                ],
-                "반사 검사": [
-                    "위팔두갈래근 반사(Biceps reflex, C5-C6), 위팔노근 반사(Brachioradialis reflex, C5-C6), 위팔세갈래근 반사(Triceps reflex, C7-C8): 모두 대칭적 정상(DRT 2+)",
-                    "특수 검사: 팔렌 검사(Phalen test) 양성, 손목 정중신경 주행 부위 티넬 징후(Tinel sign) 양성",
-                ],
+                "감각 검사": ["엄지, 검지, 중지 손바닥쪽 감각 둔화. 정중신경 분포와 일치"],
+                "맨손근력검사(MMT)": ["엄지손가락 벌림근: Good (4/5) - 정중신경(C8-T1)"],
+                "반사 검사": ["특수 검사: 팔렌 검사 양성, 손목 정중신경 티넬 징후 양성"],
             },
         },
         "findings": {
-            "정중신경 감각신경활동전위 (Median SNAP)": (NCS_NORMAL, NCS_DELAYED),
-            "정중신경 복합근육활동전위 (Median CMAP)": (NCS_NORMAL, NCS_REDUCED),
-            "짧은엄지벌림근 (Abductor Pollicis Brevis, APB)": (EMG_NORMAL, EMG_NORMAL),
+            "정중신경 감각 (Median SNAP)": ("9 μV (감소)", "4.9 ms (지연)", NCS_DELAYED),
+            "정중신경 운동 (Median CMAP)": ("4.5 mV (감소)", "5.8 ms (지연)", NCS_REDUCED),
+            "짧은엄지벌림근 (Abductor Pollicis Brevis)": ("Silent", "Normal recruitment", EMG_NORMAL),
         },
         "teaching_diagnosis": {
-            "summary": "손목굴증후군(Carpal tunnel syndrome)을 시사하는 정중신경 포착병증(Median entrapment neuropathy)입니다.",
+            "summary": "손목굴증후군(Carpal tunnel syndrome)을 시사하는 정중신경 포착병증입니다.",
             "ncs_reason": [
-                "정중신경(Median nerve) 감각신경활동전위(SNAP)에서 잠복기 지연(정상측 대비 130% 이상)이 도출되어 손목굴 내 국소 말이집탈락(Demyelination)성 전도 지연을 지시합니다.",
-                "정중신경(Median nerve) 복합근육활동전위(CMAP)에서 진폭 감소(정상측 대비 50% 이하)가 나타나 운동 축삭 손상(Axonal loss)이 함께 진행되고 있음을 뜻합니다.",
+                "정중신경 감각전도 잠복기 지연은 손목굴 내 국소 말이집탈락(Demyelination)성 전도 지연을 지시합니다.",
+                "운동 진폭 감소가 동반된 것은 신경 압박에 따른 운동 축삭 손상이 일부 진행되고 있음을 뜻합니다."
             ],
             "emg_reason": [
-                "1) 휴식 시 자발활동 전기생리 판독:",
-                "짧은엄지벌림근에서 휴식 시 섬유자발전위(Fibrillation potential)나 양성예파(Positive sharp wave) 등의 이상 자발전위가 검출되지 않는 전기적 침묵(Silent at rest)의 정상 범위를 보입니다. 이는 정중신경(Median nerve) 압박 포착 깊이가 경미하여 아직 먼쪽(Distal) 축삭 손상(Axonal loss) 단계까지는 유발되지 않았음을 뜻합니다.",
-                "2) 수의수축 시 운동단위 동원 분석:",
-                "해당 짧은엄지벌림근의 수의수축 시 정상적인 운동단위동원(Normal MU recruitment)이 원활하게 일어납니다. 수축을 전달할 수 있는 하위 운동 축삭의 손실이 없어 간섭파형 형성이 온전히 보존되고 있음을 지시합니다.",
+                "정중신경 말단 지배인 짧은엄지벌림근에서 비정상 자발전위가 없는 것(Silent)은, 아직 축삭이 완전히 손상되거나 마비에 이르지 않은 상태임을 의미합니다."
             ],
-            "integration": [
-                "야간 통증 저림, 정중신경(Median nerve) 분포 영역 감각 저하, 정중신경 전도 지연 및 짧은엄지벌림근(APB) 전기활동 보존을 종합하여 손목굴증후군(Carpal tunnel syndrome)으로 해석합니다.",
-            ],
+            "integration": ["야간 통증 저림, 정중신경 분포 감각 저하, 전도 지연 데이터를 통합하여 손목굴증후군으로 해석합니다."],
         },
         "differential_diagnosis": [
             {
-                "name": "몸쪽 정중신경병증(Proximal median neuropathy)",
-                "why_consider": "정중신경(Median nerve) 지배 영역의 근력 저하 및 손가락 저림이 매우 흡사합니다.",
-                "how_to_differentiate": "원엎침근(Pronator teres) 등 손목 상부의 몸쪽(Proximal) 정중신경(Median nerve) 지배 근육들의 침근전도검사(Needle EMG) 결과가 정상이므로 손목 수준의 포착으로 해석할 수 있습니다.",
-                "practical_tip": "포착 신경병증 감별 시, 포착 의심 경계선보다 더 몸쪽(Proximal)에서 기시하는 근육들의 정상 전기활동 보존 여부를 확인하십시오.",
-            },
+                "name": "몸쪽 정중신경병증(Proximal median neuropathy)", 
+                "why_consider": "정중신경 지배 영역의 근력 저하 및 손가락 저림이 매우 흡사합니다.",
+                "how_to_differentiate": "원엎침근 등 손목 상부 정중신경 지배 근육들의 근전도가 정상이므로 압박 부위는 손목 수준으로 국한됩니다.",
+                "practical_tip": "포착 신경병증 감별 시, 포착 의심 경계선보다 더 몸쪽(Proximal)에서 기시하는 근육들의 정상 전기활동 보존 여부를 확인하십시오."
+            }
         ],
     },
 
@@ -155,58 +104,39 @@ CASE_LIBRARY = {
         "category": "말초 포착신경병증",
         "difficulty": "초중급",
         "patient": {
-            "age": 34,
-            "sex": "남성",
-            "side": "오른쪽",
-            "symptoms": [
-                "위팔뼈 몸통 골절(Humeral shaft fracture) 병력 있음",
-                "골절 수술 직후부터 손목과 손가락을 들어 올리지 못하는 손목처짐(Wrist drop) 현상 발생",
-            ],
+            "age": 34, "sex": "남성", "side": "오른쪽",
+            "symptoms": ["위팔뼈 몸통 골절 병력 있음", "골절 수술 직후부터 손목처짐(Wrist drop) 현상 발생"],
             "physical_exam": {
-                "감각 검사": [
-                    "손등 노쪽 영역 감각 소실. 표재노신경(Superficial radial nerve) 지배 영역 분포와 정확히 일치함",
-                ],
-                "맨손근력검사(MMT)": [
-                    "손목관절 폄근: Poor (2/5) - 노신경(Radial nerve, C6-C7)",
-                    "손가락 폄근: Poor (2/5) - 뒤뼈사이신경(Posterior interosseous nerve, C7-C8)",
-                    "팔꿉관절 폄근: Normal (5/5) - 노신경(Radial nerve, C7-C8)",
-                ],
-                "반사 검사": [
-                    "위팔세갈래근 반사(Triceps reflex, C7-C8): 정상(DRT 2+ - 골절 부위 상단 기시 가지로 보존됨)",
-                    "위팔노근 반사(Brachioradialis reflex, C5-C6): 감소(DRT 1+)",
-                ],
+                "감각 검사": ["손등 노쪽 영역 감각 소실. 노신경 분포와 일치함"],
+                "맨손근력검사(MMT)": ["손목관절 폄근: Poor (2/5)", "손가락 폄근: Poor (2/5)", "팔꿉관절 폄근: Normal (5/5)"],
+                "반사 검사": ["위팔세갈래근 반사: 정상(DRT 2+)", "위팔노근 반사: 감소(DRT 1+)"],
             },
         },
         "findings": {
-            "노신경 표재감각신경활동전위 (Superficial Radial SNAP)": (NCS_NORMAL, NCS_REDUCED),
-            "노신경 복합근육활동전위 (Radial CMAP)": (NCS_NORMAL, NCS_REDUCED),
-            "노쪽손목폄근 (Extensor Carpi Radialis)": (EMG_NORMAL, EMG_ACTIVE_DENERVATION),
-            "집게폄근 (Extensor Indicis Proprius, EIP)": (EMG_NORMAL, EMG_ACTIVE_DENERVATION),
-            "목 척추주위근 (Cervical Paraspinal)": (EMG_NORMAL, EMG_NORMAL),
+            "노신경 감각 (Radial SNAP)": ("8 μV (감소)", "3.2 ms (지연)", NCS_REDUCED),
+            "노신경 운동 (Radial CMAP)": ("1.5 mV (급감)", "7.1 ms (지연)", NCS_REDUCED),
+            "노쪽손목폄근 (Extensor Carpi Radialis)": ("Fibrillation/PSW", "Reduced recruitment", EMG_ACTIVE_DENERVATION),
+            "집게폄근 (Extensor Indicis Proprius)": ("Fibrillation/PSW", "Reduced recruitment", EMG_ACTIVE_DENERVATION),
+            "목 척추주위근 (Cervical Paraspinal)": ("Silent", "Normal recruitment", EMG_NORMAL),
         },
         "teaching_diagnosis": {
-            "summary": "위팔뼈 나선고랑(Spiral groove) 부위의 노신경병증(Radial neuropathy) 마비 패턴입니다.",
+            "summary": "위팔뼈 나선고랑(Spiral groove) 부위의 노신경병증(Radial neuropathy)입니다.",
             "ncs_reason": [
-                "표재노신경(Superficial radial nerve) 감각신경활동전위(SNAP) 진폭 감소(정상측 대비 50% 이하)는 병변이 뒤뿌리신경절(Dorsal root ganglion, DRG)보다 먼쪽(Distal)의 혼합 말초신경계 축삭 마비임을 가리킵니다.",
-                "노신경(Radial nerve) 복합근육활동전위(CMAP) 진폭 저하(정상측 대비 50% 이하)는 나선고랑 하부 주행 경로 내 운동 축삭 손상(Axonal loss)을 대변합니다.",
+                "노신경 감각 진폭 감소는 병변이 뒤뿌리신경절 먼쪽의 말초신경계 마비임을 가리키며, 운동 진폭 저하는 나선고랑 통과 구간의 운동 축삭 손상을 대변합니다."
             ],
             "emg_reason": [
-                "1) 휴식 시 자발활동 전기생리 판독:",
-                "노쪽손목폄근(ECR)과 집게폄근(EIP)에서 휴식 시 섬유자발전위(Fibrillation potential) 및 양성예파(Positive sharp wave)의 탈신경 비정상 자발전위가 뚜렷하게 관찰됩니다. 이는 위팔뼈 나선고랑 통과 구간에서 발생한 기계적 압박에 기인한 먼쪽(Distal) 축삭 단절 상태를 가리킵니다.",
-                "2) 수의수축 시 운동단위 동원 분석:",
-                "수의수축 시 노쪽손목폄근(ECR)과 집게폄근(EIP)에서 감소된 운동단위동원(Reduced MU recruitment) 패턴 반응이 나타나 폄근 마비를 대변합니다. 반면 목 뒤가지 경로를 대변하는 목 척추주위근육(Paraspinal muscle)은 휴식 시 전기적 침묵(Silent at rest), 수의수축 시 운동단위동원(Normal MU recruitment)으로 매우 조용하여 신경뿌리병증을 배제합니다.",
+                "나선고랑 하부 지배근(노쪽손목폄근, 집게폄근)에서 활동성 탈신경 소견을 보입니다.",
+                "목 척추주위근은 온전히 보존되어 있어 경추 신경뿌리병증을 배제합니다."
             ],
-            "integration": [
-                "나선고랑 상단 골절력, 팔꿉관절 폄 기능 보존 대비 먼쪽(Distal) 손목/손가락 폄 근력의 저하, 표재노신경(Superficial radial nerve) SNAP의 진폭 감소(50% 이하), 목 척추주위근육(Paraspinal muscle) 정상 전기활동을 융합하여 외상성 노신경병증(Radial neuropathy)으로 해석합니다.",
-            ],
+            "integration": ["팔꿉관절 폄 기능 보존 대비 먼쪽 손목/손가락 폄 마비, 노신경 전도 감소, 목 척추주위근 정상 소견을 융합하여 외상성 노신경병증으로 해석합니다."],
         },
         "differential_diagnosis": [
             {
-                "name": "뒤뼈사이신경병증(Posterior interosseous neuropathy, PIN)",
-                "why_consider": "손가락 및 손목관절 폄 근력 저하가 노신경병증(Radial neuropathy)과 매우 유사하게 관찰됩니다.",
-                "how_to_differentiate": "뒤뼈사이신경(Posterior interosseous nerve)은 노신경(Radial nerve)의 순수 운동 분지이므로 감각 소실 영역이 없어야 하며, 표재노신경 감각신경활동전위(SNAP)가 완전 정상 범위로 기록되어야 합니다.",
-                "practical_tip": "감각신경활동전위(SNAP)의 변성 탈락 유무가 노신경(Radial nerve) 주간 경로 마비와 먼쪽(Distal) 심부 운동 분지 마비를 감별하는 임상 잣대입니다.",
-            },
+                "name": "뒤뼈사이신경병증(Posterior interosseous neuropathy)", 
+                "why_consider": "손가락 및 손목관절 폄 근력 저하가 매우 유사하게 관찰됩니다.",
+                "how_to_differentiate": "뒤뼈사이신경은 노신경의 순수 운동 분지이므로, 이 질환이라면 노신경 감각 전도는 완전 정상 범위로 기록되어야 합니다.",
+                "practical_tip": "손목 마비 환자에서 표재노신경 감각의 보존 여부가 노신경 주간 경로 마비와 먼쪽 심부 운동 분지 마비를 감별하는 핵심입니다."
+            }
         ],
     },
 
@@ -214,56 +144,37 @@ CASE_LIBRARY = {
         "category": "말초 포착신경병증",
         "difficulty": "초중급",
         "patient": {
-            "age": 42,
-            "sex": "남성",
-            "side": "오른쪽",
-            "symptoms": [
-                "우측 4, 5번째 손가락 감각 이상 및 새끼손가락 가쪽 손날 부위 통증",
-                "최근 젓가락질 시 손날 지지력 소실 및 미세한 손가락 동작 약화",
-            ],
+            "age": 42, "sex": "남성", "side": "오른쪽",
+            "symptoms": ["우측 4, 5번째 손가락 감각 이상 및 새끼손가락 손날 통증", "최근 젓가락질 시 손가락 미세 동작 약화"],
             "physical_exam": {
-                "감각 검사": [
-                    "반지손가락 자쪽 절반 및 새끼손가락 감각 저하. 자신경(Ulnar nerve) 분포 영역에 국한됨",
-                ],
-                "맨손근력검사(MMT)": [
-                    "새끼손가락 벌림근: Fair (3/5) - 자신경(Ulnar nerve, C8-T1)",
-                    "손가락 벌림/모음근: Fair (3/5) - 자신경(Ulnar nerve, C8-T1)",
-                ],
-                "반사 검사": [
-                    "위팔두갈래근(C5), 위팔노근(C6), 위팔세갈래근(C7) 반사: 대칭적 정상(DRT 2+)",
-                    "특수 검사: 팔꿈치굴 주행 부위 티넬 징후 양성 및 팔꿉관절 최대 굽힘 유발 검사 양성",
-                ],
+                "감각 검사": ["반지손가락 자쪽 절반 및 새끼손가락 감각 저하"],
+                "맨손근력검사(MMT)": ["새끼손가락 벌림근: Fair (3/5)", "손가락 벌림/모음근: Fair (3/5)"],
+                "반사 검사": ["특수 검사: 팔꿈치굴 주행 부위 티넬 징후 양성"],
             },
         },
         "findings": {
-            "자신경 감각신경활동전위 (Ulnar SNAP)": (NCS_NORMAL, NCS_DELAYED),
-            "자신경 복합근육활동전위 (Ulnar CMAP)": (NCS_NORMAL, NCS_REDUCED),
-            "새끼벌림근 (Abductor Digiti Minimi, ADM)": (EMG_NORMAL, EMG_ACTIVE_DENERVATION),
-            "첫째등쪽뼈사이근 (First Dorsal Interosseous, FDI)": (EMG_NORMAL, EMG_ACTIVE_DENERVATION),
+            "자신경 감각 (Ulnar SNAP)": ("9 μV (감소)", "3.4 ms (지연)", NCS_DELAYED),
+            "자신경 운동 (Ulnar CMAP)": ("3.1 mV (감소)", "8.2 ms (지연)", NCS_REDUCED),
+            "새끼벌림근 (Abductor Digiti Minimi)": ("Fibrillation/PSW", "Reduced recruitment", EMG_ACTIVE_DENERVATION),
+            "첫째등쪽뼈사이근 (First Dorsal Interosseous)": ("Fibrillation/PSW", "Reduced recruitment", EMG_ACTIVE_DENERVATION),
         },
         "teaching_diagnosis": {
-            "summary": "팔꿈치굴증후군(Cubital tunnel syndrome)으로 대표되는 팔꿈치 부위 자신경병증(Ulnar neuropathy)입니다.",
+            "summary": "팔꿈치굴증후군(Cubital tunnel syndrome)으로 대표되는 팔꿈치 부위 자신경병증입니다.",
             "ncs_reason": [
-                "자신경(Ulnar nerve) 감각신경활동전위(SNAP)에서 잠복기 지연(정상측 대비 130% 이상)이 관찰되어 팔꿈치굴 구간 내의 국소 말이집탈락(Demyelination)성 병변을 가리킵니다.",
-                "자신경(Ulnar nerve) 복합근육활동전위(CMAP)의 진폭 저하(정상측 대비 50% 이하)는 포착성 신경 마비에 따르는 운동 축삭 손상(Axonal loss) 단계를 고발합니다.",
+                "자신경 감각 전도 지연은 팔꿈치굴 구간 내 국소 말이집탈락성 병변을 가리키며, 운동 진폭 저하는 포착 부위 하단의 운동 축삭 손상을 뜻합니다."
             ],
             "emg_reason": [
-                "1) 휴식 시 자발활동 전기생리 판독:",
-                "새끼벌림근 및 첫째등쪽뼈사이근에서 휴식 시 섬유자발전위(Fibrillation potential) 및 양성예파(Positive sharp wave)의 탈신경 비정상 자발전위가 도출됩니다. 팔꿈치굴 포착으로 인한 먼쪽(Distal) 운동 축삭의 변성을 전기생리학적으로 지시합니다.",
-                "2) 수의수축 시 운동단위 동원 분석:",
-                "수의수축 시 새끼벌림근 및 첫째등쪽뼈사이근에서 동원 가능한 총 결합 단위수 저하 현상에 기인한 감소된 운동단위동원(Reduced MU recruitment) 패턴 반응이 정밀 관찰됩니다.",
+                "자신경 하위 지배근인 새끼벌림근과 뼈사이근에서 활동성 탈신경 비정상 자발전위가 도출되어, 압박으로 인한 먼쪽 운동 축삭 변성을 지시합니다."
             ],
-            "integration": [
-                "새끼손가락 감각 이상, 새끼벌림근 및 첫째등쪽뼈사이근 근력 저하, 자신경(Ulnar nerve) 잠복기 지연 및 침근전도검사(Needle EMG) 이상 소견을 융합하여 팔꿈치굴증후군(Cubital tunnel syndrome)으로 진단합니다.",
-            ],
+            "integration": ["자신경 국한 감각 이상 및 마비, 자신경 전도 지연 및 침근전도 이상 소견을 융합하여 팔꿈치굴증후군으로 진단합니다."],
         },
         "differential_diagnosis": [
             {
-                "name": "C8-T1 목 신경뿌리병증(Cervical radiculopathy)",
-                "why_consider": "손 내재근 약화 분절이 C8-T1 영역과 일치하여 자신경 신경 분포와 흡사하게 관찰될 수 있습니다.",
-                "how_to_differentiate": "목 신경뿌리병증(Cervical radiculopathy)은 정중신경 지배 손가락 근육들도 전반적으로 동시 침범되며, 표재 자신경 감각신경활동전위(SNAP)는 정상 범위로 보존되는 특징이 있습니다.",
-                "practical_tip": "손 자체기원근육(Intrinsic hand muscle) 약화 시 정중/자신경의 감각전도를 상호 비교하는 것이 척수 신경뿌리(Nerve root) 병변과 말초 단일 포착 병변의 감별 잣대입니다.",
-            },
+                "name": "C8-T1 목 신경뿌리병증(Cervical radiculopathy)", 
+                "why_consider": "손 내재근 약화 분절이 C8-T1 영역과 일치하여 자신경 마비와 흡사합니다.",
+                "how_to_differentiate": "목 신경뿌리병증은 동일 분절의 정중신경 지배 손가락 근육들도 전반적으로 침범되며, 자신경 감각전도는 대개 보존됩니다.",
+                "practical_tip": "아귀 힘이 빠질 때 정중/자신경의 감각전도를 상호 비교하는 것이 목 디스크와 팔꿈치 포착 병변의 감별 잣대입니다."
+            }
         ],
     },
 
@@ -271,58 +182,40 @@ CASE_LIBRARY = {
         "category": "허리 신경뿌리병증(Lumbar radiculopathy)",
         "difficulty": "초중급",
         "patient": {
-            "age": 61,
-            "sex": "여성",
-            "side": "오른쪽",
-            "symptoms": [
-                "허리(Lumbar)에서 우측 엉치, 종아리 가쪽, 발등으로 뻗치는 방사통과 저림",
-                "최근 보행 시 발끝이 바닥에 끌려 보행이 어려운 발처짐(Foot drop) 발생",
-            ],
+            "age": 61, "sex": "여성", "side": "오른쪽",
+            "symptoms": ["허리에서 우측 엉치, 종아리 가쪽, 발등으로 뻗치는 방사통", "최근 보행 시 발끝이 바닥에 끌리는 발처짐(Foot drop) 발생"],
             "physical_exam": {
-                "감각 검사": [
-                    "종아리 가쪽 및 발등 중앙 부위 감각 둔화. L5 피부분절 범위 분포",
-                ],
-                "맨손근력검사(MMT)": [
-                    "발목관절 등굽힘근: Fair (3/5) - 깊은종아리신경(Deep peroneal nerve, L4-L5)",
-                    "엄지발가락 폄근: Poor (2/5) - 깊은종아리신경(Deep peroneal nerve, L5)",
-                    "엉덩관절 벌림근: Good (4/5) - 위볼기신경(Superior gluteal nerve, L4-S1)",
-                ],
-                "반사 검사": [
-                    "무릎반사(Patellar reflex, L4): 정상(DRT 2+)",
-                    "아킬레스힘줄반사(Achilles tendon reflex, S1): 정상(DRT 2+)",
-                ],
+                "감각 검사": ["종아리 가쪽 및 발등 중앙 부위 감각 둔화. L5 피부분절 범위"],
+                "맨손근력검사(MMT)": ["발목관절 등굽힘근: Fair (3/5)", "엄지발가락 폄근: Poor (2/5)", "엉덩관절 벌림근: Good (4/5)"],
+                "반사 검사": ["무릎반사(L4): 정상", "아킬레스힘줄반사(S1): 정상"],
             },
         },
         "findings": {
-            "얕은종아리신경 감각신경활동전위 (Superficial Peroneal SNAP)": (NCS_NORMAL, NCS_NORMAL),
-            "종아리신경 복합근육활동전위 (Peroneal CMAP)": (NCS_NORMAL, NCS_NORMAL),
-            "허리 척추주위근 (Lumbar Paraspinal)": (EMG_NORMAL, EMG_PARASPINAL_DENERVATION),
-            "앞정강근 (Tibialis Anterior, TA)": (EMG_NORMAL, EMG_ACTIVE_DENERVATION),
-            "긴엄지폄근 (Extensor Hallucis Longus, EHL)": (EMG_NORMAL, EMG_ACTIVE_DENERVATION),
-            "중간볼기근 (Gluteus Medius)": (EMG_NORMAL, EMG_ACTIVE_DENERVATION),
+            "얕은종아리신경 감각 (Superficial Peroneal SNAP)": ("15 μV", "2.8 ms", NCS_NORMAL),
+            "종아리신경 운동 (Peroneal CMAP)": ("4.8 mV", "4.2 ms", NCS_NORMAL),
+            "허리 척추주위근 (Lumbar Paraspinal)": ("Fibrillation/PSW", "통증으로 평가 불가", EMG_PARASPINAL_DENERVATION),
+            "앞정강근 (Tibialis Anterior)": ("Fibrillation/PSW", "Reduced recruitment", EMG_ACTIVE_DENERVATION),
+            "긴엄지폄근 (Extensor Hallucis Longus)": ("Fibrillation/PSW", "Reduced recruitment", EMG_ACTIVE_DENERVATION),
+            "중간볼기근 (Gluteus Medius)": ("Fibrillation/PSW", "Reduced recruitment", EMG_ACTIVE_DENERVATION),
         },
         "teaching_diagnosis": {
             "summary": "발처짐(Foot drop)을 동반한 L5 허리 신경뿌리병증(Lumbar radiculopathy) 패턴입니다.",
             "ncs_reason": [
-                "얕은종아리신경(Superficial peroneal nerve) 감각신경활동전위(SNAP)가 대칭성 정상 보존됩니다. 이는 감각 세포체가 위치한 뒤뿌리신경절(Dorsal root ganglion, DRG)보다 몸쪽(Proximal)인 허리 신경뿌리 압박 상황을 지지합니다.",
+                "발처짐 증상에도 불구하고 얕은종아리신경 감각 진폭이 정상 보존됩니다. 이는 감각 세포체보다 근위부인 척수 신경뿌리 압박을 의미합니다."
             ],
             "emg_reason": [
-                "1) 휴식 시 자발활동 전기생리 판독:",
-                "허리 척추주위근육(Paraspinal muscle), 앞정강근(TA), 긴엄지폄근(EHL), 중간볼기근의 침근전도 결과, 휴식 시 섬유자발전위(Fibrillation potential) 및 양성예파(Positive sharp wave)의 탈신경 자발전위가 관찰됩니다. L5 신경뿌리의 물리적 압박으로 앞뿌리 운동 축삭의 퇴행이 진행 중임을 전기생리학적으로 지시합니다.",
-                "2) 수의수축 시 운동단위 동원 분석:",
-                "수의수축 시 앞정강근, 긴엄지폄근, 중간볼기근에서 동원 가능한 기능적 알파 운동신경원 수의 유의미한 소실로 인해 감소된 운동단위동원(Reduced MU recruitment) 패턴이 뚜렷하게 관찰됩니다. 허리 척추주위근육(Paraspinal muscle)은 급성 신경뿌리 압박 통증으로 인해 수의수축 동원 평가가 어렵습니다.",
+                "가장 중요한 지표로 가장 근위부인 허리 척추주위근에서 비정상 자발전위가 검출되었습니다.",
+                "L5 분절을 공유하는 앞정강근, 긴엄지폄근, 중간볼기근에서 공통적인 탈신경이 관찰되어 L5 레벨을 확진합니다."
             ],
-            "integration": [
-                "L5 피부분절 감각 저하, 발처짐(Foot drop) 및 중간볼기근 근력 저하, 감각신경활동전위(SNAP) 정상 보존 및 허리 척추주위근육(Paraspinal muscle) 탈신경 전위 검출을 종합하여 L5 허리 신경뿌리병증(Lumbar radiculopathy)으로 진단합니다.",
-            ],
+            "integration": ["L5 감각 저하, 중간볼기근 약화 동반, 감각전도 보존 및 허리 척추주위근 탈신경을 종합하여 L5 신경뿌리병증으로 진단합니다."],
         },
         "differential_diagnosis": [
             {
-                "name": "온종아리신경병증(Common peroneal neuropathy)",
-                "why_consider": "발목관절 등굽힘근 약화로 보행 시 발처짐 양상이 매우 유사합니다.",
-                "how_to_differentiate": "온종아리신경병증(Common peroneal neuropathy)은 가쪽 무릎 부위 포착으로 얕은종아리신경 SNAP 및 Peroneal CMAP가 대폭 감소(정상측 대비 50% 이하)하며, 위볼기신경 지배인 중간볼기근 및 척추주위근은 정상입니다.",
-                "practical_tip": "발처짐(Foot drop) 감별 시 엉덩관절 벌림(Hip abduction) 및 발목 안쪽번짐(Inversion) 근력의 보존 여부를 반드시 연계 확인하십시오.",
-            },
+                "name": "온종아리신경병증(Common peroneal neuropathy)", 
+                "why_consider": "발목을 들어올리지 못하는 발처짐(Foot drop) 양상이 매우 비슷합니다.",
+                "how_to_differentiate": "온종아리신경 압박 마비라면 얕은종아리신경 감각전도가 대폭 감소하며, 중간볼기근과 척추주위근은 반드시 정상이어야 합니다.",
+                "practical_tip": "발처짐(Foot drop) 환자 감별 시 엉덩관절 벌림(중간볼기근) 근력의 보존 여부를 반드시 확인하십시오."
+            }
         ],
     },
 
@@ -330,57 +223,39 @@ CASE_LIBRARY = {
         "category": "말초 포착신경병증",
         "difficulty": "초중급",
         "patient": {
-            "age": 31,
-            "sex": "남성",
-            "side": "왼쪽",
-            "symptoms": [
-                "정강뼈 골절(Tibial fracture) 부위 석고붕대 유지 이력 있음",
-                "석고붕대 제거 직후 좌측 발처짐과 발등 감각 소실 발견",
-            ],
+            "age": 31, "sex": "남성", "side": "왼쪽",
+            "symptoms": ["정강뼈 골절 부위 석고붕대 유지 이력", "석고붕대 제거 직후 좌측 발처짐과 발등 감각 소실 발견"],
             "physical_exam": {
-                "감각 검사": [
-                    "종아리 가쪽 및 발등 부위 감각 소실. 얕은/깊은종아리신경 분포 범위",
-                ],
-                "맨손근력검사(MMT)": [
-                    "발목관절 등굽힘근: Poor (2/5) - 깊은종아리신경(Deep peroneal nerve, L4-L5)",
-                    "엄지발가락 폄근: Trace (1/5) - 깊은종아리신경(Deep peroneal nerve, L5)",
-                    "발목관절 가쪽번짐근: Poor (2/5) - 얕은종아리신경(Superficial peroneal nerve, L5-S1)",
-                    "발목관절 안쪽번짐근: Normal (5/5) - 정강신경(Tibial nerve, L4-S1)",
-                ],
-                "반사 검사": [
-                    "무릎반사(Patellar reflex, L4) 및 아킬레스힘줄반사(Achilles reflex, S1): 모두 대칭적 정상",
-                ],
+                "감각 검사": ["종아리 가쪽 및 발등 부위 감각 소실"],
+                "맨손근력검사(MMT)": ["발목 등굽힘근: Poor (2/5)", "발목 가쪽번짐근: Poor (2/5)", "발목 안쪽번짐근: Normal (5/5)"],
+                "반사 검사": ["무릎반사 및 아킬레스힘줄반사: 대칭적 정상"],
             },
         },
         "findings": {
-            "얕은종아리신경 감각신경활동전위 (Superficial Peroneal SNAP)": (NCS_REDUCED, NCS_NORMAL),
-            "종아리신경 복합근육활동전위 (Peroneal CMAP)": (NCS_REDUCED, NCS_NORMAL),
-            "앞정강근 (Tibialis Anterior, TA)": (EMG_ACTIVE_DENERVATION, EMG_NORMAL),
-            "긴종아리근 (Peroneus Longus)": (EMG_ACTIVE_DENERVATION, EMG_NORMAL),
-            "허리 척추주위근 (Lumbar Paraspinal)": (EMG_NORMAL, EMG_NORMAL),
+            "얕은종아리신경 감각 (Superficial Peroneal SNAP)": ("6 μV (감소)", "4.1 ms (지연)", NCS_REDUCED),
+            "종아리신경 운동 (Peroneal CMAP)": ("1.2 mV (급감)", "8.5 ms (지연)", NCS_REDUCED),
+            "앞정강근 (Tibialis Anterior)": ("Fibrillation/PSW", "Reduced recruitment", EMG_ACTIVE_DENERVATION),
+            "긴종아리근 (Peroneus Longus)": ("Fibrillation/PSW", "Reduced recruitment", EMG_ACTIVE_DENERVATION),
+            "허리 척추주위근 (Lumbar Paraspinal)": ("Silent", "Normal recruitment", EMG_NORMAL),
         },
         "teaching_diagnosis": {
-            "summary": "종아리뼈머리(Fibular head) 부위 압박으로 인한 온종아리신경병증(Common peroneal neuropathy)입니다.",
+            "summary": "종아리뼈머리(Fibular head) 압박으로 인한 온종아리신경 마비(Common peroneal neuropathy)입니다.",
             "ncs_reason": [
-                "얕은종아리신경 SNAP 및 Peroneal CMAP의 동시 진폭 감소는 석고붕대에 의한 종아리뼈머리(Fibular head) 가쪽에서의 심한 압박 마비 및 축삭 손상을 입증합니다.",
+                "얕은종아리신경 감각과 종아리신경 운동 전도의 동시 진폭 감소는 무릎 가쪽 부위의 심한 기계적 압박을 입증합니다."
             ],
             "emg_reason": [
-                "1) 휴식 시 자발활동 전기생리 판독:",
-                "좌측 앞정강근(TA)과 긴종아리근(PL)의 침근전도 소견 상 섬유자발전위(Fibrillation), 양성예파(Positive sharp wave)의 비정상 탈신경 자발 활동이 관찰됩니다. 석고붕대 장기 고정으로 종아리뼈머리 가쪽 부위의 온종아리신경이 직접 압박을 받아 먼쪽(Distal) 운동축삭 변성이 야기되었음을 가리킵니다.",
-                "2) 수의수축 시 운동단위 동원 분석:",
-                "해당 앞정강근, 긴종아리근의 수의수축 시 운동단위동원 감소(Reduced MU recruitment) 패턴이 나타나 운동단위 결손을 대변합니다. 반면 허리 척추주위근(Paraspinal)은 휴식 시 Silent at rest, 수의수축 시 Normal MU recruitment로 매우 조용하여 신경뿌리병증을 배제합니다.",
+                "종아리뼈머리 하부에 위치한 앞정강근, 긴종아리근에서 비정상 탈신경 자발 활동이 관찰됩니다.",
+                "척추주위근은 완전히 보존되어 있어 신경뿌리병증을 배제할 수 있습니다."
             ],
-            "integration": [
-                "정강뼈 골절 부목 고정력, 정강신경(Tibial nerve) 지배 발목 안쪽번짐 보존 및 종아리 지배 폄근 근력 저하, 감각신경활동전위 감소를 종합하여 압박성 온종아리신경 마비로 정의합니다.",
-            ],
+            "integration": ["골절 부목 고정력, 정강신경(안쪽번짐) 기능 보존, 종아리 신경 전도 저하를 종합하여 압박성 온종아리신경 마비로 정의합니다."],
         },
         "differential_diagnosis": [
             {
-                "name": "L5 허리 신경뿌리병증(Lumbar radiculopathy)",
+                "name": "L5 허리 신경뿌리병증(Lumbar radiculopathy)", 
                 "why_consider": "발처짐 및 발등 감각 이상 양상이 매우 비슷합니다.",
-                "how_to_differentiate": "L5 허리 신경뿌리병증(Lumbar radiculopathy)은 감각신경전도(SNAP)가 대칭 정상 보존되며, 척추주위근 침범 비정상적인 자발전위가 뚜렷하게 도출됩니다.",
-                "practical_tip": "뒤정강근(Tibialis posterior)이 분담하는 안쪽번짐(Ankle inversion) 기능 보존 여부가 L5 뿌리 마비와 말초 온종아리신경 마비를 가르는 임상적 열쇠입니다.",
-            },
+                "how_to_differentiate": "L5 뿌리병증은 감각신경전도가 정상 보존되며 허리 척추주위근에 탈신경이 뚜렷하게 도출되어야 합니다.",
+                "practical_tip": "뒤정강근이 분담하는 안쪽번짐(Ankle inversion) 기능 보존 여부가 L5 마비와 말초 종아리신경 마비를 가르는 핵심 열쇠입니다."
+            }
         ],
     },
 
@@ -388,58 +263,40 @@ CASE_LIBRARY = {
         "category": "신경얼기병증(Plexopathy)",
         "difficulty": "중급",
         "patient": {
-            "age": 45,
-            "sex": "여성",
-            "side": "왼쪽",
-            "symptoms": [
-                "골반 골절(Pelvic fracture) 수술 후 좌측 다리 전반의 심한 근력 약화 발생",
-                "허벅지부터 종아리, 발등까지 광범위한 감각 둔화와 보행장애 호소",
-            ],
+            "age": 45, "sex": "여성", "side": "왼쪽",
+            "symptoms": ["골반 골절 수술 후 좌측 다리 전반의 심한 근력 약화", "허벅지부터 종아리, 발등까지 광범위한 감각 둔화"],
             "physical_exam": {
-                "감각 검사": [
-                    "허벅지, 종아리, 발등 등 여러 피부분절을 넘는 광범위 감각 소실",
-                ],
-                "맨손근력검사(MMT)": [
-                    "엉덩관절 굽힘근: Poor (2/5) - 허리신경얼기/넓적다리신경 관련",
-                    "무릎관절 폄근: Poor (2/5) - 넓적다리신경(Femoral nerve)",
-                    "발목관절 등굽힘근: Trace (1/5) - 깊은종아리신경(Deep peroneal nerve)",
-                    "발목관절 발바닥굽힘근: Poor (2/5) - 정강신경(Tibial nerve)",
-                ],
-                "반사 검사": [
-                    "무릎반사(Patellar reflex, L4) 및 아킬레스힘줄반사(Achilles reflex, S1): 좌측 완전 소실(DRT 0)",
-                ],
+                "감각 검사": ["여러 피부분절을 넘는 광범위 감각 소실"],
+                "맨손근력검사(MMT)": ["엉덩관절 굽힘근: Poor (2/5)", "무릎관절 폄근: Poor (2/5)", "발목 등굽힘근: Trace (1/5)"],
+                "반사 검사": ["무릎반사(L4) 및 아킬레스힘줄반사(S1): 좌측 완전 소실"],
             },
         },
         "findings": {
-            "허리 척추주위근 (Lumbar Paraspinal)": (EMG_NORMAL, EMG_NORMAL),
-            "장딴지신경 감각신경활동전위 (Sural SNAP)": (NCS_REDUCED, NCS_NORMAL),
-            "종아리신경 복합근육활동전위 (Peroneal CMAP)": (NCS_REDUCED, NCS_NORMAL),
-            "넓적다리신경 복합근육활동전위 (Femoral CMAP)": (NCS_REDUCED, NCS_NORMAL),
-            "가쪽넓은근 (Vastus Lateralis)": (EMG_ACTIVE_DENERVATION, EMG_NORMAL),
-            "앞정강근 (Tibialis Anterior, TA)": (EMG_ACTIVE_DENERVATION, EMG_NORMAL),
+            "장딴지신경 감각 (Sural SNAP)": ("6 μV (감소)", "4.2 ms (지연)", NCS_REDUCED),
+            "종아리신경 운동 (Peroneal CMAP)": ("1.5 mV (감소)", "6.5 ms (지연)", NCS_REDUCED),
+            "넓적다리신경 운동 (Femoral CMAP)": ("2.0 mV (감소)", "5.5 ms (지연)", NCS_REDUCED),
+            "가쪽넓은근 (Vastus Lateralis)": ("Fibrillation/PSW", "Reduced recruitment", EMG_ACTIVE_DENERVATION),
+            "앞정강근 (Tibialis Anterior)": ("Fibrillation/PSW", "Reduced recruitment", EMG_ACTIVE_DENERVATION),
+            "허리 척추주위근 (Lumbar Paraspinal)": ("Silent", "Normal recruitment", EMG_NORMAL),
         },
         "teaching_diagnosis": {
             "summary": "외상과 관련된 허리엉치신경얼기병증(Lumbosacral plexopathy) 패턴입니다.",
             "ncs_reason": [
-                "장딴지신경 감각신경활동전위, 넓적다리신경 및 종아리신경 복합근육활동전위 등 복수의 주요 말초 전도에서 진폭 감소가 확인됩니다. 이는 병변이 뒤뿌리신경절보다 먼쪽(Distal)에 형성된 말초 신경얼기 줄기 장애임을 시사합니다.",
+                "장딴지신경, 넓적다리신경 등 복수의 다른 말초 전도에서 진폭 감소가 확인됩니다. 이는 감각세포체 먼쪽의 골반 내 신경얼기 장애를 의미합니다."
             ],
             "emg_reason": [
-                "1) 휴식 시 자발활동 전기생리 판독:",
-                "좌측 가쪽넓은근(Vastus lateralis)과 앞정강근(TA) 침근전도 검사에서, 휴식 시 섬유자발전위(Fibrillation) 및 양성예파(Positive sharp wave)의 탈신경 자발 활동전위가 명확히 관찰되어 골반 외상에 수반된 운동축삭 손상 상황을 대변합니다.",
-                "2) 수의수축 시 운동단위 동원 분석:",
-                "수의수축 시 가쪽넓은근과 앞정강근에서 감소된 운동단위동원(Reduced MU recruitment) 패턴 현상이 도출됩니다. 반면 허리 척추주위근(Paraspinal)은 휴식 시 전기적 침묵(Silent at rest), 수의수축 시 운동단위동원(Normal MU recruitment)으로 정상을 보여 다발 신경뿌리가 아닌 신경얼기(Plexus) 수준의 손상임을 생리학적으로 확립시킵니다.",
+                "다리 전체 여러 근육에서 광범위하게 탈신경 활동이 관찰됩니다.",
+                "그러나 척수와 가장 가까운 척추주위근은 정상으로 보존되어 있어 다발 신경뿌리가 아닌 얼기 수준의 손상임을 입증합니다."
             ],
-            "integration": [
-                "골반 골절 외상 및 고정 수술력, 다리 다발 신경 영역의 동시 근력 저하, 다발성 감각신경활동전위/복합근육활동전위 감소, 척추주위근 보존을 종합하여 허리엉치신경얼기 마비로 진단합니다.",
-            ],
+            "integration": ["골반 골절 수술력, 다리 광범위 근력저하, 다발성 전도 저하, 척추주위근 정상 소견을 종합하여 신경얼기 마비로 진단합니다."],
         },
         "differential_diagnosis": [
             {
-                "name": "다발 허리 신경뿌리병증(Lumbar radiculopathy)",
+                "name": "다발 허리 신경뿌리병증(Lumbar radiculopathy)", 
                 "why_consider": "복수 척수 분절의 동시 약화와 깊은힘줄 반사 소실이 나타나 혼동하기 쉽습니다.",
-                "how_to_differentiate": "다발 허리 신경뿌리병증(Lumbar radiculopathy)은 감각신경전도가 정상 범위로 유지되며, 허리 척추주위근 침근전도에서 다발성 탈신경 활동이 명확하게 나타납니다.",
-                "practical_tip": "다리 전반의 광범위 마비 양상 시, 척추주위근 침범과 감각신경활동전위 저하 여부가 감별의 핵심 척도입니다.",
-            },
+                "how_to_differentiate": "다발 신경뿌리병증은 감각신경전도가 정상 범위로 유지되며, 허리 척추주위근에서 다발성 탈신경이 명확하게 나타납니다.",
+                "practical_tip": "다리 전반의 광범위 마비 양상 시, 척추주위근 침범 유무와 감각신경 진폭 저하 여부가 감별의 핵심 척도입니다."
+            }
         ],
     },
 
@@ -447,56 +304,37 @@ CASE_LIBRARY = {
         "category": "다발신경병증(Polyneuropathy)",
         "difficulty": "초중급",
         "patient": {
-            "age": 67,
-            "sex": "남성",
-            "side": "양쪽",
-            "symptoms": [
-                "오랜 기간 당뇨병 병력 있음",
-                "양쪽 발끝에서 시작해 발목 위로 서서히 올라오는 대칭성 저림과 감각 둔화",
-            ],
+            "age": 67, "sex": "남성", "side": "양쪽",
+            "symptoms": ["당뇨병 병력", "양쪽 발끝에서 발목 위로 서서히 올라오는 대칭성 저림"],
             "physical_exam": {
-                "감각 검사": [
-                    "양측 발가락 끝부터 발목 상부까지 대칭적인 장갑-양말형(Glove-stocking) 감각 저하",
-                ],
-                "맨손근력검사(MMT)": [
-                    "양측 엄지발가락 폄근: Good (4/5) - 깊은종아리신경(Deep peroneal nerve, L5)",
-                    "양측 발가락 굽힘근: Good (4/5) - 정강신경(Tibial nerve, L5-S2)",
-                    "양측 발목관절 등굽힘근: Normal (5/5) - 깊은종아리신경(Deep peroneal nerve)",
-                ],
-                "반사 검사": [
-                    "양측 아킬레스힘줄반사(Achilles reflex, S1): 완전 소실(DRT 0)",
-                    "양측 무릎반사(Patellar reflex, L4): 보존 및 경미한 감소",
-                ],
+                "감각 검사": ["양측 대칭적인 장갑-양말형(Glove-stocking) 감각 저하"],
+                "맨손근력검사(MMT)": ["양측 엄지발가락 폄근/굽힘근: Good (4/5)"],
+                "반사 검사": ["양측 아킬레스힘줄반사: 소실(0)", "양측 무릎반사: 보존"],
             },
         },
         "findings": {
-            "장딴지신경 감각신경활동전위 (Sural SNAP)": (NCS_REDUCED, NCS_REDUCED),
-            "얕은종아리신경 감각신경활동전위 (Superficial Peroneal SNAP)": (NCS_REDUCED, NCS_REDUCED),
-            "정강신경 복합근육활동전위 (Tibial CMAP)": (NCS_REDUCED, NCS_REDUCED),
-            "앞정강근 (Tibialis Anterior, TA)": (EMG_ACTIVE_CHRONIC, EMG_ACTIVE_CHRONIC),
+            "장딴지신경 감각 (Sural SNAP)": ("무반응 (소실)", "측정불가", NCS_ABSENT),
+            "얕은종아리신경 감각 (Superficial Peroneal SNAP)": ("무반응 (소실)", "측정불가", NCS_ABSENT),
+            "정강신경 운동 (Tibial CMAP)": ("1.8 mV (감소)", "6.2 ms (지연)", NCS_REDUCED),
+            "앞정강근 (Tibialis Anterior)": ("Fibrillation/PSW", "Giant MUAPs", EMG_ACTIVE_CHRONIC),
         },
         "teaching_diagnosis": {
             "summary": "길이 의존성 축삭성 다발신경병증(Length-dependent axonal polyneuropathy) 패턴입니다.",
             "ncs_reason": [
-                "양다리 말단의 먼쪽 감각 및 운동 신경들에서 대칭적인 진폭 감소가 두드러지게 관찰되며, 이는 당뇨 등 전신 대사 이상에 따른 말초 축삭 손상 패턴과 부합합니다.",
+                "가장 긴 신경인 다리 말단부 감각 반응이 소실되고 운동 진폭이 감소하는 전형적인 전신성 축삭 손상 패턴입니다."
             ],
             "emg_reason": [
-                "1) 휴식 시 자발활동 전기생리 판독:",
-                "양측 앞정강근(TA)의 침근전도 결과, 휴식 시 섬유자발전위(Fibrillation) 및 양성예파(Positive sharp wave)의 탈신경 비정상 자발전위가 좌우 대칭 분포로 유도됩니다. 대사성 축삭 병변으로 인해 긴 말단 축삭 가지부터 대칭 손상해 들어오는 Dying back 기전의 세포학적 단서입니다.",
-                "2) 수의수축 시 운동단위 동원 분석:",
-                "해당 앞정강근(TA) 근육들의 수의수축 시, 운동단위 소실 및 잔여 축삭 발아(Sprouting)에 기초하여 거대운동단위활동전위(Giant MUAPs) 출현 및 감소된 운동단위동원(Reduced MU recruitment) 양상이 좌우 대칭적으로 발생하여 만성 축삭 파괴 상태를 지지합니다.",
+                "앞정강근에서 탈신경 자발전위와 만성 회복 지표인 거대운동단위활동전위(Giant MUAPs)가 대칭적으로 유도되어 만성 축삭 파괴와 회복을 시사합니다."
             ],
-            "integration": [
-                "장기 당뇨병 병력, 대칭성 먼쪽(Distal) 장갑-양말 감각 저하, 아킬레스 반사 소실 및 다리 감각신경활동전위/복합근육활동전위 진폭 감소를 연결하여 최종 해석합니다.",
-            ],
+            "integration": ["당뇨 병력, 대칭성 먼쪽 감각 저하, 원위부 신경전도 감소 데이터를 종합하여 다발신경병증으로 해석합니다."],
         },
         "differential_diagnosis": [
             {
-                "name": "말이집탈락성 다발신경병증(Demyelinating polyneuropathy)",
+                "name": "말이집탈락성 다발신경병증(Demyelinating polyneuropathy)", 
                 "why_consider": "상하 대칭적인 다발성 신경 침범 양상이 매우 유사합니다.",
-                "how_to_differentiate": "말이집탈락성(Demyelinating)은 진폭 보존 하에 극심한 전도 잠복기 지연, 전도속도 저하, 후기반응(F-wave) 소실이 선행 지표로 검출됩니다.",
-                "practical_tip": "다발성 다리 마비 환자의 판독 시 진폭 감소(축삭성)가 우선인지, 잠복기 지연(말이집탈락성)이 우선인지 구분하십시오.",
-            },
+                "how_to_differentiate": "말이집탈락성은 진폭 저하보다는 극심한 전도 잠복기 지연과 전도속도 저하가 선행합니다.",
+                "practical_tip": "다발성 다리 마비 환자 판독 시 진폭 감소(축삭성)가 우선인지, 잠복기 지연(말이집탈락성)이 우선인지 구분하십시오."
+            }
         ],
     },
 
@@ -504,59 +342,40 @@ CASE_LIBRARY = {
         "category": "다발신경병증(Polyneuropathy)",
         "difficulty": "중급",
         "patient": {
-            "age": 55,
-            "sex": "여성",
-            "side": "양쪽",
-            "symptoms": [
-                "몇 달간 양쪽 손과 발이 대칭적으로 저리고 둔함",
-                "계단 오르기와 발목 움직임 모두에서 진행성 근력 약화 호소",
-            ],
+            "age": 55, "sex": "여성", "side": "양쪽",
+            "symptoms": ["몇 달간 양쪽 손발이 대칭적으로 둔함", "계단 오르기와 발목 움직임 진행성 약화"],
             "physical_exam": {
-                "감각 검사": [
-                    "양측 팔과 다리 먼쪽(Distal)의 대칭적인 감각 탈락",
-                ],
-                "맨손근력검사(MMT)": [
-                    "양측 어깨관절 벌림근: Fair (3/5) - 겨드랑신경(Axillary nerve, C5-C6)",
-                    "양측 엉덩관절 굽힘근: Fair (3/5) - 허리신경얼기/넓적다리신경 관련",
-                    "양측 손목관절 폄근: Fair (3/5) - 노신경(Radial nerve, C6-C7)",
-                    "양측 발목관절 등굽힘근: Fair (3/5) - 깊은종아리신경(Deep peroneal nerve, L4-L5)",
-                ],
-                "반사 검사": [
-                    "전신 깊은힘줄 반사(C5, C6, C7, L4, S1): 완전 소실(DRT 0)",
-                ],
+                "감각 검사": ["양측 팔다리 먼쪽의 대칭적인 감각 탈락"],
+                "맨손근력검사(MMT)": ["양측 어깨 벌림근: Fair (3/5)", "양측 손목 및 발목 폄근: Fair (3/5)"],
+                "반사 검사": ["전신 깊은힘줄 반사: 완전 소실(0)"],
             },
         },
         "findings": {
-            "정중신경 감각신경활동전위 (Median SNAP)": (NCS_DELAYED, NCS_DELAYED),
-            "자신경 감각신경활동전위 (Ulnar SNAP)": (NCS_DELAYED, NCS_DELAYED),
-            "정중신경 복합근육활동전위 (Median CMAP)": (NCS_DELAYED, NCS_DELAYED),
-            "종아리신경 복합근육활동전위 (Peroneal CMAP)": (NCS_DELAYED, NCS_DELAYED),
-            "정강/종아리신경 F파 (F-wave)": (FWAVE_DELAYED_ABSENT, FWAVE_DELAYED_ABSENT),
-            "앞정강근 (Tibialis Anterior, TA)": (EMG_NORMAL, EMG_NORMAL),
+            "정중신경 감각 (Median SNAP)": ("12 μV (감소)", "6.8 ms (지연)", NCS_DELAYED),
+            "자신경 감각 (Ulnar SNAP)": ("14 μV (감소)", "6.5 ms (지연)", NCS_DELAYED),
+            "정중신경 운동 (Median CMAP)": ("6.5 mV", "9.2 ms (지연)", NCS_DELAYED),
+            "종아리신경 운동 (Peroneal CMAP)": ("4.2 mV", "11.5 ms (지연)", NCS_DELAYED),
+            "정강/종아리신경 F파 (F-wave)": ("무반응 (소실)", "측정불가", FWAVE_DELAYED_ABSENT),
+            "앞정강근 (Tibialis Anterior)": ("Silent", "Normal recruitment", EMG_NORMAL),
         },
         "teaching_diagnosis": {
-            "summary": "만성 염증성 말이집탈락성 다발신경병증(Demyelinating polyneuropathy) 양상입니다.",
+            "summary": "만성 염증성 말이집탈락성 다발신경병증(CIDP) 양상입니다.",
             "ncs_reason": [
-                "다수의 운동 및 감각 전도에서 광범위한 잠복기 지연(정상 기준 대비 130% 초과)이 대칭 도출되는 것은 다발성 말이집탈락성 변화를 강하게 입증합니다.",
-                "F파 전도 속도의 유의미한 지연 및 소실은 척수 신경근과 가장 가까운 근위 전도부의 말이집 손상을 직접 시사합니다.",
+                "다수의 전도에서 진폭은 보존되나 잠복기가 극심하게 지연되는 다발성 말이집탈락성 변화가 나타납니다.",
+                "F파 소실은 근위 전도부의 신경 말이집 손상을 직접 시사합니다."
             ],
             "emg_reason": [
-                "1) 휴식 시 자발활동 전기생리 판독:",
-                "양측 앞정강근(TA)의 침근전도 결과, 휴식 시 자발 활동이 전혀 관찰되지 않는 전기적 침묵(Silent at rest)이 나타나 정상 소견을 보입니다. 말이집탈락성 병변의 특성에 따라, 축삭 손상이 동반되지 않은 탈말이집 상태임을 생리학적으로 입증합니다.",
-                "2) 수의수축 시 운동단위 동원 분석:",
-                "해당 앞정강근(TA) 근육의 수의수축 시 정상적인 운동단위동원(Normal MU recruitment) 양상이 나타납니다. 축삭 단절에 의한 지배 유실이 없으므로 수의수축 시 간섭파형 동원은 보존되고 있음을 지시합니다.",
+                "침근전도에서 탈신경 자발 활동이 전혀 없는 전기적 침묵(Silent)이 나타나, 축삭 단절이 동반되지 않은 순수 탈말이집 상태임을 입증합니다."
             ],
-            "integration": [
-                "몸쪽(Proximal)/먼쪽(Distal) 동시 마비, 전신 무반사, 다발성 잠복기 지연 및 F파 지연 소실을 종합하여 만성 염증성 말이집탈락성 다발신경병증으로 판단합니다.",
-            ],
+            "integration": ["근/원위부 동시 마비, 전신 무반사, 다발성 잠복기 지연 및 정상 침근전도를 종합하여 CIDP로 판단합니다."],
         },
         "differential_diagnosis": [
             {
-                "name": "근육병증(Myopathy)",
+                "name": "근육병증(Myopathy)", 
                 "why_consider": "어깨 및 엉덩관절 등 몸쪽(Proximal) 약화 기전이 유사하여 혼동을 초래합니다.",
-                "how_to_differentiate": "근육병증은 말단 감각 소실이 없으며 전신 깊은힘줄 반사가 비교적 정상적으로 유지되는 경향을 띱니다.",
-                "practical_tip": "감각의 보존 여부와 전신 무반사(Areflexia)의 대조가 신경병과 근육병 감별의 기준선입니다.",
-            },
+                "how_to_differentiate": "근육병증은 말단 감각 소실이 없으며 신경전도 잠복기 지연이 나타나지 않습니다.",
+                "practical_tip": "감각의 보존 여부와 전신 무반사(Areflexia)의 대조가 신경병과 근육병 감별의 기준선입니다."
+            }
         ],
     },
 
@@ -564,53 +383,40 @@ CASE_LIBRARY = {
         "category": "뇌신경/반사경로",
         "difficulty": "중급",
         "patient": {
-            "age": 62,
-            "sex": "여성",
-            "side": "오른쪽",
-            "symptoms": [
-                "우측 눈꺼풀 주변의 간헐적인 미세 떨림과 가벼운 경련이 2주간 발생함",
-                "우측 눈 가쪽의 가벼운 촉각 저하 및 이물감이 동반됨",
-            ],
+            "age": 62, "sex": "여성", "side": "오른쪽",
+            "symptoms": ["우측 눈꺼풀 주변 간헐적 떨림", "우측 눈 가쪽 촉각 저하"],
             "physical_exam": {
-                "얼굴 표정근 관찰": [
-                    "이마 주름잡기(이마근-얼굴신경): 양측 대칭성 정상 범위 보존",
-                    "눈 꽉 감기(눈둘레근-얼굴신경): 양측 대칭성 정상 범위 보존",
-                    "입꼬리 올리기(큰광대근-얼굴신경): 양측 대칭성 정상 범위 보존",
-                ],
-                "뇌신경 감각 검사": [
-                    "우측 이마 및 눈 주변 영역[삼차신경의 눈신경(V1) 가지]의 촉각 감각 감소",
-                ],
-                "반사 검사": [
-                    "우측 각막반사(Corneal reflex): 임상적 저하 관찰",
-                ],
+                "얼굴 표정근 관찰": ["이마 주름잡기, 눈 감기: 양측 대칭성 정상"],
+                "뇌신경 감각 검사": ["우측 이마 및 눈 주변(삼차신경 V1) 촉각 감소"],
+                "반사 검사": ["우측 각막반사: 저하 관찰"],
             },
         },
         "findings": {
-            "우측 자극-우측 R1 (동측 단일시냅스)": ("잠복기 지연", "14.8 ms", BLINK_DELAYED),
-            "우측 자극-우측 R2 (동측 다시냅스)": ("반응 소실", "측정불가", BLINK_DELAYED_ABSENT),
-            "우측 자극-좌측 R2 (대측 다시냅스)": ("반응 소실", "측정불가", BLINK_DELAYED_ABSENT),
+            "우측 자극-우측 R1 (동측 단일시냅스)": ("잠복기 지연 (지연)", "14.8 ms", BLINK_DELAYED),
+            "우측 자극-우측 R2 (동측 다시냅스)": ("반응 소실 (소실)", "측정불가", BLINK_DELAYED_ABSENT),
+            "우측 자극-좌측 R2 (대측 다시냅스)": ("반응 소실 (소실)", "측정불가", BLINK_DELAYED_ABSENT),
             "좌측 자극-좌측 R1 (동측 단일시냅스)": ("정상 유발", "10.4 ms", NCS_NORMAL),
             "좌측 자극-좌측 R2 (동측 다시냅스)": ("정상 유발", "32.1 ms", NCS_NORMAL),
             "좌측 자극-우측 R2 (대측 다시냅스)": ("정상 유발", "31.8 ms", NCS_NORMAL),
         },
         "teaching_diagnosis": {
-            "summary": "우측 삼차신경(Trigeminal nerve)의 눈신경(V1) 가지 들신경 경로(Afferent limb) 손상입니다.",
+            "summary": "우측 삼차신경(Trigeminal nerve) 들신경 경로(Afferent limb) 손상입니다.",
             "ncs_reason": [
-                "우측 자극 시 우측 R1, 우측 R2, 좌측 R2가 모두 정상측 대비 130% 이상 유의미하게 지연되거나 반사 유발이 소실됩니다.",
-                "반면 좌측 자극 시에는 동측 R1, R2뿐만 아니라 우측 R2 반사 반응까지 정상 범위로 도출됩니다.",
-                "이는 얼굴마비를 일으키는 얼굴신경(날신경 경로)은 보존되어 있으나, 자극을 수용하여 뇌줄기로 보내는 삼차신경(들신경 경로)의 우측 가지에 전도 장애가 발생했음을 생리학적으로 확증합니다.",
+                "우측 자극 시 우측 R1, 우측 R2, 좌측 R2가 모두 반사 유발 소실되거나 지연됩니다.",
+                "좌측 자극 시 우측 R2 반사 반응까지 정상 도출되어 운동을 지시하는 얼굴신경은 보존됨을 확증합니다."
             ],
-            "integration": [
-                "우측 삼차신경 눈신경(V1) 가지의 촉각 저하, 우측 각막반사 감소 및 우측 자극 시 양측 수축 반응의 전기적 지연/소실을 종합하여 우측 삼차신경 들신경 경로(Afferent limb) 전도 장애로 최종 판독합니다.",
+            "emg_reason": [
+                "반사궁 회로 전도 결손만을 평가하는 증례로 환자 보호를 위해 침근전도는 배제되었습니다."
             ],
+            "integration": ["우측 V1 가지 촉각 저하 및 우측 자극 시에만 나타나는 양측 반사 지연을 종합하여 삼차신경 들신경 장애로 판독합니다."],
         },
         "differential_diagnosis": [
             {
-                "name": "우측 얼굴신경병증(Facial neuropathy)",
+                "name": "우측 얼굴신경병증(Facial neuropathy)", 
                 "why_consider": "눈 감기 불편감과 얼굴 불편감이 얼굴마비 초기와 혼동될 수 있습니다.",
-                "how_to_differentiate": "우측 얼굴신경(날신경) 병변이라면 좌측 자극 시에도 우측 반응인 우측 R2가 소실됩니다. 본 환자는 좌측 자극 시 우측 R2가 정상입니다.",
-                "practical_tip": "눈깜빡반사(Blink reflex) 판독 시 전기 자극을 준 쪽이 문제인지, 반응을 하는 눈꺼풀 근육 쪽이 문제인지 비교해서 확인하세요.",
-            },
+                "how_to_differentiate": "우측 얼굴신경(운동) 마비라면 좌측 자극 시 우측 눈 감기 반응(우측 R2)이 소실되어야 합니다.",
+                "practical_tip": "눈깜빡반사(Blink reflex) 판독 시 전기 자극을 준 쪽이 문제인지, 반응을 하는 눈꺼풀 근육 쪽이 문제인지 비교해서 확인하세요."
+            }
         ],
     },
 
@@ -618,29 +424,18 @@ CASE_LIBRARY = {
         "category": "중추성 반사이상",
         "difficulty": "중급",
         "patient": {
-            "age": 68,
-            "sex": "남성",
-            "side": "오른쪽",
-            "symptoms": [
-                "뇌졸중 후 편마비(Hemiplegia) 상태이며 우측 발목 발바닥굽힘근의 중증 경직(Spasticity) 발생",
-                "첨족내반변형(Equinovarus)으로 보행에 극심한 지장을 받아, 일정기간 물리치료 전/후 경직 완화 효과를 정량적으로 모니터링함",
-            ],
+            "age": 68, "sex": "남성", "side": "오른쪽",
+            "symptoms": ["뇌졸중 편마비 상태, 우측 발목 발바닥굽힘근 중증 경직", "보행 제한으로 물리치료 전/후 경직 완화 효과 정량 모니터링"],
             "physical_exam": {
-                "근긴장도 검사(MAS)": [
-                    "우측 발목 발바닥굽힘근 수정 애쉬워스 척도(MAS): 3등급 (물리치료 적용 전)",
-                    "우측 발목 발바닥굽힘근 수정 애쉬워스 척도(MAS): 2등급 (물리치료 적용 후)",
-                ],
-                "깊은힘줄 및 병적반사 검사": [
-                    "아킬레스힘줄반사(Achilles tendon reflex, S1): 우측 비정상적 항진(DRT 4+)",
-                    "우측 발목간대경련(Ankle clonus): 3-5회 지속적 관찰",
-                ],
+                "근긴장도 검사(MAS)": ["우측 MAS: 3등급(치료 전) -> 2등급(치료 후)"],
+                "반사 검사": ["아킬레스힘줄반사: 우측 비정상적 항진", "발목간대경련: 관찰"],
             },
         },
         "findings": {
-            "우측 가자미근 H-반사 최대 진폭 (물리치료 전)": (H_REFLEX_HYPERACTIVE, "7.2 mV (정상치 대비 현저히 항진)"),
-            "우측 가자미근 H-반사 최대 진폭 (물리치료 후)": (NCS_NORMAL, "5.1 mV (유의미한 수준으로 감소)"),
-            "우측 가자미근 H/M ratio 비율 (물리치료 전)": (H_M_RATIO_INCREASED, "65% (정상 기준치 < 40% 대폭 초과)"),
-            "우측 가자미근 H/M ratio 비율 (물리치료 후)": (NCS_NORMAL, "55% (물리치료 중재 후 경직 일부 완화)"),
+            "우측 가자미근 H-반사 진폭 (물리치료 전)": ("7.2 mV (항진)", "비정상 과항진", H_REFLEX_HYPERACTIVE),
+            "우측 가자미근 H-반사 진폭 (물리치료 후)": ("5.1 mV (감소)", "유의미하게 감소", NCS_NORMAL),
+            "우측 가자미근 H/M ratio (물리치료 전)": ("65% (초과)", "정상 기준치 < 40%", H_M_RATIO_INCREASED),
+            "우측 가자미근 H/M ratio (물리치료 후)": ("55% (감소)", "경직 일부 완화", NCS_NORMAL),
         },
         "teaching_diagnosis": {
             "summary": "물리치료 중재(지속적 스트레칭 및 대항근 전기자극) 적용 후 우측 가자미근의 척수반사 흥분성 감소 및 경직 완화 효과가 일부 나타난 것으로 평가됩니다.",
@@ -650,7 +445,7 @@ CASE_LIBRARY = {
             ],
             "integration": [
                 "MAS 3등급의 보행 제한 환자에게 물리치료를 적용한 후, H-반사의 진폭 감소 및 H/M 비율의 감소(65%에서 55%)를 통해 소폭의 경직 완화를 확인합니다.",
-            ],
-        },
+            }
+        ],
     },
 }
