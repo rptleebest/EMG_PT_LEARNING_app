@@ -412,10 +412,10 @@ VIRTUAL_REPORTS = {
             ["삼차신경", "병변측(Lt)", "21 μV", "2.0 ms", "정상 범위"],
         ],
         "ncs_motor": [
-            ["얼굴신경 코근", "귀앞", "정상측(Rt)", "3.5 mV", "2.8 ms", "-", "정상 범위"],
-            ["얼굴신경 코근", "귀앞", "병변측(Lt)", "0.8 mV", "4.5 ms", "-", "비정상 (진폭 감소 / 잠복기 지연)"],
-            ["얼굴신경 눈둘레근", "귀앞", "정상측(Rt)", "3.0 mV", "2.6 ms", "-", "정상 범위"],
-            ["얼굴신경 눈둘레근", "귀앞", "병변측(Lt)", "0.6 mV", "4.2 ms", "-", "비정상 (진폭 감소)"],
+            ["얼굴신경(코근)", "귀앞", "정상측(Rt)", "3.5 mV", "2.8 ms", "-", "정상 범위"],
+            ["얼굴신경(코근)", "귀앞", "병변측(Lt)", "0.8 mV", "4.5 ms", "-", "비정상 (진폭 감소 / 잠복기 지연)"],
+            ["얼굴신경(눈둘레근)", "귀앞", "정상측(Rt)", "3.0 mV", "2.6 ms", "-", "정상 범위"],
+            ["얼굴신경(눈둘레근)", "귀앞", "병변측(Lt)", "0.6 mV", "4.2 ms", "-", "비정상 (진폭 감소)"],
         ],
         "emg": [
             ["눈둘레근 (Lt)", "얼굴신경", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
@@ -510,7 +510,7 @@ def get_report_section_name(section: str, language: str) -> str:
     lang = normalize_report_language(language)
     mapping = {
         "sensory": {"ko": "감각신경전도검사", "en": "Sensory NCS"},
-        "motor": {"ko": "Rt동신경전도검사", "en": "Motor NCS"},
+        "motor": {"ko": "운동신경전도검사", "en": "Motor NCS"},
         "emg": {"ko": "침근전도검사", "en": "Needle EMG"}
     }
     return mapping[section]["en" if lang == REPORT_LANG_EN else "ko"]
@@ -562,8 +562,8 @@ def custom_english_translate(text: str) -> str:
         "가쪽아래팔피부신경": "Lat. Antebrachial Cutaneous",
         "안쪽아래팔피부신경": "Med. Antebrachial Cutaneous",
         "얕은종아리신경": "Superficial Peroneal",
-        "얼굴신경 코근": "Facial (Nasalis)",
-        "얼굴신경 눈둘레근": "Facial (Orbicularis Oculi)",
+        "얼굴신경(코근)": "Facial (Nasalis)",
+        "얼굴신경(눈둘레근)": "Facial (Orbicularis Oculi)",
         "근육피부신경": "Musculocutaneous",
         "정중신경": "Median",
         "자신경": "Ulnar",
