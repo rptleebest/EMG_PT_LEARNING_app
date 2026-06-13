@@ -56,7 +56,14 @@ VIRTUAL_REPORTS = {
                 "광범위한 신경전도검사 정상 소견과 C6 분절 표지 근육들에 국한된 근전도검사 탈신경 소견을 종합하여 C6 신경뿌리 병변으로 확진합니다."
             ]
         },
-        "differential_diagnosis": [{"name": "근육피부신경병증 (Musculocutaneous Neuropathy)", "how_to_differentiate": "가쪽아래팔 저림이 유사하나, 단일 마비라면 정중신경 지배인 원엎침근과 척추주위근은 정상이어야 하므로 구별됩니다."}]
+        "differential_diagnosis": [
+            {
+                "name": "근육피부신경병증 (Musculocutaneous Neuropathy)",
+                "why_consider": "가쪽아래팔 저림과 팔꿉관절 굽힘 약화 양상이 C6 신경뿌리병증과 매우 유사하게 나타납니다.",
+                "how_to_differentiate": "단일 말초 마비라면 정중신경 지배인 원엎침근이나 C6 척추주위근은 완전 정상이어야 하므로 쉽게 구별됩니다.",
+                "practical_tip": "통증 양상이 목에서부터 뻗쳐 내려오는지(방사통), 아니면 팔의 특정 부위에만 국한되는지 병력을 세밀히 청취하세요."
+            }
+        ]
     },
 
     "2. 오른쪽 1~3번째 손가락 저림 (손목굴증후군)": {
@@ -98,7 +105,14 @@ VIRTUAL_REPORTS = {
                 "정중신경에 국한된 명확한 말초 잠복기 지연 데이터와 상위 근육의 정상 소견을 통합하여 손목굴증후군으로 진단합니다."
             ]
         },
-        "differential_diagnosis": [{"name": "원엎침근증후군 (Pronator Teres Syndrome)", "how_to_differentiate": "손가락 저림 증상은 동일하나, 원엎침근증후군이라면 손목 상부 근육인 원엎침근 근전도검사에서 비정상 활동성 탈신경 소견이 나타나야 합니다."}]
+        "differential_diagnosis": [
+            {
+                "name": "원엎침근증후군 (Pronator Teres Syndrome)",
+                "why_consider": "정중신경 지배인 1~3번째 손가락 저림 증상이 완벽하게 동일합니다.",
+                "how_to_differentiate": "원엎침근증후군이라면 압박 부위가 손목 상부이므로, 손목 상부 근육인 원엎침근 근전도검사에서 비정상 활동성 탈신경 소견이 나타나야 합니다.",
+                "practical_tip": "환자가 밤에 통증이 심해 잠에서 깨는지(손목굴증후군의 전형적 증상), 팔뚝 부위를 강하게 누를 때 통증이 유발되는지 감별해 보세요."
+            }
+        ]
     },
 
     "3. 왼쪽 허리/엉치 통증 및 발처짐 (L5 신경뿌리병증)": {
@@ -124,10 +138,12 @@ VIRTUAL_REPORTS = {
             ["허리 척추주위근", "L4", "왼쪽", "Silent", "Normal recruitment", "정상 범위"],
             ["허리 척추주위근", "L5", "왼쪽", "Fibrillation/PSW", "통증으로 평가 불가", "비정상 (활동성 탈신경)"],
             ["허리 척추주위근", "S1", "왼쪽", "Silent", "Normal recruitment", "정상 범위"],
+            ["엉덩허리근", "L2-L3", "왼쪽", "Silent", "Normal recruitment", "정상 범위"],
+            ["가쪽넓은근", "L3-L4", "왼쪽", "Silent", "Normal recruitment", "정상 범위"],
             ["앞정강근", "L4-L5", "왼쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
             ["긴종아리근", "L5-S1", "왼쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
             ["넓적다리근막긴장근", "L4-L5", "왼쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["가쪽넓은근", "L3-L4", "왼쪽", "Silent", "Normal recruitment", "정상 범위"],
+            ["안쪽장딴지근", "S1-S2", "왼쪽", "Silent", "Normal recruitment", "정상 범위"],
             ["큰볼기근", "S1-S2", "왼쪽", "Silent", "Normal recruitment", "정상 범위"],
         ],
         "teaching_diagnosis": {
@@ -144,7 +160,14 @@ VIRTUAL_REPORTS = {
                 "감각 전도 보존 현상과 척추주위근을 포함한 광범위한 L5 분절의 동시 탈신경을 통합하여 L5 신경뿌리병증으로 결론 내립니다."
             ]
         },
-        "differential_diagnosis": [{"name": "온종아리신경 마비 (Common Peroneal Neuropathy)", "how_to_differentiate": "발처짐 증상이 유사하나, 온종아리신경 마비는 감각 전도가 저하되며 척추주위근 및 TFL 근육은 정상으로 유지되어야 합니다."}]
+        "differential_diagnosis": [
+            {
+                "name": "온종아리신경 마비 (Common Peroneal Neuropathy)",
+                "why_consider": "발목을 들어올리지 못하는 발처짐(Foot drop)과 발등 감각 저하 증상이 매우 흡사하여 임상에서 빈번하게 혼동됩니다.",
+                "how_to_differentiate": "온종아리신경 마비는 얕은종아리신경 감각 전도가 눈에 띄게 저하되며, 위볼기신경 지배인 넓적다리근막긴장근(TFL) 및 허리 척추주위근은 정상으로 유지되어야 합니다.",
+                "practical_tip": "발처짐 환자를 평가할 때, 발목을 안쪽으로 굽히는(Inversion) 정강신경 기능이 보존되어 있는지 반드시 확인하십시오."
+            }
+        ]
     },
 
     "4. 오른쪽 4~5번째 손가락 저림 (팔꿈치굴증후군)": {
@@ -156,8 +179,7 @@ VIRTUAL_REPORTS = {
             ["안쪽아래팔피부신경", "오른쪽", "20 μV", "2.2 ms", "정상 범위"],
         ],
         "ncs_motor": [
-            ["자신경", "손목", "오른쪽", "7.2 mV", "3.0 ms", "-", "정상 범위"],
-            ["자신경", "팔꿈치 아래", "오른쪽", "7.0 mV", "6.5 ms", "56 m/s", "정상 범위"],
+            ["자신경", "팔꿈치 아래", "오른쪽", "7.2 mV", "3.0 ms", "-", "정상 범위"],
             ["자신경", "팔꿈치 위", "오른쪽", "3.1 mV (급감)", "8.2 ms (지연)", "23 m/s (저하)", "비정상 (진폭 급감 / 국소 전도차단 의심)"],
             ["정중신경", "손목", "오른쪽", "8.5 mV", "3.5 ms", "-", "정상 범위"],
             ["정중신경", "팔꿈치", "오른쪽", "8.2 mV", "7.2 ms", "54 m/s", "정상 범위"],
@@ -183,7 +205,14 @@ VIRTUAL_REPORTS = {
                 "자신경에 국한된 팔꿈치 부위 전도차단 수치와 특정 말초 근육의 탈신경 데이터를 종합하여 팔꿈치굴증후군으로 진단합니다."
             ]
         },
-        "differential_diagnosis": [{"name": "C8 신경뿌리병증", "how_to_differentiate": "손 저림 양상이 비슷하나, C8 신경뿌리병증이라면 정중신경 지배 근육인 짧은엄지벌림근도 이상을 보이며 자신경 감각전도는 정상이어야 합니다."}]
+        "differential_diagnosis": [
+            {
+                "name": "C8 신경뿌리병증 (C8 Radiculopathy)",
+                "why_consider": "4~5번째 손가락 저림과 손 내재근(아귀 힘) 약화 양상이 비슷하여 임상에서 자주 혼동됩니다.",
+                "how_to_differentiate": "C8 신경뿌리병증이라면 정중신경 지배 근육인 짧은엄지벌림근(APB)도 이상을 보이며, 신경뿌리 병변이므로 자신경 감각전도(SNAP) 수치는 정상이어야 합니다.",
+                "practical_tip": "환자가 손가락을 벌리는 힘뿐만 아니라, 엄지손가락을 천장 방향으로 세우는(Abduction) 힘도 같이 약해졌는지 반드시 대조해 보세요."
+            }
+        ]
     },
 
     "5. 오른쪽 손목처짐 및 손등 감각 저하 (노신경 마비)": {
@@ -191,8 +220,8 @@ VIRTUAL_REPORTS = {
         "ncs_sensory": [
             ["노신경", "오른쪽", "8 μV (감소)", "3.2 ms (지연)", "비정상 (진폭 감소 / 잠복기 지연)"],
             ["노신경", "왼쪽", "20 μV", "2.1 ms", "정상 범위"],
-            ["정중신경", "오른쪽", "25 μV", "2.8 ms", "정상 범위"],
             ["가쪽아래팔피부신경", "오른쪽", "19 μV", "2.2 ms", "정상 범위"],
+            ["정중신경", "오른쪽", "25 μV", "2.8 ms", "정상 범위"],
         ],
         "ncs_motor": [
             ["노신경", "아래팔", "오른쪽", "6.8 mV", "2.5 ms", "-", "정상 범위"],
@@ -207,13 +236,13 @@ VIRTUAL_REPORTS = {
             ["위팔노근", "C5-C6", "오른쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
             ["긴노쪽손목폄근", "C6-C7", "오른쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
             ["손가락폄근", "C7-C8", "오른쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["고유집게폄근", "C7-C8", "오른쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
             ["원엎침근", "C6-C7", "오른쪽", "Silent", "Normal recruitment", "정상 범위"],
+            ["노쪽손목굽힘근", "C6-C7", "오른쪽", "Silent", "Normal recruitment", "정상 범위"],
         ],
         "teaching_diagnosis": {
             "summary": "오른쪽 노신경 마비 (Radial Nerve Palsy at Spiral Groove)",
             "ncs_reason": [
-                "표재노신경 감각전도 저하와 함께, 나선고랑 상/하부 자극에서 운동 전도속도가 21 m/s로 저하되며 진폭이 급감하는 국소 전도차단 수치가 기록되어 물리적 압박 위치를 지시합니다."
+                "노신경 감각전도 저하와 함께, 나선고랑 상/하부 자극에서 운동 전도속도가 21 m/s로 저하되며 진폭이 급감하는 국소 전도차단 수치가 기록되어 물리적 압박 위치를 지시합니다."
             ],
             "emg_reason": [
                 "나선고랑 하부에서 신경 지배를 받는 위팔노근 및 폄근들은 일제히 탈신경 소견을 보입니다.",
@@ -223,7 +252,14 @@ VIRTUAL_REPORTS = {
                 "위팔세갈래근 보존, 나선고랑 부위 전도차단, 하부 폄근들의 선택적 마비를 통합하여 'Saturday night palsy' 형태의 노신경 마비로 확진합니다."
             ]
         },
-        "differential_diagnosis": [{"name": "C7 신경뿌리병증", "how_to_differentiate": "손목 처짐은 유사하나, C7 병변이라면 위팔세갈래근 및 노쪽손목굽힘근에서도 탈신경 소견이 관찰되어야 합니다."}]
+        "differential_diagnosis": [
+            {
+                "name": "C7 신경뿌리병증 (C7 Radiculopathy)",
+                "why_consider": "손목 처짐(Wrist drop)과 팔 뒤쪽의 통증이 말초 노신경 마비와 매우 유사하게 관찰됩니다.",
+                "how_to_differentiate": "C7 신경뿌리 병변이라면 노신경뿐 아니라 정중신경 지배인 노쪽손목굽힘근 등 다양한 C7 지배 근육에서 탈신경 소견이 관찰되며, 말초 노신경 감각전도는 정상 범위로 보존되어야 합니다.",
+                "practical_tip": "팔꿈치를 펴는 힘(위팔세갈래근 근력)이 정상적으로 강한지 확인하는 것이 나선고랑 부위 마비 감별의 가장 중요한 핵심입니다."
+            }
+        ]
     },
 
     "6. 오른쪽 엉덩이 통증 및 까치발 보행 어려움 (S1 신경뿌리병증)": {
@@ -267,7 +303,9 @@ VIRTUAL_REPORTS = {
         "differential_diagnosis": [
             {
                 "name": "궁둥신경병증 (Sciatic Neuropathy)",
-                "how_to_differentiate": "다리 뒤쪽 통증과 약화는 유사하나, 말초 궁둥신경 마비라면 장딴지신경 감각 전도가 반드시 감소해야 하며 허리 척추주위근은 정상이어야 합니다."
+                "why_consider": "엉덩이부터 다리 뒤쪽으로 뻗어 내려오는 통증과 근력 약화 양상이 매우 유사합니다.",
+                "how_to_differentiate": "말초 궁둥신경(Sciatic nerve) 마비라면 장딴지신경 감각 전도가 반드시 감소해야 하며, S1 허리 척추주위근은 완벽히 정상이어야 합니다.",
+                "practical_tip": "장딴지신경(Sural nerve) 감각전도 보존 여부가 척수 신경뿌리 마비와 골반부 말초 신경 마비를 가르는 가장 결정적 잣대입니다."
             }
         ]
     },
@@ -278,6 +316,7 @@ VIRTUAL_REPORTS = {
             ["얕은종아리신경", "왼쪽", "6 μV (감소)", "4.1 ms (지연)", "비정상 (진폭 감소 / 잠복기 지연)"],
             ["얕은종아리신경", "오른쪽", "16 μV", "2.8 ms", "정상 범위"],
             ["장딴지신경", "왼쪽", "18 μV", "3.1 ms", "정상 범위"],
+            ["두렁신경", "왼쪽", "13 μV", "3.0 ms", "정상 범위"],
         ],
         "ncs_motor": [
             ["종아리신경", "발목", "왼쪽", "5.1 mV", "4.0 ms", "-", "정상 범위"],
@@ -291,8 +330,7 @@ VIRTUAL_REPORTS = {
             ["넓적다리두갈래근 짧은갈래", "L5-S1", "왼쪽", "Silent", "Normal recruitment", "정상 범위"],
             ["앞정강근", "L4-L5", "왼쪽", "Silent", "Reduced recruitment", "비정상 (동원 감소)"],
             ["긴종아리근", "L5-S1", "왼쪽", "Silent", "Reduced recruitment", "비정상 (동원 감소)"],
-            ["짧은발가락폄근", "L5-S1", "왼쪽", "Silent", "Reduced recruitment", "비정상 (동원 감소)"],
-            ["안쪽장딴지근", "S1-S2", "왼쪽", "Silent", "Normal recruitment", "정상 범위"],
+            ["넓적다리근막긴장근", "L4-L5", "왼쪽", "Silent", "Normal recruitment", "정상 범위"],
         ],
         "teaching_diagnosis": {
             "summary": "왼쪽 온종아리신경 마비 (Common Peroneal Neuropathy)",
@@ -310,7 +348,9 @@ VIRTUAL_REPORTS = {
         "differential_diagnosis": [
             {
                 "name": "L5 허리 신경뿌리병증 (L5 Radiculopathy)",
-                "how_to_differentiate": "발처짐(Foot drop) 증상이 똑같아 매우 헷갈리기 쉬우나, L5 병변이라면 허리 척추주위근 근전도검사가 비정상이어야 하며 감각신경 전도는 정상으로 보존되어야 합니다."
+                "why_consider": "발처짐(Foot drop) 증상과 종아리 가쪽 감각 무딤 현상이 완벽하게 똑같이 나타납니다.",
+                "how_to_differentiate": "L5 병변이라면 허리 척추주위근 및 넓적다리근막긴장근(TFL) 근전도검사가 비정상이어야 하며, 얕은종아리신경 감각전도는 정상으로 보존되어야 합니다.",
+                "practical_tip": "무릎 외측 비골두(Fibular head) 부위를 두드렸을 때 저릿한 찌릿함(Tinel sign)이 다리 아래로 뻗치는지 확인하세요."
             }
         ]
     },
@@ -358,7 +398,9 @@ VIRTUAL_REPORTS = {
         "differential_diagnosis": [
             {
                 "name": "노신경 마비 (Radial Neuropathy)",
-                "how_to_differentiate": "팔 펴는 힘의 약화와 손등 저림이 비슷하지만, 노신경 마비라면 정중신경 지배인 노쪽손목굽힘근이나 목 척추주위근은 정상이어야 합니다."
+                "why_consider": "팔 펴는 힘의 약화와 손등 방사통 양상이 비슷하여 임상에서 자주 헷갈릴 수 있습니다.",
+                "how_to_differentiate": "노신경 마비라면 정중신경 지배인 노쪽손목굽힘근이나 목 척추주위근은 완벽히 정상이어야 하며, 노신경 감각전도가 저하됩니다.",
+                "practical_tip": "반사 검사 시 위팔세갈래근 반사(Triceps reflex)가 한쪽만 떨어져 있는지 양측을 세밀하게 비교하는 것이 중요합니다."
             }
         ]
     },
@@ -397,7 +439,9 @@ VIRTUAL_REPORTS = {
         "differential_diagnosis": [
             {
                 "name": "중추성 얼굴 마비 (뇌졸중 등)",
-                "how_to_differentiate": "입이 돌아가고 발음이 새는 증상은 비슷하나, 뇌졸중 등 중추성 질환은 이마 근육에 양측성 지배가 유지되어 마비측 이마 주름을 잡을 수 있는 점이 벨마비(이마 마비 동반)와 다릅니다."
+                "why_consider": "입이 돌아가고 발음이 새는 안면 비대칭 증상은 뇌졸중 환자와 완벽히 동일합니다.",
+                "how_to_differentiate": "뇌졸중 등 중추성 질환은 이마 근육에 양측성 지배가 유지되어 마비측 이마 주름을 정상적으로 잡을 수 있는 점이 말초성 벨마비(이마 마비 동반)와 다릅니다.",
+                "practical_tip": "환자에게 '눈썹을 위로 치켜떠보세요'라고 지시했을 때 마비된 쪽 이마에 주름이 생기는지 가장 먼저 꼭 확인하세요."
             }
         ]
     },
@@ -429,29 +473,33 @@ VIRTUAL_REPORTS = {
             ["정중신경", "팔꿈치", "왼쪽", "6.5 mV", "8.4 ms", "53 m/s", "정상 범위"],
         ],
         "emg": [
-            ["짧은발가락폄근", "L5-S1", "오른쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["짧은발가락폄근", "L5-S1", "왼쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
             ["앞정강근", "L4-L5", "오른쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
             ["앞정강근", "L4-L5", "왼쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
             ["안쪽장딴지근", "S1-S2", "오른쪽", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
             ["가쪽넓은근", "L3-L4", "오른쪽", "Silent", "Normal recruitment", "정상 범위"],
-            ["첫째등쪽뼈사이근", "C8-T1", "오른쪽", "Silent", "Normal recruitment", "정상 범위"],
             ["위팔두갈래근", "C5-C6", "왼쪽", "Silent", "Normal recruitment", "정상 범위"],
         ],
         "teaching_diagnosis": {
             "summary": "대칭성 길이의존성 축삭성 다발신경병증 (Polyneuropathy)",
             "ncs_reason": [
-                "가장 긴 신경인 다리 원위부 감각 신경(장딴지신경, 얕은종아리신경) 반응이 소실되고 운동 진폭 및 속도가 대칭적으로 감소한 길이의존성 패턴입니다.",
+                "가장 긴 신경인 다리 원위부 감각 신경(장딴지신경, 얕은종아리신경) 반응이 소실되고 운동 진폭이 대칭적으로 감소한 길이의존성 패턴입니다.",
                 "팔 말단(정중, 자신경) 감각 진폭도 감소하여 전신적인 침범을 확인합니다."
             ],
             "emg_reason": [
-                "다리 최원위부 근육(짧은발가락폄근, 앞정강근, 장딴지근)에서는 탈신경이 보이나, 근위부(가쪽넓은근, 팔 근육)는 정상인 'Dying-back' 양상입니다."
+                "다리 최원위부 근육(앞정강근, 장딴지근)에서는 탈신경이 보이나, 근위부(가쪽넓은근, 팔 근육)는 정상인 'Dying-back' 양상입니다."
             ],
             "integration": [
                 "양측 신경 전도의 대칭적 소실과 원위부 우세 근전도검사 이상을 통해 당뇨성 증상 등과 부합하는 전신성 다발신경병증으로 진단합니다."
             ]
         },
-        "differential_diagnosis": [{"name": "다발성 허리 신경뿌리병증 (Lumbar Canal Stenosis)", "how_to_differentiate": "양측 다리 저림은 유사하나, 척추 협착에 의한 다발 뿌리병증은 말초 감각전도가 보존되며 허리 척추주위근에 양측 탈신경이 도출되어야 합니다."}]
+        "differential_diagnosis": [
+            {
+                "name": "다발성 허리 신경뿌리병증 (Lumbar Canal Stenosis)",
+                "why_consider": "양측 다리의 대칭적인 저림과 통증이 척추관 협착증 증상과 매우 흡사하게 나타납니다.",
+                "how_to_differentiate": "척추 협착에 의한 다발 뿌리병증은 말초 감각전도(SNAP)가 정상으로 보존되며, 허리 척추주위근에 양측성 탈신경이 도출되어야 합니다.",
+                "practical_tip": "장화-양말(Glove-stocking) 패턴의 대칭적 감각 저하는 전신 대사성 질환의 전형적 특징이므로, 양측 발끝 감각부터 세밀히 대조 평가하세요."
+            }
+        ]
     }
 }
 
