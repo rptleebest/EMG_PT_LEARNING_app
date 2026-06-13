@@ -44,9 +44,9 @@ def _get_result_color_style(value: str, is_normal_side: bool = False) -> str:
     abnormal_words = ["비정상", "감소", "지연", "소실", "탈신경", "재신경지배", "차단", "항진", "초과", "증가", "저하", "급감"]
     normal_words = ["정상", "Normal", "Silent", "WNL", "침묵", "동원"]
     
-    # 눈이 덜 아프면서 시인성이 좋은 붉은색(#dc2626)으로 수정
-    if any(w in text for w in abnormal_words): return "color: #dc2626; font-weight: 800;"
-    if any(w in text for w in normal_words): return "color: #15803d; font-weight: 800;"
+    # 눈이 편안하도록 채도/명도를 낮춘 벽돌색 톤(#b91c1c)과 굵기(700) 적용
+    if any(w in text for w in abnormal_words): return "color: #b91c1c; font-weight: 700;"
+    if any(w in text for w in normal_words): return "color: #15803d; font-weight: 700;"
     return ""
 
 def _format_reason_text(text: str) -> str:
