@@ -33,7 +33,6 @@ def _safe_format_code(code: str) -> str:
     return raw
 
 def _get_result_color_style(value: str, is_normal_side: bool = False) -> str:
-    # 해당 줄(Row) 전체가 '정상측' 데이터인 경우 색상 강조를 완전히 배제합니다.
     if is_normal_side:
         return ""
 
@@ -41,12 +40,15 @@ def _get_result_color_style(value: str, is_normal_side: bool = False) -> str:
     if any(x in text for x in ["정상측", "병변측", "Normal (", "Affected ("]):
         return ""
 
-    abnormal_words = ["비정상", "감소", "지연", "소실", "탈신경", "재신경지배", "차단", "항진", "초과", "증가", "저하", "급감"]
-    normal_words = ["정상", "Normal", "Silent", "WNL", "침묵", "동원"]
+    # EMG 비정상 전위(Fibrillation, PSW, 거대운동단위 등) 추가
+    abnormal_words = [
+        "비정상", "감소", "지연", "소실", "탈신경", "재신경지배", "차단", "항진", "초과", "증가", "저하", "급감",
+        "Fibrillation", "PSW", "섬유자발전위", "양성예파", "거대운동단위", "Giant"
+    ]
     
-    # 눈이 편안하도록 채도/명도를 낮춘 벽돌색 톤(#b91c1c)과 굵기(700) 적용
+    # 비정상 소견만 붉은색 강조, 정상은 기본 CSS 스타일(검정/회색 일반 굵기) 유지
     if any(w in text for w in abnormal_words): return "color: #b91c1c; font-weight: 700;"
-    if any(w in text for w in normal_words): return "color: #15803d; font-weight: 700;"
+    
     return ""
 
 def _format_reason_text(text: str) -> str:
@@ -107,7 +109,6 @@ def _create_responsive_table(headers: list, rows: list) -> str:
     header_html = "".join([f"<th>{html.escape(h)}</th>" for h in headers])
     tr_html = ""
     for row in rows:
-        # 해당 줄(Row)에 '정상측' 또는 영문 번역본 'Normal (' 이 포함되어 있는지 확인
         is_normal_side = any("정상측" in str(c) or "Normal (" in str(c) for c in row)
         
         td_html = ""
