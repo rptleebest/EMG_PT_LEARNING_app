@@ -6,29 +6,29 @@ import streamlit as st
 from data.cases import CASE_LIBRARY
 from ui.navigation import render_bottom_navigation
 
-# --- 표(Table) 내부에 들어갈 영문 용어들을 완벽하게 한글로 변환 ---
 def _safe_format_code(code: str) -> str:
     raw = str(code)
     code_str = raw.lower().strip()
     
     mapping = {
         "ncs_normal": "정상 범위", 
-        "ncs_delayed": "잠복기 지연", 
-        "ncs_reduced": "진폭 감소", 
-        "ncs_absent": "반응 소실", 
-        "ncs_conduction_block": "진폭 급감 (국소 전도차단 의심)",
+        "ncs_delayed": "비정상 (잠복기 지연)", 
+        "ncs_reduced": "비정상 (진폭 감소)", 
+        "ncs_absent": "비정상 (반응 소실)", 
+        "ncs_conduction_block": "비정상 (진폭 급감)",
         "emg_normal": "정상 범위", 
-        "emg_active_denervation": "활동성 탈신경", 
-        "emg_paraspinal_denervation": "활동성 탈신경", 
-        "emg_chronic_reinnervation": "만성 재신경지배", 
-        "emg_active_chronic": "활동성 및 만성 변화", 
-        "blink_delayed": "잠복기 지연", 
-        "blink_absent": "반응 소실",
-        "blink_delayed_absent": "지연 및 소실",
-        "fwave_delayed_absent": "지연 및 소실",
-        "h_reflex_hyperactive": "진폭 과항진",
-        "h_m_ratio_increased": "비율 증가"
+        "emg_active_denervation": "비정상 (활동성 탈신경)", 
+        "emg_paraspinal_denervation": "비정상 (활동성 탈신경)", 
+        "emg_chronic_reinnervation": "비정상 (만성 재신경지배)", 
+        "emg_active_chronic": "비정상 (활동성+만성)", 
+        "blink_delayed": "비정상 (잠복기 지연)", 
+        "blink_absent": "비정상 (반응 소실)",
+        "blink_delayed_absent": "비정상 (지연 및 소실)",
+        "fwave_delayed_absent": "비정상 (반응 소실)",
+        "h_reflex_hyperactive": "비정상 (과항진)",
+        "h_m_ratio_increased": "비정상 (비율 증가)"
     }
+    
     if code_str in mapping:
         return mapping[code_str]
         
@@ -64,23 +64,58 @@ def _format_reason_text(text: str) -> str:
 def _create_responsive_table(headers: list, rows: list) -> str:
     if not rows: return ""
     css = """<style>
-    table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 0.95rem; }
-    th { background-color: #f8fafc; padding: 12px 10px; border-bottom: 2px solid #cbd5e1; text-align: center !important; color: #1e293b; font-weight: 800; }
-    th:first-child { text-align: left !important; padding-left: 16px; }
-    th:last-child { text-align: left !important; padding-left: 16px; }
-    td { padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: center !important; color: #334155; }
-    td.fst-col { font-weight: 800; color: #1e3a8a; text-align: left !important; padding-left: 16px; }
-    td:last-child { text-align: left !important; padding-left: 16px; line-height: 1.4; }
+    /* PC 환경 기본 스타일 */
+    .res-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 0.95rem; }
+    .res-table th { background-color: #f8fafc; padding: 12px 10px; border-bottom: 2px solid #cbd5e1; text-align: center !important; color: #1e293b; font-weight: 800; }
+    .res-table th:first-child { text-align: left !important; padding-left: 16px; }
+    .res-table th:last-child { text-align: left !important; padding-left: 16px; }
+    .res-table td { padding: 12px 10px; border-bottom: 1px solid #e2e8f0; text-align: center !important; color: #334155; vertical-align: middle; }
+    .res-table td.fst-col { font-weight: 800; color: #1e3a8a; text-align: left !important; padding-left: 16px; }
+    .res-table td:last-child { text-align: left !important; padding-left: 16px; line-height: 1.4; }
+    
+    /* 모바일 환경: 독립된 카드 UI로 완벽 분리 */
     @media screen and (max-width: 768px) {
-        thead { display: none; }
-        tr { display: block; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 16px; background: #ffffff; overflow: hidden; }
-        td { display: flex; align-items: flex-start; gap: 12px; border-bottom: 1px dashed #e2e8f0; padding: 10px 12px 10px 24px; text-align: left !important; }
-        td:last-child { border-bottom: none; }
-        td::before { content: attr(data-label); font-weight: 800; color: #64748b; text-align: left !important; font-size: 0.85rem; flex: 0 0 38%; margin-top: 2px; }
-        td > span { flex: 1; text-align: left !important; word-break: keep-all; font-weight: 400; color: #334155; line-height: 1.4; }
-        td.fst-col { display: flex; flex-direction: row; justify-content: flex-start; background: #f1f5f9; text-align: left !important; padding: 12px 16px; border-bottom: 2px solid #cbd5e1; }
-        td.fst-col::before { content: attr(data-label) ": "; color: #1e3a8a; font-weight: 800; flex: unset; margin-right: 8px; font-size: 0.95rem; margin-top: 0; text-align: left !important;}
-        td.fst-col > span { text-align: left !important; font-weight: 800; color: #1e3a8a; font-size: 0.95rem; }
+        .res-table, .res-table thead, .res-table tbody, .res-table th, .res-table td, .res-table tr { display: block; }
+        .res-table thead { display: none; }
+        
+        .res-table tr { 
+            margin-bottom: 1rem; 
+            border: 1px solid #cbd5e1; 
+            border-radius: 10px; 
+            background: #ffffff; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        
+        .res-table td { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 10px 16px; 
+            border-bottom: 1px dashed #e2e8f0; 
+            text-align: right !important; 
+        }
+        .res-table td:last-child { border-bottom: none; background-color: #f8fafc; align-items: flex-start;}
+        
+        .res-table td::before { 
+            content: attr(data-label); 
+            font-weight: 700; 
+            color: #64748b; 
+            text-align: left !important; 
+            flex: 0 0 40%;
+            font-size: 0.9rem;
+        }
+        .res-table td > span { flex: 1; word-break: keep-all; font-weight: 500; }
+        
+        .res-table td.fst-col { 
+            background: #eff6ff; 
+            padding: 12px 16px; 
+            border-bottom: 2px solid #bfdbfe; 
+            justify-content: flex-start;
+        }
+        .res-table td.fst-col::before { display: none; }
+        .res-table td.fst-col > span { text-align: left !important; font-weight: 800; color: #1d4ed8; font-size: 1.05rem; }
+        .res-table td.fst-col > span::before { content: "🔹 "; }
     }
     </style>"""
     
@@ -95,7 +130,7 @@ def _create_responsive_table(headers: list, rows: list) -> str:
             header_label = html.escape(headers[idx]) if idx < len(headers) else ""
             td_html += f"<td data-label='{header_label}' class='{cls}' style='{color_style}'><span>{html.escape(val)}</span></td>"
         tr_html += f"<tr>{td_html}</tr>"
-    return f"{css}<table><thead><tr>{header_html}</tr></thead><tbody>{tr_html}</tbody></table>"
+    return f"{css}<table class='res-table'><thead><tr>{header_html}</tr></thead><tbody>{tr_html}</tbody></table>"
 
 def render_case_list():
     st.markdown('<div class="main-title" style="text-align:left;">사례 학습 모드</div>', unsafe_allow_html=True)
@@ -226,8 +261,7 @@ def render_case_detail_inline(case_name: str):
         unsafe_allow_html=True
     )
 
-    # --- [핵심 수정] 누락되어 보였던 감별진단 상세 데이터(왜 고려하는지, 임상 꿀팁 등) 100% 표출 로직 ---
-    if "differential_diagnosis" in data:
+    if "differential_diagnosis" in data and not is_stroke_case:
         st.markdown('<div class="sub-title" style="margin-top:24px;">🧭 유사 질환과의 감별진단</div>', unsafe_allow_html=True)
         for ddx in data["differential_diagnosis"]:
             name = ddx.get('name', '')
