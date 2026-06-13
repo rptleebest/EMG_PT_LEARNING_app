@@ -7,7 +7,7 @@ REPORT_TITLE_EN = "Virtual EMG Report (Bilateral Comparison)"
 
 VIRTUAL_REPORTS = {
     "왼쪽 목 통증 및 엄지/검지 저림 (C6 신경뿌리병증)": {
-        "info": {"age": 45, "sex": "남성", "symptom": "왼쪽 뒷목 통증~어깨와 엄지/검지로 뻗치는 저림, 팔꿉 굽힘 시 힘 빠짐", "side": "Lt"},
+        "info": {"age": 45, "sex": "남성", "symptom": "왼쪽 뒷목 통증~어깨와 엄지/검지로 뻗치는 저림, 팔꿉 굽힘 시 힘 빠짐", "side": "왼쪽"},
         "ncs_sensory": [
             ["정중신경", "정상측(Rt)", "25 μV", "2.8 ms", "정상 범위"],
             ["정중신경", "병변측(Lt)", "24 μV", "2.8 ms", "정상 범위"],
