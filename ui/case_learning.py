@@ -33,7 +33,6 @@ def _safe_format_code(code: str) -> str:
     return raw
 
 def _get_result_color_style(value: str, is_normal_side: bool = False) -> str:
-    # 해당 줄(Row) 전체가 '정상측' 데이터인 경우 색상 강조를 완전히 배제합니다.
     if is_normal_side:
         return ""
 
@@ -45,11 +44,12 @@ def _get_result_color_style(value: str, is_normal_side: bool = False) -> str:
         "비정상", "감소", "지연", "소실", "탈신경", "재신경지배", "차단", "항진", "초과", "증가", "저하", "급감",
         "Fibrillation", "PSW", "섬유자발전위", "양성예파", "거대운동단위", "Giant"
     ]
-    normal_words = ["정상", "Normal", "Silent", "WNL", "침묵", "동원"]
     
-    # 굵기를 주변 텍스트와 동일하게(500) 맞추어 표의 가독성과 정렬을 유지함
-    if any(w in text for w in abnormal_words): return "color: #b91c1c; font-weight: 500;"
-    if any(w in text for w in normal_words): return "color: #15803d; font-weight: 500;"
+    # 비정상 수치/용어는 붉은색으로 표기하되 글자 두께는 일반 두께 유지
+    if any(w in text for w in abnormal_words): 
+        return "color: #b91c1c;"
+    
+    # 정상 소견(녹색) 강조 제거 -> 아무 속성도 반환하지 않아 기본 검은색/회색 텍스트로 표시
     return ""
 
 def _format_reason_text(text: str) -> str:
@@ -66,9 +66,12 @@ def _create_responsive_table(headers: list, rows: list) -> str:
     .sl-table th { background-color: #f8fafc; padding: 12px 10px; border-bottom: 2px solid #cbd5e1; text-align: center !important; color: #1e293b; font-weight: 800; white-space: nowrap; }
     .sl-table th:first-child { text-align: left !important; padding-left: 16px; }
     .sl-table th:last-child { text-align: left !important; padding-left: 16px; }
-    .sl-table td { padding: 10px 12px; border-bottom: 1px solid #e2e8f0; text-align: center !important; color: #334155; vertical-align: middle; }
+    
+    /* 일반 데이터 셀: 두께 일반(400) 고정 */
+    .sl-table td { padding: 10px 12px; border-bottom: 1px solid #e2e8f0; text-align: center !important; color: #334155; vertical-align: middle; font-weight: 400; }
     .sl-table td.fst-col { font-weight: 800; color: #1e3a8a; text-align: left !important; padding-left: 16px; }
-    .sl-table td:last-child { text-align: left !important; padding-left: 16px; line-height: 1.4; font-weight: 600;}
+    /* 마지막 판독 결과만 볼드 처리 */
+    .sl-table td:last-child { text-align: left !important; padding-left: 16px; line-height: 1.4; font-weight: 700;}
     
     /* 모바일 환경 */
     @media screen and (max-width: 768px) {
@@ -84,9 +87,10 @@ def _create_responsive_table(headers: list, rows: list) -> str:
         .sl-table td::before { 
             content: attr(data-label); font-weight: 700; color: #64748b; text-align: left !important; font-size: 0.85rem; flex: 0 0 40%; margin-top: 2px; 
         }
-        .sl-table td > span { flex: 1; text-align: left !important; word-break: keep-all; font-weight: 500; color: #334155; line-height: 1.4; }
         
-        /* 카드 제목 (검사 신경 이름) */
+        /* 모바일 데이터 스팬 두께 일반(400) 고정 */
+        .sl-table td > span { flex: 1; text-align: left !important; word-break: keep-all; font-weight: 400; color: #334155; line-height: 1.4; }
+        
         .sl-table td.fst-col { 
             background: #eff6ff; padding: 14px 16px; border-bottom: 2px solid #bfdbfe; justify-content: flex-start; 
         }
@@ -94,7 +98,6 @@ def _create_responsive_table(headers: list, rows: list) -> str:
         .sl-table td.fst-col > span { text-align: left !important; font-weight: 800; color: #1d4ed8; font-size: 1.05rem; }
         .sl-table td.fst-col > span::before { content: "🔹 "; }
         
-        /* 판독 결과 */
         .sl-table td:last-child { 
             flex-direction: column; align-items: flex-start; background-color: #f8fafc; border-bottom: none; padding-top: 14px; padding-bottom: 14px;
         }
@@ -102,7 +105,7 @@ def _create_responsive_table(headers: list, rows: list) -> str:
             margin-bottom: 6px; color: #1e3a8a; font-size: 0.95rem; content: "📝 " attr(data-label); width: 100%;
         }
         .sl-table td:last-child > span { 
-            text-align: left !important; width: 100%; font-size: 0.95rem; 
+            text-align: left !important; width: 100%; font-size: 0.95rem; font-weight: 700; 
         }
     }
     </style>"""
@@ -236,7 +239,7 @@ def render_case_detail_inline(case_name: str):
         st.markdown('<div class="section-label" style="margin-top:32px;">⚡ 특수 및 후기반응 검사 (Special & Late Responses)</div>', unsafe_allow_html=True)
         st.markdown(_create_responsive_table(["검사 항목", "결과", "상세 수치", "판독"], blink_rows), unsafe_allow_html=True)
         if "emg_reason" in teaching and not emg_rows: 
-            with st.expander("🔍 특수 검사 소견 해석"):
+            with st.expander("🔍 특수 검 소견 해석"):
                 for r in teaching["emg_reason"]: 
                     st.markdown(_format_reason_text(r), unsafe_allow_html=True)
 
