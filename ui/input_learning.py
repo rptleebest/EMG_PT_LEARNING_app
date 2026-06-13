@@ -4,8 +4,8 @@ import html
 import re
 import streamlit as st
 from ui.navigation import render_bottom_navigation
-from data.report_terms import REPORT_LANG_KO, REPORT_LANG_EN, LANGUAGE_OPTIONS, normalize_report_language, translate_term
-from data.virtual_reports import VIRTUAL_REPORTS, get_report_section_name, custom_english_translate
+from data.report_terms import REPORT_LANG_KO, REPORT_LANG_EN, LANGUAGE_OPTIONS, normalize_report_language
+from data.virtual_reports import VIRTUAL_REPORTS, get_report_section_name
 
 def get_input_learning_report_language() -> str:
     selected = st.radio("언어 모드", options=LANGUAGE_OPTIONS, index=0, horizontal=True, label_visibility="collapsed", key="v_lang")
@@ -31,184 +31,79 @@ def custom_korean_translate(text: str) -> str:
     code_str = raw.lower().strip()
     
     code_mapping = {
-        "ncs_normal": "정상 범위", 
-        "ncs_delayed": "잠복기 지연", 
-        "ncs_reduced": "진폭 감소", 
-        "ncs_absent": "반응 소실", 
-        "ncs_conduction_block": "진폭 급감",
-        "emg_normal": "정상 범위", 
-        "emg_active_denervation": "활동성 탈신경", 
-        "emg_paraspinal_denervation": "활동성 탈신경", 
-        "emg_chronic_reinnervation": "만성 재신경지배", 
-        "emg_active_chronic": "활동성+만성", 
-        "blink_delayed": "잠복기 지연", 
-        "blink_absent": "반응 소실",
-        "blink_delayed_absent": "지연 및 소실",
-        "fwave_delayed_absent": "지연 및 소실",
-        "h_reflex_hyperactive": "진폭 과항진",
-        "h_m_ratio_increased": "비율 증가"
+        "ncs_normal": "정상 범위", "ncs_delayed": "잠복기 지연", "ncs_reduced": "진폭 감소", 
+        "ncs_absent": "반응 소실", "ncs_conduction_block": "진폭 급감", "emg_normal": "정상 범위", 
+        "emg_active_denervation": "활동성 탈신경", "emg_paraspinal_denervation": "활동성 탈신경", 
+        "emg_chronic_reinnervation": "만성 재신경지배", "emg_active_chronic": "활동성+만성", 
+        "blink_delayed": "잠복기 지연", "blink_absent": "반응 소실", "blink_delayed_absent": "지연 및 소실",
+        "fwave_delayed_absent": "지연 및 소실", "h_reflex_hyperactive": "진폭 과항진", "h_m_ratio_increased": "비율 증가"
     }
-    if code_str in code_mapping:
-        return code_mapping[code_str]
+    if code_str in code_mapping: return code_mapping[code_str]
 
     replace_map = {
-        "Silent": "전기적 침묵",
-        "Normal recruitment": "정상 동원",
-        "Reduced recruitment": "동원 감소",
-        "No recruitment": "동원 불가",
-        "Fibrillation/PSW": "섬유자발전위/양성예파",
-        "Absent": "반응 소실",
-        "Incomplete due to pain": "통증으로 평가 불가",
-        "Giant MUAPs": "거대운동단위"
+        "Silent": "전기적 침묵", "Normal recruitment": "정상 동원", "Reduced recruitment": "동원 감소",
+        "No recruitment": "동원 불가", "Fibrillation/PSW": "섬유자발전위/양성예파", "Absent": "반응 소실",
+        "Incomplete due to pain": "통증으로 평가 불가", "Giant MUAPs": "거대운동단위"
     }
     for eng, kor in replace_map.items():
-        if eng in raw:
-            raw = raw.replace(eng, kor)
-            
+        if eng in raw: raw = raw.replace(eng, kor)
     return raw
 
-# --- [핵심 수정] PC는 깔끔한 표, 모바일은 직관적인 카드로 변신하도록 로직 정비 ---
-def pivot_to_grouped_table(headers: list, rows: list, lesion_side: str, is_eng: bool) -> tuple:
-    if "측정측" not in headers and "Side" not in headers:
-        return headers, rows
+def custom_english_translate(text: str) -> str:
+    raw = str(text)
+    mapping = {
+        "정상 범위": "Within Normal Limits", "비정상 (활동성 탈신경)": "Abnormal (Active denervation)",
+        "통증으로 평가 불가": "Incomplete due to pain", "비정상 (진폭 감소 / 잠복기 지연)": "Abnormal (Reduced Amp. & Delayed Lat.)",
+        "비정상 (전도속도 저하)": "Abnormal (Slowed NCV)", "비정상 (진폭 급감 / 국소 전도차단 의심)": "Abnormal (Conduction block)",
+        "비정상 (진폭 감소)": "Abnormal (Reduced amp)", "비정상 (반응 소실)": "Abnormal (Absent)",
+        "비정상 (동원 감소)": "Abnormal (Reduced recruitment)", "비정상 (동원 불가)": "Abnormal (No recruitment)",
+        " (감소)": " (Reduced)", " (지연)": " (Delayed)", " (저하)": " (Slowed)", " (급감)": " (Drop)", 
+        " (소실)": " (Absent)", " (항진)": " (Hyper)", " (초과)": " (Increased)", "오른쪽": "Rt", "왼쪽": "Lt", "양측": "Bilateral",
+        "팔꿈치 아래": "Below elbow", "팔꿈치 위": "Above elbow", "나선고랑 위": "Above spiral groove", "종아리뼈머리 아래": "Below Fib. head",
+        "종아리뼈머리": "Fibular head", "무릎 위": "Above knee", "고샅부위": "Groin", "손목": "Wrist", "팔꿈치": "Elbow",
+        "아래팔": "Forearm", "위팔": "Arm", "발목": "Ankle", "오금": "Popliteal", "겨드랑이": "Axilla", "귀앞": "Preauricular",
+        "정중신경 첫째 가지": "Median (digit1)", "정중신경 둘째 가지": "Median (digit2)", "정중신경 셋째 가지": "Median (digit3)",
+        "자신경 다섯째 가지": "Ulnar (digit5)", "등쪽자신경": "Dorsal Ulnar Cutaneous", "가쪽아래팔피부신경": "Lat. Antebrachial Cutaneous",
+        "안쪽아래팔피부신경": "Med. Antebrachial Cutaneous", "얕은종아리신경": "Superficial Peroneal", "얼굴신경 코근": "Facial (Nasalis)",
+        "얼굴신경 눈둘레근": "Facial (Orbicularis Oculi)", "근육피부신경": "Musculocutaneous", "정중신경": "Median",
+        "자신경": "Ulnar", "노신경": "Radial", "종아리신경": "Peroneal", "장딴지신경": "Sural", "정강신경": "Tibial",
+        "두렁신경": "Saphenous", "넓적다리신경": "Femoral", "삼차신경": "Trigeminal", "얼굴신경": "Facial",
+        "깊은손가락굽힘근 4-다섯째 가지": "FDP (digit 4-5)", "넓적다리두갈래근 짧은갈래": "Biceps Femoris (Short)",
+        "목 척추주위근": "Cervical Paraspinal", "허리 척추주위근": "Lumbar Paraspinal", "긴노쪽손목폄근": "ECRL",
+        "넓적다리근막긴장근": "Tensor Fasciae Latae", "넓적다리네갈래근": "Quadriceps Femoris", "위팔두갈래근": "Biceps Brachii",
+        "위팔세갈래근": "Triceps Brachii", "노쪽손목굽힘근": "Flexor Carpi Radialis", "자쪽손목굽힘근": "Flexor Carpi Ulnaris",
+        "첫째등쪽뼈사이근": "First Dorsal Interosseous", "짧은엄지벌림근": "Abductor Pollicis Brevis", "짧은발가락폄근": "Extensor Digitorum Brevis",
+        "안쪽장딴지근": "Medial Gastrocnemius", "어깨세모근": "Deltoid", "위팔노근": "Brachioradialis", "원엎침근": "Pronator Teres",
+        "손가락폄근": "Extensor Digitorum Communis", "고유집게폄근": "Extensor Indicis Proprius", "깊은손가락굽힘근": "Flexor Digitorum Profundus",
+        "새끼벌림근": "Abductor Digiti Minimi", "엉덩허리근": "Iliopsoas", "가쪽넓은근": "Vastus Lateralis", "앞정강근": "Tibialis Anterior",
+        "긴종아리근": "Peroneus Longus", "가자미근": "Soleus", "큰볼기근": "Gluteus Maximus", "눈둘레근": "Orbicularis Oculi",
+        "입둘레근": "Orbicularis Oris", "이마근": "Frontalis", "깨물근": "Masseter", "무반응": "Absent", "측정불가": "N/A"
+    }
+    for k in sorted(mapping.keys(), key=len, reverse=True):
+        if k in raw: raw = raw.replace(k, mapping[k])
+    return raw
 
-    side_idx = headers.index("Side") if is_eng else headers.index("측정측")
-    interp_idx = headers.index("Interpretation") if is_eng else headers.index("판독")
-
-    base_headers = headers[:side_idx]
-    val_headers = headers[side_idx+1:interp_idx]
-
-    # 신경/자극위치를 기준으로 데이터 병합
-    grouped = {}
-    for row in rows:
-        if len(row) <= interp_idx: continue
-        base_key = tuple(row[:side_idx])
-        side_val = str(row[side_idx]).strip()
-        vals = row[side_idx+1:interp_idx]
-        interp = row[interp_idx]
-
-        if base_key not in grouped:
-            grouped[base_key] = {"Rt": None, "Lt": None, "Bil": None}
-
-        if side_val in ["오른쪽", "Rt", "우측"]:
-            grouped[base_key]["Rt"] = {"vals": vals, "interp": interp}
-        elif side_val in ["왼쪽", "Lt", "좌측"]:
-            grouped[base_key]["Lt"] = {"vals": vals, "interp": interp}
-        else:
-            grouped[base_key]["Bil"] = {"vals": vals, "interp": interp}
-
-    # 환자 병변 호소측을 기준으로 정상/병변측 타이틀 생성
-    if "오른쪽" in lesion_side or "Rt" in lesion_side:
-        aff_key, nor_key = "Rt", "Lt"
-        aff_label = "병변측 (우)" if not is_eng else "Affected (Rt)"
-        nor_label = "정상측 (좌)" if not is_eng else "Normal (Lt)"
-    elif "왼쪽" in lesion_side or "Lt" in lesion_side:
-        aff_key, nor_key = "Lt", "Rt"
-        aff_label = "병변측 (좌)" if not is_eng else "Affected (Lt)"
-        nor_label = "정상측 (우)" if not is_eng else "Normal (Rt)"
-    else:
-        aff_key, nor_key = "Bil", None
-        aff_label = "검사 결과 (양측)" if not is_eng else "Result (Bilateral)"
-        nor_label = ""
-
-    new_headers = base_headers.copy()
-    if nor_key: new_headers.append(nor_label)
-    new_headers.append(aff_label)
-    new_headers.append("병변측 판독" if not is_eng else "Interpretation")
-
-    new_rows = []
-    for base_key, data in grouped.items():
-        new_row = list(base_key)
-
-        def format_vals(val_list):
-            if not val_list: return "-"
-            out = []
-            for h, v in zip(val_headers, val_list):
-                if v != "-":
-                    out.append(f"{h}: {v}")
-            return " / ".join(out) if out else "-"
-
-        # 정상측 수치 삽입
-        if nor_key:
-            nor_data = data[nor_key]
-            new_row.append(format_vals(nor_data["vals"]) if nor_data else "-")
-
-        # 병변측 수치 및 판독 삽입
-        aff_data = data[aff_key] if data[aff_key] else data.get("Bil")
-        if aff_data:
-            new_row.append(format_vals(aff_data["vals"]))
-            new_row.append(aff_data["interp"])
-        else:
-            if data[nor_key]: # 병변측 검사가 없고 정상측만 있는 경우
-                new_row.append("-")
-                new_row.append(data[nor_key]["interp"])
-            else:
-                new_row.append("-")
-                new_row.append("-")
-
-        new_rows.append(new_row)
-
-    return new_headers, new_rows
-
-def create_responsive_table(headers: list, rows: list) -> str:
+def create_standard_responsive_table(headers: list, rows: list) -> str:
     if not rows: return ""
     css = """<style>
-    /* PC 환경 기본 스타일 */
-    .res-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 0.92rem; }
-    .res-table th { background-color: #f8fafc; padding: 12px 10px; border-bottom: 2px solid #cbd5e1; text-align: center !important; color: #1e293b; font-weight: 800; white-space: nowrap; }
-    .res-table th:first-child { text-align: left !important; padding-left: 16px; }
-    .res-table td { padding: 12px 10px; border-bottom: 1px solid #e2e8f0; text-align: center !important; color: #334155; vertical-align: middle; line-height: 1.5; }
-    .res-table td.fst-col { font-weight: 800; color: #1e3a8a; text-align: left !important; padding-left: 16px; }
-    .res-table td:last-child { text-align: left !important; padding-left: 16px; }
-    
-    /* 모바일 환경: 병합된 데이터를 예쁜 독립 카드 UI로 표출 */
+    .st-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 0.92rem; }
+    .st-table th { background-color: #f8fafc; padding: 10px 8px; border-bottom: 2px solid #cbd5e1; text-align: center !important; color: #1e293b; font-weight: 800; white-space: nowrap; }
+    .st-table th:first-child { text-align: left !important; padding-left: 16px; }
+    .st-table td { padding: 10px 8px; border-bottom: 1px solid #e2e8f0; text-align: center !important; color: #334155; }
+    .st-table td.fst-col { font-weight: 800; color: #1e3a8a; text-align: left !important; padding-left: 16px; }
     @media screen and (max-width: 768px) {
-        .res-table, .res-table thead, .res-table tbody, .res-table th, .res-table td, .res-table tr { display: block; }
-        .res-table thead { display: none; }
-        
-        .res-table tr { 
-            margin-bottom: 1rem; 
-            border: 1px solid #cbd5e1; 
-            border-radius: 10px; 
-            background: #ffffff; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            overflow: hidden;
-        }
-        
-        .res-table td { 
-            display: flex; 
-            flex-direction: column; /* 라벨과 수치가 위아래로 깔끔하게 떨어지도록 설정 */
-            padding: 12px 16px; 
-            border-bottom: 1px dashed #e2e8f0; 
-            text-align: left !important; 
-        }
-        .res-table td:last-child { border-bottom: none; background-color: #f8fafc; }
-        
-        .res-table td::before { 
-            content: attr(data-label); 
-            font-weight: 700; 
-            color: #64748b; 
-            font-size: 0.85rem; 
-            margin-bottom: 4px;
-        }
-        .res-table td > span { font-weight: 500; word-break: keep-all; line-height: 1.4; }
-        
-        /* 신경 및 자극위치 열은 카드 타이틀 모양으로 강조 */
-        .res-table td.fst-col, .res-table td:nth-child(2) { 
-            background: #eff6ff; 
-            padding: 10px 16px; 
-            flex-direction: row; 
-            align-items: center; 
-        }
-        .res-table td.fst-col { border-bottom: none; padding-bottom: 2px; }
-        .res-table td:nth-child(2) { border-bottom: 2px solid #bfdbfe; padding-top: 2px; }
-        .res-table td.fst-col::before, .res-table td:nth-child(2)::before { display: none; }
-        .res-table td.fst-col > span { font-weight: 800; color: #1d4ed8; font-size: 1.05rem; }
-        .res-table td.fst-col > span::before { content: "🔹 "; }
-        .res-table td:nth-child(2) > span { font-weight: 700; color: #3b82f6; font-size: 0.95rem; margin-left: 20px;}
+        .st-table thead { display: none; }
+        .st-table tr { display: block; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 16px; background: #ffffff; overflow: hidden; }
+        .st-table td { display: flex; align-items: flex-start; gap: 12px; border-bottom: 1px dashed #e2e8f0; padding: 10px 12px 10px 24px; text-align: left !important; }
+        .st-table td:last-child { border-bottom: none; }
+        .st-table td::before { content: attr(data-label); font-weight: 800; color: #64748b; text-align: left !important; font-size: 0.85rem; flex: 0 0 38%; margin-top: 2px; }
+        .st-table td > span { flex: 1; text-align: left !important; word-break: keep-all; font-weight: 400; color: #334155; line-height: 1.4; }
+        .st-table td.fst-col { display: flex; flex-direction: row; justify-content: flex-start; background: #f1f5f9; padding: 12px 16px; border-bottom: 2px solid #cbd5e1; }
+        .st-table td.fst-col::before { display: none; }
+        .st-table td.fst-col > span { text-align: left !important; font-weight: 800; color: #1e3a8a; font-size: 0.95rem; }
+        .st-table td.fst-col > span::before { content: "🔹 "; }
     }
     </style>"""
-    
     header_html = "".join([f"<th>{html.escape(h)}</th>" for h in headers])
     tr_html = ""
     for row in rows:
@@ -219,7 +114,155 @@ def create_responsive_table(headers: list, rows: list) -> str:
             h_lbl = html.escape(str(headers[idx])) if idx < len(headers) else ""
             td_html += f"<td data-label='{h_lbl}' class='{cls}' style='{color_style}'><span>{html.escape(str(col))}</span></td>"
         tr_html += f"<tr>{td_html}</tr>"
-    return f"{css}<table class='res-table'><thead><tr>{header_html}</tr></thead><tbody>{tr_html}</tbody></table>"
+    return f"{css}<table class='st-table'><thead><tr>{header_html}</tr></thead><tbody>{tr_html}</tbody></table>"
+
+# --- [핵심 추가] PC와 모바일을 완벽하게 분리하는 반응형 HTML 렌더러 ---
+def generate_virtual_report_html(headers: list, rows: list, lesion_side: str, is_eng: bool) -> str:
+    side_idx = headers.index("Side") if "Side" in headers else (headers.index("측정측") if "측정측" in headers else -1)
+    interp_idx = headers.index("Interpretation") if "Interpretation" in headers else (headers.index("판독") if "판독" in headers else -1)
+
+    # 측정측 컬럼이 없는 특수검사 등은 일반 테이블로 폴백(Fallback) 처리
+    if side_idx == -1 or interp_idx == -1:
+        return create_standard_responsive_table(headers, rows)
+
+    base_headers = headers[:side_idx]
+    val_headers = headers[side_idx+1:interp_idx]
+
+    grouped = {}
+    for row in rows:
+        if len(row) <= interp_idx: continue
+        base_key = tuple(row[:side_idx])
+        side_val = str(row[side_idx]).strip()
+        vals = row[side_idx+1:interp_idx]
+        interp = row[interp_idx]
+
+        if base_key not in grouped: grouped[base_key] = {"Rt": None, "Lt": None, "Bil": None}
+
+        if side_val in ["오른쪽", "Rt", "우측"]: grouped[base_key]["Rt"] = {"vals": vals, "interp": interp}
+        elif side_val in ["왼쪽", "Lt", "좌측"]: grouped[base_key]["Lt"] = {"vals": vals, "interp": interp}
+        else: grouped[base_key]["Bil"] = {"vals": vals, "interp": interp}
+
+    is_bilateral = "양측" in lesion_side or "Bilateral" in lesion_side
+    if "오른쪽" in lesion_side or "Rt" in lesion_side:
+        aff_key, nor_key = "Rt", "Lt"
+        aff_label = "병변측(우)" if not is_eng else "Affected(Rt)"
+        nor_label = "정상측(좌)" if not is_eng else "Normal(Lt)"
+    elif "왼쪽" in lesion_side or "Lt" in lesion_side:
+        aff_key, nor_key = "Lt", "Rt"
+        aff_label = "병변측(좌)" if not is_eng else "Affected(Lt)"
+        nor_label = "정상측(우)" if not is_eng else "Normal(Rt)"
+    else:
+        aff_key, nor_key = "Bil", None
+        aff_label = "우측" if not is_eng else "Rt"
+        nor_label = "좌측" if not is_eng else "Lt"
+
+    html_str = "<div class='compare-table-container'>"
+
+    # --- 1. PC용 테이블 (정상측 먼저, 병변측 나중) ---
+    html_str += "<table class='pc-compare-table'>"
+    html_str += "<thead><tr>"
+    for bh in base_headers: html_str += f"<th rowspan='2'>{bh}</th>"
+    
+    if is_bilateral:
+        html_str += f"<th colspan='{len(val_headers)}'>좌측 (Lt)</th><th colspan='{len(val_headers)}'>우측 (Rt)</th>"
+    else:
+        html_str += f"<th colspan='{len(val_headers)}'>{nor_label}</th><th colspan='{len(val_headers)}'>{aff_label}</th>"
+        
+    html_str += f"<th rowspan='2'>{'판독' if not is_eng else 'Interpretation'}</th></tr><tr>"
+    for _ in range(2):
+        for vh in val_headers: html_str += f"<th>{vh}</th>"
+    html_str += "</tr></thead><tbody>"
+
+    for base_key, data in grouped.items():
+        if is_bilateral:
+            nor_d = data["Lt"] if data["Lt"] else data["Bil"]
+            aff_d = data["Rt"] if data["Rt"] else data["Bil"]
+        else:
+            nor_d = data[nor_key]
+            aff_d = data[aff_key] if data[aff_key] else data["Bil"]
+
+        html_str += "<tr>"
+        for bk in base_key: html_str += f"<td class='base-col'>{bk}</td>"
+        
+        # 정상측 수치
+        for i in range(len(val_headers)):
+            v = nor_d["vals"][i] if nor_d and i < len(nor_d["vals"]) else "-"
+            html_str += f"<td style='{get_result_color_style(v)}'>{v}</td>"
+            
+        # 병변측 수치
+        for i in range(len(val_headers)):
+            v = aff_d["vals"][i] if aff_d and i < len(aff_d["vals"]) else "-"
+            html_str += f"<td style='{get_result_color_style(v)}'>{v}</td>"
+
+        # 판독
+        interp_val = aff_d["interp"] if aff_d else (nor_d["interp"] if nor_d else "-")
+        html_str += f"<td style='{get_result_color_style(interp_val)}'>{interp_val}</td></tr>"
+    html_str += "</tbody></table>"
+
+    # --- 2. 모바일용 카드 UI (신경마다 파라미터별로 정상/병변 위아래 비교) ---
+    html_str += "<div class='mobile-compare-cards'>"
+    for base_key, data in grouped.items():
+        if is_bilateral:
+            nor_d = data["Lt"] if data["Lt"] else data["Bil"]
+            aff_d = data["Rt"] if data["Rt"] else data["Bil"]
+        else:
+            nor_d = data[nor_key]
+            aff_d = data[aff_key] if data[aff_key] else data["Bil"]
+
+        title = " - ".join(base_key)
+        html_str += f"<div class='m-card'><div class='m-card-title'>🔹 {title}</div>"
+
+        # 파라미터별(진폭, 잠복기 등) 반복
+        for i, vh in enumerate(val_headers):
+            n_val = nor_d["vals"][i] if nor_d and i < len(nor_d["vals"]) else "-"
+            a_val = aff_d["vals"][i] if aff_d and i < len(aff_d["vals"]) else "-"
+            
+            html_str += f"""
+            <div class='m-card-row'>
+                <div class='m-row-label'>📌 {vh}</div>
+                <div class='m-row-vals'>
+                    <div class='m-val-item'><span class='m-side-badge nor'>{nor_label}</span> <span style='{get_result_color_style(n_val)}'>{n_val}</span></div>
+                    <div class='m-val-item'><span class='m-side-badge aff'>{aff_label}</span> <span style='{get_result_color_style(a_val)}'>{a_val}</span></div>
+                </div>
+            </div>
+            """
+        interp_val = aff_d["interp"] if aff_d else (nor_d["interp"] if nor_d else "-")
+        html_str += f"""
+        <div class='m-card-interp'>
+            <span class='m-interp-label'>{'병변측 판독' if not is_eng else 'Interpretation'}</span>
+            <span style='{get_result_color_style(interp_val)}'>{interp_val}</span>
+        </div>
+        </div>
+        """
+    html_str += "</div></div>"
+
+    css = """<style>
+    .compare-table-container { margin-bottom: 24px; }
+    /* PC CSS */
+    .pc-compare-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    .pc-compare-table th { background: #f8fafc; padding: 10px; border: 1px solid #cbd5e1; text-align: center; font-weight: 800; color: #1e293b; white-space: nowrap; }
+    .pc-compare-table td { padding: 10px; border: 1px solid #e2e8f0; text-align: center; color: #334155; }
+    .pc-compare-table .base-col { font-weight: 800; color: #1e3a8a; text-align: left; background: #f1f5f9; }
+    .mobile-compare-cards { display: none; }
+    
+    /* 모바일 CSS */
+    @media screen and (max-width: 768px) {
+        .pc-compare-table { display: none; }
+        .mobile-compare-cards { display: flex; flex-direction: column; gap: 16px; }
+        .m-card { border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.05); overflow:hidden;}
+        .m-card-title { background: #eff6ff; padding: 12px 16px; font-weight: 800; color: #1d4ed8; font-size: 1.05rem; border-bottom: 2px solid #bfdbfe; }
+        .m-card-row { padding: 12px 16px; border-bottom: 1px dashed #e2e8f0; }
+        .m-row-label { font-weight: 800; color: #475569; margin-bottom: 8px; font-size: 0.95rem; }
+        .m-row-vals { display: flex; flex-direction: column; gap: 8px; padding-left: 8px;}
+        .m-val-item { display: flex; align-items: center; justify-content: flex-start; }
+        .m-side-badge { padding: 2px 8px; border-radius: 4px; font-size: 0.85rem; font-weight: 700; min-width: 80px; text-align: center; margin-right: 12px; }
+        .m-side-badge.nor { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+        .m-side-badge.aff { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+        .m-card-interp { padding: 12px 16px; background: #f8fafc; display: flex; flex-direction: column; gap: 6px;}
+        .m-interp-label { font-weight: 800; color: #1e293b; font-size: 0.95rem; }
+    }
+    </style>"""
+    return css + html_str
 
 def render_input_learning():
     st.markdown('<div class="main-title">가상 검사결과표 해석 모드</div>', unsafe_allow_html=True)
@@ -264,22 +307,19 @@ def render_virtual_report_inline(case_name: str):
     spec_hdrs = ["Test", "Condition", "Result", "Interpretation"] if is_eng else ["검사 항목", "조건/측정측", "결과", "상세 수치 및 판독"]
 
     def _tr(mat): 
-        if is_eng:
-            return [[custom_english_translate(str(c)) for c in row] for row in mat]
-        else:
-            return [[custom_korean_translate(str(c)) for c in row] for row in mat]
+        if is_eng: return [[custom_english_translate(str(c)) for c in row] for row in mat]
+        else: return [[custom_korean_translate(str(c)) for c in row] for row in mat]
 
     teaching = data.get("teaching_diagnosis", {})
 
+    # 여기서 에러 없이 안전하게 호출됩니다.
     if data.get("ncs_sensory"):
         st.markdown(f'<div class="section-label" style="margin-top:32px;">⚡ {get_report_section_name("sensory", lang)}</div>', unsafe_allow_html=True)
-        p_headers, p_rows = pivot_table_left_right(sen_hdrs, _tr(data.get("ncs_sensory", [])), lesion_side, is_eng)
-        st.markdown(create_responsive_table(p_headers, p_rows), unsafe_allow_html=True)
+        st.markdown(generate_virtual_report_html(sen_hdrs, _tr(data.get("ncs_sensory", [])), lesion_side, is_eng), unsafe_allow_html=True)
 
     if data.get("ncs_motor"):
         st.markdown(f'<div class="section-label" style="margin-top:32px;">⚡ {get_report_section_name("motor", lang)}</div>', unsafe_allow_html=True)
-        p_headers, p_rows = pivot_table_left_right(mot_hdrs, _tr(data.get("ncs_motor", [])), lesion_side, is_eng)
-        st.markdown(create_responsive_table(p_headers, p_rows), unsafe_allow_html=True)
+        st.markdown(generate_virtual_report_html(mot_hdrs, _tr(data.get("ncs_motor", [])), lesion_side, is_eng), unsafe_allow_html=True)
 
     if (data.get("ncs_sensory") or data.get("ncs_motor")) and "ncs_reason" in teaching:
         with st.expander("🔍 신경전도검사 결과 해석"):
@@ -297,8 +337,7 @@ def render_virtual_report_inline(case_name: str):
     if data.get("special"):
         spec_title = "Special & Late Responses" if is_eng else "특수 및 후기반응 검사"
         st.markdown(f'<div class="section-label" style="margin-top:32px;">⚡ {spec_title}</div>', unsafe_allow_html=True)
-        p_headers, p_rows = pivot_table_left_right(spec_hdrs, _tr(data.get("special", [])), lesion_side, is_eng)
-        st.markdown(create_responsive_table(p_headers, p_rows), unsafe_allow_html=True)
+        st.markdown(generate_virtual_report_html(spec_hdrs, _tr(data.get("special", [])), lesion_side, is_eng), unsafe_allow_html=True)
         if "emg_reason" in teaching and not data.get("emg"):
             with st.expander("🔍 특수 검사 소견 해석"):
                 for r in teaching["emg_reason"]: 
@@ -306,8 +345,7 @@ def render_virtual_report_inline(case_name: str):
 
     if data.get("emg"):
         st.markdown(f'<div class="section-label" style="margin-top:32px;">🪡 {get_report_section_name("emg", lang)}</div>', unsafe_allow_html=True)
-        p_headers, p_rows = pivot_table_left_right(emg_hdrs, _tr(data.get("emg", [])), lesion_side, is_eng)
-        st.markdown(create_responsive_table(p_headers, p_rows), unsafe_allow_html=True)
+        st.markdown(generate_virtual_report_html(emg_hdrs, _tr(data.get("emg", [])), lesion_side, is_eng), unsafe_allow_html=True)
         if "emg_reason" in teaching:
             with st.expander("🔍 침근전도검사 결과 해석"):
                 st.markdown("""
