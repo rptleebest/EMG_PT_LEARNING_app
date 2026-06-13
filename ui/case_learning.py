@@ -33,6 +33,7 @@ def _safe_format_code(code: str) -> str:
     return raw
 
 def _get_result_color_style(value: str, is_normal_side: bool = False) -> str:
+    # 해당 줄(Row) 전체가 '정상측' 데이터인 경우 색상 강조를 완전히 배제합니다.
     if is_normal_side:
         return ""
 
@@ -40,15 +41,15 @@ def _get_result_color_style(value: str, is_normal_side: bool = False) -> str:
     if any(x in text for x in ["정상측", "병변측", "Normal (", "Affected ("]):
         return ""
 
-    # EMG 비정상 전위(Fibrillation, PSW, 거대운동단위 등) 추가
     abnormal_words = [
         "비정상", "감소", "지연", "소실", "탈신경", "재신경지배", "차단", "항진", "초과", "증가", "저하", "급감",
         "Fibrillation", "PSW", "섬유자발전위", "양성예파", "거대운동단위", "Giant"
     ]
+    normal_words = ["정상", "Normal", "Silent", "WNL", "침묵", "동원"]
     
-    # 비정상 소견만 붉은색 강조, 정상은 기본 CSS 스타일(검정/회색 일반 굵기) 유지
-    if any(w in text for w in abnormal_words): return "color: #b91c1c; font-weight: 700;"
-    
+    # 굵기를 주변 텍스트와 동일하게(500) 맞추어 표의 가독성과 정렬을 유지함
+    if any(w in text for w in abnormal_words): return "color: #b91c1c; font-weight: 500;"
+    if any(w in text for w in normal_words): return "color: #15803d; font-weight: 500;"
     return ""
 
 def _format_reason_text(text: str) -> str:
@@ -60,7 +61,7 @@ def _format_reason_text(text: str) -> str:
 def _create_responsive_table(headers: list, rows: list) -> str:
     if not rows: return ""
     css = """<style>
-    /* PC 환경 기본 스타일 (깔끔한 Row-by-Row) */
+    /* PC 환경 기본 스타일 */
     .sl-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 0.95rem; }
     .sl-table th { background-color: #f8fafc; padding: 12px 10px; border-bottom: 2px solid #cbd5e1; text-align: center !important; color: #1e293b; font-weight: 800; white-space: nowrap; }
     .sl-table th:first-child { text-align: left !important; padding-left: 16px; }
@@ -69,7 +70,7 @@ def _create_responsive_table(headers: list, rows: list) -> str:
     .sl-table td.fst-col { font-weight: 800; color: #1e3a8a; text-align: left !important; padding-left: 16px; }
     .sl-table td:last-child { text-align: left !important; padding-left: 16px; line-height: 1.4; font-weight: 600;}
     
-    /* 모바일 환경: 독립된 카드 UI로 완벽 분리 및 판독 결과 강조 */
+    /* 모바일 환경 */
     @media screen and (max-width: 768px) {
         .sl-table, .sl-table thead, .sl-table tbody, .sl-table th, .sl-table td, .sl-table tr { display: block; }
         .sl-table thead { display: none; }
@@ -93,7 +94,7 @@ def _create_responsive_table(headers: list, rows: list) -> str:
         .sl-table td.fst-col > span { text-align: left !important; font-weight: 800; color: #1d4ed8; font-size: 1.05rem; }
         .sl-table td.fst-col > span::before { content: "🔹 "; }
         
-        /* 판독 결과 (맨 아래 넓게 배치) */
+        /* 판독 결과 */
         .sl-table td:last-child { 
             flex-direction: column; align-items: flex-start; background-color: #f8fafc; border-bottom: none; padding-top: 14px; padding-bottom: 14px;
         }
