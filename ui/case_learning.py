@@ -64,24 +64,26 @@ def _format_reason_text(text: str) -> str:
 def _create_responsive_table(headers: list, rows: list) -> str:
     if not rows: return ""
     css = """<style>
-    .res-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 0.95rem; }
-    .res-table th { background-color: #f8fafc; padding: 12px 10px; border-bottom: 2px solid #cbd5e1; text-align: center !important; color: #1e293b; font-weight: 800; }
-    .res-table th:first-child { text-align: left !important; padding-left: 16px; }
-    .res-table th:last-child { text-align: left !important; padding-left: 16px; }
-    .res-table td { padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: center !important; color: #334155; }
-    .res-table td.fst-col { font-weight: 800; color: #1e3a8a; text-align: left !important; padding-left: 16px; }
-    .res-table td:last-child { text-align: left !important; padding-left: 16px; line-height: 1.4; }
+    .sl-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 0.95rem; }
+    .sl-table th { background-color: #f8fafc; padding: 12px 10px; border-bottom: 2px solid #cbd5e1; text-align: center !important; color: #1e293b; font-weight: 800; white-space: nowrap; }
+    .sl-table th:first-child { text-align: left !important; padding-left: 16px; }
+    .sl-table th:last-child { text-align: left !important; padding-left: 16px; }
+    .sl-table td { padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: center !important; color: #334155; vertical-align: middle; }
+    .sl-table td.fst-col { font-weight: 800; color: #1e3a8a; text-align: left !important; padding-left: 16px; }
+    .sl-table td:last-child { text-align: left !important; padding-left: 16px; line-height: 1.4; }
+    
     @media screen and (max-width: 768px) {
-        .res-table thead { display: none; }
-        .res-table tr { display: block; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 16px; background: #ffffff; overflow: hidden; }
-        .res-table td { display: flex; align-items: flex-start; gap: 12px; border-bottom: 1px dashed #e2e8f0; padding: 10px 12px 10px 24px; text-align: left !important; }
-        .res-table td:last-child { border-bottom: none; }
-        .res-table td::before { content: attr(data-label); font-weight: 800; color: #64748b; text-align: left !important; font-size: 0.85rem; flex: 0 0 38%; margin-top: 2px; }
-        .res-table td > span { flex: 1; text-align: left !important; word-break: keep-all; font-weight: 400; color: #334155; line-height: 1.4; }
-        .res-table td.fst-col { display: flex; flex-direction: row; justify-content: flex-start; background: #f1f5f9; text-align: left !important; padding: 12px 16px; border-bottom: 2px solid #cbd5e1; }
-        .res-table td.fst-col::before { display: none; }
-        .res-table td.fst-col > span { text-align: left !important; font-weight: 800; color: #1e3a8a; font-size: 0.95rem; }
-        .res-table td.fst-col > span::before { content: "🔹 "; }
+        .sl-table thead { display: none; }
+        .sl-table tr { display: block; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 16px; background: #ffffff; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .sl-table td { display: flex; align-items: flex-start; gap: 12px; border-bottom: 1px dashed #e2e8f0; padding: 12px 16px 12px 24px; text-align: left !important; }
+        .sl-table td:last-child { border-bottom: none; background-color: #f8fafc; }
+        .sl-table td::before { content: attr(data-label); font-weight: 800; color: #64748b; text-align: left !important; font-size: 0.85rem; flex: 0 0 38%; margin-top: 2px; }
+        .sl-table td > span { flex: 1; text-align: left !important; word-break: keep-all; font-weight: 500; color: #334155; line-height: 1.4; }
+        
+        .sl-table td.fst-col { display: flex; flex-direction: row; justify-content: flex-start; background: #eff6ff; padding: 12px 16px; border-bottom: 2px solid #bfdbfe; }
+        .sl-table td.fst-col::before { display: none; }
+        .sl-table td.fst-col > span { text-align: left !important; font-weight: 800; color: #1d4ed8; font-size: 1.05rem; }
+        .sl-table td.fst-col > span::before { content: "🔹 "; }
     }
     </style>"""
     
@@ -96,7 +98,7 @@ def _create_responsive_table(headers: list, rows: list) -> str:
             header_label = html.escape(headers[idx]) if idx < len(headers) else ""
             td_html += f"<td data-label='{header_label}' class='{cls}' style='{color_style}'><span>{html.escape(val)}</span></td>"
         tr_html += f"<tr>{td_html}</tr>"
-    return f"{css}<table class='res-table'><thead><tr>{header_html}</tr></thead><tbody>{tr_html}</tbody></table>"
+    return f"{css}<table class='sl-table'><thead><tr>{header_html}</tr></thead><tbody>{tr_html}</tbody></table>"
 
 def render_case_list():
     st.markdown('<div class="main-title" style="text-align:left;">사례 학습 모드</div>', unsafe_allow_html=True)
@@ -167,12 +169,12 @@ def render_case_detail_inline(case_name: str):
         else: 
             emg_rows.append(row)
 
-    # --- [핵심 추가] 병변측 안내 문구 표출 ---
+    # --- [핵심 추가] 병변측 데이터 안내 박스 ---
     if sensory_rows or motor_rows or emg_rows:
         st.markdown("""
         <div style="background-color: #f0fdf4; border-left: 4px solid #16a34a; padding: 12px 16px; margin-top: 32px; border-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
             <span style="font-weight: 800; color: #16a34a; font-size: 1.05rem;">💡 검사 결과 표기 안내</span><br>
-            <span style="color: #15803d; font-size: 0.95rem; line-height: 1.6;">아래 제시된 신경전도 및 침근전도 검사 수치는 환자의 주요 증상을 반영하는 <b>병변 호소측(Affected side)</b>의 대표 검사 결과입니다.</span>
+            <span style="color: #15803d; font-size: 0.95rem; line-height: 1.6;">아래 제시된 신경전도 및 침근전도 수치는 환자의 주요 증상을 반영하는 <b>병변 호소측(Affected side)</b>의 대표 검사 결과입니다.</span>
         </div>
         """, unsafe_allow_html=True)
 
