@@ -31,21 +31,21 @@ VIRTUAL_REPORTS = {
             ["근육피부신경", "겨드랑이", "병변측(Lt)", "5.4 mV", "4.8 ms", "60 m/s", "정상 범위"],
         ],
         "emg": [
-            ["목 척추주위근 (좌)", "C5", "Silent", "Normal recruitment", "정상 범위"],
-            ["목 척추주위근 (좌)", "C6", "Fibrillation/PSW", "통증으로 평가 불가", "비정상 (활동성 탈신경)"],
-            ["목 척추주위근 (좌)", "C7", "Silent", "Normal recruitment", "정상 범위"],
-            ["어깨세모근 (좌)", "C5-C6", "Silent", "Normal recruitment", "정상 범위"],
-            ["위팔두갈래근 (좌)", "C5-C6", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["위팔노근 (좌)", "C5-C6", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["원엎침근 (좌)", "C6-C7", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["노쪽손목굽힘근 (좌)", "C6-C7", "Silent", "Normal recruitment", "정상 범위"],
-            ["위팔세갈래근 (좌)", "C7-C8", "Silent", "Normal recruitment", "정상 범위"],
-            ["손가락폄근 (좌)", "C7-C8", "Silent", "Normal recruitment", "정상 범위"],
+            ["목 척추주위근 (Lt)", "C5", "Silent", "Normal recruitment", "정상 범위"],
+            ["목 척추주위근 (Lt)", "C6", "Fibrillation/PSW", "통증으로 평가 불가", "비정상 (활동성 탈신경)"],
+            ["목 척추주위근 (Lt)", "C7", "Silent", "Normal recruitment", "정상 범위"],
+            ["어깨세모근 (Lt)", "C5-C6", "Silent", "Normal recruitment", "정상 범위"],
+            ["위팔두갈래근 (Lt)", "C5-C6", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
+            ["위팔노근 (Lt)", "C5-C6", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
+            ["원엎침근 (Lt)", "C6-C7", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
+            ["노쪽손목굽힘근 (Lt)", "C6-C7", "Silent", "Normal recruitment", "정상 범위"],
+            ["위팔세갈래근 (Lt)", "C7-C8", "Silent", "Normal recruitment", "정상 범위"],
+            ["손가락폄근 (Lt)", "C7-C8", "Silent", "Normal recruitment", "정상 범위"],
         ],
         "teaching_diagnosis": {
             "summary": "Lt C6 목 신경뿌리병증 (Cervical Radiculopathy)",
             "ncs_reason": [
-                "정중, 자신경, 노신경, 근육피부신경 등 광범위한 감각(SNAP) 및 운동(CMAP) 전도가 모두 정상입니다.",
+                "정중, 자신경, 노신경, 근육피부신경 등 광범위한 감각(SNAP) 및 Rt동(CMAP) 전도가 모두 정상입니다.",
                 "감각신경 진폭이 보존된 것은 병변이 감각세포체(DRG)보다 근위부인 신경뿌리에 있음을 명확히 지시합니다."
             ],
             "emg_reason": [
@@ -59,7 +59,7 @@ VIRTUAL_REPORTS = {
         "differential_diagnosis": [
             {
                 "name": "근육피부신경병증 (Musculocutaneous Neuropathy)",
-                "why_consider": "가쪽아래팔 저림과 팔꿉관절 굽힘 약화 양상이 C6 신경뿌리병증과 매우 유사하게 나타납니다.",
+                "why_consider": "가쪽아래팔 저림과 팔꿉관절 굽힘 약화 양상이 C6 신경뿌리병증과 매Rt 유사하게 나타납니다.",
                 "how_to_differentiate": "단일 말초 마비라면 정중신경 지배인 원엎침근이나 C6 척추주위근은 완전 정상이어야 하므로 쉽게 구별됩니다.",
                 "practical_tip": "통증 양상이 목에서부터 뻗쳐 내려오는지(방사통), 아니면 팔의 특정 부위에만 국한되는지 병력을 세밀히 청취하세요."
             }
@@ -85,20 +85,20 @@ VIRTUAL_REPORTS = {
             ["노신경", "팔꿈치", "병변측(Rt)", "6.5 mV", "5.2 ms", "62 m/s", "정상 범위"],
         ],
         "emg": [
-            ["목 척추주위근 (우)", "C6-C7", "Silent", "Normal recruitment", "정상 범위"],
-            ["원엎침근 (우)", "C6-C7", "Silent", "Normal recruitment", "정상 범위"],
-            ["노쪽손목굽힘근 (우)", "C6-C7", "Silent", "Normal recruitment", "정상 범위"],
-            ["짧은엄지벌림근 (우)", "C8-T1", "Silent", "Normal recruitment", "정상 범위"],
-            ["첫째등쪽뼈사이근 (우)", "C8-T1", "Silent", "Normal recruitment", "정상 범위"],
+            ["목 척추주위근 (Rt)", "C6-C7", "Silent", "Normal recruitment", "정상 범위"],
+            ["원엎침근 (Rt)", "C6-C7", "Silent", "Normal recruitment", "정상 범위"],
+            ["노쪽손목굽힘근 (Rt)", "C6-C7", "Silent", "Normal recruitment", "정상 범위"],
+            ["짧은엄지벌림근 (Rt)", "C8-T1", "Silent", "Normal recruitment", "정상 범위"],
+            ["첫째등쪽뼈사이근 (Rt)", "C8-T1", "Silent", "Normal recruitment", "정상 범위"],
         ],
         "teaching_diagnosis": {
             "summary": "Rt 손목굴증후군 (Carpal Tunnel Syndrome)",
             "ncs_reason": [
-                "Rt 정중신경 감각 및 운동 신경에서만 잠복기가 뚜렷하게 지연되어 손목굴 부위 압박을 지시합니다.",
+                "Rt 정중신경 감각 및 Rt동 신경에서만 잠복기가 뚜렷하게 지연되어 손목굴 부위 압박을 지시합니다.",
                 "자신경 및 노신경 등 인접 신경은 정상 범위를 유지하고 있습니다."
             ],
             "emg_reason": [
-                "정중신경의 손목 원위부 지배근(짧은엄지벌림근)에서 탈신경 전위가 없는 것(Silent)은 아직 축삭이 완전히 손상되거나 마비에 이르지 않은 가벼운 상태임을 의미합니다.",
+                "정중신경의 손목 원위부 지배근(짧은엄지벌림근)에서 탈신경 전위가 없는 것(Silent)은 아직 축삭이 완전히 손상되거나 마비에 이르지 않은 가벼Rt 상태임을 의미합니다.",
                 "손목 상부의 정중신경 지배 근육인 원엎침근, 노쪽손목굽힘근은 정상입니다."
             ],
             "integration": [
@@ -135,16 +135,16 @@ VIRTUAL_REPORTS = {
             ["넓적다리신경", "고샅부위", "병변측(Lt)", "6.0 mV", "8.5 ms", "52 m/s", "정상 범위"],
         ],
         "emg": [
-            ["허리 척추주위근 (좌)", "L4", "Silent", "Normal recruitment", "정상 범위"],
-            ["허리 척추주위근 (좌)", "L5", "Fibrillation/PSW", "통증으로 평가 불가", "비정상 (활동성 탈신경)"],
-            ["허리 척추주위근 (좌)", "S1", "Silent", "Normal recruitment", "정상 범위"],
-            ["엉덩허리근 (좌)", "L2-L3", "Silent", "Normal recruitment", "정상 범위"],
-            ["가쪽넓은근 (좌)", "L3-L4", "Silent", "Normal recruitment", "정상 범위"],
-            ["앞정강근 (좌)", "L4-L5", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["긴종아리근 (좌)", "L5-S1", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["넓적다리근막긴장근 (좌)", "L4-L5", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["안쪽장딴지근 (좌)", "S1-S2", "Silent", "Normal recruitment", "정상 범위"],
-            ["큰볼기근 (좌)", "S1-S2", "Silent", "Normal recruitment", "정상 범위"],
+            ["허리 척추주위근 (Lt)", "L4", "Silent", "Normal recruitment", "정상 범위"],
+            ["허리 척추주위근 (Lt)", "L5", "Fibrillation/PSW", "통증으로 평가 불가", "비정상 (활동성 탈신경)"],
+            ["허리 척추주위근 (Lt)", "S1", "Silent", "Normal recruitment", "정상 범위"],
+            ["엉덩허리근 (Lt)", "L2-L3", "Silent", "Normal recruitment", "정상 범위"],
+            ["가쪽넓은근 (Lt)", "L3-L4", "Silent", "Normal recruitment", "정상 범위"],
+            ["앞정강근 (Lt)", "L4-L5", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
+            ["긴종아리근 (Lt)", "L5-S1", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
+            ["넓적다리근막긴장근 (Lt)", "L4-L5", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
+            ["안쪽장딴지근 (Lt)", "S1-S2", "Silent", "Normal recruitment", "정상 범위"],
+            ["큰볼기근 (Lt)", "S1-S2", "Silent", "Normal recruitment", "정상 범위"],
         ],
         "teaching_diagnosis": {
             "summary": "Lt L5 허리 신경뿌리병증 (Lumbar Radiculopathy)",
@@ -163,7 +163,7 @@ VIRTUAL_REPORTS = {
         "differential_diagnosis": [
             {
                 "name": "온종아리신경 마비 (Common Peroneal Neuropathy)",
-                "why_consider": "발목을 들어올리지 못하는 발처짐(Foot drop)과 발등 감각 저하 증상이 매우 흡사하여 임상에서 빈번하게 혼동됩니다.",
+                "why_consider": "발목을 들어올리지 못하는 발처짐(Foot drop)과 발등 감각 저하 증상이 매Rt 흡사하여 임상에서 빈번하게 혼동됩니다.",
                 "how_to_differentiate": "온종아리신경 마비는 얕은종아리신경 감각 전도가 눈에 띄게 저하되며, 위볼기신경 지배인 넓적다리근막긴장근(TFL) 및 허리 척추주위근은 정상으로 유지되어야 합니다.",
                 "practical_tip": "발처짐 환자를 평가할 때, 발목을 안쪽으로 굽히는(Inversion) 정강신경 기능이 보존되어 있는지 반드시 확인하십시오."
             }
@@ -185,17 +185,17 @@ VIRTUAL_REPORTS = {
             ["정중신경", "팔꿈치", "병변측(Rt)", "8.2 mV", "7.2 ms", "54 m/s", "정상 범위"],
         ],
         "emg": [
-            ["목 척추주위근 (우)", "C8-T1", "Silent", "Normal recruitment", "정상 범위"],
-            ["자쪽손목굽힘근 (우)", "C7-C8", "Silent", "Normal recruitment", "정상 범위"],
-            ["깊은손가락굽힘근 (우)", "C8-T1", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["새끼벌림근 (우)", "C8-T1", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["첫째등쪽뼈사이근 (우)", "C8-T1", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["짧은엄지벌림근 (우)", "C8-T1", "Silent", "Normal recruitment", "정상 범위"],
+            ["목 척추주위근 (Rt)", "C8-T1", "Silent", "Normal recruitment", "정상 범위"],
+            ["자쪽손목굽힘근 (Rt)", "C7-C8", "Silent", "Normal recruitment", "정상 범위"],
+            ["깊은손가락굽힘근 (Rt)", "C8-T1", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
+            ["새끼벌림근 (Rt)", "C8-T1", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
+            ["첫째등쪽뼈사이근 (Rt)", "C8-T1", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
+            ["짧은엄지벌림근 (Rt)", "C8-T1", "Silent", "Normal recruitment", "정상 범위"],
         ],
         "teaching_diagnosis": {
             "summary": "Rt 팔꿈치굴증후군 (Cubital Tunnel Syndrome)",
             "ncs_reason": [
-                "Rt 자신경 감각전도가 감소하였고, 팔꿈치 위/아래를 자극했을 때 운동 전도속도가 23 m/s로 저하되며 진폭이 50% 이상 급감하는 전도차단이 관찰되어 팔꿈치 부위 압박을 확진합니다."
+                "Rt 자신경 감각전도가 감소하였고, 팔꿈치 위/아래를 자극했을 때 Rt동 전도속도가 23 m/s로 저하되며 진폭이 50% 이상 급감하는 전도차단이 관찰되어 팔꿈치 부위 압박을 확진합니다."
             ],
             "emg_reason": [
                 "자신경 지배 손 내재근(ADM, FDI)과 깊은손가락굽힘근에서 활동성 탈신경 전위가 확인됩니다.",
@@ -210,13 +210,13 @@ VIRTUAL_REPORTS = {
                 "name": "C8 신경뿌리병증 (C8 Radiculopathy)",
                 "why_consider": "4~5번째 손가락 저림과 손 내재근(아귀 힘) 약화 양상이 비슷하여 임상에서 자주 혼동됩니다.",
                 "how_to_differentiate": "C8 신경뿌리병증이라면 정중신경 지배 근육인 짧은엄지벌림근(APB)도 이상을 보이며, 신경뿌리 병변이므로 자신경 감각전도(SNAP) 수치는 정상이어야 합니다.",
-                "practical_tip": "환자가 손가락을 벌리는 힘뿐만 아니라, 엄지손가락을 천장 방향으로 세우는(Abduction) 힘도 같이 약해졌는지 반드시 대조해 보세요."
+                "practical_tip": "환자가 손가락을 벌리는 힘뿐만 아니라, 엄지손가락을 천장 방향으로 세Rt는(Abduction) 힘도 같이 약해졌는지 반드시 대조해 보세요."
             }
         ]
     },
 
     "오른쪽 손목처짐 및 손등 감각 저하 (노신경 마비)": {
-        "info": {"age": 34, "sex": "남성", "symptom": "음주 후 의자에서 팔을 누른 채 잔 후 우측 손목처짐 및 손등 저림 발생", "side": "Rt"},
+        "info": {"age": 34, "sex": "남성", "symptom": "음주 후 의자에서 팔을 누른 채 잔 후 Rt측 손목처짐 및 손등 저림 발생", "side": "Rt"},
         "ncs_sensory": [
             ["노신경", "정상측(Lt)", "20 μV", "2.1 ms", "정상 범위"],
             ["노신경", "병변측(Rt)", "8 μV", "3.2 ms", "비정상 (진폭 감소 / 잠복기 지연)"],
@@ -231,18 +231,18 @@ VIRTUAL_REPORTS = {
             ["정중신경", "팔꿈치", "병변측(Rt)", "7.9 mV", "7.1 ms", "55 m/s", "정상 범위"],
         ],
         "emg": [
-            ["목 척추주위근 (우)", "C7-C8", "Silent", "Normal recruitment", "정상 범위"],
-            ["위팔세갈래근 (우)", "C7-C8", "Silent", "Normal recruitment", "정상 범위"],
-            ["위팔노근 (우)", "C5-C6", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["긴노쪽손목폄근 (우)", "C6-C7", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["손가락폄근 (우)", "C7-C8", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["원엎침근 (우)", "C6-C7", "Silent", "Normal recruitment", "정상 범위"],
-            ["노쪽손목굽힘근 (우)", "C6-C7", "Silent", "Normal recruitment", "정상 범위"],
+            ["목 척추주위근 (Rt)", "C7-C8", "Silent", "Normal recruitment", "정상 범위"],
+            ["위팔세갈래근 (Rt)", "C7-C8", "Silent", "Normal recruitment", "정상 범위"],
+            ["위팔노근 (Rt)", "C5-C6", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
+            ["긴노쪽손목폄근 (Rt)", "C6-C7", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
+            ["손가락폄근 (Rt)", "C7-C8", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
+            ["원엎침근 (Rt)", "C6-C7", "Silent", "Normal recruitment", "정상 범위"],
+            ["노쪽손목굽힘근 (Rt)", "C6-C7", "Silent", "Normal recruitment", "정상 범위"],
         ],
         "teaching_diagnosis": {
             "summary": "Rt 노신경 마비 (Radial Nerve Palsy at Spiral Groove)",
             "ncs_reason": [
-                "노신경 감각전도 저하와 함께, 나선고랑 상/하부 자극에서 운동 전도속도가 21 m/s로 저하되며 진폭이 급감하는 국소 전도차단 수치가 기록되어 물리적 압박 위치를 지시합니다."
+                "노신경 감각전도 저하와 함께, 나선고랑 상/하부 자극에서 Rt동 전도속도가 21 m/s로 저하되며 진폭이 급감하는 국소 전도차단 수치가 기록되어 물리적 압박 위치를 지시합니다."
             ],
             "emg_reason": [
                 "나선고랑 하부에서 신경 지배를 받는 위팔노근 및 폄근들은 일제히 탈신경 소견을 보입니다.",
@@ -255,14 +255,14 @@ VIRTUAL_REPORTS = {
         "differential_diagnosis": [
             {
                 "name": "C7 신경뿌리병증 (C7 Radiculopathy)",
-                "why_consider": "손목 처짐(Wrist drop)과 팔 뒤쪽의 통증이 말초 노신경 마비와 매우 유사하게 관찰됩니다.",
+                "why_consider": "손목 처짐(Wrist drop)과 팔 뒤쪽의 통증이 말초 노신경 마비와 매Rt 유사하게 관찰됩니다.",
                 "how_to_differentiate": "C7 신경뿌리 병변이라면 노신경뿐 아니라 정중신경 지배인 노쪽손목굽힘근 등 다양한 C7 지배 근육에서 탈신경 소견이 관찰되며, 말초 노신경 감각전도는 정상 범위로 보존되어야 합니다.",
                 "practical_tip": "팔꿈치를 펴는 힘(위팔세갈래근 근력)이 정상적으로 강한지 확인하는 것이 나선고랑 부위 마비 감별의 가장 중요한 핵심입니다."
             }
         ]
     },
 
-    "오른쪽 엉덩이 통증 및 까치발 보행 어려움 (S1 신경뿌리병증)": {
+    "오른쪽 엉덩이 통증 및 까치발 보행 어려Rt (S1 신경뿌리병증)": {
         "info": {"age": 50, "sex": "남성", "symptom": "Rt 엉치 통증, 종아리 뒤쪽 감각 저하 및 발바닥 쪽으로 힘이 안 들어감", "side": "Rt"},
         "ncs_sensory": [
             ["장딴지신경", "정상측(Lt)", "17 μV", "2.9 ms", "정상 범위"],
@@ -279,13 +279,13 @@ VIRTUAL_REPORTS = {
             ["종아리신경", "종아리뼈머리 아래", "병변측(Rt)", "5.0 mV", "10.0 ms", "46 m/s", "정상 범위"],
         ],
         "emg": [
-            ["허리 척추주위근 (우)", "L5", "Silent", "Normal recruitment", "정상 범위"],
-            ["허리 척추주위근 (우)", "S1", "Fibrillation/PSW", "통증으로 평가 불가", "비정상 (활동성 탈신경)"],
-            ["가쪽넓은근 (우)", "L3-L4", "Silent", "Normal recruitment", "정상 범위"],
-            ["앞정강근 (우)", "L4-L5", "Silent", "Normal recruitment", "정상 범위"],
-            ["안쪽장딴지근 (우)", "S1-S2", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["가자미근 (우)", "S1-S2", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["큰볼기근 (우)", "S1-S2", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
+            ["허리 척추주위근 (Rt)", "L5", "Silent", "Normal recruitment", "정상 범위"],
+            ["허리 척추주위근 (Rt)", "S1", "Fibrillation/PSW", "통증으로 평가 불가", "비정상 (활동성 탈신경)"],
+            ["가쪽넓은근 (Rt)", "L3-L4", "Silent", "Normal recruitment", "정상 범위"],
+            ["앞정강근 (Rt)", "L4-L5", "Silent", "Normal recruitment", "정상 범위"],
+            ["안쪽장딴지근 (Rt)", "S1-S2", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
+            ["가자미근 (Rt)", "S1-S2", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
+            ["큰볼기근 (Rt)", "S1-S2", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
         ],
         "teaching_diagnosis": {
             "summary": "Rt S1 허리 신경뿌리병증 (Lumbosacral Radiculopathy)",
@@ -297,13 +297,13 @@ VIRTUAL_REPORTS = {
                 "L5, L4 지배 근육(앞정강근, 가쪽넓은근)은 정상이며, S1 척추주위근의 탈신경 소견은 병변이 척수 근위부임을 확진합니다."
             ],
             "integration": [
-                "장딴지신경 전도 보존 수치와, S1 분절 우세 말초 근육 및 척추주위근의 일치된 탈신경 데이터를 통합하여 S1 신경뿌리병증으로 진단합니다."
+                "장딴지신경 전도 보존 수치와, S1 분절 Rt세 말초 근육 및 척추주위근의 일치된 탈신경 데이터를 통합하여 S1 신경뿌리병증으로 진단합니다."
             ]
         },
         "differential_diagnosis": [
             {
                 "name": "궁둥신경병증 (Sciatic Neuropathy)",
-                "why_consider": "엉덩이부터 다리 뒤쪽으로 뻗어 내려오는 통증과 근력 약화 양상이 매우 유사합니다.",
+                "why_consider": "엉덩이부터 다리 뒤쪽으로 뻗어 내려오는 통증과 근력 약화 양상이 매Rt 유사합니다.",
                 "how_to_differentiate": "말초 궁둥신경(Sciatic nerve) 마비라면 장딴지신경 감각 전도가 반드시 감소해야 하며, S1 허리 척추주위근은 완벽히 정상이어야 합니다.",
                 "practical_tip": "장딴지신경(Sural nerve) 감각전도 보존 여부가 척수 신경뿌리 마비와 골반부 말초 신경 마비를 가르는 가장 결정적 잣대입니다."
             }
@@ -326,16 +326,16 @@ VIRTUAL_REPORTS = {
             ["정강신경", "오금", "병변측(Lt)", "5.9 mV", "13.5 ms", "48 m/s", "정상 범위"],
         ],
         "emg": [
-            ["허리 척추주위근 (좌)", "L5", "Silent", "Normal recruitment", "정상 범위"],
-            ["넓적다리두갈래근 짧은갈래 (좌)", "L5-S1", "Silent", "Normal recruitment", "정상 범위"],
-            ["앞정강근 (좌)", "L4-L5", "Silent", "Reduced recruitment", "비정상 (동원 감소)"],
-            ["긴종아리근 (좌)", "L5-S1", "Silent", "Reduced recruitment", "비정상 (동원 감소)"],
-            ["넓적다리근막긴장근 (좌)", "L4-L5", "Silent", "Normal recruitment", "정상 범위"],
+            ["허리 척추주위근 (Lt)", "L5", "Silent", "Normal recruitment", "정상 범위"],
+            ["넓적다리두갈래근 짧은갈래 (Lt)", "L5-S1", "Silent", "Normal recruitment", "정상 범위"],
+            ["앞정강근 (Lt)", "L4-L5", "Silent", "Reduced recruitment", "비정상 (동원 감소)"],
+            ["긴종아리근 (Lt)", "L5-S1", "Silent", "Reduced recruitment", "비정상 (동원 감소)"],
+            ["넓적다리근막긴장근 (Lt)", "L4-L5", "Silent", "Normal recruitment", "정상 범위"],
         ],
         "teaching_diagnosis": {
             "summary": "Lt 온종아리신경 마비 (Common Peroneal Neuropathy)",
             "ncs_reason": [
-                "얕은종아리신경 감각전도가 저하되었으며, 종아리뼈머리(Fibular head) 상하부 자극 시 운동 전도속도가 급감(22m/s)하는 국소 전도차단이 확인되어 무릎 외측 압박을 특정합니다."
+                "얕은종아리신경 감각전도가 저하되었으며, 종아리뼈머리(Fibular head) 상하부 자극 시 Rt동 전도속도가 급감(22m/s)하는 국소 전도차단이 확인되어 무릎 외측 압박을 특정합니다."
             ],
             "emg_reason": [
                 "압박 부위 하부의 근육(앞정강근, 긴종아리근)은 수의수축 동원이 감소합니다.",
@@ -356,7 +356,7 @@ VIRTUAL_REPORTS = {
     },
 
     "오른쪽 어깨 통증 및 어깨세모근 약화 (C7 신경뿌리병증)": {
-        "info": {"age": 51, "sex": "여성", "symptom": "Rt 날개뼈 안쪽 통증, 팔 뒤쪽부터 가운데 손가락까지 뻗치는 저림, 팔 펴는 힘이 약함", "side": "Rt"},
+        "info": {"age": 51, "sex": "여성", "symptom": "Rt 날개뼈 안쪽 통증, 팔 뒤쪽부터 가Rt데 손가락까지 뻗치는 저림, 팔 펴는 힘이 약함", "side": "Rt"},
         "ncs_sensory": [
             ["정중신경", "정상측(Lt)", "29 μV", "2.6 ms", "정상 범위"],
             ["정중신경", "병변측(Rt)", "28 μV", "2.7 ms", "정상 범위"],
@@ -372,27 +372,27 @@ VIRTUAL_REPORTS = {
             ["자신경", "팔꿈치 아래", "병변측(Rt)", "7.2 mV", "6.4 ms", "57 m/s", "정상 범위"],
         ],
         "emg": [
-            ["목 척추주위근 (우)", "C6", "Silent", "Normal recruitment", "정상 범위"],
-            ["목 척추주위근 (우)", "C7", "Fibrillation/PSW", "통증으로 평가 불가", "비정상 (활동성 탈신경)"],
-            ["목 척추주위근 (우)", "C8", "Silent", "Normal recruitment", "정상 범위"],
-            ["위팔두갈래근 (우)", "C5-C6", "Silent", "Normal recruitment", "정상 범위"],
-            ["노쪽손목굽힘근 (우)", "C6-C7", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["위팔세갈래근 (우)", "C7-C8", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["손가락폄근 (우)", "C7-C8", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["짧은엄지벌림근 (우)", "C8-T1", "Silent", "Normal recruitment", "정상 범위"],
+            ["목 척추주위근 (Rt)", "C6", "Silent", "Normal recruitment", "정상 범위"],
+            ["목 척추주위근 (Rt)", "C7", "Fibrillation/PSW", "통증으로 평가 불가", "비정상 (활동성 탈신경)"],
+            ["목 척추주위근 (Rt)", "C8", "Silent", "Normal recruitment", "정상 범위"],
+            ["위팔두갈래근 (Rt)", "C5-C6", "Silent", "Normal recruitment", "정상 범위"],
+            ["노쪽손목굽힘근 (Rt)", "C6-C7", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
+            ["위팔세갈래근 (Rt)", "C7-C8", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
+            ["손가락폄근 (Rt)", "C7-C8", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
+            ["짧은엄지벌림근 (Rt)", "C8-T1", "Silent", "Normal recruitment", "정상 범위"],
         ],
         "teaching_diagnosis": {
             "summary": "Rt C7 목 신경뿌리병증 (Cervical Radiculopathy)",
             "ncs_reason": [
-                "저림 호소 부위인 가운데 손가락(정중신경)의 감각 전도가 정상인 것은, 말초신경 병변이 아닌 근위부 신경뿌리 병변의 전형적 소견입니다.",
-                "팔 모든 주요 운동 전도 및 전도속도(NCV) 역시 정상으로 유지되고 있습니다."
+                "저림 호소 부위인 가Rt데 손가락(정중신경)의 감각 전도가 정상인 것은, 말초신경 병변이 아닌 근위부 신경뿌리 병변의 전형적 소견입니다.",
+                "팔 모든 주요 Rt동 전도 및 전도속도(NCV) 역시 정상으로 유지되고 있습니다."
             ],
             "emg_reason": [
                 "서로 다른 말초신경(노신경, 정중신경) 지배를 받으나 C7 분절을 공유하는 위팔세갈래근, 손가락폄근, 노쪽손목굽힘근에서 일치된 탈신경이 확인됩니다.",
                 "C7 척추주위근 탈신경 소견과 인접한 C5-C6 지배 위팔두갈래근의 정상 범위는 병변이 C7 레벨에 특정됨을 확진합니다."
             ],
             "integration": [
-                "말초 감각전도 보존 현상과 C7 분절 우세 다수 말초근육의 동시 침범 데이터를 통합하여 C7 신경뿌리병증으로 진단합니다."
+                "말초 감각전도 보존 현상과 C7 분절 Rt세 다수 말초근육의 동시 침범 데이터를 통합하여 C7 신경뿌리병증으로 진단합니다."
             ]
         },
         "differential_diagnosis": [
@@ -405,8 +405,8 @@ VIRTUAL_REPORTS = {
         ]
     },
 
-    "왼쪽 갑작스러운 얼굴 마비 (벨마비)": {
-        "info": {"age": 35, "sex": "여성", "symptom": "자고 일어난 후 Lt 얼굴 근육이 움직이지 않고 눈이 안 감김, 이마 주름 잡기 불가", "side": "Lt"},
+    "왼쪽 갑작스러Rt 얼굴 마비 (벨마비)": {
+        "info": {"age": 35, "sex": "여성", "symptom": "자고 일어난 후 Lt 얼굴 근육이 Rt직이지 않고 눈이 안 감김, 이마 주름 잡기 불가", "side": "Lt"},
         "ncs_sensory": [
             ["삼차신경", "정상측(Rt)", "22 μV", "1.9 ms", "정상 범위"],
             ["삼차신경", "병변측(Lt)", "21 μV", "2.0 ms", "정상 범위"],
@@ -418,18 +418,18 @@ VIRTUAL_REPORTS = {
             ["얼굴신경 눈둘레근", "귀앞", "병변측(Lt)", "0.6 mV", "4.2 ms", "-", "비정상 (진폭 감소)"],
         ],
         "emg": [
-            ["눈둘레근 (좌)", "얼굴신경", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["입둘레근 (좌)", "얼굴신경", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["이마근 (좌)", "얼굴신경", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["깨물근 (좌)", "삼차신경", "Silent", "Normal recruitment", "정상 범위"],
+            ["눈둘레근 (Lt)", "얼굴신경", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
+            ["입둘레근 (Lt)", "얼굴신경", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
+            ["이마근 (Lt)", "얼굴신경", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
+            ["깨물근 (Lt)", "삼차신경", "Silent", "Normal recruitment", "정상 범위"],
         ],
         "teaching_diagnosis": {
             "summary": "Lt 특발성 얼굴신경마비 (Bell's Palsy)",
             "ncs_reason": [
-                "감각을 지배하는 삼차신경은 정상이지만, 운동을 지배하는 얼굴신경(코근, 눈둘레근)의 진폭이 정상측 대비 70% 이상 유의하게 감소하여 심한 축삭 손상을 시사합니다."
+                "감각을 지배하는 삼차신경은 정상이지만, Rt동을 지배하는 얼굴신경(코근, 눈둘레근)의 진폭이 정상측 대비 70% 이상 유의하게 감소하여 심한 축삭 손상을 시사합니다."
             ],
             "emg_reason": [
-                "이마근, 눈둘레근, 입둘레근 등 얼굴신경 지배 전 영역에서 활동성 탈신경 전위가 확인되어 전형적인 아래운동신경세포(LMN) 손상을 확진합니다.",
+                "이마근, 눈둘레근, 입둘레근 등 얼굴신경 지배 전 영역에서 활동성 탈신경 전위가 확인되어 전형적인 아래Rt동신경세포(LMN) 손상을 확진합니다.",
                 "삼차신경 지배인 깨물근(Masseter)은 정상으로 복합 뇌신경 마비를 배제합니다."
             ],
             "integration": [
@@ -473,29 +473,29 @@ VIRTUAL_REPORTS = {
             ["정중신경", "팔꿈치", "병변측(Lt)", "6.5 mV", "8.4 ms", "53 m/s", "정상 범위"],
         ],
         "emg": [
-            ["앞정강근 (우)", "L4-L5", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["앞정강근 (좌)", "L4-L5", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["안쪽장딴지근 (우)", "S1-S2", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
-            ["가쪽넓은근 (우)", "L3-L4", "Silent", "Normal recruitment", "정상 범위"],
-            ["위팔두갈래근 (좌)", "C5-C6", "Silent", "Normal recruitment", "정상 범위"],
+            ["앞정강근 (Rt)", "L4-L5", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
+            ["앞정강근 (Lt)", "L4-L5", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
+            ["안쪽장딴지근 (Rt)", "S1-S2", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
+            ["가쪽넓은근 (Rt)", "L3-L4", "Silent", "Normal recruitment", "정상 범위"],
+            ["위팔두갈래근 (Lt)", "C5-C6", "Silent", "Normal recruitment", "정상 범위"],
         ],
         "teaching_diagnosis": {
             "summary": "대칭성 길이의존성 축삭성 다발신경병증 (Polyneuropathy)",
             "ncs_reason": [
-                "가장 긴 신경인 다리 원위부 감각 신경(장딴지신경, 얕은종아리신경) 반응이 소실되고 운동 진폭이 대칭적으로 감소한 길이의존성 패턴입니다.",
+                "가장 긴 신경인 다리 원위부 감각 신경(장딴지신경, 얕은종아리신경) 반응이 소실되고 Rt동 진폭이 대칭적으로 감소한 길이의존성 패턴입니다.",
                 "팔 말단(정중, 자신경) 감각 진폭도 감소하여 전신적인 침범을 확인합니다."
             ],
             "emg_reason": [
                 "다리 최원위부 근육(앞정강근, 장딴지근)에서는 탈신경이 보이나, 근위부(가쪽넓은근, 팔 근육)는 정상인 'Dying-back' 양상입니다."
             ],
             "integration": [
-                "양측 신경 전도의 대칭적 소실과 원위부 우세 근전도검사 이상을 통해 당뇨성 증상 등과 부합하는 전신성 다발신경병증으로 진단합니다."
+                "양측 신경 전도의 대칭적 소실과 원위부 Rt세 근전도검사 이상을 통해 당뇨성 증상 등과 부합하는 전신성 다발신경병증으로 진단합니다."
             ]
         },
         "differential_diagnosis": [
             {
                 "name": "다발성 허리 신경뿌리병증 (Lumbar Canal Stenosis)",
-                "why_consider": "양측 다리의 대칭적인 저림과 통증이 척추관 협착증 증상과 매우 흡사하게 나타납니다.",
+                "why_consider": "양측 다리의 대칭적인 저림과 통증이 척추관 협착증 증상과 매Rt 흡사하게 나타납니다.",
                 "how_to_differentiate": "척추 협착에 의한 다발 뿌리병증은 말초 감각전도(SNAP)가 정상으로 보존되며, 허리 척추주위근에 양측성 탈신경이 도출되어야 합니다.",
                 "practical_tip": "장화-양말(Glove-stocking) 패턴의 대칭적 감각 저하는 전신 대사성 질환의 전형적 특징이므로, 양측 발끝 감각부터 세밀히 대조 평가하세요."
             }
@@ -510,7 +510,7 @@ def get_report_section_name(section: str, language: str) -> str:
     lang = normalize_report_language(language)
     mapping = {
         "sensory": {"ko": "감각신경전도검사", "en": "Sensory NCS"},
-        "motor": {"ko": "운동신경전도검사", "en": "Motor NCS"},
+        "motor": {"ko": "Rt동신경전도검사", "en": "Motor NCS"},
         "emg": {"ko": "침근전도검사", "en": "Needle EMG"}
     }
     return mapping[section]["en" if lang == REPORT_LANG_EN else "ko"]
