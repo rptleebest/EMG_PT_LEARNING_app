@@ -12,19 +12,16 @@ def get_input_learning_report_language() -> str:
     return normalize_report_language(selected)
 
 def get_result_color_style(value: str, is_normal_side: bool = False) -> str:
-    # 해당 줄(Row) 전체가 '정상측' 데이터인 경우 색상 강조를 완전히 배제합니다.
     if is_normal_side:
         return ""
         
     text = str(value)
-    # 측정측 칼럼 자체의 텍스트("병변측" 등)도 색상에서 제외
     if any(x in text for x in ["정상측", "병변측", "Normal (", "Affected ("]): 
         return ""
 
     abnormal_words = ["비정상", "감소", "지연", "소실", "탈신경", "측정불가", "차단", "항진", "초과", "증가", "저하", "급감", "Abnormal", "Reduced", "Absent", "Delayed", "Incomplete", "Active", "drop", "block", "Slowed", "Hyper"]
     normal_words = ["정상", "Normal", "Silent", "WNL", "침묵", "동원"]
     
-    # 눈이 덜 아프면서 시인성이 좋은 붉은색(#dc2626)으로 수정
     if any(w in text for w in abnormal_words): return "color: #dc2626; font-weight: 800;"
     if any(w in text for w in normal_words): return "color: #15803d; font-weight: 800;"
     return ""
@@ -88,7 +85,8 @@ def custom_english_translate(text: str) -> str:
         "손가락폄근": "Extensor Digitorum Communis", "고유집게폄근": "Extensor Indicis Proprius", "깊은손가락굽힘근": "Flexor Digitorum Profundus",
         "새끼벌림근": "Abductor Digiti Minimi", "엉덩허리근": "Iliopsoas", "가쪽넓은근": "Vastus Lateralis", "앞정강근": "Tibialis Anterior",
         "긴종아리근": "Peroneus Longus", "가자미근": "Soleus", "큰볼기근": "Gluteus Maximus", "눈둘레근": "Orbicularis Oculi",
-        "입둘레근": "Orbicularis Oris", "이마근": "Frontalis", "깨물근": "Masseter", "무반응": "Absent", "측정불가": "N/A"
+        "입둘레근": "Orbicularis Oris", "이마근": "Frontalis", "깨물근": "Masseter", "무반응": "Absent", "측정불가": "N/A",
+        " (우)": " (Rt)", " (좌)": " (Lt)"
     }
     for k in sorted(mapping.keys(), key=len, reverse=True):
         if k in raw: raw = raw.replace(k, mapping[k])
@@ -97,7 +95,6 @@ def custom_english_translate(text: str) -> str:
 def create_responsive_table(headers: list, rows: list) -> str:
     if not rows: return ""
     css = """<style>
-    /* PC 환경: 실제 병원 임상 결과지와 동일한 Row-by-Row 테이블 */
     .clinical-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 0.95rem; }
     .clinical-table th { background-color: #f8fafc; padding: 12px 10px; border-bottom: 2px solid #cbd5e1; text-align: center !important; color: #1e293b; font-weight: 800; white-space: nowrap; }
     .clinical-table th:first-child, .clinical-table th:last-child { text-align: left !important; padding-left: 16px; }
@@ -105,49 +102,27 @@ def create_responsive_table(headers: list, rows: list) -> str:
     .clinical-table td.fst-col { font-weight: 800; color: #1e3a8a; text-align: left !important; padding-left: 16px; }
     .clinical-table td:last-child { text-align: left !important; padding-left: 16px; font-weight: 600; line-height: 1.4;}
 
-    /* 모바일 환경: 각 검사 결과가 예쁜 '카드' 형태로 분리됨 */
     @media screen and (max-width: 768px) {
         .clinical-table, .clinical-table thead, .clinical-table tbody, .clinical-table th, .clinical-table td, .clinical-table tr { display: block; }
         .clinical-table thead { display: none; }
-        
-        .clinical-table tr { 
-            margin-bottom: 16px; border: 1px solid #cbd5e1; border-radius: 10px; background: #ffffff; box-shadow: 0 4px 6px rgba(0,0,0,0.05); overflow: hidden; 
-        }
-        .clinical-table td { 
-            display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px dashed #e2e8f0; text-align: right !important; 
-        }
-        .clinical-table td::before { 
-            content: attr(data-label); font-weight: 700; color: #64748b; font-size: 0.85rem; text-align: left !important; flex: 0 0 40%;
-        }
+        .clinical-table tr { margin-bottom: 16px; border: 1px solid #cbd5e1; border-radius: 10px; background: #ffffff; box-shadow: 0 4px 6px rgba(0,0,0,0.05); overflow: hidden; }
+        .clinical-table td { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px dashed #e2e8f0; text-align: right !important; }
+        .clinical-table td::before { content: attr(data-label); font-weight: 700; color: #64748b; font-size: 0.85rem; text-align: left !important; flex: 0 0 40%; }
         .clinical-table td > span { flex: 1; word-break: keep-all; font-weight: 500; }
-        
-        /* 카드 제목 (검사 신경 이름) */
-        .clinical-table td:first-child { 
-            background: #eff6ff; padding: 14px 16px; border-bottom: 2px solid #bfdbfe; justify-content: flex-start; 
-        }
+        .clinical-table td:first-child { background: #eff6ff; padding: 14px 16px; border-bottom: 2px solid #bfdbfe; justify-content: flex-start; }
         .clinical-table td:first-child::before { display: none; }
         .clinical-table td:first-child > span { text-align: left !important; font-weight: 800; color: #1d4ed8; font-size: 1.05rem; }
         .clinical-table td:first-child > span::before { content: "🔹 "; }
-        
-        /* 판독 결과 (맨 아래 넓게 배치) */
-        .clinical-table td:last-child { 
-            flex-direction: column; align-items: flex-start; background-color: #f8fafc; border-bottom: none; padding-top: 14px; padding-bottom: 14px;
-        }
-        .clinical-table td:last-child::before { 
-            margin-bottom: 6px; color: #1e3a8a; font-size: 0.95rem; content: "📝 " attr(data-label); width: 100%;
-        }
-        .clinical-table td:last-child > span { 
-            text-align: left !important; width: 100%; font-size: 0.95rem; 
-        }
+        .clinical-table td:last-child { flex-direction: column; align-items: flex-start; background-color: #f8fafc; border-bottom: none; padding-top: 14px; padding-bottom: 14px; }
+        .clinical-table td:last-child::before { margin-bottom: 6px; color: #1e3a8a; font-size: 0.95rem; content: "📝 " attr(data-label); width: 100%; }
+        .clinical-table td:last-child > span { text-align: left !important; width: 100%; font-size: 0.95rem; }
     }
     </style>"""
     
     header_html = "".join([f"<th>{html.escape(h)}</th>" for h in headers])
     tr_html = ""
     for row in rows:
-        # 해당 줄(Row)에 '정상측' 또는 영문 번역본 'Normal (' 이 포함되어 있는지 확인
         is_normal_side = any("정상측" in str(c) or "Normal (" in str(c) for c in row)
-        
         td_html = ""
         for idx, col in enumerate(row):
             cls = "fst-col" if idx == 0 else ""
@@ -195,7 +170,9 @@ def render_virtual_report_inline(case_name: str):
 
     sen_hdrs = ["Nerve", "Side", "Amplitude", "Latency", "Interpretation"] if is_eng else ["검사 신경", "측정측", "진폭", "잠복기", "판독"]
     mot_hdrs = ["Nerve", "Stim Site", "Side", "Amplitude", "Latency", "NCV", "Interpretation"] if is_eng else ["검사 신경", "자극 위치", "측정측", "진폭", "잠복기", "전도속도(NCV)", "판독"]
-    emg_hdrs = ["Muscle", "Segment", "Side", "Rest", "Volition", "Interpretation"] if is_eng else ["검사 근육", "분절", "측정측", "휴식 시", "수의수축 시", "판독"]
+    
+    # EMG 헤더에서 "측정측" 삭제
+    emg_hdrs = ["Muscle", "Segment", "Rest", "Volition", "Interpretation"] if is_eng else ["검사 근육", "분절", "휴식 시", "수의수축 시", "판독"]
     spec_hdrs = ["Test", "Condition", "Result", "Interpretation"] if is_eng else ["검사 항목", "조건/측정측", "결과", "상세 수치 및 판독"]
 
     def _tr(mat): 
@@ -204,8 +181,19 @@ def render_virtual_report_inline(case_name: str):
 
     teaching = data.get("teaching_diagnosis", {})
 
+    if data.get("ncs_sensory") or data.get("ncs_motor"):
+        st.markdown("""
+        <div style="background:#fef3c7; padding:14px; margin-top:24px; margin-bottom:16px; border-radius:6px; border-left:5px solid #f59e0b;">
+            <div style="font-size:0.95rem; font-weight:800; color:#b45309; margin-bottom:6px;">💡 [임상 실무 팁] 양측 검사와 편측 검사</div>
+            <div style="font-size:0.9rem; color:#451a03; line-height:1.6;">
+                신경전도검사(NCS)는 환자의 통증과 검사 시간을 줄이기 위해 기본적으로 <b>병변 호소측</b>만 선별하여 검사합니다. 
+                단, 손목굴증후군 등 국소 포착 병변이 의심되거나 병변측 결과가 뚜렷하게 비정상일 경우, 환자 본인의 정상적인 고유 수치와 비교하기 위해 <b>반대쪽(정상측) 신경을 대조군으로 함께 검사</b>합니다.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
     if data.get("ncs_sensory"):
-        st.markdown(f'<div class="section-label" style="margin-top:32px;">⚡ {get_report_section_name("sensory", lang)}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="section-label" style="margin-top:16px;">⚡ {get_report_section_name("sensory", lang)}</div>', unsafe_allow_html=True)
         st.markdown(create_responsive_table(sen_hdrs, _tr(data.get("ncs_sensory", []))), unsafe_allow_html=True)
 
     if data.get("ncs_motor"):
