@@ -48,7 +48,7 @@ CASE_LIBRARY = {
             ],
             "emg_reason": [
                 "목 척추주위근, 위팔두갈래근, 노쪽손목폄근에서 활동성 탈신경(Active denervation)을 의미하는 자발전위가 관찰됩니다.",
-                "가장 근위부인 C6 척추주위근의 이상 소견은 병변이 척수 신경뿌리임을 확진하는 핵심 지표입니다."
+                "가장 근위부인 C6 척추주위근의 이상 소견은 병변이 척수 신경뿌리에 위치함을 확진하는 핵심 지표입니다."
             ],
             "integration": ["C6 피부분절 감각 저하, 위팔노근 반사 감소, 그리고 C6 지배 하위 말초근육과 척추주위근의 동시 탈신경을 종합하여 C6 신경뿌리병증으로 판단합니다."],
         },
@@ -75,8 +75,8 @@ CASE_LIBRARY = {
             },
         },
         "findings": {
-            "정중신경 감각 (Median SNAP)": ("9 μV (감소)", "4.9 ms (지연)", NCS_DELAYED),
-            "정중신경 운동 (Median CMAP)": ("4.5 mV (감소)", "5.8 ms (지연)", NCS_REDUCED),
+            "정중신경 감각 (Median SNAP)": ("9 μV", "4.9 ms", NCS_DELAYED),
+            "정중신경 운동 (Median CMAP)": ("4.5 mV", "5.8 ms", NCS_REDUCED),
             "짧은엄지벌림근 (Abductor Pollicis Brevis)": ("Silent", "Normal recruitment", EMG_NORMAL),
         },
         "teaching_diagnosis": {
@@ -113,8 +113,8 @@ CASE_LIBRARY = {
             },
         },
         "findings": {
-            "노신경 감각 (Radial SNAP)": ("8 μV (감소)", "3.2 ms (지연)", NCS_REDUCED),
-            "노신경 운동 (Radial CMAP)": ("1.5 mV (급감)", "7.1 ms (지연)", NCS_REDUCED),
+            "노신경 감각 (Radial SNAP)": ("8 μV", "3.2 ms", NCS_REDUCED),
+            "노신경 운동 (Radial CMAP)": ("1.5 mV", "7.1 ms", NCS_REDUCED),
             "노쪽손목폄근 (Extensor Carpi Radialis)": ("Fibrillation/PSW", "Reduced recruitment", EMG_ACTIVE_DENERVATION),
             "집게폄근 (Extensor Indicis Proprius)": ("Fibrillation/PSW", "Reduced recruitment", EMG_ACTIVE_DENERVATION),
             "목 척추주위근 (Cervical Paraspinal)": ("Silent", "Normal recruitment", EMG_NORMAL),
@@ -153,8 +153,8 @@ CASE_LIBRARY = {
             },
         },
         "findings": {
-            "자신경 감각 (Ulnar SNAP)": ("9 μV (감소)", "3.4 ms (지연)", NCS_DELAYED),
-            "자신경 운동 (Ulnar CMAP)": ("3.1 mV (감소)", "8.2 ms (지연)", NCS_REDUCED),
+            "자신경 감각 (Ulnar SNAP)": ("9 μV", "3.4 ms", NCS_DELAYED),
+            "자신경 운동 (Ulnar CMAP)": ("3.1 mV", "8.2 ms", NCS_REDUCED),
             "새끼벌림근 (Abductor Digiti Minimi)": ("Fibrillation/PSW", "Reduced recruitment", EMG_ACTIVE_DENERVATION),
             "첫째등쪽뼈사이근 (First Dorsal Interosseous)": ("Fibrillation/PSW", "Reduced recruitment", EMG_ACTIVE_DENERVATION),
         },
@@ -201,7 +201,7 @@ CASE_LIBRARY = {
         "teaching_diagnosis": {
             "summary": "발처짐(Foot drop)을 동반한 L5 허리 신경뿌리병증(Lumbar radiculopathy) 패턴입니다.",
             "ncs_reason": [
-                "발처짐 증상에도 불구하고 얕은종아리신경 감각 진폭이 정상 보존됩니다. 이는 감각 세포체보다 근위부인 척수 신경뿌리 압박을 의미합니다."
+                "발처짐 증상에도 불구하고 얕은종아리신경 감각 진폭이 정상 보존됩니다. 이는 병변이 감각세포체 보다 근위부인 척수 신경뿌리 압박을 의미합니다."
             ],
             "emg_reason": [
                 "가장 중요한 지표로 가장 근위부인 허리 척추주위근에서 비정상 자발전위가 검출되었습니다.",
@@ -232,8 +232,8 @@ CASE_LIBRARY = {
             },
         },
         "findings": {
-            "얕은종아리신경 감각 (Superficial Peroneal SNAP)": ("6 μV (감소)", "4.1 ms (지연)", NCS_REDUCED),
-            "종아리신경 운동 (Peroneal CMAP)": ("1.2 mV (급감)", "8.5 ms (지연)", NCS_REDUCED),
+            "얕은종아리신경 감각 (Superficial Peroneal SNAP)": ("6 μV", "4.1 ms", NCS_REDUCED),
+            "종아리신경 운동 (Peroneal CMAP)": ("1.2 mV", "8.5 ms", NCS_REDUCED),
             "앞정강근 (Tibialis Anterior)": ("Fibrillation/PSW", "Reduced recruitment", EMG_ACTIVE_DENERVATION),
             "긴종아리근 (Peroneus Longus)": ("Fibrillation/PSW", "Reduced recruitment", EMG_ACTIVE_DENERVATION),
             "허리 척추주위근 (Lumbar Paraspinal)": ("Silent", "Normal recruitment", EMG_NORMAL),
@@ -272,9 +272,9 @@ CASE_LIBRARY = {
             },
         },
         "findings": {
-            "장딴지신경 감각 (Sural SNAP)": ("6 μV (감소)", "4.2 ms (지연)", NCS_REDUCED),
-            "종아리신경 운동 (Peroneal CMAP)": ("1.5 mV (감소)", "6.5 ms (지연)", NCS_REDUCED),
-            "넓적다리신경 운동 (Femoral CMAP)": ("2.0 mV (감소)", "5.5 ms (지연)", NCS_REDUCED),
+            "장딴지신경 감각 (Sural SNAP)": ("6 μV", "4.2 ms", NCS_REDUCED),
+            "종아리신경 운동 (Peroneal CMAP)": ("1.5 mV", "6.5 ms", NCS_REDUCED),
+            "넓적다리신경 운동 (Femoral CMAP)": ("2.0 mV", "5.5 ms", NCS_REDUCED),
             "가쪽넓은근 (Vastus Lateralis)": ("Fibrillation/PSW", "Reduced recruitment", EMG_ACTIVE_DENERVATION),
             "앞정강근 (Tibialis Anterior)": ("Fibrillation/PSW", "Reduced recruitment", EMG_ACTIVE_DENERVATION),
             "허리 척추주위근 (Lumbar Paraspinal)": ("Silent", "Normal recruitment", EMG_NORMAL),
@@ -313,9 +313,9 @@ CASE_LIBRARY = {
             },
         },
         "findings": {
-            "장딴지신경 감각 (Sural SNAP)": ("무반응 (소실)", "측정불가", NCS_ABSENT),
-            "얕은종아리신경 감각 (Superficial Peroneal SNAP)": ("무반응 (소실)", "측정불가", NCS_ABSENT),
-            "정강신경 운동 (Tibial CMAP)": ("1.8 mV (감소)", "6.2 ms (지연)", NCS_REDUCED),
+            "장딴지신경 감각 (Sural SNAP)": ("무반응", "측정불가", NCS_ABSENT),
+            "얕은종아리신경 감각 (Superficial Peroneal SNAP)": ("무반응", "측정불가", NCS_ABSENT),
+            "정강신경 운동 (Tibial CMAP)": ("1.8 mV", "6.2 ms", NCS_REDUCED),
             "앞정강근 (Tibialis Anterior)": ("Fibrillation/PSW", "Giant MUAPs", EMG_ACTIVE_CHRONIC),
         },
         "teaching_diagnosis": {
@@ -351,11 +351,11 @@ CASE_LIBRARY = {
             },
         },
         "findings": {
-            "정중신경 감각 (Median SNAP)": ("12 μV (감소)", "6.8 ms (지연)", NCS_DELAYED),
-            "자신경 감각 (Ulnar SNAP)": ("14 μV (감소)", "6.5 ms (지연)", NCS_DELAYED),
-            "정중신경 운동 (Median CMAP)": ("6.5 mV", "9.2 ms (지연)", NCS_DELAYED),
-            "종아리신경 운동 (Peroneal CMAP)": ("4.2 mV", "11.5 ms (지연)", NCS_DELAYED),
-            "정강/종아리신경 F파 (F-wave)": ("무반응 (소실)", "측정불가", FWAVE_DELAYED_ABSENT),
+            "정중신경 감각 (Median SNAP)": ("12 μV", "6.8 ms", NCS_DELAYED),
+            "자신경 감각 (Ulnar SNAP)": ("14 μV", "6.5 ms", NCS_DELAYED),
+            "정중신경 운동 (Median CMAP)": ("6.5 mV", "9.2 ms", NCS_DELAYED),
+            "종아리신경 운동 (Peroneal CMAP)": ("4.2 mV", "11.5 ms", NCS_DELAYED),
+            "정강/종아리신경 F파 (F-wave)": ("무반응", "측정불가", FWAVE_DELAYED_ABSENT),
             "앞정강근 (Tibialis Anterior)": ("Silent", "Normal recruitment", EMG_NORMAL),
         },
         "teaching_diagnosis": {
@@ -392,9 +392,9 @@ CASE_LIBRARY = {
             },
         },
         "findings": {
-            "우측 자극-우측 R1 (동측 단일시냅스)": ("잠복기 지연 (지연)", "14.8 ms", BLINK_DELAYED),
-            "우측 자극-우측 R2 (동측 다시냅스)": ("반응 소실 (소실)", "측정불가", BLINK_DELAYED_ABSENT),
-            "우측 자극-좌측 R2 (대측 다시냅스)": ("반응 소실 (소실)", "측정불가", BLINK_DELAYED_ABSENT),
+            "우측 자극-우측 R1 (동측 단일시냅스)": ("잠복기 지연", "14.8 ms", BLINK_DELAYED),
+            "우측 자극-우측 R2 (동측 다시냅스)": ("반응 소실", "측정불가", BLINK_DELAYED_ABSENT),
+            "우측 자극-좌측 R2 (대측 다시냅스)": ("반응 소실", "측정불가", BLINK_DELAYED_ABSENT),
             "좌측 자극-좌측 R1 (동측 단일시냅스)": ("정상 유발", "10.4 ms", NCS_NORMAL),
             "좌측 자극-좌측 R2 (동측 다시냅스)": ("정상 유발", "32.1 ms", NCS_NORMAL),
             "좌측 자극-우측 R2 (대측 다시냅스)": ("정상 유발", "31.8 ms", NCS_NORMAL),
@@ -432,10 +432,10 @@ CASE_LIBRARY = {
             },
         },
         "findings": {
-            "우측 가자미근 H-반사 진폭 (물리치료 전)": ("7.2 mV (항진)", "비정상 과항진", H_REFLEX_HYPERACTIVE),
-            "우측 가자미근 H-반사 진폭 (물리치료 후)": ("5.1 mV (감소)", "유의미하게 감소", NCS_NORMAL),
-            "우측 가자미근 H/M ratio (물리치료 전)": ("65% (초과)", "정상 기준치 < 40%", H_M_RATIO_INCREASED),
-            "우측 가자미근 H/M ratio (물리치료 후)": ("55% (감소)", "경직 일부 완화", NCS_NORMAL),
+            "우측 가자미근 H-반사 진폭 (물리치료 전)": ("7.2 mV", "비정상 과항진", H_REFLEX_HYPERACTIVE),
+            "우측 가자미근 H-반사 진폭 (물리치료 후)": ("5.1 mV", "유의미하게 감소", NCS_NORMAL),
+            "우측 가자미근 H/M ratio (물리치료 전)": ("65%", "정상 기준치 < 40%", H_M_RATIO_INCREASED),
+            "우측 가자미근 H/M ratio (물리치료 후)": ("55%", "경직 일부 완화", NCS_NORMAL),
         },
         "teaching_diagnosis": {
             "summary": "물리치료 중재(지속적 스트레칭 및 대항근 전기자극) 적용 후 우측 가자미근의 척수반사 흥분성 감소 및 경직 완화 효과가 일부 나타난 것으로 평가됩니다.",
