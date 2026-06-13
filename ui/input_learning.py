@@ -4,7 +4,7 @@ import html
 import re
 import streamlit as st
 from ui.navigation import render_bottom_navigation
-from data.report_terms import REPORT_LANG_KO, REPORT_LANG_EN, LANGUAGE_OPTIONS, normalize_report_language, translate_term
+from data.report_terms import REPORT_LANG_KO, REPORT_LANG_EN, LANGUAGE_OPTIONS, normalize_report_language
 from data.virtual_reports import VIRTUAL_REPORTS, get_report_section_name, custom_english_translate
 
 def get_input_learning_report_language() -> str:
@@ -67,66 +67,65 @@ def custom_korean_translate(text: str) -> str:
             
     return raw
 
-def pivot_table_left_right(headers: list, rows: list, is_eng: bool) -> tuple:
-    side_keywords = ["측정측", "Side"]
-    side_idx = -1
-    for i, h in enumerate(headers):
-        if h in side_keywords:
-            side_idx = i
-            break
-    
-    if side_idx == -1: return headers, rows
-    
-    base_headers = headers[:side_idx]
-    val_headers = headers[side_idx+1:]
-    
-    rt_prefix = "(Rt) " if is_eng else "(우) "
-    lt_prefix = "(Lt) " if is_eng else "(좌) "
-    
-    new_headers = base_headers + [f"{rt_prefix}{h}" for h in val_headers] + [f"{lt_prefix}{h}" for h in val_headers]
-    
-    grouped = {}
-    for row in rows:
-        if len(row) != len(headers): continue
-        base_key = tuple(row[:side_idx])
-        side_val = str(row[side_idx]).strip()
-        vals = row[side_idx+1:]
-        
-        if base_key not in grouped:
-            grouped[base_key] = {"Rt": ["-"]*len(val_headers), "Lt": ["-"]*len(val_headers)}
-        
-        if side_val in ["오른쪽", "Rt", "우측"]:
-            grouped[base_key]["Rt"] = vals
-        elif side_val in ["왼쪽", "Lt", "좌측"]:
-            grouped[base_key]["Lt"] = vals
-        elif side_val in ["양측", "Bilateral"]:
-            grouped[base_key]["Rt"] = vals
-            grouped[base_key]["Lt"] = vals
-            
-    new_rows = []
-    for base_key, sides in grouped.items():
-        new_rows.append(list(base_key) + sides["Rt"] + sides["Lt"])
-        
-    return new_headers, new_rows
-
 def create_responsive_table(headers: list, rows: list) -> str:
     if not rows: return ""
     css = """<style>
-    table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 0.92rem; }
-    th { background-color: #f8fafc; padding: 10px 8px; border-bottom: 2px solid #cbd5e1; text-align: center !important; color: #1e293b; font-weight: 800; white-space: nowrap; }
-    th:first-child { text-align: left !important; padding-left: 16px; }
-    td { padding: 10px 8px; border-bottom: 1px solid #e2e8f0; text-align: center !important; color: #334155; }
-    td.fst-col { font-weight: 800; color: #1e3a8a; text-align: left !important; padding-left: 16px; }
+    /* PC 환경 기본 스타일 (깔끔한 Row-by-Row 형태) */
+    .res-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 0.95rem; }
+    .res-table th { background-color: #f8fafc; padding: 12px 10px; border-bottom: 2px solid #cbd5e1; text-align: center !important; color: #1e293b; font-weight: 800; white-space: nowrap; }
+    .res-table th:first-child { text-align: left !important; padding-left: 16px; }
+    .res-table th:last-child { text-align: left !important; padding-left: 16px; }
+    .res-table td { padding: 12px 10px; border-bottom: 1px solid #e2e8f0; text-align: center !important; color: #334155; vertical-align: middle; }
+    .res-table td.fst-col { font-weight: 800; color: #1e3a8a; text-align: left !important; padding-left: 16px; }
+    .res-table td:last-child { text-align: left !important; padding-left: 16px; line-height: 1.4; }
+    
+    /* 모바일 환경 스타일 (독립된 카드 형태로 완벽 분리) */
     @media screen and (max-width: 768px) {
-        thead { display: none; }
-        tr { display: block; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 16px; background: #ffffff; overflow: hidden; }
-        td { display: flex; align-items: flex-start; gap: 12px; border-bottom: 1px dashed #e2e8f0; padding: 10px 12px 10px 24px; text-align: left !important; }
-        td:last-child { border-bottom: none; }
-        td::before { content: attr(data-label); font-weight: 800; color: #64748b; text-align: left !important; font-size: 0.85rem; flex: 0 0 38%; margin-top: 2px; }
-        td > span { flex: 1; text-align: left !important; word-break: keep-all; font-weight: 400; color: #334155; line-height: 1.4; }
-        td.fst-col { display: flex; flex-direction: row; justify-content: flex-start; background: #f1f5f9; text-align: left !important; padding: 12px 16px; border-bottom: 2px solid #cbd5e1; }
-        td.fst-col::before { content: attr(data-label) ": "; color: #1e3a8a; font-weight: 800; flex: unset; margin-right: 8px; font-size: 0.95rem; margin-top: 0; text-align: left !important;}
-        td.fst-col > span { text-align: left !important; font-weight: 800; color: #1e3a8a; font-size: 0.95rem; }
+        .res-table, .res-table thead, .res-table tbody, .res-table th, .res-table td, .res-table tr { display: block; }
+        .res-table thead { display: none; }
+        
+        /* 각 Row를 하나의 카드 모양으로 설정 */
+        .res-table tr { 
+            margin-bottom: 1rem; 
+            border: 1px solid #cbd5e1; 
+            border-radius: 10px; 
+            background: #ffffff; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        
+        /* 데이터 셀 스타일 (라벨: 좌측, 값: 우측 배치로 가독성 향상) */
+        .res-table td { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 10px 16px; 
+            border-bottom: 1px dashed #e2e8f0; 
+            text-align: right !important; 
+        }
+        .res-table td:last-child { border-bottom: none; background-color: #f8fafc; align-items: flex-start;}
+        
+        /* 모바일에서 라벨(데이터 헤더명) 출력 */
+        .res-table td::before { 
+            content: attr(data-label); 
+            font-weight: 700; 
+            color: #64748b; 
+            text-align: left !important; 
+            flex: 0 0 40%;
+            font-size: 0.9rem;
+        }
+        .res-table td > span { flex: 1; word-break: keep-all; font-weight: 500; }
+        
+        /* 첫 번째 열(신경/근육명)을 카드 타이틀(헤더)로 변신 */
+        .res-table td.fst-col { 
+            background: #eff6ff; 
+            padding: 12px 16px; 
+            border-bottom: 2px solid #bfdbfe; 
+            justify-content: flex-start;
+        }
+        .res-table td.fst-col::before { display: none; } /* 첫열은 라벨 숨김 */
+        .res-table td.fst-col > span { text-align: left !important; font-weight: 800; color: #1d4ed8; font-size: 1.05rem; }
+        .res-table td.fst-col > span::before { content: "🔹 "; }
     }
     </style>"""
     
@@ -140,11 +139,11 @@ def create_responsive_table(headers: list, rows: list) -> str:
             h_lbl = html.escape(headers[idx]) if idx < len(headers) else ""
             td_html += f"<td data-label='{h_lbl}' class='{cls}' style='{color_style}'><span>{html.escape(str(col))}</span></td>"
         tr_html += f"<tr>{td_html}</tr>"
-    return f"{css}<table><thead><tr>{header_html}</tr></thead><tbody>{tr_html}</tbody></table>"
+    return f"{css}<table class='res-table'><thead><tr>{header_html}</tr></thead><tbody>{tr_html}</tbody></table>"
 
 def render_input_learning():
     st.markdown('<div class="main-title">가상 검사결과표 해석 모드</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-desc">실제 임상과 동일한 양측 비교 데이터를 통해 병변 위치를 스스로 추론합니다.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-desc">실제 임상과 동일한 비교 데이터를 통해 병변 위치를 스스로 추론합니다.</div>', unsafe_allow_html=True)
     st.markdown('<hr style="border-top: 1px dotted #cbd5e1; margin-bottom: 20px;">', unsafe_allow_html=True)
 
     if "v_reset_counter" not in st.session_state: st.session_state["v_reset_counter"] = 0
@@ -191,15 +190,14 @@ def render_virtual_report_inline(case_name: str):
 
     teaching = data.get("teaching_diagnosis", {})
 
+    # 병합 로직 제거하고 있는 그대로의 데이터를 테이블로 출력
     if data.get("ncs_sensory"):
         st.markdown(f'<div class="section-label" style="margin-top:32px;">⚡ {get_report_section_name("sensory", lang)}</div>', unsafe_allow_html=True)
-        p_headers, p_rows = pivot_table_left_right(sen_hdrs, _tr(data.get("ncs_sensory", [])), is_eng)
-        st.markdown(create_responsive_table(p_headers, p_rows), unsafe_allow_html=True)
+        st.markdown(create_responsive_table(sen_hdrs, _tr(data.get("ncs_sensory", []))), unsafe_allow_html=True)
 
     if data.get("ncs_motor"):
         st.markdown(f'<div class="section-label" style="margin-top:32px;">⚡ {get_report_section_name("motor", lang)}</div>', unsafe_allow_html=True)
-        p_headers, p_rows = pivot_table_left_right(mot_hdrs, _tr(data.get("ncs_motor", [])), is_eng)
-        st.markdown(create_responsive_table(p_headers, p_rows), unsafe_allow_html=True)
+        st.markdown(create_responsive_table(mot_hdrs, _tr(data.get("ncs_motor", []))), unsafe_allow_html=True)
 
     if (data.get("ncs_sensory") or data.get("ncs_motor")) and "ncs_reason" in teaching:
         with st.expander("🔍 신경전도검사 결과 해석"):
@@ -217,8 +215,7 @@ def render_virtual_report_inline(case_name: str):
     if data.get("special"):
         spec_title = "Special & Late Responses" if is_eng else "특수 및 후기반응 검사"
         st.markdown(f'<div class="section-label" style="margin-top:32px;">⚡ {spec_title}</div>', unsafe_allow_html=True)
-        p_headers, p_rows = pivot_table_left_right(spec_hdrs, _tr(data.get("special", [])), is_eng)
-        st.markdown(create_responsive_table(p_headers, p_rows), unsafe_allow_html=True)
+        st.markdown(create_responsive_table(spec_hdrs, _tr(data.get("special", []))), unsafe_allow_html=True)
         if "emg_reason" in teaching and not data.get("emg"):
             with st.expander("🔍 특수 검사 소견 해석"):
                 for r in teaching["emg_reason"]: 
@@ -226,8 +223,7 @@ def render_virtual_report_inline(case_name: str):
 
     if data.get("emg"):
         st.markdown(f'<div class="section-label" style="margin-top:32px;">🪡 {get_report_section_name("emg", lang)}</div>', unsafe_allow_html=True)
-        p_headers, p_rows = pivot_table_left_right(emg_hdrs, _tr(data.get("emg", [])), is_eng)
-        st.markdown(create_responsive_table(p_headers, p_rows), unsafe_allow_html=True)
+        st.markdown(create_responsive_table(emg_hdrs, _tr(data.get("emg", []))), unsafe_allow_html=True)
         if "emg_reason" in teaching:
             with st.expander("🔍 침근전도검사 결과 해석"):
                 st.markdown("""
@@ -264,8 +260,7 @@ def render_virtual_report_inline(case_name: str):
         f'</div>', unsafe_allow_html=True
     )
 
-    # --- [핵심 수정] 가상 검사결과표에서도 감별진단 상세 데이터(왜 고려하는지, 임상 꿀팁 등) 100% 표출 로직 ---
-    if "differential_diagnosis" in data:
+    if "differential_diagnosis" in data and not is_stroke_case:
         st.markdown('<div class="sub-title" style="margin-top:24px;">🧭 유사 질환과의 감별진단</div>', unsafe_allow_html=True)
         for ddx in data["differential_diagnosis"]:
             name = ddx.get('name', '')
