@@ -9,7 +9,7 @@
 - 표 내부의 짧은 의학 용어를 영문으로 변환
 """
 
-REPORT_LANG_KO = "한글 신용어 모드"
+REPORT_LANG_KO = "한글 모드"
 REPORT_LANG_EN = "실제 검사결과표 영문 모드"
 
 LANGUAGE_OPTIONS = [
