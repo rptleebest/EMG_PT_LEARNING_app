@@ -43,7 +43,7 @@ VIRTUAL_REPORTS = {
             ["손가락폄근 (Lt)", "C7-C8", "Silent", "Normal recruitment", "정상 범위"],
         ],
         "teaching_diagnosis": {
-            "summary": "Lt C6 목 신경뿌리병증 (Cervical Radiculopathy)",
+            "summary": "왼쪽 C6 목 신경뿌리병증 (C6 Radiculopathy)",
             "ncs_reason": [
                 "정중신경, 자신경, 노신경, 근육피부신경 등 광범위한 감각(SNAP) 및 운동(CMAP) 전도가 모두 정상입니다.",
                 "감각신경 진폭이 보존된 것은 병변이 감각세포체(DRG)보다 몸쪽(proximal)인 신경뿌리에 있음을 명확히 지시합니다."
