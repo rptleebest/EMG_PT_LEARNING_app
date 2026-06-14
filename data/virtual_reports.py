@@ -32,7 +32,7 @@ VIRTUAL_REPORTS = {
         ],
         "emg": [
             ["목 척추주위근 (Lt)", "C5", "Silent", "Normal recruitment", "정상 범위"],
-            ["목 척추주위근 (Lt)", "C6", "Fibrillation/PSW", "통증으로 평가 불가", "평가 하지 않음"],
+            ["목 척추주위근 (Lt)", "C6", "Fibrillation/PSW", "통증으로 평가 불가", "비정상 (활동성 탈신경)"],
             ["목 척추주위근 (Lt)", "C7", "Silent", "Normal recruitment", "정상 범위"],
             ["어깨세모근 (Lt)", "C5-C6", "Silent", "Normal recruitment", "정상 범위"],
             ["위팔두갈래근 (Lt)", "C5-C6", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
@@ -136,7 +136,7 @@ VIRTUAL_REPORTS = {
         ],
         "emg": [
             ["허리 척추주위근 (Lt)", "L4", "Silent", "Normal recruitment", "정상 범위"],
-            ["허리 척추주위근 (Lt)", "L5", "Fibrillation/PSW", "통증으로 평가 불가", "평가하지 않음"],
+            ["허리 척추주위근 (Lt)", "L5", "Fibrillation/PSW", "통증으로 평가 불가", "비정상 (활동성 탈신경)"],
             ["허리 척추주위근 (Lt)", "S1", "Silent", "Normal recruitment", "정상 범위"],
             ["엉덩허리근 (Lt)", "L2-L3", "Silent", "Normal recruitment", "정상 범위"],
             ["가쪽넓은근 (Lt)", "L3-L4", "Silent", "Normal recruitment", "정상 범위"],
@@ -373,7 +373,7 @@ VIRTUAL_REPORTS = {
         ],
         "emg": [
             ["목 척추주위근 (Rt)", "C6", "Silent", "Normal recruitment", "정상 범위"],
-            ["목 척추주위근 (Rt)", "C7", "Fibrillation/PSW", "통증으로 평가 불가", "평가하지 않음"],
+            ["목 척추주위근 (Rt)", "C7", "Fibrillation/PSW", "통증으로 평가 불가", "비정상 (활동성 탈신경)"],
             ["목 척추주위근 (Rt)", "C8", "Silent", "Normal recruitment", "정상 범위"],
             ["위팔두갈래근 (Rt)", "C5-C6", "Silent", "Normal recruitment", "정상 범위"],
             ["노쪽손목굽힘근 (Rt)", "C6-C7", "Fibrillation/PSW", "Reduced recruitment", "비정상 (활동성 탈신경)"],
