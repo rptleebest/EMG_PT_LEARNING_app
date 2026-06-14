@@ -395,7 +395,7 @@ CASE_LIBRARY = {
             "앞정강근 (Tibialis Anterior)": ("Silent", "Normal recruitment", EMG_NORMAL),
         },
         "teaching_diagnosis": {
-            "summary": "만성 염증성 말이집탈락성 다발신경병증(CIDP) 양상입니다.",
+            "summary": "만성 염증성 말이집탈락성 다발신경병증(Chroinc Inflammatory Demyelinating Polyeuropathy, CIDP) 양상입니다.",
             "ncs_reason": [
                 "다수의 전도에서 진폭은 보존되나 잠복기가 극심하게 지연되는 다발성 말이집탈락성 변화가 나타납니다.",
                 "F파 소실은 근위 전도부의 신경 말이집 손상을 직접 시사합니다."
@@ -403,7 +403,7 @@ CASE_LIBRARY = {
             "emg_reason": [
                 "침근전도에서 탈신경 자발 활동이 전혀 없는 전기적 침묵(Silent)이 나타나, 축삭 단절이 동반되지 않은 순수 탈말이집 상태임을 입증합니다."
             ],
-            "integration": ["근/원위부 동시 마비, 전신 무반사, 다발성 잠복기 지연 및 정상 침근전도를 종합하여 CIDP로 판단합니다."],
+            "integration": ["근/원위부 동시 마비, 전신 무반사, 다발성 잠복기 지연 및 정상 침근전도를 종합하여 말이집탈락성 다발신경병증(CIDP)으로 판단합니다."],
         },
         "differential_diagnosis": [
             {
