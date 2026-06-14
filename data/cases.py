@@ -25,7 +25,7 @@ CASE_LIBRARY = {
         "patient": {
             "age": 57, "sex": "남성", "side": "오른쪽",
             "symptoms": [
-                "뒷목(Cervical)에서 오른쪽 어깨와 아래팔 노쪽, 엄지손가락 쪽으로 뻗치는 통증과 저림이 지속됨",
+                "몇 개월 이전 부터 서서히 뒷목(Cervical)에서 오른쪽 어깨와 아래팔 노쪽, 엄지손가락 쪽으로 뻗치는 통증과 저림이 지속됨",
                 "최근 팔꿉관절 굽힘 및 손목관절 폄 동작 시 힘이 빠지는 현상 발생"
             ],
             "physical_exam": {
@@ -50,14 +50,15 @@ CASE_LIBRARY = {
         "teaching_diagnosis": {
             "summary": "C6 중심의 목 신경뿌리병증(Cervical radiculopathy) 패턴입니다.",
             "ncs_reason": [
-                "감각신경활동전위(SNAP)가 정상 범위로 완전히 보존됩니다. 목 신경뿌리병증은 뒤뿌리신경절(DRG)보다 몸쪽에 병변이 위치하므로, 말초 감각신경전도는 정상 범위로 도출됩니다.",
+                "감각신경활동전위(SNAP)가 정상 범위이므로, 말초 감각신경 손상 가능성은 낮습니다.",
+                "목 신경뿌리병증인 경우 뒤뿌리신경절(DRG)보다 척수쪽 가까이(proximal)에 병변이 위치하므로, 말초 감각신경전도는 정상 범위로 도출됩니다.",
                 "운동신경전도검사(Motor NCS)가 정상 범위이므로 말초 신경얼기 혹은 단일 신경병증 가능성은 낮습니다."
             ],
             "emg_reason": [
                 "목 척추주위근, 위팔두갈래근, 노쪽손목폄근에서 활동성 탈신경(Active denervation)을 의미하는 자발전위가 관찰됩니다.",
                 "가장 근위부인 C6 척추주위근의 이상 소견은 병변이 척수 신경뿌리임을 확진하는 핵심 지표입니다."
             ],
-            "integration": ["C6 피부분절 감각 저하, 위팔노근 반사 감소, 그리고 C6 지배 하위 말초근육과 척추주위근의 동시 탈신경을 종합하여 C6 신경뿌리병증으로 판단합니다."],
+            "integration": ["C6 피부분절 감각 저하, 위팔노근 반사 감소, 그리고 C6 지배 아래 부위 말초근육과 척추주위근의 동시 탈신경을 종합하여 C6 신경뿌리병증으로 판단합니다."],
         },
         "differential_diagnosis": [
             {
@@ -80,7 +81,7 @@ CASE_LIBRARY = {
                 "맨손근력검사(MMT)": [
                     "엄지손가락 벌림근: Good (4/5) | 정중신경(C8-T1)"
                 ],
-                "반사 검사": ["특수 검사: 팔렌 검사 양성, 손목 정중신경 티넬 징후 양성"],
+                "반사 검사": ["특수 검사: 팔렌 검사(Phalen test) 양성, 손목 정중신경 티넬 징후(Tinnel sign) 양성"],
             },
         },
         "findings": {
@@ -89,7 +90,7 @@ CASE_LIBRARY = {
             "짧은엄지벌림근 (Abductor Pollicis Brevis)": ("Silent", "Normal recruitment", EMG_NORMAL),
         },
         "teaching_diagnosis": {
-            "summary": "손목굴증후군(Carpal tunnel syndrome)을 시사하는 정중신경 포착병증입니다.",
+            "summary": "손목굴증후군(Carpal tunnel syndrome)을 시사하는 정중신경 포착병증(Entrapment Neuropathy)입니다.",
             "ncs_reason": [
                 "정중신경 감각전도 잠복기 지연은 손목굴 내 국소 말이집탈락(Demyelination)성 전도 지연을 지시합니다.",
                 "운동 진폭 감소가 동반된 것은 신경 압박에 따른 운동 축삭 손상이 일부 진행되고 있음을 뜻합니다."
@@ -104,7 +105,7 @@ CASE_LIBRARY = {
                 "name": "몸쪽 정중신경병증(Proximal median neuropathy)",
                 "why_consider": "정중신경 지배 영역의 근력 저하 및 손가락 저림이 매우 흡사합니다.",
                 "how_to_differentiate": "원엎침근 등 손목 상부 정중신경 지배 근육들의 근전도가 정상이므로 압박 부위는 손목 수준으로 국한됩니다.",
-                "practical_tip": "포착 신경병증 감별 시, 포착 의심 경계선보다 더 몸쪽(Proximal)에서 기시하는 근육들의 정상 전기활동 보존 여부를 확인하십시오."
+                "practical_tip": "포착 신경병증 감별 시, 포착 의심 경계선보다 더 몸쪽(trunk side)에 가까운 부위에서 기시하는 근육들의 정상 전기활동 보존 여부를 확인하십시오."
             }
         ],
     },
@@ -472,10 +473,10 @@ CASE_LIBRARY = {
             },
         },
         "findings": {
-            "우측 가자미근 H-반사 진폭 (물리치료 전)": ("7.2 mV", "비정상 과항진", H_REFLEX_HYPERACTIVE),
-            "우측 가자미근 H-반사 진폭 (물리치료 후)": ("5.1 mV", "유의미하게 감소", NCS_NORMAL),
+            "우측 가자미근 H-반사 진폭 (물리치료 전)": ("7.2 mV", "정상 범위: 0.5~5.0 mV", H_REFLEX_HYPERACTIVE),
+            "우측 가자미근 H-반사 진폭 (물리치료 후)": ("5.1 mV", "정상 범위: 0.5~5.0 mV", NCS_NORMAL),
             "우측 가자미근 H/M ratio (물리치료 전)": ("65%", "정상 기준치 < 40%", H_M_RATIO_INCREASED),
-            "우측 가자미근 H/M ratio (물리치료 후)": ("55%", "경직 일부 완화", NCS_NORMAL),
+            "우측 가자미근 H/M ratio (물리치료 후)": ("55%", "정상 기준치 < 40%", NCS_NORMAL),
         },
         "teaching_diagnosis": {
             "summary": "물리치료 중재(지속적 스트레칭 및 대항근 전기자극) 적용 후 우측 가자미근의 척수반사 흥분성 감소 및 경직 완화 효과가 일부 나타난 것으로 평가됩니다.",
