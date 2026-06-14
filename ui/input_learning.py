@@ -198,8 +198,8 @@ def render_virtual_report_inline(case_name: str):
         <div style="background:#fef3c7; padding:14px; margin-top:24px; margin-bottom:16px; border-radius:6px; border-left:5px solid #f59e0b;">
             <div style="font-size:0.95rem; font-weight:800; color:#b45309; margin-bottom:6px;">💡 [임상 실무 팁] 양측 검사와 편측 검사</div>
             <div style="font-size:0.9rem; color:#451a03; line-height:1.6;">
-                신경전도검사(NCS)는 환자의 통증과 검사 시간을 줄이기 위해 기본적으로 <b>병변 호소측</b>만 선별하여 검사합니다. 
-                단, 손목굴증후군 등 국소 포착 병변이 의심되거나 병변측 결과가 뚜렷하게 비정상일 경우, 환자 본인의 정상적인 고유 수치와 비교하기 위해 <b>반대쪽(정상측) 신경을 대조군으로 함께 검사</b>합니다.
+                근전도 검사는 환자의 통증과 검사 시간을 줄이기 위해 기본적으로 <b>병변 호소측</b>만 선별하여 검사합니다. 
+                단, 손목굴증후군 등 국소 포착 병변이 의심되거나 병변측 결과가 뚜렷하게 비정상일 경우, 환자 본인의 정상적인 고유 수치와 비교하기 위해 <b>신경전도검사의 경우 반대쪽(정상측) 신경을 대조군으로 함께 검사</b>합니다.
             </div>
         </div>
         """, unsafe_allow_html=True)
