@@ -48,7 +48,7 @@ def custom_korean_translate(text: str) -> str:
         "emg_normal": "정상 범위", "emg_active_denervation": "활동성 탈신경", 
         "emg_paraspinal_denervation": "활동성 탈신경", "emg_chronic_reinnervation": "만성 재신경지배", 
         "emg_active_chronic": "활동성+만성", "blink_delayed": "잠복기 지연", 
-        "emg_absent": "통증으로 평가불가"
+        "emg_absent": "통증으로 평가 불가",
         "blink_absent": "반응 소실", "blink_delayed_absent": "지연 및 소실",
         "fwave_delayed_absent": "지연 및 소실", "h_reflex_hyperactive": "진폭 과항진",
         "h_m_ratio_increased": "비율 증가"
