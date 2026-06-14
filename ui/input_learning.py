@@ -67,20 +67,30 @@ def custom_korean_translate(text: str) -> str:
 def custom_english_translate(text: str) -> str:
     raw = str(text)
     mapping = {
-        "정상 범위": "Within Normal Limits", "비정상 (활동성 탈신경)": "Abnormal (Active denervation)",
-        "통증으로 평가 불가": "Incomplete due to pain", "비정상 (진폭 감소 / 잠복기 지연)": "Abnormal (Reduced Amp. & Delayed Lat.)",
-        "비정상 (전도속도 저하)": "Abnormal (Slowed NCV)", "비정상 (진폭 급감 / 국소 전도차단 의심)": "Abnormal (Conduction block)",
-        "비정상 (진폭 감소)": "Abnormal (Reduced amp)", "비정상 (반응 소실)": "Abnormal (Absent)",
-        "비정상 (동원 감소)": "Abnormal (Reduced recruitment)", "비정상 (동원 불가)": "Abnormal (No recruitment)",
+        "정상 범위": "Within Normal Limits", 
+        "비정상 (활동성 탈신경)": "Abnormal (Active denervation)",
+        "통증으로 평가 불가": "Incomplete due to pain", 
+        "비정상 (진폭 감소 / 잠복기 지연)": "Abnormal (Reduced Amp. & Delayed Lat.)",
+        "비정상 (손목 지연 지속)": "Abnormal (Persistent wrist delay)",
+        "비정상 (전도속도 저하)": "Abnormal (Slowed NCV)", 
+        "비정상 (진폭 급감 / 국소 전도차단 의심)": "Abnormal (Conduction block)",
+        "비정상 (진폭 감소)": "Abnormal (Reduced amp)", 
+        "비정상 (반응 소실)": "Abnormal (Absent)",
+        "비정상 (동원 감소)": "Abnormal (Reduced recruitment)", 
+        "비정상 (동원 불가)": "Abnormal (No recruitment)",
         " (감소)": " (Reduced)", " (지연)": " (Delayed)", " (저하)": " (Slowed)", " (급감)": " (Drop)", 
-        " (소실)": " (Absent)", " (항진)": " (Hyper)", " (초과)": " (Increased)", "오른쪽": "Rt", "왼쪽": "Lt", "양측": "Bilateral",
+        " (소실)": " (Absent)", " (항진)": " (Hyper)", " (초과)": " (Increased)", 
+        "정상측(Rt)": "Normal (Rt)", "정상측(Lt)": "Normal (Lt)",
+        "병변측(Rt)": "Affected (Rt)", "병변측(Lt)": "Affected (Lt)",
+        "정상측": "Normal", "병변측": "Affected",
+        "오른쪽": "Rt", "왼쪽": "Lt", "양측": "Bilateral",
         "팔꿈치 아래": "Below elbow", "팔꿈치 위": "Above elbow", "나선고랑 위": "Above spiral groove", "종아리뼈머리 아래": "Below Fib. head",
         "종아리뼈머리": "Fibular head", "무릎 위": "Above knee", "고샅부위": "Groin", "손목": "Wrist", "팔꿈치": "Elbow",
         "아래팔": "Forearm", "위팔": "Arm", "발목": "Ankle", "오금": "Popliteal", "겨드랑이": "Axilla", "귀앞": "Preauricular",
         "정중신경 첫째 가지": "Median (digit1)", "정중신경 둘째 가지": "Median (digit2)", "정중신경 셋째 가지": "Median (digit3)",
         "자신경 다섯째 가지": "Ulnar (digit5)", "등쪽자신경": "Dorsal Ulnar Cutaneous", "가쪽아래팔피부신경": "Lat. Antebrachial Cutaneous",
-        "안쪽아래팔피부신경": "Med. Antebrachial Cutaneous", "얕은종아리신경": "Superficial Peroneal", "얼굴신경 코근": "Facial (Nasalis)",
-        "얼굴신경 눈둘레근": "Facial (Orbicularis Oculi)", "근육피부신경": "Musculocutaneous", "정중신경": "Median",
+        "안쪽아래팔피부신경": "Med. Antebrachial Cutaneous", "얕은종아리신경": "Superficial Peroneal", "얼굴신경(코근)": "Facial (Nasalis)",
+        "얼굴신경(눈둘레근)": "Facial (Orbicularis Oculi)", "근육피부신경": "Musculocutaneous", "정중신경": "Median",
         "자신경": "Ulnar", "노신경": "Radial", "종아리신경": "Peroneal", "장딴지신경": "Sural", "정강신경": "Tibial",
         "두렁신경": "Saphenous", "넓적다리신경": "Femoral", "삼차신경": "Trigeminal", "얼굴신경": "Facial",
         "깊은손가락굽힘근 4-다섯째 가지": "FDP (digit 4-5)", "넓적다리두갈래근 짧은갈래": "Biceps Femoris (Short)",
@@ -93,7 +103,7 @@ def custom_english_translate(text: str) -> str:
         "새끼벌림근": "Abductor Digiti Minimi", "엉덩허리근": "Iliopsoas", "가쪽넓은근": "Vastus Lateralis", "앞정강근": "Tibialis Anterior",
         "긴종아리근": "Peroneus Longus", "가자미근": "Soleus", "큰볼기근": "Gluteus Maximus", "눈둘레근": "Orbicularis Oculi",
         "입둘레근": "Orbicularis Oris", "이마근": "Frontalis", "깨물근": "Masseter", "무반응": "Absent", "측정불가": "N/A",
-        " (우)": " (Rt)", " (좌)": " (Lt)"
+        " (우)": " (Rt)", " (좌)": " (Lt)", " (Rt)": " (Rt)", " (Lt)": " (Lt)"
     }
     for k in sorted(mapping.keys(), key=len, reverse=True):
         if k in raw: raw = raw.replace(k, mapping[k])
