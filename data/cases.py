@@ -214,7 +214,7 @@ CASE_LIBRARY = {
         "findings": {
             "얕은종아리신경 감각 (Superficial Peroneal SNAP)": ("15 μV", "2.8 ms", NCS_NORMAL),
             "종아리신경 운동 (Peroneal CMAP)": ("4.8 mV", "4.2 ms", NCS_NORMAL),
-            "허리 척추주위근 (Lumbar Paraspinal)": ("Fibrillation/PSW", "통증으로 평가 불가", EMG_Absent),
+            "허리 척추주위근 (Lumbar Paraspinal)": ("Fibrillation/PSW", "통증으로 평가 불가", EMG_PARASPINAL_DENERVATION),
             "앞정강근 (Tibialis Anterior)": ("Fibrillation/PSW", "Reduced recruitment", EMG_ACTIVE_DENERVATION),
             "긴엄지폄근 (Extensor Hallucis Longus)": ("Fibrillation/PSW", "Reduced recruitment", EMG_ACTIVE_DENERVATION),
             "중간볼기근 (Gluteus Medius)": ("Fibrillation/PSW", "Reduced recruitment", EMG_ACTIVE_DENERVATION),
