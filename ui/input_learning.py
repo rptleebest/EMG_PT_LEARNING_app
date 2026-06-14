@@ -207,10 +207,13 @@ def render_virtual_report_inline(case_name: str):
     if data.get("ncs_sensory") or data.get("ncs_motor"):
         st.markdown("""
         <div style="background:#fef3c7; padding:14px; margin-top:24px; margin-bottom:16px; border-radius:6px; border-left:5px solid #f59e0b;">
-            <div style="font-size:0.95rem; font-weight:800; color:#b45309; margin-bottom:6px;">💡 [임상 실무 팁] 양측 검사와 편측 검사</div>
+            <div style="font-size:0.95rem; font-weight:800; color:#b45309; margin-bottom:8px;">💡 [임상 실무 팁] 양측/편측 검사 및 정상측 대조 판정 기준</div>
             <div style="font-size:0.9rem; color:#451a03; line-height:1.6;">
-                근전도 검사는 환자의 통증과 검사 시간을 줄이기 위해 기본적으로 <b>병변 호소측</b>만 선별하여 검사합니다. 
-                단, 손목굴증후군 등과 같이 국소 포착 병변이 의심되거나 병변측 결과가 뚜렷하게 비정상일 경우, 환자 본인의 정상적인 고유 수치와 비교하기 위해 <b>신경전도검사의 경우에서만 반대쪽(정상측) 신경을 대조군으로 함께 검사</b>합니다.
+                <div style="margin-bottom:4px;">• 근전도 검사는 환자의 통증과 검사 시간을 줄이기 위해 기본적으로 <b>병변 호소측</b>만 선별하여 검사합니다.</div>
+                <div style="margin-bottom:12px;">• 단, 국소 포착 병변이 의심되거나 결과가 뚜렷하게 비정상일 경우, 환자 본인의 고유 수치와 비교하기 위해 <b>신경전도검사에 한하여 반대쪽(정상측) 신경을 대조군으로 함께 검사</b>합니다.</div>
+                <div style="margin-bottom:4px; font-weight:700; color:#92400e;">[정상측 대비 비정상 판정 기준]</div>
+                <div style="margin-bottom:4px; padding-left:8px;">• <b>진폭(Amplitude) 감소:</b> 병변측 진폭이 정상측 진폭 대비 <b>50% 이하</b>로 떨어질 때 뚜렷한 신경 손상(비정상)으로 판정합니다.</div>
+                <div style="padding-left:8px;">• <b>잠복기(Latency) 지연:</b> 병변측 잠복기가 정상측 대비 <b>10~20% 이상 연장</b>되거나, 좌우 차이가 신경별 허용 오차(예: 0.5~1.0ms) 이상일 때 비정상으로 판정합니다.</div>
             </div>
         </div>
         """, unsafe_allow_html=True)
