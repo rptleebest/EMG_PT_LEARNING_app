@@ -56,8 +56,8 @@ def custom_korean_translate(text: str) -> str:
     if code_str in code_mapping: return code_mapping[code_str]
 
     replace_map = {
-        "Silent": "전기적 침묵", "Normal recruitment": "정상 동원", "Reduced recruitment": "동원 감소",
-        "No recruitment": "동원 불가", "Fibrillation/PSW": "섬유자발전위/양성예파",
+        "Silent": "전기적 침묵", "Normal recruitment": "정상 운동단위동원", "Reduced recruitment": "운동단위동원 감소",
+        "No recruitment": "운동단위동원 불가", "Fibrillation/PSW": "섬유자발전위/양성예파",
         "Absent": "반응 소실", "Incomplete due to pain": "통증으로 평가 불가", "Giant MUAPs": "거대운동단위"
     }
     for eng, kor in replace_map.items():
